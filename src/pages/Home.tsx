@@ -10,6 +10,7 @@ export default function Home() {
         <Link className="btn" to="/year">See a year of checks (no microphone)</Link>
         <Link className="btn" to="/clinician">Go to the physician's view</Link>
       </div>
+      <p><Link to="/check">Take the full four-minute check</Link> · <Link to="/benchmark">How the flag was tested</Link></p>
       <p className="muted">No sign-up. The histories and patients shown are synthetic and labelled. This prototype does not diagnose.</p>
     </>
   )

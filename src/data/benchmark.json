@@ -1,0 +1,276 @@
+{
+ "generated": "2026-11-10",
+ "n": 20000,
+ "rows": [
+  {
+   "world": "As assumed",
+   "rule": "ours",
+   "falseAlarmYear": 0.0339,
+   "detected": {
+    "1": 0.3852,
+    "2": 0.92475,
+    "3": 0.999
+   },
+   "medianChecksToFlag": {
+    "1": 6,
+    "2": 5,
+    "3": 4
+   }
+  },
+  {
+   "world": "As assumed",
+   "rule": "single-low",
+   "falseAlarmYear": 0.2698,
+   "detected": {
+    "1": 0.7559,
+    "2": 0.9423,
+    "3": 0.94575
+   },
+   "medianChecksToFlag": {
+    "1": 4,
+    "2": 3,
+    "3": 2
+   }
+  },
+  {
+   "world": "As assumed",
+   "rule": "fixed-cutoff",
+   "falseAlarmYear": 0.15925,
+   "detected": {
+    "1": 0.3542,
+    "2": 0.71125,
+    "3": 0.9051
+   },
+   "medianChecksToFlag": {
+    "1": 5,
+    "2": 5,
+    "3": 4
+   }
+  },
+  {
+   "world": "Each recogniser misses 8% of words",
+   "rule": "ours",
+   "falseAlarmYear": 0.01835,
+   "detected": {
+    "1": 0.2898,
+    "2": 0.8754,
+    "3": 0.9968
+   },
+   "medianChecksToFlag": {
+    "1": 6,
+    "2": 5,
+    "3": 4
+   }
+  },
+  {
+   "world": "Each recogniser misses 8% of words",
+   "rule": "single-low",
+   "falseAlarmYear": 0.1989,
+   "detected": {
+    "1": 0.70105,
+    "2": 0.95715,
+    "3": 0.96725
+   },
+   "medianChecksToFlag": {
+    "1": 5,
+    "2": 4,
+    "3": 3
+   }
+  },
+  {
+   "world": "Each recogniser misses 8% of words",
+   "rule": "fixed-cutoff",
+   "falseAlarmYear": 0.2506,
+   "detected": {
+    "1": 0.43975,
+    "2": 0.74315,
+    "3": 0.88135
+   },
+   "medianChecksToFlag": {
+    "1": 4,
+    "2": 4,
+    "3": 4
+   }
+  },
+  {
+   "world": "Each recogniser misses 15% of words",
+   "rule": "ours",
+   "falseAlarmYear": 0.00735,
+   "detected": {
+    "1": 0.16885,
+    "2": 0.75755,
+    "3": 0.98885
+   },
+   "medianChecksToFlag": {
+    "1": 6,
+    "2": 6,
+    "3": 5
+   }
+  },
+  {
+   "world": "Each recogniser misses 15% of words",
+   "rule": "single-low",
+   "falseAlarmYear": 0.1181,
+   "detected": {
+    "1": 0.5639,
+    "2": 0.95755,
+    "3": 0.982
+   },
+   "medianChecksToFlag": {
+    "1": 5,
+    "2": 4,
+    "3": 3
+   }
+  },
+  {
+   "world": "Each recogniser misses 15% of words",
+   "rule": "fixed-cutoff",
+   "falseAlarmYear": 0.39495,
+   "detected": {
+    "1": 0.51455,
+    "2": 0.75415,
+    "3": 0.83235
+   },
+   "medianChecksToFlag": {
+    "1": 4,
+    "2": 4,
+    "3": 3
+   }
+  },
+  {
+   "world": "True measurement error larger (4.5, rule assumes 3.5)",
+   "rule": "ours",
+   "falseAlarmYear": 0.1086,
+   "detected": {
+    "1": 0.4449,
+    "2": 0.88195,
+    "3": 0.9918
+   },
+   "medianChecksToFlag": {
+    "1": 5,
+    "2": 5,
+    "3": 4
+   }
+  },
+  {
+   "world": "True measurement error larger (4.5, rule assumes 3.5)",
+   "rule": "single-low",
+   "falseAlarmYear": 0.4588,
+   "detected": {
+    "1": 0.74245,
+    "2": 0.88285,
+    "3": 0.8952
+   },
+   "medianChecksToFlag": {
+    "1": 4,
+    "2": 3,
+    "3": 2
+   }
+  },
+  {
+   "world": "True measurement error larger (4.5, rule assumes 3.5)",
+   "rule": "fixed-cutoff",
+   "falseAlarmYear": 0.22535,
+   "detected": {
+    "1": 0.42125,
+    "2": 0.7294,
+    "3": 0.8927
+   },
+   "medianChecksToFlag": {
+    "1": 4,
+    "2": 4,
+    "3": 4
+   }
+  },
+  {
+   "world": "True practice gain larger (3.0, rule assumes 1.5)",
+   "rule": "ours",
+   "falseAlarmYear": 0.01575,
+   "detected": {
+    "1": 0.2774,
+    "2": 0.87305,
+    "3": 0.997
+   },
+   "medianChecksToFlag": {
+    "1": 6,
+    "2": 5,
+    "3": 4
+   }
+  },
+  {
+   "world": "True practice gain larger (3.0, rule assumes 1.5)",
+   "rule": "single-low",
+   "falseAlarmYear": 0.18555,
+   "detected": {
+    "1": 0.68235,
+    "2": 0.95405,
+    "3": 0.9618
+   },
+   "medianChecksToFlag": {
+    "1": 5,
+    "2": 4,
+    "3": 3
+   }
+  },
+  {
+   "world": "True practice gain larger (3.0, rule assumes 1.5)",
+   "rule": "fixed-cutoff",
+   "falseAlarmYear": 0.11155,
+   "detected": {
+    "1": 0.2921,
+    "2": 0.64525,
+    "3": 0.8942
+   },
+   "medianChecksToFlag": {
+    "1": 5,
+    "2": 5,
+    "3": 4
+   }
+  },
+  {
+   "world": "No practice gain at all (rule assumes 1.5)",
+   "rule": "ours",
+   "falseAlarmYear": 0.0613,
+   "detected": {
+    "1": 0.51555,
+    "2": 0.96215,
+    "3": 0.99955
+   },
+   "medianChecksToFlag": {
+    "1": 5,
+    "2": 5,
+    "3": 4
+   }
+  },
+  {
+   "world": "No practice gain at all (rule assumes 1.5)",
+   "rule": "single-low",
+   "falseAlarmYear": 0.37565,
+   "detected": {
+    "1": 0.81175,
+    "2": 0.9263,
+    "3": 0.92605
+   },
+   "medianChecksToFlag": {
+    "1": 4,
+    "2": 3,
+    "3": 2
+   }
+  },
+  {
+   "world": "No practice gain at all (rule assumes 1.5)",
+   "rule": "fixed-cutoff",
+   "falseAlarmYear": 0.2153,
+   "detected": {
+    "1": 0.4306,
+    "2": 0.75225,
+    "3": 0.9068
+   },
+   "medianChecksToFlag": {
+    "1": 4,
+    "2": 4,
+    "3": 4
+   }
+  }
+ ]
+}

@@ -1,9 +1,12 @@
 import type { Lang } from '../engine/lexicon'
 
+/** The recogniser puts its stop function here so the caller can end listening early. */
+export interface ListenControl { stop?: () => void }
+
 export interface Recogniser {
   name: string
   /** Listens for a fixed time and resolves with everything it heard. */
-  listen(lang: Lang, ms: number, onPartial: (text: string) => void): Promise<string>
+  listen(lang: Lang, ms: number, onPartial: (text: string) => void, control?: ListenControl): Promise<string>
 }
 
 type SR = {
@@ -22,7 +25,7 @@ export function browserSpeechAvailable(): boolean {
 /** The browser's built-in recogniser. Audio handling is the browser vendor's, so the app says so on screen. */
 export const browserRecogniser: Recogniser = {
   name: 'Browser',
-  listen(lang, ms, onPartial) {
+  listen(lang, ms, onPartial, control) {
     return new Promise((resolve, reject) => {
       const w = window as unknown as Record<string, new () => SR>
       const Ctor = w.SpeechRecognition || w.webkitSpeechRecognition
@@ -44,7 +47,9 @@ export const browserRecogniser: Recogniser = {
       // Some browsers end the session after a pause; start again until the time is up.
       rec.onend = () => { if (stopping) return finish(); committed = text; try { rec.start() } catch { finish() } }
       try { rec.start() } catch { return reject(new Error('blocked')) }
-      setTimeout(() => { stopping = true; try { rec.stop() } catch { /* already stopped */ } setTimeout(finish, 800) }, ms)
+      const stop = () => { if (stopping) return; stopping = true; try { rec.stop() } catch { /* already stopped */ } setTimeout(finish, 800) }
+      if (control) control.stop = stop
+      setTimeout(stop, ms)
     })
   },
 }

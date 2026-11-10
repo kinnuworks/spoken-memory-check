@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { evaluate } from '../engine/change'
 import { PERSONAS } from '../engine/histories'
 import { REFERRAL_TARGET_WORKING_DAYS, riskFactors, treatableContributors, workingDaysBetween } from '../engine/packet'
+import { bundle, checkObservation, referralRequest } from '../engine/fhir'
 import TrajectoryChart from './TrajectoryChart'
 
 type Decision = 'pending' | 'approved' | 'dismissed'
@@ -103,6 +104,15 @@ export default function Clinician() {
           )}
         </>
       )}
+
+      <h2>Hand-off to other systems</h2>
+      <p className="muted">The checks and the referral as FHIR R4 resources, for an exchange or a record system to take in.</p>
+      <button className="small" onClick={() => {
+        const res = [...person.checks.map((c) => checkObservation('Patient/synthetic-c', c)), ...(referredOn ? [referralRequest('Patient/synthetic-c', 'Practitioner/ordering', referredOn, addDays(visitOn, 21))] : [])]
+        const url = URL.createObjectURL(new Blob([JSON.stringify(bundle(res), null, 2)], { type: 'application/fhir+json' }))
+        Object.assign(document.createElement('a'), { href: url, download: 'synthetic-person-c.fhir.json' }).click()
+        URL.revokeObjectURL(url)
+      }}>Download FHIR bundle (synthetic)</button>
 
       <h2>Step trace</h2>
       <ol className="trace">{trace.map((t) => <li key={t.step}><strong className={t.ok ? 'status-usual-range' : 'status-watch'}>{t.ok ? 'Passed' : 'Held'}</strong>: {t.step}{t.detail ? ` (${t.detail})` : ''}</li>)}</ol>
