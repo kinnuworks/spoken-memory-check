@@ -18,7 +18,7 @@ function normEnglish(w: string): string {
 
 export function tokens(text: string, lang: Lang): string[] {
   const norm = lang === 'ar' ? normArabic : normEnglish
-  return text.split(/[\s,.;:!?،؛\-]+/).map(norm).filter(Boolean)
+  return text.split(/[\s,.;:!?،؛-]+/).map(norm).filter(Boolean)
 }
 
 /**
