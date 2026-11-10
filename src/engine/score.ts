@@ -1,0 +1,40 @@
+import { matchClosedSet } from './match'
+import type { Lang } from './lexicon'
+
+export type Heard = 'both' | 'one' | 'none'
+
+export interface ItemResult { row: number; label: string; heard: Heard; by: string[] }
+
+export interface RangeScore {
+  /** Count every recogniser heard. */
+  low: number
+  /** Count at least one recogniser heard. */
+  high: number
+  items: ItemResult[]
+  /** False when the recognisers disagree on too many items to use the session. */
+  scored: boolean
+  recognisers: string[]
+}
+
+/** A session is not scored when the range is wider than this share of the high count (and more than two items). */
+export const MAX_RANGE_SHARE = 0.34
+
+/**
+ * Scores one task from each recogniser's transcript of the same clip. Every item is marked
+ * heard by both, by one or by neither, so the score is a range and never a single guess.
+ * With one recogniser the range has zero width and the caller must say only one listened.
+ */
+export function scoreTask(transcripts: Record<string, string>, rows: string[][], lang: Lang): RangeScore {
+  const names = Object.keys(transcripts)
+  const sets = names.map((n) => matchClosedSet(transcripts[n], rows, lang))
+  const items: ItemResult[] = []
+  rows.forEach((row, i) => {
+    const by = names.filter((_, k) => sets[k].has(i))
+    if (by.length) items.push({ row: i, label: row[0], heard: by.length === names.length && names.length > 1 ? 'both' : names.length === 1 ? 'both' : 'one', by })
+  })
+  const high = items.length
+  const low = items.filter((it) => it.heard === 'both').length
+  const width = high - low
+  const scored = width <= 2 || width <= MAX_RANGE_SHARE * high
+  return { low, high, items, scored, recognisers: names }
+}
