@@ -97,3 +97,48 @@ export function runBenchmark(n: number, seed = 20261110): { n: number; rows: Row
   }
   return { n, rows }
 }
+
+/** Wilson score interval for a proportion, 95%. */
+export function wilson(k: number, n: number): [number, number] {
+  if (n === 0) return [0, 1]
+  const z = 1.96, p = k / n, d = 1 + (z * z) / n
+  const c = (p + (z * z) / (2 * n)) / d
+  const h = (z * Math.sqrt((p * (1 - p)) / n + (z * z) / (4 * n * n))) / d
+  return [Math.max(0, c - h), Math.min(1, c + h)]
+}
+
+export interface Burden {
+  /** Share of enrolled members assumed to be in real decline during the year. ASSUMPTION, shown on screen. */
+  prevalence: number
+  members: number
+  tp: number; fn: number; fp: number; tn: number
+  sensitivity: number; sensitivityCi: [number, number]
+  specificity: number; specificityCi: [number, number]
+  packetsPer1000: number
+  realPer1000: number
+}
+
+/**
+ * A year for a simulated programme: some members in real decline (two points a check),
+ * the rest stable. Counts packets sent and how many of them are real. Everything here is
+ * simulated, and the share in decline is an assumption the page states.
+ */
+export function programmeYear(members: number, prevalence: number, seed = 20261111, slope = 2): Burden {
+  const r = rng(seed)
+  let tp = 0, fn = 0, fp = 0, tn = 0
+  for (let i = 0; i < members; i++) {
+    const declining = r() < prevalence
+    const w = { ...BASE_WORLD, miss: 0.08, slope: declining ? slope : 0 }
+    const f = firstFlag('ours', simulatePerson(w, r))
+    if (declining) { if (f >= w.declineFrom) tp++; else fn++ }
+    else { if (f >= 0) fp++; else tn++ }
+  }
+  const pos = tp + fn, neg = fp + tn
+  return {
+    prevalence, members, tp, fn, fp, tn,
+    sensitivity: pos ? tp / pos : 0, sensitivityCi: wilson(tp, pos),
+    specificity: neg ? tn / neg : 0, specificityCi: wilson(tn, neg),
+    packetsPer1000: ((tp + fp) / members) * 1000,
+    realPer1000: (tp / members) * 1000,
+  }
+}

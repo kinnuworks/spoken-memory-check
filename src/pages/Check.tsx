@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { evaluate } from '../engine/change'
 import { ANIMALS, ARABIC_REVIEWED, SOUND_CHECK_WORDS, WORD_LISTS, type Lang } from '../engine/lexicon'
 import { scoreTask, type RangeScore } from '../engine/score'
+import { readYesNo } from '../engine/yesno'
 import { clearChecks, loadChecks, saveCheck, type StoredCheck } from '../engine/store'
 import { browserSpeechAvailable, type ListenControl } from '../speech/recogniser'
 import { DOWNLOAD_MB, loadSecond, secondLoading, secondSupported } from '../speech/second'
@@ -10,7 +11,7 @@ import { listenTask, type Heard } from '../speech/session'
 import { pause, speak, speakList } from '../speech/speak'
 import TrajectoryChart from './TrajectoryChart'
 
-type Stage = 'intro' | 'sound' | 'sound-failed' | 'hear-list' | 'recall-1' | 'animals' | 'count' | 'recall-2' | 'scoring' | 'done' | 'blocked'
+type Stage = 'intro' | 'sound' | 'sound-failed' | 'hear-list' | 'recall-1' | 'animals' | 'count' | 'recall-2' | 'function' | 'scoring' | 'done' | 'blocked'
 
 const T: Record<Lang, Record<string, string>> = {
   en: {
@@ -19,6 +20,7 @@ const T: Record<Lang, Record<string, string>> = {
     animals: 'Now name as many animals as you can. You have one minute.',
     count: 'Now count backwards from twenty to one.',
     recallLater: 'Earlier I read you ten words. Say as many as you can remember.',
+    fn: 'Last question. In the past month, have money, medicines or appointments become harder to manage? Please say yes or no.',
     thanks: 'Thank you. That is the end of the check.',
   },
   ar: {
@@ -27,13 +29,14 @@ const T: Record<Lang, Record<string, string>> = {
     animals: 'الآن اذكر أكبر عدد من الحيوانات. لديك دقيقة واحدة.',
     count: 'الآن عد تنازلياً من عشرين إلى واحد.',
     recallLater: 'قرأت لك قبل قليل عشر كلمات. قل ما تتذكره منها.',
+    fn: 'سؤال أخير. خلال الشهر الماضي، هل أصبح التعامل مع المال أو الأدوية أو المواعيد أصعب؟ قل نعم أو لا.',
     thanks: 'شكراً لك. انتهى الفحص.',
   },
 }
 
 const HEAD: Record<Stage, string> = {
   intro: 'The full check', sound: 'Say these three words', 'sound-failed': "We can't hear you clearly here", 'hear-list': 'Listen to the ten words',
-  'recall-1': 'Say the words you remember', animals: 'Name animals for one minute', count: 'Count backwards from twenty', 'recall-2': 'Say the ten words again', scoring: 'Scoring your check', done: 'Check received', blocked: "The microphone isn't available here",
+  'recall-1': 'Say the words you remember', animals: 'Name animals for one minute', count: 'Count backwards from twenty', 'recall-2': 'Say the ten words again', function: 'One last question', scoring: 'Scoring your check', done: 'Check received', blocked: "The microphone isn't available here",
 }
 
 export default function Check() {
@@ -91,6 +94,10 @@ export default function Check() {
       await speak(T[lang].recallLater, lang)
       setStage('recall-2')
       const delayedHeard = await listen(45000, rows, false)
+      await speak(T[lang].fn, lang)
+      setStage('function')
+      const fnHeard = await listen(8000, [], false, false)
+      const functionChange = readYesNo(fnHeard.first.Browser ?? '', lang)
       await speak(T[lang].thanks, lang)
 
       // The second listener works through each recording after the task; wait for all three.
@@ -102,7 +109,7 @@ export default function Check() {
         date: new Date().toISOString().slice(0, 10),
         low: scored ? immediate.low + delayed.low + animals.low : null,
         high: scored ? immediate.high + delayed.high + animals.high : null,
-        offDay, lang, list: listIndex,
+        offDay, lang, list: listIndex, ...(functionChange === true ? { functionChange } : {}),
         parts: { immediate: [immediate.low, immediate.high], delayed: [delayed.low, delayed.high], animals: [animals.low, animals.high] },
         recognisers: Object.keys(ani),
       }
@@ -117,7 +124,7 @@ export default function Check() {
 
   const traj = evaluate(history)
   const range = (p: [number, number]) => (p[0] === p[1] ? String(p[1]) : `${p[0]} to ${p[1]}`)
-  const listening = stage === 'recall-1' || stage === 'animals' || stage === 'count' || stage === 'recall-2'
+  const listening = stage === 'recall-1' || stage === 'animals' || stage === 'count' || stage === 'recall-2' || stage === 'function'
   const dir = lang === 'ar' ? 'rtl' : 'ltr'
 
   return (
@@ -148,6 +155,7 @@ export default function Check() {
       )}
 
       {percent !== null && <p className="muted">Second listener: {percent}%</p>}
+      {stage === 'function' && <p dir={dir}>{T[lang].fn}</p>}
       {stage === 'scoring' && <p className="muted">The second listener is going through your recordings on this device. This can take up to a minute.</p>}
       {stage === 'sound' && <><p className="big" dir={dir}>{SOUND_CHECK_WORDS[lang].join(lang === 'ar' ? '، ' : ', ')}</p><p className="muted">Listening…</p></>}
       {stage === 'hear-list' && <p className="muted">Reading the words aloud. Nothing is shown on screen.</p>}
@@ -175,6 +183,7 @@ export default function Check() {
               <tr><td>Words said back</td><td>{range(last.parts.immediate)} of 10</td></tr>
               <tr><td>Animals in a minute</td><td>{range(last.parts.animals)}</td></tr>
               <tr><td>Words recalled later</td><td>{range(last.parts.delayed)} of 10</td></tr>
+              <tr><td>Everyday tasks harder?</td><td>{last.functionChange ? 'Yes: this goes to the physician whatever the scores say' : 'No, or unclear'}</td></tr>
             </tbody></table>
             <p className="muted">{last.recognisers.length > 1 ? 'Both listeners scored this check, so each figure is a range where they disagreed.' : 'One listener scored this check, so there are no ranges.'}</p>
             <p className="muted">The words were list {last.list + 1}: <span dir={dir}>{WORD_LISTS[last.lang][last.list].join(lang === 'ar' ? '، ' : ', ')}</span>. A patient sees only "Check received" and their trend.</p>

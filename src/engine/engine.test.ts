@@ -150,3 +150,18 @@ describe('words outside the accepted list', () => {
     expect(s.unmatched).toEqual(['unicorn', 'flibbertigibbet'])
   })
 })
+
+import { readYesNo } from './yesno'
+describe('spoken yes or no', () => {
+  it('reads clear answers', () => {
+    expect(readYesNo('yes it has', 'en')).toBe(true)
+    expect(readYesNo('no', 'en')).toBe(false)
+    expect(readYesNo('نعم', 'ar')).toBe(true)
+    expect(readYesNo('لا', 'ar')).toBe(false)
+  })
+  it('leaves unclear answers unknown, never no', () => {
+    expect(readYesNo('', 'en')).toBeUndefined()
+    expect(readYesNo('well yes and no', 'en')).toBeUndefined()
+    expect(readYesNo('I am not sure', 'en')).toBeUndefined()
+  })
+})

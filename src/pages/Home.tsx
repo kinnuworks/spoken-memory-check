@@ -10,7 +10,7 @@ export default function Home() {
         <Link className="btn" to="/recorded">Play a recorded check (no microphone)</Link>
         <Link className="btn" to="/clinician">Go to the physician's view</Link>
       </div>
-      <p><Link to="/check">Take the full four-minute check</Link> · <Link to="/year">A year of checks</Link> · <Link to="/me/decline">What the person sees</Link> · <Link to="/benchmark">How the flag was tested</Link></p>
+      <p><Link to="/check">Take the full four-minute check</Link> · <Link to="/year">A year of checks</Link> · <Link to="/me/decline">What the person sees</Link> · <Link to="/benchmark">How the flag was tested</Link> · <Link to="/programme">Programme view</Link> · <Link to="/how">How it works, and what is real</Link></p>
       <p className="muted">No sign-up. The histories and patients shown are synthetic and labelled. This prototype does not diagnose.</p>
     </>
   )

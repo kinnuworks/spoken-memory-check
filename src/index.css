@@ -33,3 +33,12 @@ svg { max-width: 100%; height: auto; display: block; }
 .trace li { margin: 4px 0; }
 textarea { width: 100%; min-height: 120px; font: inherit; padding: 10px; border: 1px solid var(--line); border-radius: 8px; }
 @media (max-width: 520px) { h1 { font-size: 25px; } .barrow { grid-template-columns: 120px 1fr 44px; } }
+
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
+.tiles .card { margin: 0; }
+.small-big { font-size: 30px; }
+.lbl { display: inline-block; font-size: 13px; padding: 2px 8px; border-radius: 4px; border: 1px solid; }
+.lbl.working { color: var(--ok); border-color: var(--ok); }
+.lbl.simulated { color: var(--warn); border-color: var(--warn); }
+.lbl.proposed { color: var(--muted); border-color: var(--line); }
+.scroll { overflow-x: auto; }

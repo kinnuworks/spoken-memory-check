@@ -70,14 +70,14 @@ export default function Clinician() {
       </div>
 
       <h2>3. Treatable contributors to check first</h2>
-      <table>
+      <div className="scroll"><table>
         <thead><tr><th>Check</th><th>Why for this person</th><th>Suggested action</th></tr></thead>
         <tbody>{contributors.map((c) => <tr key={c.name}><td><strong>{c.name}</strong></td><td>{c.why}</td><td>{c.action}</td></tr>)}</tbody>
-      </table>
+      </table></div>
 
       <h2>4. Risk factors already in the screening record</h2>
       <p className="muted">Ten of the fourteen modifiable risk factors in the 2024 Lancet Commission report have a matching field in the screening record. Four do not.</p>
-      <table>
+      <div className="scroll"><table>
         <thead><tr><th>Factor</th><th>Screening field</th><th>Value</th><th></th></tr></thead>
         <tbody>
           {factors.map((f) => (
@@ -87,7 +87,7 @@ export default function Clinician() {
             </tr>
           ))}
         </tbody>
-      </table>
+      </table></div>
 
       <h2>5. Your decision</h2>
       {decision === 'pending' && (
