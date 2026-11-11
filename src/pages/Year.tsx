@@ -15,13 +15,13 @@ export default function Year() {
     <>
       <h1>A year of checks</h1>
       <p><span className="tag syn">Synthetic people, not real data</span></p>
-      <div className="row">
+      <nav className="personas" aria-label="Synthetic people">
         {PERSONAS.map((p) => (
-          <Link key={p.id} className="btn" style={{ padding: '6px 10px', fontSize: 15, fontWeight: p.id === person.id ? 700 : 400 }} to={`/year/${p.id}`}>{p.name}<br /><span className="muted">{p.path}</span></Link>
+          <Link key={p.id} className="persona" aria-current={p.id === person.id} to={`/year/${p.id}`}><b>{p.name}</b><span>{p.path}</span></Link>
         ))}
-      </div>
+      </nav>
       <p>{person.story}</p>
-      <div className="card">
+      <div className="card chart-card">
         <TrajectoryChart checks={person.checks} traj={traj} />
         <p className="muted">Each dot is one check (total of words said back, words recalled later and animals named). The thick bar is the range from the two recognisers. The dashed line is this person's own baseline, the mean of their first three checks, and the shaded band is normal variation. Hollow dots are days the person reported as off days. A dash is a missed check.</p>
       </div>
@@ -43,7 +43,7 @@ export default function Year() {
         </tbody>
       </table></div>
       <div className="note">
-        <strong>What the person sees.</strong> After every check: "Check received. Thank you." and a dated tick. No scores, no trend, nothing abnormal. {urgent ? 'The one exception is this route: after a very large fall the app says "Please see a doctor today" and gives the clinic number, and the clinic is told.' : flagged ? 'For this person, the physician is asked first.' : 'For this person nothing went to a physician.'}
+        <strong>What the person sees.</strong> After every check: "Check received. Thank you." and a dated tick. No scores, no trend, nothing abnormal. {urgent ? 'The one exception is this route: after a very large fall the app says "Please see a doctor today". In a pilot the clinic would be told at the same time; that alert is not built in this prototype.' : flagged ? 'For this person, the physician is asked first.' : 'For this person nothing went to a physician.'}
       </div>
       <div className="stack">
         {flagged && <Link className="btn primary" to={`/clinician/${person.id}`}>Open the physician's packet for {person.name}</Link>}

@@ -78,16 +78,16 @@ export default function Try() {
   }
 
   const chips = live?.items.map((it) => (
-    <span key={it.row} className={`chip ${listeners > 1 ? it.heard : ''}`}>{it.label}</span>
+    <span key={it.row} className={`chip pop ${listeners > 1 ? it.heard : ''}`}>{it.label}</span>
   ))
   const one = listeners === 1
 
   return (
     <>
       <h1>Try it with your voice</h1>
-      <div className="row">
-        <button className="small" disabled={!['intro', 'blocked', 'typed'].includes(stage)} onClick={() => setLang('en')} aria-pressed={lang === 'en'}>{lang === 'en' ? '● ' : ''}English</button>
-        <button className="small" disabled={!['intro', 'blocked', 'typed'].includes(stage)} onClick={() => setLang('ar')} aria-pressed={lang === 'ar'}>{lang === 'ar' ? '● ' : ''}العربية</button>
+      <div className="segmented" role="group" aria-label="Language">
+        <button className="seg" disabled={!['intro', 'blocked', 'typed'].includes(stage)} onClick={() => setLang('en')} aria-pressed={lang === 'en'}>English</button>
+        <button className="seg" lang="ar" disabled={!['intro', 'blocked', 'typed'].includes(stage)} onClick={() => setLang('ar')} aria-pressed={lang === 'ar'}>العربية</button>
       </div>
       {lang === 'ar' && !ARABIC_REVIEWED && <p className="note">The Arabic word lists are a draft and have not yet been reviewed by a native Gulf Arabic speaker.</p>}
 
@@ -100,14 +100,14 @@ export default function Try() {
         </>
       )}
 
-      {second === 'loading' && <p className="muted">Second listener: {percent}%</p>}
+      {second === 'loading' && <div><p className="muted">Getting the second listener ready on this device: {percent}%</p><div className="meter"><i style={{ width: `${percent}%` }} /></div></div>}
 
       {stage === 'sound' && (
         <>
           <h2>Say these three words</h2>
-          <p className="big" dir={lang === 'ar' ? 'rtl' : 'ltr'}>{SOUND_CHECK_WORDS[lang].join(lang === 'ar' ? '، ' : ', ')}</p>
+          <p className="prompt-words" dir={lang === 'ar' ? 'rtl' : 'ltr'}>{SOUND_CHECK_WORDS[lang].join(lang === 'ar' ? '، ' : ', ')}</p>
           <div className="chips" dir={lang === 'ar' ? 'rtl' : 'ltr'}>{chips}</div>
-          <p className="muted">Listening…</p>
+          <p className="listening"><i />Listening…</p>
         </>
       )}
 
@@ -136,6 +136,7 @@ export default function Try() {
         <>
           <h2>Name animals</h2>
           <p className="big">{left}s</p>
+          <p className="listening"><i />Listening</p>
           <div className="chips" dir={lang === 'ar' ? 'rtl' : 'ltr'}>{chips}</div>
         </>
       )}

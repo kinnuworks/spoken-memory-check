@@ -141,9 +141,9 @@ export default function Check() {
       {stage === 'intro' && (
         <>
           <p>About four minutes, all by voice: a sound check, ten words to say back, a minute of naming animals, counting backwards, then the ten words again. Find a quiet place and do it on your own.</p>
-          <div className="row">
-            <button className="small" onClick={() => setLang('en')} aria-pressed={lang === 'en'}>{lang === 'en' ? '● ' : ''}English</button>
-            <button className="small" onClick={() => setLang('ar')} aria-pressed={lang === 'ar'}>{lang === 'ar' ? '● ' : ''}العربية</button>
+          <div className="segmented" role="group" aria-label="Language">
+            <button className="seg" onClick={() => setLang('en')} aria-pressed={lang === 'en'}>English</button>
+            <button className="seg" lang="ar" onClick={() => setLang('ar')} aria-pressed={lang === 'ar'}>العربية</button>
           </div>
           {lang === 'ar' && !ARABIC_REVIEWED && <p className="note">The Arabic wording and word lists are a draft, not yet reviewed by a native Gulf Arabic speaker, and the voice is the device's synthetic one.</p>}
           <p><label><input type="checkbox" checked={offDay} onChange={(e) => setOffDay(e.target.checked)} /> I slept badly or feel unwell today</label></p>
@@ -164,12 +164,12 @@ export default function Check() {
       {percent !== null && <p className="muted">Second listener: {percent}%</p>}
       {stage === 'function' && <p dir={dir}>{T[lang].fn}</p>}
       {stage === 'scoring' && <p className="muted">The second listener is going through your recordings on this device. This can take up to a minute.</p>}
-      {stage === 'sound' && <><p className="big" dir={dir}>{SOUND_CHECK_WORDS[lang].join(lang === 'ar' ? '، ' : ', ')}</p><p className="muted">Listening…</p></>}
+      {stage === 'sound' && <><p className="prompt-words" dir={dir}>{SOUND_CHECK_WORDS[lang].join(lang === 'ar' ? '، ' : ', ')}</p><p className="listening"><i />Listening…</p></>}
       {stage === 'hear-list' && <p className="muted">Reading the words aloud. Nothing is shown on screen.</p>}
       {stage === 'animals' && <div className="chips" dir={dir}>{live?.items.map((it) => <span key={it.row} className="chip">{it.label}</span>)}</div>}
       {listening && (
         <>
-          <p className="muted">Listening…</p>
+          <p className="listening"><i />Listening…</p>
           <div className="stack"><button onClick={() => control.current.stop?.()}>I've finished</button></div>
         </>
       )}

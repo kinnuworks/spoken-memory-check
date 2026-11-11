@@ -1,4 +1,4 @@
-import { Link, Route, Routes } from 'react-router-dom'
+import { Outlet, Route, Routes } from 'react-router-dom'
 import Home from './pages/Home'
 import Try from './pages/Try'
 import Year from './pages/Year'
@@ -9,17 +9,20 @@ import Person from './pages/Person'
 import Recorded from './pages/Recorded'
 import Programme from './pages/Programme'
 import How from './pages/How'
+import { Footer, Nav, ScrollToTop } from './components/Shell'
+
+function Page() {
+  return <main className="page"><Outlet /></main>
+}
 
 export default function App() {
   return (
     <>
-      <header className="top">
-        <Link to="/">Spoken memory check</Link>
-        <span className="tag">Prototype. Not a diagnosis.</span>
-      </header>
-      <main>
-        <Routes>
-          <Route path="/" element={<Home />} />
+      <ScrollToTop />
+      <Nav />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route element={<Page />}>
           <Route path="/try" element={<Try />} />
           <Route path="/year" element={<Year />} />
           <Route path="/year/:id" element={<Year />} />
@@ -32,8 +35,9 @@ export default function App() {
           <Route path="/how" element={<How />} />
           <Route path="/me" element={<Person />} />
           <Route path="/me/:id" element={<Person />} />
-        </Routes>
-      </main>
+        </Route>
+      </Routes>
+      <Footer />
     </>
   )
 }

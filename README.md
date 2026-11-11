@@ -1,10 +1,10 @@
 # Spoken memory check
 
-A four-minute memory check that an adult does at home by voice, in Gulf Arabic or English, compared with their own earlier scores. A physician hears about it only when a change lasts, and results are given in person.
+A four-minute memory check that an adult does at home by voice, in Gulf Arabic or English, compared with their own earlier scores. A physician hears about it only after two low checks in a row, and results are given in person.
 
 Why speech: many older adults in the Gulf had little schooling, and a test that needs reading, typing or tapping is unfair to them. Saying words back and naming animals is how memory has been tested by phone for decades.
 
-Prototype for Statement 8, Protecting Brain Health Earlier. It does not diagnose. The people and histories in the demo are synthetic and labelled.
+A prototype for Abu Dhabi's adult screening programme, built for Statement 8 of the Future Health challenge, "Protecting Brain Health Earlier". It does not diagnose. The people and histories in the demo are synthetic and labelled.
 
 ## Try it in 30 seconds
 

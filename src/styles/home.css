@@ -1,0 +1,85 @@
+/* Landing page pieces that sit on top of the foundation. */
+.hero .btn .tag { background: rgba(255,255,255,.16); color: inherit; }
+.hero-stage { background-size: cover; background-position: center 60%; padding: clamp(20px, 4vw, 56px) clamp(16px, 4vw, 56px); }
+.hero-grid { display: grid; grid-template-columns: 290px 1fr; gap: clamp(20px, 3vw, 40px); align-items: center; max-width: 1000px; margin: 0 auto; }
+.hero-grid .phone { width: 290px; }
+.hero-window__body { padding: 18px 20px 20px; }
+.hero-window__head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 6px; }
+.stage-caption { margin: 14px auto 0; font-size: 13px; color: var(--ink-3); text-align: center; position: relative; z-index: 1; }
+
+/* Mock UI text inside frames */
+.mock-eyebrow { font-size: 11.5px; font-weight: 650; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 4px; }
+.mock-title { font: 650 17px/1.3 var(--font-display); letter-spacing: -.015em; color: var(--ink); }
+.mock-h { font: 700 26px/1.1 var(--font-display); letter-spacing: -.03em; margin: 6px 0 0; }
+.mock-count { font: 700 72px/1 var(--font-display); letter-spacing: -.05em; margin: 14px 0 12px; color: var(--ink); }
+.mock-count span { font-size: 28px; color: var(--ink-4); margin-left: 2px; }
+.mock-sub { font-weight: 500; color: var(--ink-3); }
+.mock-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.mock-chips .chip { height: 30px; padding: 0 12px; font-size: 13px; }
+.mock-listen { display: inline-flex; align-items: center; gap: 8px; margin-top: 18px; font-size: 13px; font-weight: 600; color: var(--ink-3); }
+.mock-listen i { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); animation: breathe 1.4s var(--ease-out) infinite; }
+.mock-pad { padding: 20px 22px 22px; }
+.mock-big { font: 700 44px/1 var(--font-display); letter-spacing: -.045em; margin: 2px 0 16px; color: var(--ink); }
+.mock-big span { font-size: 17px; font-weight: 550; letter-spacing: -.01em; color: var(--ink-3); }
+.mock-row { display: grid; grid-template-columns: 130px 1fr; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 14px; color: var(--ink-2); }
+.mock-row b { color: var(--ink); font-weight: 650; }
+.mock-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.mock-actions .btn { pointer-events: auto; }
+.legend { display: flex; gap: 18px; margin-top: 16px; font-size: 13px; color: var(--ink-3); }
+.legend span, .dotline { display: inline-flex; align-items: center; gap: 7px; }
+.legend i, .dotline i { width: 8px; height: 8px; border-radius: 50%; }
+i.ok { background: var(--both); } i.one { background: var(--one); }
+.stage-note { position: absolute; right: 18px; bottom: 12px; margin: 0; font-size: 12px; font-weight: 600; color: var(--ink-3); }
+
+/* Floating fragments around the hero frame */
+.float { display: grid; gap: 4px; }
+.float b { font-size: 12px; font-weight: 650; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }
+.float--a { right: clamp(16px, 5vw, 72px); top: clamp(16px, 3vw, 40px); }
+.mock-steps { list-style: none; padding: 0; margin: 22px 0 0; display: grid; gap: 2px; border-top: 1px solid var(--line); padding-top: 14px; }
+.mock-steps li { display: flex; align-items: center; gap: 10px; padding: 6px 0; font-size: 13.5px; color: var(--ink-3); }
+.mock-steps li i { width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center; box-shadow: inset 0 0 0 1.5px var(--line-2); flex: none; }
+.mock-steps li.done { color: var(--ink-2); }
+.mock-steps li.done i { background: var(--both); box-shadow: none; }
+.mock-steps li.done i::after { content: ""; width: 7px; height: 4px; border: solid #fff; border-width: 0 0 2px 2px; transform: rotate(-45deg) translate(1px, -1px); }
+.mock-steps li.now { color: var(--ink); font-weight: 650; }
+.mock-steps li.now i { box-shadow: inset 0 0 0 5px var(--accent); }
+.float--b { right: clamp(16px, 5vw, 72px); bottom: clamp(16px, 3vw, 36px); }
+.float--b span { font-weight: 600; color: var(--ink); }
+
+/* Problem and solution cards */
+.card-h { font-size: 22px; margin: 10px 0 6px; letter-spacing: -.025em; }
+.card-viz { margin: 18px 0 14px; }
+.card .eyebrow { margin: 0; }
+
+/* Try it here */
+.try-controls { display: flex; flex-direction: column; gap: 14px; }
+.try-list { display: grid; gap: 6px; }
+.try-pick { display: grid; gap: 1px; text-align: left; padding: 12px 14px; border: 0; border-radius: var(--r-md); background: transparent; box-shadow: inset 0 0 0 1px var(--line); font: inherit; color: var(--ink); cursor: pointer; transition: background-color var(--dur-hover) var(--ease-out), box-shadow var(--dur-hover) var(--ease-out); }
+.try-pick:hover { background: var(--surface-2); }
+.try-pick b { font-size: 15px; font-weight: 650; }
+.try-pick span { font-size: 13.5px; color: var(--ink-3); }
+.try-pick[aria-pressed="true"] { background: var(--accent-wash); box-shadow: inset 0 0 0 1.5px var(--accent); }
+.try-stage { padding: clamp(16px, 3vw, 36px); display: flex; align-items: center; }
+.try-stage .window { width: 100%; }
+.try-story { margin-top: 8px; }
+
+/* Evidence bento */
+.stat { font: 700 clamp(40px, 5vw, 60px)/1 var(--font-display); letter-spacing: -.045em; color: var(--ink); margin: auto 0 0; }
+.stat span { font-size: 17px; font-weight: 550; letter-spacing: -.01em; color: var(--ink-3); }
+.stat--muted { color: var(--ink-4); font-size: clamp(34px, 4vw, 44px); }
+.bento .lbl { align-self: flex-start; }
+.center-link { display: flex; justify-content: center; margin-top: 36px; }
+
+/* Final call */
+.final { text-align: center; }
+.final-icon { width: 88px; height: 88px; border-radius: 22.5%; margin: 0 auto 28px; box-shadow: var(--shadow-2); }
+
+@media (max-width: 900px) {
+  .hero-grid { grid-template-columns: 1fr; }
+  .hero-grid .phone { display: none; }
+}
+@media (max-width: 640px) {
+  .mock-row { grid-template-columns: 1fr; gap: 2px; }
+  .hero .cta-row .btn { width: 100%; }
+}
+.hero .badge { height: auto; min-height: 32px; padding-block: 6px; line-height: 1.35; text-align: left; max-width: 100%; }

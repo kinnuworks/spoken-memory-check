@@ -4,6 +4,7 @@ import { evaluate } from '../engine/change'
 import { loadConsent, saveConsent } from '../engine/consent'
 import { PERSONAS } from '../engine/histories'
 import { improvable } from '../engine/prevention'
+import { Check as Tick } from '../components/Icons'
 
 export default function Person() {
   const { id } = useParams()
@@ -18,23 +19,23 @@ export default function Person() {
     <>
       <h1>What the person sees</h1>
       <p><span className="tag syn">Synthetic person</span></p>
-      <div className="row">
+      <nav className="personas" aria-label="Synthetic people">
         {PERSONAS.map((p) => (
-          <Link key={p.id} className="btn" style={{ padding: '6px 10px', fontSize: 15, fontWeight: p.id === person.id ? 700 : 400 }} to={`/me/${p.id}`}>{p.name}</Link>
+          <Link key={p.id} className="persona" aria-current={p.id === person.id} to={`/me/${p.id}`}><b>{p.name}</b><span>{p.path}</span></Link>
         ))}
-      </div>
+      </nav>
 
       <h2>Your checks</h2>
       {traj.status === 'urgent' ? (
-        <div className="note" style={{ borderLeft: '4px solid #a12a2a' }}>
+        <div className="note note-alert">
           <strong>Please see a doctor today.</strong> Your last check was very different from your earlier ones. This can have many causes, some of them simple to treat, and it is worth checking straight away. Call your screening clinic, or go to an urgent care centre. In a pilot, the clinic would be told at the same time; that alert is not built in this prototype.
         </div>
       ) : (
         <p>{person.checks.length} checks this year, {scored} of them scored. Thank you. Your next check is due in about six weeks; we will remind you.</p>
       )}
-      <div className="row" aria-label="Checks received">
+      <div className="ticks" aria-label="Checks received">
         {person.checks.map((c, i) => (
-          <span key={i} className="chip" title={c.date}>{c.date.slice(5)} {c.low === null ? (c.hearingLimited ? '· sound check' : '· missed') : '✓'}</span>
+          <span key={i} className={`tick${c.low === null ? ' off' : ''}`} title={c.date}>{c.low !== null && <Tick />}{c.date.slice(5)}{c.low === null ? (c.hearingLimited ? ' · sound check' : ' · missed') : ''}</span>
         ))}
       </div>
       {person.checks.filter((c) => c.hearingLimited).length >= 2 && (
@@ -54,9 +55,9 @@ export default function Person() {
 
       <h2>Your choices</h2>
       <p>Each one is off until you turn it on, and you can turn it off again at any time.</p>
-      <p><label><input type="checkbox" checked={consent.takeChecks} onChange={(e) => set({ takeChecks: e.target.checked })} /> Take memory checks at home and keep my scores on this device</label></p>
-      <p><label><input type="checkbox" checked={consent.sharePhysician} onChange={(e) => set({ sharePhysician: e.target.checked })} /> If my scores stay lower than usual, tell the physician at my screening clinic</label></p>
-      <p><label><input type="checkbox" disabled={!consent.sharePhysician} checked={consent.keepClips} onChange={(e) => set({ keepClips: e.target.checked })} /> Let that physician listen to a recording when the check was unsure what I said</label></p>
+      <label className="choice"><input className="switch" type="checkbox" checked={consent.takeChecks} onChange={(e) => set({ takeChecks: e.target.checked })} /><span>Take memory checks at home and keep my scores on this device</span></label>
+      <label className="choice"><input className="switch" type="checkbox" checked={consent.sharePhysician} onChange={(e) => set({ sharePhysician: e.target.checked })} /><span>If my scores stay lower than usual, tell the physician at my screening clinic</span></label>
+      <label className="choice"><input className="switch" type="checkbox" disabled={!consent.sharePhysician} checked={consent.keepClips} onChange={(e) => set({ keepClips: e.target.checked })} /><span>Let that physician listen to a recording when the check was unsure what I said</span></label>
       {consent.updated && (
         <div className="card">
           <strong>Your receipt</strong>

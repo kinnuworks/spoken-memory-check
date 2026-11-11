@@ -55,13 +55,13 @@ function Clinician({ id }: { id?: string }) {
     <>
       <h1>Physician's packet</h1>
       <p><span className="tag syn">Synthetic patient; dates are illustrative</span> <span className="tag">Decision support. You decide.</span></p>
-      <div className="row">
-        {candidates.map((p) => <Link key={p.id} className="btn" style={{ padding: '6px 10px', fontSize: 15, fontWeight: p.id === person.id ? 700 : 400 }} to={`/clinician/${p.id}`}>{p.name}: {p.path}</Link>)}
-      </div>
+      <nav className="personas" aria-label="Packets waiting">
+        {candidates.map((p) => <Link key={p.id} className="persona" aria-current={p.id === person.id} to={`/clinician/${p.id}`}><b>{p.name}</b><span>{p.path}</span></Link>)}
+      </nav>
       <p><strong>{person.name}</strong>, {person.record.sex === 'F' ? 'female' : 'male'}. Clinic MoCA at the screening visit: {person.record.mocaAtVisit}. Home checks since {person.checks[0].date}.</p>
 
       <h2>1. What was observed</h2>
-      <div className="card"><TrajectoryChart checks={person.checks} traj={traj} /></div>
+      <div className="card chart-card"><TrajectoryChart checks={person.checks} traj={traj} /></div>
       <p>Scores are totals from a spoken check at home. Each is a range from two speech recognisers.</p>
 
       <h2>2. What was calculated</h2>

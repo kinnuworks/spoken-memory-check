@@ -39,9 +39,9 @@ export default function Recorded() {
     <>
       <h1>Play a recorded check</h1>
       <p><span className="tag syn">Synthetic voice, not a person</span></p>
-      <div className="row">
-        <button className="small" disabled={stage !== 'intro' && stage !== 'result'} onClick={() => { setLang('en'); setStage('intro') }}>{lang === 'en' ? '● ' : ''}English</button>
-        <button className="small" disabled={stage !== 'intro' && stage !== 'result'} onClick={() => { setLang('ar'); setStage('intro') }}>{lang === 'ar' ? '● ' : ''}العربية</button>
+      <div className="segmented" role="group" aria-label="Language">
+        <button className="seg" aria-pressed={lang === 'en'} disabled={stage !== 'intro' && stage !== 'result'} onClick={() => { setLang('en'); setStage('intro') }}>English</button>
+        <button className="seg" lang="ar" aria-pressed={lang === 'ar'} disabled={stage !== 'intro' && stage !== 'result'} onClick={() => { setLang('ar'); setStage('intro') }}>العربية</button>
       </div>
       <p>No microphone needed. This is a computer voice naming twenty animals, heard by the same on-device listener the spoken check uses. Play it, then let the listener score it.</p>
       <audio controls src={CLIP[lang]} style={{ width: '100%' }} />
@@ -52,8 +52,8 @@ export default function Recorded() {
           <div className="stack"><button className="primary" onClick={run}>Score this recording on my device</button></div>
         </>
       )}
-      {stage === 'loading' && <p className="muted">Getting the listener ready: {percent}%</p>}
-      {stage === 'listening' && <p className="muted">Listening to the recording on this device…</p>}
+      {stage === 'loading' && <div><p className="muted">Getting the listener ready on this device: {percent}%</p><div className="meter"><i style={{ width: `${percent}%` }} /></div></div>}
+      {stage === 'listening' && <p className="listening"><i />Listening to the recording on this device…</p>}
       {stage === 'failed' && (
         <>
           <p>The on-device listener could not run here. Older or low-memory devices score with one listener only.</p>
