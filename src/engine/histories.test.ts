@@ -14,6 +14,22 @@ describe('seeded histories', () => {
   })
 })
 
+describe('every route has a seeded case', () => {
+  const last = (id: string) => evaluate(PERSONAS.find((p) => p.id === id)!.checks)
+  it('holds checks when the sound check fails, without scoring them as low', () => {
+    const t = last('hearing')
+    expect(t.results.filter((r) => !r.scored).length).toBe(2)
+    expect(t.results.map((r) => r.status)).not.toContain('flag')
+  })
+  it('sends a reported change in everyday tasks to review whatever the score', () => {
+    const t = last('function')
+    const r = t.results[t.results.length - 1]
+    expect(r.status).toBe('review')
+    expect((r.z as number) > -1.645).toBe(true)
+  })
+  it('takes the urgent route on a very large fall', () => expect(last('urgent').status).toBe('urgent'))
+})
+
 describe('packet', () => {
   it('maps ten of fourteen risk factors to a screening field', () => {
     const f = riskFactors(PERSONAS[0].record)

@@ -3,20 +3,21 @@ import { evaluate } from '../engine/change'
 import { PERSONAS } from '../engine/histories'
 import TrajectoryChart from './TrajectoryChart'
 
-const LABEL: Record<string, string> = { 'building-baseline': 'Setting the baseline', 'usual-range': 'Within usual range', watch: 'Lower once', flag: 'Lower twice in a row', urgent: 'Very large fall' }
+const LABEL: Record<string, string> = { 'building-baseline': 'Setting the baseline', 'usual-range': 'Within usual range', watch: 'Lower once', review: 'Reported change in everyday tasks', flag: 'Lower twice in a row', urgent: 'Very large fall' }
 
 export default function Year() {
   const { id } = useParams()
   const person = PERSONAS.find((p) => p.id === id) ?? PERSONAS[2]
   const traj = evaluate(person.checks)
-  const flagged = traj.results.find((r) => r.status === 'flag')
+  const flagged = traj.results.find((r) => r.status === 'flag' || r.status === 'review')
+  const urgent = traj.status === 'urgent'
   return (
     <>
       <h1>A year of checks</h1>
       <p><span className="tag syn">Synthetic people, not real data</span></p>
       <div className="row">
         {PERSONAS.map((p) => (
-          <Link key={p.id} className="btn" style={{ padding: '6px 10px', fontSize: 15, fontWeight: p.id === person.id ? 700 : 400 }} to={`/year/${p.id}`}>{p.name}</Link>
+          <Link key={p.id} className="btn" style={{ padding: '6px 10px', fontSize: 15, fontWeight: p.id === person.id ? 700 : 400 }} to={`/year/${p.id}`}>{p.name}<br /><span className="muted">{p.path}</span></Link>
         ))}
       </div>
       <p>{person.story}</p>
@@ -35,17 +36,17 @@ export default function Year() {
                 <td>{r.date}</td>
                 <td>{c.low === null ? 'missed' : c.low === c.high ? c.high : `${c.low} to ${c.high}`}</td>
                 <td>{r.change === null ? '' : `${r.change > 0 ? '+' : ''}${r.change.toFixed(1)} (z ${(r.z as number).toFixed(2)}, p below ${(r.pBelow as number).toFixed(2)})`}</td>
-                <td className={`status-${r.status}`}><strong>{r.scored ? LABEL[r.status] : 'Not scored'}</strong><br /><span className="muted">{r.note}</span></td>
+                <td className={`status-${r.status}`}><strong>{r.scored ? LABEL[r.status] : person.checks[r.index].hearingLimited ? 'Held' : 'Not scored'}</strong><br /><span className="muted">{r.note}</span></td>
               </tr>
             )
           })}
         </tbody>
       </table>
       <div className="note">
-        <strong>What the person sees.</strong> After every check, on the same fixed day each week: "Check received. Thank you." and their own trend. Nothing abnormal is ever shown in the app. {flagged ? 'For this person, the physician is asked first.' : 'For this person nothing went to a physician.'}
+        <strong>What the person sees.</strong> After every check, on the same fixed day each week: "Check received. Thank you." and their own trend. Nothing abnormal is ever shown in the app. {urgent ? 'The one exception is this route: after a very large fall the app says "Please see a doctor today" and gives the clinic number, and the clinic is told.' : flagged ? 'For this person, the physician is asked first.' : 'For this person nothing went to a physician.'}
       </div>
       <div className="stack">
-        {flagged && <Link className="btn primary" to="/clinician">Open the physician's packet for Person C</Link>}
+        {flagged && <Link className="btn primary" to={`/clinician/${person.id}`}>Open the physician's packet for {person.name}</Link>}
         <Link className="btn" to={`/me/${person.id}`}>See this person's own screen</Link>
         <Link className="btn" to="/try">Try it with your voice</Link>
       </div>

@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { evaluate } from '../engine/change'
+import { Link, useParams } from 'react-router-dom'
+import { DEFAULT_PARAMS, evaluate } from '../engine/change'
 import { PERSONAS } from '../engine/histories'
 import { REFERRAL_TARGET_WORKING_DAYS, riskFactors, treatableContributors, workingDaysBetween } from '../engine/packet'
 import { bundle, checkObservation, referralRequest } from '../engine/fhir'
@@ -11,9 +11,12 @@ type Decision = 'pending' | 'approved' | 'dismissed'
 const INVITE = 'Your screening clinic would like to see you to talk about your memory checks. This is a routine follow-up visit. Please book an appointment with your physician.'
 
 export default function Clinician() {
-  const person = PERSONAS[2]
+  const { id } = useParams()
+  const candidates = PERSONAS.filter((p) => evaluate(p.checks).results.some((r) => r.status === 'flag' || r.status === 'review'))
+  const person = candidates.find((p) => p.id === id) ?? candidates[0]
   const traj = evaluate(person.checks)
-  const flag = traj.results.find((r) => r.status === 'flag')!
+  const flag = traj.results.find((r) => r.status === 'flag' || r.status === 'review')!
+  const byReport = flag.status === 'review'
   const base = traj.baseline as number
   const factors = riskFactors(person.record)
   const contributors = treatableContributors(person.record)
@@ -31,8 +34,10 @@ export default function Clinician() {
   const trace = [
     { step: 'Consent on file (given at the screening visit, can be withdrawn)', ok: true },
     { step: 'Three scored checks set the baseline', ok: true, detail: `baseline ${base.toFixed(1)}` },
-    { step: 'Lower than usual on two scored checks in a row', ok: true, detail: `${flag.date}, z ${(flag.z as number).toFixed(2)}` },
-    { step: 'Neither low check was reported as an off day', ok: true },
+    byReport
+      ? { step: 'Person reported that everyday tasks have become harder (this overrides the scores)', ok: true, detail: flag.date }
+      : { step: 'Lower than usual on two scored checks in a row', ok: true, detail: `${flag.date}, z ${(flag.z as number).toFixed(2)}` },
+    { step: byReport ? 'Scores themselves are within the usual range' : 'Neither low check was reported as an off day', ok: true },
     { step: 'Not a very large single drop (that goes to urgent assessment)', ok: true },
     { step: 'Physician decision', ok: decision !== 'pending', detail: decision === 'pending' ? 'held: waiting for you' : decision },
     { step: 'Result given in person at a visit', ok: decision === 'approved' && !!referredOn, detail: decision === 'approved' ? (referredOn ? `visit ${visitOn}` : 'held: visit not yet recorded') : 'held' },
@@ -43,6 +48,9 @@ export default function Clinician() {
     <>
       <h1>Physician's packet</h1>
       <p><span className="tag syn">Synthetic patient</span> <span className="tag">Decision support. You decide.</span></p>
+      <div className="row">
+        {candidates.map((p) => <Link key={p.id} className="btn" style={{ padding: '6px 10px', fontSize: 15, fontWeight: p.id === person.id ? 700 : 400 }} to={`/clinician/${p.id}`}>{p.name}: {p.path}</Link>)}
+      </div>
       <p><strong>{person.name}</strong>, {person.record.sex === 'F' ? 'female' : 'male'}. Clinic MoCA at the screening visit: {person.record.mocaAtVisit}. Home checks since {person.checks[0].date}.</p>
 
       <h2>1. What was observed</h2>
@@ -50,8 +58,16 @@ export default function Clinician() {
       <p>Scores are totals from a spoken check at home. Each is a range from two speech recognisers.</p>
 
       <h2>2. What was calculated</h2>
-      <p>Baseline {base.toFixed(1)} (mean of the first three checks). On {flag.date} the score was {(flag.mid as number).toFixed(1)}, which is {Math.abs(flag.change as number).toFixed(1)} points below baseline after the expected practice gain, {Math.abs(flag.z as number).toFixed(1)} times the measurement error. The check before it was also low. Fixed rule in code; no language model.</p>
-      <p className="muted">The measurement error used here is an assumption until our volunteer retest data replaces it. This is a change from this person's own baseline, not a diagnosis and not a comparison with other people.</p>
+      {byReport
+        ? <p>Baseline {base.toFixed(1)} (mean of the first three checks). On {flag.date} the score was {(flag.mid as number).toFixed(1)}, within this person's usual range (z {(flag.z as number).toFixed(2)}). The packet was raised because the person said everyday tasks such as money, medicines or appointments have become harder. A reported change in daily life goes to you whatever the scores say.</p>
+        : <p>Baseline {base.toFixed(1)} (mean of the first three checks). On {flag.date} the score was {(flag.mid as number).toFixed(1)}, which is {Math.abs(flag.change as number).toFixed(1)} points below baseline after the expected practice gain, {Math.abs(flag.z as number).toFixed(1)} times the measurement error. The check before it was also low.</p>}
+      <div className="card">
+        <p className="muted">The rule, in full. Fixed in code; no language model takes part.</p>
+        <p><code>change = score − baseline − expected practice gain</code><br />
+        <code>error = √( {DEFAULT_PARAMS.sem.toFixed(1)}² × (1 + 1/3) + range² / 12 )</code><br />
+        <code>z = change ÷ error</code>; lower than usual when <code>z ≤ {DEFAULT_PARAMS.flagZ}</code>; flagged only on two scored checks in a row.</p>
+        <p className="muted">{DEFAULT_PARAMS.sem.toFixed(1)} points is how much one check varies within a person, taken from published retest studies of similar tasks and not yet from this check. "Range" is the gap between what both listeners heard and what either heard. A score in the usual range does not rule out impairment, and this is a change from the person's own baseline, not a diagnosis.</p>
+      </div>
 
       <h2>3. Treatable contributors to check first</h2>
       <table>
@@ -108,15 +124,15 @@ export default function Clinician() {
       <h2>Hand-off to other systems</h2>
       <p className="muted">The checks and the referral as FHIR R4 resources, for an exchange or a record system to take in.</p>
       <button className="small" onClick={() => {
-        const res = [...person.checks.map((c) => checkObservation('Patient/synthetic-c', c)), ...(referredOn ? [referralRequest('Patient/synthetic-c', 'Practitioner/ordering', referredOn, addDays(visitOn, 21))] : [])]
+        const res = [...person.checks.map((c) => checkObservation(`Patient/synthetic-${person.id}`, c)), ...(referredOn ? [referralRequest(`Patient/synthetic-${person.id}`, 'Practitioner/ordering', referredOn, addDays(visitOn, 21))] : [])]
         const url = URL.createObjectURL(new Blob([JSON.stringify(bundle(res), null, 2)], { type: 'application/fhir+json' }))
-        Object.assign(document.createElement('a'), { href: url, download: 'synthetic-person-c.fhir.json' }).click()
+        Object.assign(document.createElement('a'), { href: url, download: `synthetic-${person.id}.fhir.json` }).click()
         URL.revokeObjectURL(url)
       }}>Download FHIR bundle (synthetic)</button>
 
       <h2>Step trace</h2>
       <ol className="trace">{trace.map((t) => <li key={t.step}><strong className={t.ok ? 'status-usual-range' : 'status-watch'}>{t.ok ? 'Passed' : 'Held'}</strong>: {t.step}{t.detail ? ` (${t.detail})` : ''}</li>)}</ol>
-      <div className="stack"><Link className="btn" to="/year/decline">Back to the year of checks</Link></div>
+      <div className="stack"><Link className="btn" to={`/year/${person.id}`}>Back to the year of checks</Link></div>
     </>
   )
 }

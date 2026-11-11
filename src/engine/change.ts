@@ -10,6 +10,10 @@ export interface Check {
   high: number | null
   /** The person said they slept badly or felt unwell: kept, shown, and not used to flag. */
   offDay?: boolean
+  /** The person (or family) reported that everyday tasks have become harder. Unasked or unclear stays undefined. */
+  functionChange?: boolean
+  /** The sound check failed, so the check was held: a spoken test cannot be read when hearing is in doubt. */
+  hearingLimited?: boolean
 }
 
 export interface RuleParams {
@@ -41,7 +45,7 @@ export const DEFAULT_PARAMS: RuleParams = {
   },
 }
 
-export type Status = 'building-baseline' | 'usual-range' | 'watch' | 'flag' | 'urgent'
+export type Status = 'building-baseline' | 'usual-range' | 'watch' | 'review' | 'flag' | 'urgent'
 
 export interface CheckResult {
   index: number
@@ -96,7 +100,10 @@ export function evaluate(checks: Check[], p: RuleParams = DEFAULT_PARAMS): Traje
   let overall: Status = haveBaseline ? 'usual-range' : 'building-baseline'
   checks.forEach((c, i) => {
     if (!isScored(c)) {
-      results.push({ index: i, date: c.date, scored: false, mid: null, change: null, sd: null, z: null, pBelow: null, status: overall, note: 'Not scored. Nothing is assumed from a missing check; the next one is compared as usual.' })
+      const note = c.hearingLimited
+        ? 'Held: the sound check failed, so this check was not scored. A missing score is never treated as a low score. If it happens again the person is pointed to a hearing assessment.'
+        : 'Not scored. Nothing is assumed from a missing check; the next one is compared as usual.'
+      results.push({ index: i, date: c.date, scored: false, mid: null, change: null, sd: null, z: null, pBelow: null, status: overall, note })
       return
     }
     nScored += 1
@@ -104,7 +111,10 @@ export function evaluate(checks: Check[], p: RuleParams = DEFAULT_PARAMS): Traje
     const last = prevMid
     prevMid = m
     if (!haveBaseline || baseIdx.includes(i)) {
-      results.push({ index: i, date: c.date, scored: true, mid: m, change: null, sd: null, z: null, pBelow: null, status: 'building-baseline', note: `Baseline check ${Math.min(nScored, 3)} of 3.` })
+      // Function overrides the number: a reported change in everyday tasks goes to a physician even before a baseline exists.
+      const st: Status = c.functionChange ? 'review' : 'building-baseline'
+      if (c.functionChange) overall = 'review'
+      results.push({ index: i, date: c.date, scored: true, mid: m, change: null, sd: null, z: null, pBelow: null, status: st, note: c.functionChange ? 'The person reported that everyday tasks have become harder. That goes to the physician whatever the scores say.' : `Baseline check ${Math.min(nScored, 3)} of 3.` })
       return
     }
     const change = m - (expectedPractice(nScored, p) - basePractice) - (baseline as number)
@@ -125,6 +135,10 @@ export function evaluate(checks: Check[], p: RuleParams = DEFAULT_PARAMS): Traje
     } else if (below) {
       status = 'watch'
       note = 'Lower than usual once. One check is not enough; the next check decides.'
+    }
+    if (c.functionChange && status !== 'flag' && status !== 'urgent') {
+      status = 'review'
+      note = 'The person reported that everyday tasks have become harder. That goes to the physician whatever the scores say.'
     }
     if (!c.offDay) prevBelow = below
     overall = status

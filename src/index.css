@@ -24,7 +24,7 @@ button.small { padding: 6px 10px; font-size: 15px; display: inline-block; }
 .note { background: var(--soft); border-radius: 8px; padding: 10px 14px; font-size: 15px; margin: 12px 0; }
 .tag { display: inline-block; font-size: 13px; padding: 2px 8px; border-radius: 4px; border: 1px solid var(--line); color: var(--muted); }
 .tag.syn { border-color: var(--warn); color: var(--warn); }
-.status-usual-range { color: var(--ok); } .status-watch { color: var(--warn); } .status-flag, .status-urgent { color: var(--bad); } .status-building-baseline { color: var(--muted); }
+.status-usual-range { color: var(--ok); } .status-watch { color: var(--warn); } .status-flag, .status-urgent, .status-review { color: var(--bad); } .status-building-baseline { color: var(--muted); }
 table { border-collapse: collapse; width: 100%; font-size: 15px; }
 th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
 .bar { height: 28px; background: var(--accent); border-radius: 4px; }

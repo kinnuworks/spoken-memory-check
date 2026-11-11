@@ -1,7 +1,7 @@
 import type { Check, Trajectory } from '../engine/change'
 import { DEFAULT_PARAMS } from '../engine/change'
 
-const COLOUR: Record<string, string> = { 'building-baseline': '#5b5b5b', 'usual-range': '#1f6f43', watch: '#9a6200', flag: '#a12a2a', urgent: '#a12a2a' }
+const COLOUR: Record<string, string> = { 'building-baseline': '#5b5b5b', 'usual-range': '#1f6f43', watch: '#9a6200', review: '#a12a2a', flag: '#a12a2a', urgent: '#a12a2a' }
 
 /** `plain` is the person's own view: one calm colour, so the chart never signals a result. */
 export default function TrajectoryChart({ checks, traj, plain = false }: { checks: Check[]; traj: Trajectory; plain?: boolean }) {
