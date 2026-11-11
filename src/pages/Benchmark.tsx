@@ -22,7 +22,7 @@ export default function Benchmark() {
         <div className="card"><p className="muted">Completion</p><p className="big small-big">Pending</p><p className="muted">Needs real volunteers. Not measured yet.</p></div>
         <div className="card"><p className="muted">Retest reliability</p><p className="big small-big">Pending</p><p className="muted">Needs volunteers taking the check twice. The rule uses 4.0 points from published studies until then.</p></div>
         <div className="card"><p className="muted">Sensitivity (decline of 2 points a check)</p><p className="big small-big">{pct(b2.sensitivity)}</p><p className="muted">95% interval {pct(b2.sensitivityCi[0])} to {pct(b2.sensitivityCi[1])}. Simulated.</p></div>
-        <div className="card"><p className="muted">Specificity over a year</p><p className="big small-big">{pct(b2.specificity)}</p><p className="muted">95% interval {pct(b2.specificityCi[0])} to {pct(b2.specificityCi[1])}. Simulated.</p></div>
+        <div className="card"><p className="muted">Specificity over a year (1 minus false alarms)</p><p className="big small-big">{pct(b2.specificity)}</p><p className="muted">95% interval {pct(b2.specificityCi[0])} to {pct(b2.specificityCi[1])}. Simulated.</p></div>
         <div className="card"><p className="muted">Packets per 1,000 members a year</p><p className="big small-big">{b2.packetsPer1000.toFixed(0)}</p><p className="muted">Of which real: {b2.realPer1000.toFixed(0)}. Assumes {pct(b2.prevalence)} of members in real decline. Simulated.</p></div>
         <div className="card"><p className="muted">Time to assessment</p><p className="big small-big">Target 15</p><p className="muted">Working days from the visit, tracked per referral in the physician's view. No pilot data yet.</p></div>
       </div>
@@ -41,7 +41,7 @@ export default function Benchmark() {
         <thead><tr><th>Members in real decline (assumed)</th><th>Packets per 1,000 a year</th><th>Real ones</th><th>Share of packets that are real</th></tr></thead>
         <tbody>{data.burden.map((b) => <tr key={b.prevalence}><td>{pct(b.prevalence)}</td><td>{b.packetsPer1000.toFixed(0)}</td><td>{b.realPer1000.toFixed(0)}</td><td>{pct(b.realPer1000 / b.packetsPer1000)}</td></tr>)}</tbody>
       </table></div>
-      <p className="muted">Each packet is a short review by the ordering physician, not a referral: the physician can dismiss it with a reason. Splits by language, age and schooling need real volunteer data and are not shown until it exists. Groups smaller than five people will be suppressed.</p>
+      <p className="muted">All six measures and the tables below use the same "as assumed" settings: 4.0 points of variation, 1.0 point of practice gain, no recogniser misses. Each packet is a short review by the ordering physician, not a referral: the physician can dismiss it with a reason. Splits by language, age and schooling need real volunteer data and are not shown until it exists. Groups smaller than five people will be suppressed.</p>
 
       <h2>What to take from it</h2>
       <ul>

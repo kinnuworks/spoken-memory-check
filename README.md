@@ -29,7 +29,7 @@ npm run dev
 ## Evidence
 
 - Real data: in a public US health survey (NHANES 2011 to 2014, 3,110 adults aged 60 and over), a fixed cutoff of 14 animals flags 48% of adults with under 9 years of school who report no memory problem, against 16% of graduates. `analysis/`
-- Simulation of the flag: 3.4% false alarms a year in stable people; at an assumed 2% of members in real decline, 36 packets per 1,000 members a year, 16 of them real. `npx tsx scripts/benchmark.ts`
+- Simulation of the flag: 3.4% false alarms a year in stable people; 85% of members losing two points a check are flagged within the year; at an assumed 2% of members in real decline, about 50 packets per 1,000 members a year, 17 of them real. Same settings throughout. `npx tsx scripts/benchmark.ts`
 - 51 automated tests: `npm test`. Cases listed in `docs/TESTED_CASES.md`.
 
 ## Documents

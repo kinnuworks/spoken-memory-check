@@ -50,3 +50,15 @@ export function workingDaysBetween(fromIso: string, toIso: string): number {
 }
 
 export const REFERRAL_TARGET_WORKING_DAYS = 15
+
+/** The date n working days (Monday to Friday) after a date. */
+export function addWorkingDays(iso: string, n: number): string {
+  const d = new Date(iso + 'T00:00:00Z')
+  let left = n
+  while (left > 0) {
+    d.setUTCDate(d.getUTCDate() + 1)
+    const wd = d.getUTCDay()
+    if (wd !== 0 && wd !== 6) left--
+  }
+  return d.toISOString().slice(0, 10)
+}

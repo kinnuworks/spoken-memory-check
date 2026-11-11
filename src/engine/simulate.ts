@@ -128,7 +128,7 @@ export function programmeYear(members: number, prevalence: number, seed = 202611
   let tp = 0, fn = 0, fp = 0, tn = 0
   for (let i = 0; i < members; i++) {
     const declining = r() < prevalence
-    const w = { ...BASE_WORLD, miss: 0.08, slope: declining ? slope : 0 }
+    const w = { ...BASE_WORLD, slope: declining ? slope : 0 }
     const f = firstFlag('ours', simulatePerson(w, r))
     if (declining) { if (f >= w.declineFrom) tp++; else fn++ }
     else { if (f >= 0) fp++; else tn++ }

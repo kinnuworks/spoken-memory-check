@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { DEFAULT_PARAMS, evaluate } from '../engine/change'
 import { PERSONAS } from '../engine/histories'
-import { REFERRAL_TARGET_WORKING_DAYS, riskFactors, treatableContributors, workingDaysBetween } from '../engine/packet'
+import { REFERRAL_TARGET_WORKING_DAYS, addWorkingDays, riskFactors, treatableContributors, workingDaysBetween } from '../engine/packet'
 import { bundle, checkObservation, referralRequest } from '../engine/fhir'
 import TrajectoryChart from './TrajectoryChart'
 
@@ -25,10 +25,14 @@ export default function Clinician() {
   const [note, setNote] = useState('')
   const [referredOn, setReferredOn] = useState<string | null>(null)
   const [seenOn, setSeenOn] = useState<string | null>(null)
+  const [invite, setInvite] = useState(INVITE)
+  // A decision belongs to one case: switching case starts from a clean packet.
+  useEffect(() => { setDecision('pending'); setReason(''); setNote(''); setReferredOn(null); setSeenOn(null); setInvite(INVITE) }, [person.id])
 
-  const addDays = (iso: string, n: number) => { const d = new Date(iso + 'T00:00:00Z'); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10) }
-  const approvedOn = addDays(flag.date, 2)
-  const visitOn = addDays(approvedOn, 6)
+  // Illustrative dates on working days: approval two working days after the flag, the visit five after that.
+  const approvedOn = addWorkingDays(flag.date, 2)
+  const visitOn = addWorkingDays(approvedOn, 5)
+  const addDays = (iso: string, n: number) => addWorkingDays(iso, n)
   const used = referredOn ? workingDaysBetween(visitOn, seenOn ?? referredOn) : 0
 
   const trace = [
@@ -47,7 +51,7 @@ export default function Clinician() {
   return (
     <>
       <h1>Physician's packet</h1>
-      <p><span className="tag syn">Synthetic patient</span> <span className="tag">Decision support. You decide.</span></p>
+      <p><span className="tag syn">Synthetic patient; dates are illustrative</span> <span className="tag">Decision support. You decide.</span></p>
       <div className="row">
         {candidates.map((p) => <Link key={p.id} className="btn" style={{ padding: '6px 10px', fontSize: 15, fontWeight: p.id === person.id ? 700 : 400 }} to={`/clinician/${p.id}`}>{p.name}: {p.path}</Link>)}
       </div>
@@ -93,7 +97,7 @@ export default function Clinician() {
       {decision === 'pending' && (
         <>
           <p>Until you decide, the person sees only "Check received". If you approve, the app sends the invitation below and nothing else. You give the result in person.</p>
-          <div className="card"><p className="muted">Invitation wording (fixed template, offered to the public health centre for approval):</p><p>{INVITE}</p></div>
+          <div className="card"><p className="muted">Invitation wording. The template is offered to the public health centre for approval; you may edit it for this person before sending.</p><textarea value={invite} onChange={(e) => setInvite(e.target.value)} style={{ minHeight: 80 }} /></div>
           <p><label>Your note for the record (optional)<textarea value={note} onChange={(e) => setNote(e.target.value)} /></label></p>
           <div className="stack">
             <button className="primary" onClick={() => setDecision('approved')}>Approve and invite the person to a visit</button>
@@ -105,12 +109,12 @@ export default function Clinician() {
       {decision === 'dismissed' && <div className="note">Dismissed. Reason recorded: "{reason}". Home checks continue and the person is not contacted.</div>}
       {decision === 'approved' && (
         <>
-          <div className="note">Approved on {approvedOn}. The person received the invitation and nothing else.</div>
+          <div className="note">Approved on {approvedOn}{invite !== INVITE ? ' with edited wording' : ''}. The person received this invitation and nothing else: "{invite}"</div>
           <h2>6. Follow-up clock</h2>
           <p>Target: referral to a neurologist or geriatrician completed within {REFERRAL_TARGET_WORKING_DAYS} working days of the visit. The number is borrowed from the screening programme's own referral indicator.</p>
           <div className="stack">
-            {!referredOn && <button className="primary" onClick={() => setReferredOn(addDays(visitOn, 1))}>Record: result given in person on {visitOn}, referral made</button>}
-            {referredOn && !seenOn && <button className="primary" onClick={() => setSeenOn(addDays(visitOn, 16))}>Record: specialist appointment attended</button>}
+            {!referredOn && <button className="primary" onClick={() => setReferredOn(visitOn)}>Record: result given in person on {visitOn}, referral made the same day</button>}
+            {referredOn && !seenOn && <button className="primary" onClick={() => setSeenOn(addWorkingDays(visitOn, 12))}>Record: specialist appointment attended</button>}
           </div>
           {referredOn && (
             <div className="card">

@@ -4,7 +4,6 @@ import { evaluate } from '../engine/change'
 import { loadConsent, saveConsent } from '../engine/consent'
 import { PERSONAS } from '../engine/histories'
 import { improvable } from '../engine/prevention'
-import TrajectoryChart from './TrajectoryChart'
 
 export default function Person() {
   const { id } = useParams()
@@ -26,10 +25,22 @@ export default function Person() {
       </div>
 
       <h2>Your checks</h2>
-      <p>{scored} checks received this year. Your next check is due in about six weeks. We will remind you.</p>
-      <div className="card"><TrajectoryChart checks={person.checks} traj={traj} plain /></div>
-      <p className="muted">The dashed line is your own usual level. Scores go up and down from day to day. One low day does not mean anything on its own.</p>
-      <div className="note">The same screen is shown whatever the checks say. If your physician wants to talk about your checks, your clinic invites you to a visit. Results are discussed in person, never in the app.</div>
+      {traj.status === 'urgent' ? (
+        <div className="note" style={{ borderLeft: '4px solid #a12a2a' }}>
+          <strong>Please see a doctor today.</strong> Your last check was very different from your earlier ones. This can have many causes, some of them simple to treat, and it is worth checking straight away. Call your screening clinic, or go to an urgent care centre. Your clinic has also been told.
+        </div>
+      ) : (
+        <p>{scored} checks received this year. Thank you. Your next check is due in about six weeks; we will remind you.</p>
+      )}
+      <div className="row" aria-label="Checks received">
+        {person.checks.map((c, i) => (
+          <span key={i} className="chip" title={c.date}>{c.date.slice(5)} {c.low === null ? (c.hearingLimited ? '· sound check' : '· missed') : '✓'}</span>
+        ))}
+      </div>
+      {person.checks.filter((c) => c.hearingLimited).length >= 2 && (
+        <div className="note">Twice we could not hear you clearly enough to score the check. That is often about hearing, not memory. Please ask your clinic about a hearing test; it also makes these checks fairer.</div>
+      )}
+      <p className="muted">Scores are not shown here, because one score on one day says little and a falling number can worry people for no reason. Your physician sees your scores over time and will invite you to a visit if they want to talk about them. Results are discussed in person, never in the app.</p>
 
       <h2>What your screening visit shows you can work on</h2>
       {steps.length === 0 && <p>Nothing stood out at your last screening visit. Keeping active, sleeping well and staying in touch with people all help.</p>}

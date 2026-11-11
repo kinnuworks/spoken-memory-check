@@ -71,7 +71,14 @@ export default function Check() {
       if (lang === 'en') startSecond()
       const soundRows = SOUND_CHECK_WORDS[lang].map((w) => [w])
       const sound = scoreTask((await listen(7000, soundRows, true, false)).first, soundRows, lang)
-      if (sound.high < 2) return setStage('sound-failed')
+      if (sound.high < 2) {
+        // A second failed sound check in a row is saved as a held check: not scored, never read as low.
+        if (stage === 'sound-failed') {
+          saveCheck({ date: new Date().toISOString().slice(0, 10), low: null, high: null, hearingLimited: true, lang, list: listIndex, parts: { immediate: [0, 0], delayed: [0, 0], animals: [0, 0] }, recognisers: [] })
+          setHistory(loadChecks())
+        }
+        return setStage('sound-failed')
+      }
       const rows = words.map((w) => [w])
 
       setStage('hear-list'); setLive(null)
@@ -169,7 +176,7 @@ export default function Check() {
 
       {stage === 'sound-failed' && (
         <>
-          <p>Nothing was scored. Try again somewhere quieter.</p>
+          <p>Nothing was scored. Try again somewhere quieter. If it happens again, the check is held rather than scored, and it may be worth asking your clinic about a hearing test.</p>
           <div className="stack"><button className="primary" onClick={run}>Try again</button><Link className="btn" to="/year">See a year of checks (no microphone)</Link></div>
         </>
       )}

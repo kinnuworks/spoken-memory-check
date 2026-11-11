@@ -23,7 +23,7 @@ Baseline completion; checks per member per year; packets per 1,000 members and t
 ## 7. Evidence supporting the approach
 - Our analysis of a public US survey (NHANES, 3,110 adults aged 60+): a fixed cutoff of 14 animals flags 48% of healthy adults with under 9 years of school against 16% of graduates. A personal baseline avoids this.
 - Published: within-person variation of animal naming and phone word recall (Duff et al.; Gavett et al.; Health and Retirement Study); spoken word recall and fluency scored by speech recognition agree closely with human scoring in Dutch, German and English studies.
-- Simulation of our flag: 3.4% false alarms a year in stable people against 27.0% for a single-low-check rule; 36 packets per 1,000 members a year at 2% in real decline, 16 of them real.
+- Simulation of our flag: 3.4% false alarms a year in stable people against 27.0% for a single-low-check rule; about 50 packets per 1,000 members a year at 2% in real decline, 17 of them real; 85% of members losing two points a check are flagged within the year.
 - 51 automated tests, listed by case.
 
 ## 8. Data sources and legal right to use them

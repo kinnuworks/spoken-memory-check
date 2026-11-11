@@ -59,3 +59,23 @@ describe('person view', () => {
     expect(Object.values(NO_CONSENT).filter((v) => v === true).length).toBe(0)
   })
 })
+
+import { addWorkingDays } from './packet'
+describe('seeded stories match their data', () => {
+  const t = (id: string) => evaluate(PERSONAS.find((p) => p.id === id)!.checks)
+  it("A's off-day check really is low, and still not counted", () => {
+    const r = t('stable').results[6]
+    expect(r.z as number).toBeLessThan(-1.645)
+    expect(t('stable').results.map((x) => x.status)).not.toContain('flag')
+  })
+  it("B's scores really rise", () => {
+    const c = PERSONAS.find((p) => p.id === 'practice')!.checks
+    const late = c.slice(-3).reduce((s, x) => s + (x.high as number), 0) / 3
+    const early = c.slice(0, 3).reduce((s, x) => s + (x.high as number), 0) / 3
+    expect(late).toBeGreaterThan(early + 1.5)
+  })
+  it('working days skip weekends', () => {
+    expect(addWorkingDays('2026-11-13', 1)).toBe('2026-11-16')
+    expect(new Date(addWorkingDays('2026-08-26', 3) + 'T00:00:00Z').getUTCDay()).not.toBe(0)
+  })
+})
