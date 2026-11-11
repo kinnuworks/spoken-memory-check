@@ -6,6 +6,7 @@ import Clinician from './pages/Clinician'
 import Check from './pages/Check'
 import Benchmark from './pages/Benchmark'
 import Person from './pages/Person'
+import Recorded from './pages/Recorded'
 
 export default function App() {
   return (
@@ -23,6 +24,7 @@ export default function App() {
           <Route path="/clinician" element={<Clinician />} />
           <Route path="/check" element={<Check />} />
           <Route path="/benchmark" element={<Benchmark />} />
+          <Route path="/recorded" element={<Recorded />} />
           <Route path="/me" element={<Person />} />
           <Route path="/me/:id" element={<Person />} />
         </Routes>

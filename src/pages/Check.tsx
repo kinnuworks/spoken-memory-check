@@ -4,11 +4,13 @@ import { evaluate } from '../engine/change'
 import { ANIMALS, ARABIC_REVIEWED, SOUND_CHECK_WORDS, WORD_LISTS, type Lang } from '../engine/lexicon'
 import { scoreTask, type RangeScore } from '../engine/score'
 import { clearChecks, loadChecks, saveCheck, type StoredCheck } from '../engine/store'
-import { activeRecognisers, browserSpeechAvailable, type ListenControl } from '../speech/recogniser'
+import { browserSpeechAvailable, type ListenControl } from '../speech/recogniser'
+import { DOWNLOAD_MB, loadSecond, secondLoading, secondSupported } from '../speech/second'
+import { listenTask, type Heard } from '../speech/session'
 import { pause, speak, speakList } from '../speech/speak'
 import TrajectoryChart from './TrajectoryChart'
 
-type Stage = 'intro' | 'sound' | 'sound-failed' | 'hear-list' | 'recall-1' | 'animals' | 'count' | 'recall-2' | 'done' | 'blocked'
+type Stage = 'intro' | 'sound' | 'sound-failed' | 'hear-list' | 'recall-1' | 'animals' | 'count' | 'recall-2' | 'scoring' | 'done' | 'blocked'
 
 const T: Record<Lang, Record<string, string>> = {
   en: {
@@ -31,7 +33,7 @@ const T: Record<Lang, Record<string, string>> = {
 
 const HEAD: Record<Stage, string> = {
   intro: 'The full check', sound: 'Say these three words', 'sound-failed': "We can't hear you clearly here", 'hear-list': 'Listen to the ten words',
-  'recall-1': 'Say the words you remember', animals: 'Name animals for one minute', count: 'Count backwards from twenty', 'recall-2': 'Say the ten words again', done: 'Check received', blocked: "The microphone isn't available here",
+  'recall-1': 'Say the words you remember', animals: 'Name animals for one minute', count: 'Count backwards from twenty', 'recall-2': 'Say the ten words again', scoring: 'Scoring your check', done: 'Check received', blocked: "The microphone isn't available here",
 }
 
 export default function Check() {
@@ -42,27 +44,30 @@ export default function Check() {
   const [history, setHistory] = useState<StoredCheck[]>(loadChecks())
   const [last, setLast] = useState<StoredCheck | null>(null)
   const control = useRef<ListenControl>({})
-  const recs = activeRecognisers()
+  const [percent, setPercent] = useState<number | null>(null)
   const listIndex = history.length % WORD_LISTS[lang].length
   const words = WORD_LISTS[lang][listIndex]
 
-  async function listenAll(ms: number, rows: string[][], show = true): Promise<RangeScore> {
-    const heard: Record<string, string> = {}
+  function startSecond() {
+    if (!secondSupported() || secondLoading(lang)) return
+    setPercent(0)
+    loadSecond(lang, setPercent).then(() => setPercent(null)).catch(() => setPercent(null))
+  }
+
+  async function listen(ms: number, rows: string[][], show = true, useSecond = true): Promise<Heard> {
     control.current = {}
     setLive(null)
-    await Promise.all(recs.map(async (r) => {
-      heard[r.name] = ''
-      heard[r.name] = await r.listen(lang, ms, (t) => { heard[r.name] = t; if (show) setLive(scoreTask({ ...heard }, rows, lang)) }, control.current)
-    }))
-    const final = scoreTask(heard, rows, lang)
-    if (show) setLive(final)
-    return final
+    const heard = await listenTask(lang, ms, (t) => { if (show) setLive(scoreTask({ Browser: t }, rows, lang)) }, control.current, useSecond)
+    if (show) setLive(scoreTask(heard.first, rows, lang))
+    return heard
   }
 
   async function run() {
     try {
       setStage('sound')
-      const sound = await listenAll(7000, SOUND_CHECK_WORDS[lang].map((w) => [w]))
+      if (lang === 'en') startSecond()
+      const soundRows = SOUND_CHECK_WORDS[lang].map((w) => [w])
+      const sound = scoreTask((await listen(7000, soundRows, true, false)).first, soundRows, lang)
       if (sound.high < 2) return setStage('sound-failed')
       const rows = words.map((w) => [w])
 
@@ -73,21 +78,25 @@ export default function Check() {
       await speak(T[lang].recallNow, lang)
       setStage('recall-1')
       // Recalled words are not shown while the person speaks: seeing them would be a cue for the later recall.
-      const immediate = await listenAll(45000, rows, false)
+      const immediateHeard = await listen(45000, rows, false)
 
       await speak(T[lang].animals, lang)
       setStage('animals')
-      const animals = await listenAll(60000, ANIMALS[lang])
+      const animalsHeard = await listen(60000, ANIMALS[lang])
 
       await speak(T[lang].count, lang)
       setStage('count'); setLive(null)
-      await listenAll(30000, [], false)
+      await listen(30000, [], false, false)
 
       await speak(T[lang].recallLater, lang)
       setStage('recall-2')
-      const delayed = await listenAll(45000, rows, false)
+      const delayedHeard = await listen(45000, rows, false)
       await speak(T[lang].thanks, lang)
 
+      // The second listener works through each recording after the task; wait for all three.
+      setStage('scoring')
+      const [imm, ani, del] = await Promise.all([immediateHeard.both, animalsHeard.both, delayedHeard.both])
+      const immediate = scoreTask(imm, rows, lang), animals = scoreTask(ani, ANIMALS[lang], lang), delayed = scoreTask(del, rows, lang)
       const scored = immediate.scored && animals.scored && delayed.scored
       const check: StoredCheck = {
         date: new Date().toISOString().slice(0, 10),
@@ -95,7 +104,7 @@ export default function Check() {
         high: scored ? immediate.high + delayed.high + animals.high : null,
         offDay, lang, list: listIndex,
         parts: { immediate: [immediate.low, immediate.high], delayed: [delayed.low, delayed.high], animals: [animals.low, animals.high] },
-        recognisers: recs.map((r) => r.name),
+        recognisers: Object.keys(ani),
       }
       saveCheck(check)
       setLast(check)
@@ -124,7 +133,8 @@ export default function Check() {
           </div>
           {lang === 'ar' && !ARABIC_REVIEWED && <p className="note">The Arabic wording and word lists are a draft, not yet reviewed by a native Gulf Arabic speaker, and the voice is the device's synthetic one.</p>}
           <p><label><input type="checkbox" checked={offDay} onChange={(e) => setOffDay(e.target.checked)} /> I slept badly or feel unwell today</label></p>
-          <p className="note">In this build your speech is recognised by your browser's own speech service, and prompts use your device's voice. Your scores stay on this device. This is a prototype and does not diagnose.</p>
+          <p className="note">Two listeners score what you say: your browser's own speech service, which may send audio to the browser's maker, and an open speech model that runs on this device and sends your recording nowhere{secondSupported() ? ` (one-time download of about ${DOWNLOAD_MB[lang]} MB from huggingface.co)` : ' (not available on this device, so one listener will score)'}. Prompts use your device's voice. Your scores stay on this device. This is a prototype and does not diagnose.</p>
+          {lang === 'ar' && secondSupported() && percent === null && !secondLoading('ar') && <p><button className="small" onClick={startSecond}>Add the second listener for Arabic ({DOWNLOAD_MB.ar} MB)</button></p>}
           <div className="stack"><button className="primary" onClick={run}>Start the check</button></div>
           {history.length > 0 && (
             <>
@@ -137,6 +147,8 @@ export default function Check() {
         </>
       )}
 
+      {percent !== null && <p className="muted">Second listener: {percent}%</p>}
+      {stage === 'scoring' && <p className="muted">The second listener is going through your recordings on this device. This can take up to a minute.</p>}
       {stage === 'sound' && <><p className="big" dir={dir}>{SOUND_CHECK_WORDS[lang].join(lang === 'ar' ? '، ' : ', ')}</p><p className="muted">Listening…</p></>}
       {stage === 'hear-list' && <p className="muted">Reading the words aloud. Nothing is shown on screen.</p>}
       {stage === 'animals' && <div className="chips" dir={dir}>{live?.items.map((it) => <span key={it.row} className="chip">{it.label}</span>)}</div>}
@@ -164,6 +176,7 @@ export default function Check() {
               <tr><td>Animals in a minute</td><td>{range(last.parts.animals)}</td></tr>
               <tr><td>Words recalled later</td><td>{range(last.parts.delayed)} of 10</td></tr>
             </tbody></table>
+            <p className="muted">{last.recognisers.length > 1 ? 'Both listeners scored this check, so each figure is a range where they disagreed.' : 'One listener scored this check, so there are no ranges.'}</p>
             <p className="muted">The words were list {last.list + 1}: <span dir={dir}>{WORD_LISTS[last.lang][last.list].join(lang === 'ar' ? '، ' : ', ')}</span>. A patient sees only "Check received" and their trend.</p>
           </div>
           <div className="card"><TrajectoryChart checks={history} traj={traj} /></div>

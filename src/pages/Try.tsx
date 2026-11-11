@@ -2,7 +2,9 @@ import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ANIMALS, ARABIC_REVIEWED, SOUND_CHECK_WORDS, type Lang } from '../engine/lexicon'
 import { scoreTask, type RangeScore } from '../engine/score'
-import { activeRecognisers, browserSpeechAvailable } from '../speech/recogniser'
+import { browserSpeechAvailable } from '../speech/recogniser'
+import { DOWNLOAD_MB, loadSecond, secondLoading, secondSupported } from '../speech/second'
+import { listenTask } from '../speech/session'
 import SurveyChart from './SurveyChart'
 
 type Stage = 'intro' | 'sound' | 'sound-failed' | 'ready' | 'animals' | 'result' | 'blocked' | 'typed'
@@ -16,25 +18,37 @@ export default function Try() {
   const timer = useRef<number | undefined>(undefined)
   const [typed, setTyped] = useState('')
   const [viaTyping, setViaTyping] = useState(false)
-  const recs = activeRecognisers()
+  const [second, setSecond] = useState<'off' | 'loading' | 'ready' | 'checking'>('off')
+  const [percent, setPercent] = useState(0)
+  const [listeners, setListeners] = useState(1)
 
-  async function listenAll(ms: number, rows: string[][]): Promise<RangeScore> {
-    const heard: Record<string, string> = {}
-    const update = () => setLive(scoreTask({ ...heard }, rows, lang))
-    await Promise.all(recs.map(async (r) => {
-      heard[r.name] = ''
-      heard[r.name] = await r.listen(lang, ms, (t) => { heard[r.name] = t; update() })
-    }))
-    const final = scoreTask(heard, rows, lang)
-    setLive(final)
-    return final
+  function startSecond(l: Lang) {
+    if (!secondSupported() || secondLoading(l)) return
+    setSecond('loading')
+    loadSecond(l, setPercent).then(() => setSecond('ready')).catch(() => setSecond('off'))
+  }
+
+  async function listenAll(ms: number, rows: string[][], waitForSecond: boolean): Promise<RangeScore> {
+    const heard = await listenTask(lang, ms, (t) => setLive(scoreTask({ Browser: t }, rows, lang)), undefined, waitForSecond)
+    const first = scoreTask(heard.first, rows, lang)
+    setLive(first)
+    if (!waitForSecond) return first
+    setSecond((s) => (s === 'off' ? s : 'checking'))
+    void heard.both.then((all) => {
+      setListeners(Object.keys(all).length)
+      setLive(scoreTask(all, rows, lang))
+      setSecond((s) => (s === 'off' ? s : 'ready'))
+    })
+    return first
   }
 
   async function soundCheck() {
     setLive(null)
     setStage('sound')
+    // English fetches the second listener by itself; Arabic is a large download, so the person chooses.
+    if (lang === 'en') startSecond('en')
     try {
-      const res = await listenAll(7000, SOUND_CHECK_WORDS[lang].map((w) => [w]))
+      const res = await listenAll(7000, SOUND_CHECK_WORDS[lang].map((w) => [w]), false)
       setStage(res.high >= 2 ? 'ready' : 'sound-failed')
     } catch {
       setStage('blocked')
@@ -54,7 +68,7 @@ export default function Try() {
     setStage('animals')
     timer.current = window.setInterval(() => setLeft((s) => Math.max(0, s - 1)), 1000)
     try {
-      await listenAll(ANIMAL_SECONDS * 1000, ANIMALS[lang])
+      await listenAll(ANIMAL_SECONDS * 1000, ANIMALS[lang], true)
       setStage('result')
     } catch {
       setStage('blocked')
@@ -64,9 +78,9 @@ export default function Try() {
   }
 
   const chips = live?.items.map((it) => (
-    <span key={it.row} className={`chip ${recs.length > 1 ? it.heard : ''}`}>{it.label}</span>
+    <span key={it.row} className={`chip ${listeners > 1 ? it.heard : ''}`}>{it.label}</span>
   ))
-  const one = recs.length === 1
+  const one = listeners === 1
 
   return (
     <>
@@ -80,10 +94,13 @@ export default function Try() {
       {stage === 'intro' && (
         <>
           <p>First a sound check, then 20 seconds of naming animals. This is a short taste of the full four-minute check. Nothing is stored.</p>
-          <p className="note">In this build your speech is recognised by your browser's own speech service, so audio is handled by the browser's maker. The version for patients sends audio to a speech service in a UAE data centre and does not keep it.</p>
+          <p className="note">Two listeners score what you say. The first is your browser's own speech service, which may send audio to the browser's maker. The second is an open speech model that runs on this device and sends your recording nowhere{secondSupported() ? `; it needs a one-time download of about ${DOWNLOAD_MB[lang]} MB from huggingface.co` : '; it is not available on this device, so one listener will score'}. Nothing is stored.</p>
+          {lang === 'ar' && secondSupported() && second === 'off' && <p><button className="small" onClick={() => startSecond('ar')}>Add the second listener for Arabic ({DOWNLOAD_MB.ar} MB)</button></p>}
           <div className="stack"><button className="primary" onClick={soundCheck}>Start the sound check</button></div>
         </>
       )}
+
+      {second === 'loading' && <p className="muted">Second listener: {percent}%</p>}
 
       {stage === 'sound' && (
         <>
@@ -130,8 +147,10 @@ export default function Try() {
           <div className="chips" dir={lang === 'ar' ? 'rtl' : 'ltr'}>{chips}</div>
           {viaTyping
             ? <p className="note">You typed these, so no speech was recognised. The matching and counting are the same ones the spoken check uses: each animal counts once, whatever form you give it.</p>
+            : second === 'checking'
+            ? <p className="note">Your browser's recogniser heard the animals above. The second listener, on this device, is now going through the same recording…</p>
             : one
-            ? <p className="note">One recogniser listened in this build, so the score has no range yet. With two, each animal is marked as heard by both or by one, and the score is a range.</p>
+            ? <p className="note">One recogniser listened this time, so the score has no range. That happens when the second listener is not downloaded yet, on phones that cannot share the microphone, and on older devices. With two, each animal is marked as heard by both or by one.</p>
             : <p className="note">Green was heard by both recognisers, amber by one. The score is a range, and that range is carried into the comparison with your baseline.</p>}
           {live.unmatched.length > 0 && <p className="muted" dir={lang === 'ar' ? 'rtl' : 'ltr'}>Heard but not on the accepted list, so not counted: {live.unmatched.slice(0, 12).join(lang === 'ar' ? '، ' : ', ')}. If one of these is an animal, the list needs it; such words are logged for review.</p>}
           <p>This is 20 seconds, not the real minute, so it is not compared with anyone. One number on one day says little.</p>

@@ -7,10 +7,10 @@ export default function Home() {
       <p>Four minutes at home, by voice, in Gulf Arabic or English. Nothing to read or type. It fills the time between clinic memory tests and tells a physician only when a change lasts.</p>
       <div className="stack">
         <Link className="btn primary" to="/try">Try it with your voice (30 seconds)</Link>
-        <Link className="btn" to="/year">See a year of checks (no microphone)</Link>
+        <Link className="btn" to="/recorded">Play a recorded check (no microphone)</Link>
         <Link className="btn" to="/clinician">Go to the physician's view</Link>
       </div>
-      <p><Link to="/check">Take the full four-minute check</Link> · <Link to="/me/decline">What the person sees</Link> · <Link to="/benchmark">How the flag was tested</Link></p>
+      <p><Link to="/check">Take the full four-minute check</Link> · <Link to="/year">A year of checks</Link> · <Link to="/me/decline">What the person sees</Link> · <Link to="/benchmark">How the flag was tested</Link></p>
       <p className="muted">No sign-up. The histories and patients shown are synthetic and labelled. This prototype does not diagnose.</p>
     </>
   )
