@@ -46,6 +46,7 @@ export default function Year() {
       </div>
       <div className="stack">
         {flagged && <Link className="btn primary" to="/clinician">Open the physician's packet for Person C</Link>}
+        <Link className="btn" to={`/me/${person.id}`}>See this person's own screen</Link>
         <Link className="btn" to="/try">Try it with your voice</Link>
       </div>
       <p className="muted">A personal baseline cannot show impairment that was already present when the person enrolled. The clinic test at the screening visit covers that.</p>

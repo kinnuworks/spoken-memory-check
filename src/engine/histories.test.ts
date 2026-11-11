@@ -25,3 +25,21 @@ describe('packet', () => {
     expect(workingDaysBetween('2026-11-13', '2026-11-16')).toBe(1)
   })
 })
+
+import { improvable } from './prevention'
+import { NO_CONSENT } from './consent'
+
+describe('person view', () => {
+  it('lists only what the screening record shows and never schooling', () => {
+    const steps = improvable(PERSONAS[2].record).map((s) => s.topic)
+    expect(steps).toContain('Hearing')
+    expect(steps).toContain('Mood')
+    expect(steps.join(' ')).not.toMatch(/school|education/i)
+  })
+  it('gives nothing to someone with a clean record', () => {
+    expect(improvable({ ...PERSONAS[0].record, activeMinutesWeek: 200 }).length).toBe(0)
+  })
+  it('starts with every consent off', () => {
+    expect(Object.values(NO_CONSENT).filter((v) => v === true).length).toBe(0)
+  })
+})

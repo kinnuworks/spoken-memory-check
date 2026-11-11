@@ -5,6 +5,7 @@ import Year from './pages/Year'
 import Clinician from './pages/Clinician'
 import Check from './pages/Check'
 import Benchmark from './pages/Benchmark'
+import Person from './pages/Person'
 
 export default function App() {
   return (
@@ -22,6 +23,8 @@ export default function App() {
           <Route path="/clinician" element={<Clinician />} />
           <Route path="/check" element={<Check />} />
           <Route path="/benchmark" element={<Benchmark />} />
+          <Route path="/me" element={<Person />} />
+          <Route path="/me/:id" element={<Person />} />
         </Routes>
       </main>
     </>
