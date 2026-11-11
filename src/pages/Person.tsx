@@ -27,10 +27,10 @@ export default function Person() {
       <h2>Your checks</h2>
       {traj.status === 'urgent' ? (
         <div className="note" style={{ borderLeft: '4px solid #a12a2a' }}>
-          <strong>Please see a doctor today.</strong> Your last check was very different from your earlier ones. This can have many causes, some of them simple to treat, and it is worth checking straight away. Call your screening clinic, or go to an urgent care centre. Your clinic has also been told.
+          <strong>Please see a doctor today.</strong> Your last check was very different from your earlier ones. This can have many causes, some of them simple to treat, and it is worth checking straight away. Call your screening clinic, or go to an urgent care centre. In a pilot, the clinic would be told at the same time; that alert is not built in this prototype.
         </div>
       ) : (
-        <p>{scored} checks received this year. Thank you. Your next check is due in about six weeks; we will remind you.</p>
+        <p>{person.checks.length} checks this year, {scored} of them scored. Thank you. Your next check is due in about six weeks; we will remind you.</p>
       )}
       <div className="row" aria-label="Checks received">
         {person.checks.map((c, i) => (

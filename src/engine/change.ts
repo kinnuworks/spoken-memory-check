@@ -100,8 +100,11 @@ export function evaluate(checks: Check[], p: RuleParams = DEFAULT_PARAMS): Traje
   let overall: Status = haveBaseline ? 'usual-range' : 'building-baseline'
   checks.forEach((c, i) => {
     if (!isScored(c)) {
+      const prevHeld = i > 0 && checks[i - 1].hearingLimited
       const note = c.hearingLimited
-        ? 'Held: the sound check failed, so this check was not scored. A missing score is never treated as a low score. If it happens again the person is pointed to a hearing assessment.'
+        ? prevHeld
+          ? 'Held again: the sound check failed twice in a row. Not scored. The person is pointed to a hearing test.'
+          : 'Held: the sound check failed, so this check was not scored. A missing score is never treated as a low score. If it happens again the person is pointed to a hearing test.'
         : 'Not scored. Nothing is assumed from a missing check; the next one is compared as usual.'
       results.push({ index: i, date: c.date, scored: false, mid: null, change: null, sd: null, z: null, pBelow: null, status: overall, note })
       return
