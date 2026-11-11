@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { DEFAULT_PARAMS, evaluate } from '../engine/change'
 import { PERSONAS } from '../engine/histories'
@@ -10,8 +10,13 @@ type Decision = 'pending' | 'approved' | 'dismissed'
 
 const INVITE = 'Your screening clinic would like to see you to talk about your memory checks. This is a routine follow-up visit. Please book an appointment with your physician.'
 
-export default function Clinician() {
+// A decision belongs to one case: switching case mounts a fresh packet.
+export default function ClinicianRoute() {
   const { id } = useParams()
+  return <Clinician key={id ?? 'first'} id={id} />
+}
+
+function Clinician({ id }: { id?: string }) {
   const candidates = PERSONAS.filter((p) => evaluate(p.checks).results.some((r) => r.status === 'flag' || r.status === 'review'))
   const person = candidates.find((p) => p.id === id) ?? candidates[0]
   const traj = evaluate(person.checks)
@@ -26,8 +31,6 @@ export default function Clinician() {
   const [referredOn, setReferredOn] = useState<string | null>(null)
   const [seenOn, setSeenOn] = useState<string | null>(null)
   const [invite, setInvite] = useState(INVITE)
-  // A decision belongs to one case: switching case starts from a clean packet.
-  useEffect(() => { setDecision('pending'); setReason(''); setNote(''); setReferredOn(null); setSeenOn(null); setInvite(INVITE) }, [person.id])
 
   // Illustrative dates on working days: approval two working days after the flag, the visit five after that.
   const approvedOn = addWorkingDays(flag.date, 2)

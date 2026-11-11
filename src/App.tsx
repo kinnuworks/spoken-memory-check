@@ -24,7 +24,7 @@ export default function App() {
           <Route path="/year" element={<Year />} />
           <Route path="/year/:id" element={<Year />} />
           <Route path="/clinician" element={<Clinician />} />
-          <Route path="/clinician/:id" element={<Clinician key={location.hash} />} />
+          <Route path="/clinician/:id" element={<Clinician />} />
           <Route path="/check" element={<Check />} />
           <Route path="/benchmark" element={<Benchmark />} />
           <Route path="/recorded" element={<Recorded />} />
