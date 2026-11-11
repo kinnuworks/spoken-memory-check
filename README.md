@@ -8,14 +8,13 @@ Prototype for Statement 8, Protecting Brain Health Earlier. It does not diagnose
 
 ## Try it in 30 seconds
 
-```bash
-npm install
-npm run dev
-```
+Live: https://spoken-memory-check.vercel.app (no sign-up)
 
 1. Open the page in Chrome and choose "Try it with your voice": say three words, then name animals for 20 seconds.
 2. No microphone? Choose "Play a recorded check".
 3. Choose "A year of checks", then open the physician's packet and approve it through to a closed referral.
+
+To run it yourself: `npm install`, then `npm run dev`. To redeploy: `scripts/deploy.sh` (uploads only the built files).
 
 ## What it does
 
