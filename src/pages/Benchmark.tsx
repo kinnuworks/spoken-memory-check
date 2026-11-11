@@ -20,7 +20,7 @@ export default function Benchmark() {
       <ul>
         <li>Asking for two low checks in a row keeps false alarms in stable people to {pct(data.rows[0].falseAlarmYear)} a year, against {pct(data.rows[1].falseAlarmYear)} for one low check and {pct(data.rows[2].falseAlarmYear)} for one cutoff applied to everyone.</li>
         <li>The price is speed and sensitivity to slow change. A loss of one point per check is caught within the year in only {pct(data.rows[0].detected['1'])} of people. A loss of two points per check is caught in {pct(data.rows[0].detected['2'])}.</li>
-        <li>If our measurement-error figure is too small, false alarms rise to {pct(data.rows.find((r) => r.world.startsWith('True measurement') && r.rule === 'ours')!.falseAlarmYear)} a year. That figure is still an assumption, which is why the volunteer retest matters.</li>
+        <li>If each check really varies by 4.5 points where the rule assumes 4.0, false alarms rise to {pct(data.rows.find((r) => r.world.includes('upper bound') && r.rule === 'ours')!.falseAlarmYear)} a year. The 4.0 comes from published retest studies of similar tasks, not of this check, which is why our own volunteer retest matters.</li>
         <li>Words missed by the recognisers make the rule more cautious, not more alarming, because the misses also lower the baseline.</li>
       </ul>
 
@@ -44,7 +44,7 @@ export default function Benchmark() {
       ))}
 
       <h2>Settings and limits</h2>
-      <p className="muted">Simulated scores are totals with a mean of 33 and a spread between people of 6 points. One check varies within a person by 3.5 points and practice adds up to 1.5 points; both are assumptions until our volunteer data replaces them. Decline starts at the fifth check. A flag raised before decline starts is counted as a false alarm, not a detection. Recogniser misses are set at 8% and 15% as illustrations; the measured rates will replace them once the two-recogniser benchmark has run. A simulation shows how the rule behaves under stated assumptions. It does not show that the check detects disease.</p>
+      <p className="muted">Simulated scores are totals with a mean of 33 and a spread between people of 6 points. One check varies within a person by 4.0 points (from published retest studies of animal naming and phone word recall; 3.5 and 4.5 are shown as bounds) and practice adds up to 1.0 point (0.6 published for animal naming, the rest assumed). Decline starts at the fifth check. A flag raised before decline starts is counted as a false alarm, not a detection. Recogniser misses are set at 8% and 15% as illustrations; the measured rates will replace them once the two-recogniser benchmark has run. A simulation shows how the rule behaves under stated assumptions. It does not show that the check detects disease.</p>
 
       <h2>Real data we have</h2>
       <SurveyChart />

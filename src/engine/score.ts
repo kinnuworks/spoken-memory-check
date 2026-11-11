@@ -1,4 +1,4 @@
-import { matchClosedSet } from './match'
+import { matchWithRest } from './match'
 import type { Lang } from './lexicon'
 
 export type Heard = 'both' | 'one' | 'none'
@@ -14,6 +14,8 @@ export interface RangeScore {
   /** False when the recognisers disagree on too many items to use the session. */
   scored: boolean
   recognisers: string[]
+  /** Words a recogniser heard that are not in the accepted list. Never scored; kept for review of the list. */
+  unmatched: string[]
 }
 
 /** A session is not scored when the range is wider than this share of the high count (and more than two items). */
@@ -26,7 +28,9 @@ export const MAX_RANGE_SHARE = 0.34
  */
 export function scoreTask(transcripts: Record<string, string>, rows: string[][], lang: Lang): RangeScore {
   const names = Object.keys(transcripts)
-  const sets = names.map((n) => matchClosedSet(transcripts[n], rows, lang))
+  const matches = names.map((n) => matchWithRest(transcripts[n], rows, lang))
+  const sets = matches.map((m) => m.found)
+  const unmatched = [...new Set(matches.flatMap((m) => m.unmatched))]
   const items: ItemResult[] = []
   rows.forEach((row, i) => {
     const by = names.filter((_, k) => sets[k].has(i))
@@ -36,5 +40,5 @@ export function scoreTask(transcripts: Record<string, string>, rows: string[][],
   const low = items.filter((it) => it.heard === 'both').length
   const width = high - low
   const scored = width <= 2 || width <= MAX_RANGE_SHARE * high
-  return { low, high, items, scored, recognisers: names }
+  return { low, high, items, scored, recognisers: names, unmatched }
 }

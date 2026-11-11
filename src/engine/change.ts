@@ -27,15 +27,16 @@ export interface RuleParams {
 }
 
 export const DEFAULT_PARAMS: RuleParams = {
-  sem: 3.5,
-  practiceGain: 1.5,
-  practiceTau: 2,
+  sem: 4.0,
+  practiceGain: 1.0,
+  practiceTau: 1,
   flagZ: -1.645,
   urgentZ: -3.5,
   basis: {
-    sem: 'ASSUMPTION until our volunteer retest is in. Animal naming part: SD 5.0 in our survey analysis and a published one-year retest correlation of 0.67 give about 2.9; word recall part assumed 1.8; combined as independent.',
-    practiceGain: 'ASSUMPTION. Published first-retest gains are large for a single task; averaging three baseline checks absorbs most of it.',
-    flagZ: 'One-sided 5% per check; requiring two checks in a row lowers the false-alarm rate further (measured by simulation on the benchmark page).',
+    sem: 'Built from published retest studies, none of them of this exact check. Animal naming 3.2: Duff et al. (62 older adults, one week, https://pmc.ncbi.nlm.nih.gov/articles/PMC3789513) and Gavett et al. (4,217 adults aged 50 and over, one year, r 0.67). Word recall 2.2: Health and Retirement Study SDs for immediate and delayed recall (17,913 people, https://pmc.ncbi.nlm.nih.gov/articles/PMC4542644) with phone retest of the pair at 0.66 (Lachman et al., https://midus.wisc.edu/wp-content/uploads/2024/04/1338.pdf). Combined as independent gives 3.9; a shared bad-day error would give about 4.3. We use 4.0 and show 3.5 and 4.5 as bounds. Our own volunteer retest will replace it.',
+    practiceGain: 'Animal naming gains about 0.6 at one week (Duff et al.). No published gain exists for single-hearing word lists that change each time; 0.4 is our ASSUMPTION. Total 1.0.',
+    practiceTau: 'ASSUMPTION: most of the gain arrives by the second check.',
+    flagZ: 'One-sided 5% per check; asking for two checks in a row lowers the false-alarm rate (measured on the benchmark page).',
     urgentZ: 'ASSUMPTION, set far from normal variation so that only a very large fall between two neighbouring checks triggers it. Slow decline goes through the routine flag instead.',
   },
 }

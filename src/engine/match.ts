@@ -27,6 +27,11 @@ export function tokens(text: string, lang: Lang): string[] {
  * Longest forms are tried first so "polar bear" is not also counted as "bear".
  */
 export function matchClosedSet(text: string, rows: string[][], lang: Lang): Set<number> {
+  return matchWithRest(text, rows, lang).found
+}
+
+/** As matchClosedSet, plus the words that matched nothing, so the accepted list can be reviewed and extended. */
+export function matchWithRest(text: string, rows: string[][], lang: Lang): { found: Set<number>; unmatched: string[] } {
   const toks = tokens(text, lang)
   const forms: { key: string[]; row: number }[] = []
   rows.forEach((row, i) => row.forEach((f) => forms.push({ key: tokens(f, lang), row: i })))
@@ -43,5 +48,5 @@ export function matchClosedSet(text: string, rows: string[][], lang: Lang): Set<
       }
     }
   }
-  return found
+  return { found, unmatched: [...new Set(toks.filter((_, i) => !used[i]))] }
 }

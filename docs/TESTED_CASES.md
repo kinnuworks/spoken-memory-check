@@ -12,6 +12,7 @@ Run them with `npm test`. Each line is one automated test.
 - Silence scores zero and is not an error.
 - No word in a recall list is also an animal name.
 - No animal name appears under two different animals.
+- Words outside the accepted list are reported for review and never scored.
 
 ## Scoring as a range
 - Two recognisers that agree give a single number.

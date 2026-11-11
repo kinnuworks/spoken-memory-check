@@ -1,15 +1,15 @@
 {
- "generated": "2026-11-10",
+ "generated": "2026-11-11",
  "n": 20000,
  "rows": [
   {
    "world": "As assumed",
    "rule": "ours",
-   "falseAlarmYear": 0.0339,
+   "falseAlarmYear": 0.03425,
    "detected": {
-    "1": 0.3852,
-    "2": 0.92475,
-    "3": 0.999
+    "1": 0.31905,
+    "2": 0.85085,
+    "3": 0.99355
    },
    "medianChecksToFlag": {
     "1": 6,
@@ -20,56 +20,56 @@
   {
    "world": "As assumed",
    "rule": "single-low",
-   "falseAlarmYear": 0.2698,
+   "falseAlarmYear": 0.27365,
    "detected": {
-    "1": 0.7559,
-    "2": 0.9423,
-    "3": 0.94575
+    "1": 0.70445,
+    "2": 0.9382,
+    "3": 0.94765
    },
    "medianChecksToFlag": {
     "1": 4,
     "2": 3,
-    "3": 2
+    "3": 3
    }
   },
   {
    "world": "As assumed",
    "rule": "fixed-cutoff",
-   "falseAlarmYear": 0.15925,
+   "falseAlarmYear": 0.18485,
    "detected": {
-    "1": 0.3542,
-    "2": 0.71125,
-    "3": 0.9051
+    "1": 0.36065,
+    "2": 0.6947,
+    "3": 0.88625
    },
    "medianChecksToFlag": {
-    "1": 5,
-    "2": 5,
+    "1": 4,
+    "2": 4,
     "3": 4
    }
   },
   {
    "world": "Each recogniser misses 8% of words",
    "rule": "ours",
-   "falseAlarmYear": 0.01835,
+   "falseAlarmYear": 0.0178,
    "detected": {
-    "1": 0.2898,
-    "2": 0.8754,
-    "3": 0.9968
+    "1": 0.2279,
+    "2": 0.7762,
+    "3": 0.98685
    },
    "medianChecksToFlag": {
     "1": 6,
-    "2": 5,
-    "3": 4
+    "2": 6,
+    "3": 5
    }
   },
   {
    "world": "Each recogniser misses 8% of words",
    "rule": "single-low",
-   "falseAlarmYear": 0.1989,
+   "falseAlarmYear": 0.2043,
    "detected": {
-    "1": 0.70105,
-    "2": 0.95715,
-    "3": 0.96725
+    "1": 0.63525,
+    "2": 0.94125,
+    "3": 0.965
    },
    "medianChecksToFlag": {
     "1": 5,
@@ -80,26 +80,26 @@
   {
    "world": "Each recogniser misses 8% of words",
    "rule": "fixed-cutoff",
-   "falseAlarmYear": 0.2506,
+   "falseAlarmYear": 0.27635,
    "detected": {
-    "1": 0.43975,
-    "2": 0.74315,
-    "3": 0.88135
+    "1": 0.44455,
+    "2": 0.73575,
+    "3": 0.87465
    },
    "medianChecksToFlag": {
     "1": 4,
     "2": 4,
-    "3": 4
+    "3": 3
    }
   },
   {
    "world": "Each recogniser misses 15% of words",
    "rule": "ours",
-   "falseAlarmYear": 0.00735,
+   "falseAlarmYear": 0.00875,
    "detected": {
-    "1": 0.16885,
-    "2": 0.75755,
-    "3": 0.98885
+    "1": 0.1344,
+    "2": 0.65175,
+    "3": 0.9678
    },
    "medianChecksToFlag": {
     "1": 6,
@@ -110,11 +110,11 @@
   {
    "world": "Each recogniser misses 15% of words",
    "rule": "single-low",
-   "falseAlarmYear": 0.1181,
+   "falseAlarmYear": 0.1259,
    "detected": {
-    "1": 0.5639,
-    "2": 0.95755,
-    "3": 0.982
+    "1": 0.50995,
+    "2": 0.9276,
+    "3": 0.9811
    },
    "medianChecksToFlag": {
     "1": 5,
@@ -125,26 +125,26 @@
   {
    "world": "Each recogniser misses 15% of words",
    "rule": "fixed-cutoff",
-   "falseAlarmYear": 0.39495,
+   "falseAlarmYear": 0.4013,
    "detected": {
-    "1": 0.51455,
-    "2": 0.75415,
-    "3": 0.83235
+    "1": 0.5126,
+    "2": 0.7488,
+    "3": 0.83625
    },
    "medianChecksToFlag": {
     "1": 4,
-    "2": 4,
+    "2": 3,
     "3": 3
    }
   },
   {
-   "world": "True measurement error larger (4.5, rule assumes 3.5)",
+   "world": "True measurement error at the upper bound (4.5, rule assumes 4.0)",
    "rule": "ours",
-   "falseAlarmYear": 0.1086,
+   "falseAlarmYear": 0.0618,
    "detected": {
-    "1": 0.4449,
-    "2": 0.88195,
-    "3": 0.9918
+    "1": 0.34845,
+    "2": 0.8316,
+    "3": 0.98775
    },
    "medianChecksToFlag": {
     "1": 5,
@@ -153,28 +153,28 @@
    }
   },
   {
-   "world": "True measurement error larger (4.5, rule assumes 3.5)",
+   "world": "True measurement error at the upper bound (4.5, rule assumes 4.0)",
    "rule": "single-low",
-   "falseAlarmYear": 0.4588,
+   "falseAlarmYear": 0.36175,
    "detected": {
-    "1": 0.74245,
-    "2": 0.88285,
-    "3": 0.8952
+    "1": 0.71,
+    "2": 0.9161,
+    "3": 0.931
    },
    "medianChecksToFlag": {
     "1": 4,
     "2": 3,
-    "3": 2
+    "3": 3
    }
   },
   {
-   "world": "True measurement error larger (4.5, rule assumes 3.5)",
+   "world": "True measurement error at the upper bound (4.5, rule assumes 4.0)",
    "rule": "fixed-cutoff",
-   "falseAlarmYear": 0.22535,
+   "falseAlarmYear": 0.2197,
    "detected": {
-    "1": 0.42125,
-    "2": 0.7294,
-    "3": 0.8927
+    "1": 0.3896,
+    "2": 0.69845,
+    "3": 0.88085
    },
    "medianChecksToFlag": {
     "1": 4,
@@ -183,13 +183,13 @@
    }
   },
   {
-   "world": "True practice gain larger (3.0, rule assumes 1.5)",
+   "world": "True measurement error at the lower bound (3.5, rule assumes 4.0)",
    "rule": "ours",
-   "falseAlarmYear": 0.01575,
+   "falseAlarmYear": 0.015,
    "detected": {
-    "1": 0.2774,
-    "2": 0.87305,
-    "3": 0.997
+    "1": 0.27585,
+    "2": 0.8834,
+    "3": 0.998
    },
    "medianChecksToFlag": {
     "1": 6,
@@ -198,13 +198,13 @@
    }
   },
   {
-   "world": "True practice gain larger (3.0, rule assumes 1.5)",
+   "world": "True measurement error at the lower bound (3.5, rule assumes 4.0)",
    "rule": "single-low",
-   "falseAlarmYear": 0.18555,
+   "falseAlarmYear": 0.17885,
    "detected": {
-    "1": 0.68235,
-    "2": 0.95405,
-    "3": 0.9618
+    "1": 0.6883,
+    "2": 0.96175,
+    "3": 0.9706
    },
    "medianChecksToFlag": {
     "1": 5,
@@ -213,28 +213,58 @@
    }
   },
   {
-   "world": "True practice gain larger (3.0, rule assumes 1.5)",
+   "world": "True measurement error at the lower bound (3.5, rule assumes 4.0)",
    "rule": "fixed-cutoff",
-   "falseAlarmYear": 0.11155,
+   "falseAlarmYear": 0.15385,
    "detected": {
-    "1": 0.2921,
-    "2": 0.64525,
-    "3": 0.8942
+    "1": 0.32865,
+    "2": 0.679,
+    "3": 0.89115
    },
    "medianChecksToFlag": {
-    "1": 5,
+    "1": 4,
     "2": 5,
     "3": 4
    }
   },
   {
-   "world": "No practice gain at all (rule assumes 1.5)",
+   "world": "True practice gain larger (3.0, rule assumes 1.0)",
    "rule": "ours",
-   "falseAlarmYear": 0.0613,
+   "falseAlarmYear": 0.0177,
    "detected": {
-    "1": 0.51555,
-    "2": 0.96215,
-    "3": 0.99955
+    "1": 0.22045,
+    "2": 0.78375,
+    "3": 0.9879
+   },
+   "medianChecksToFlag": {
+    "1": 6,
+    "2": 6,
+    "3": 5
+   }
+  },
+  {
+   "world": "True practice gain larger (3.0, rule assumes 1.0)",
+   "rule": "single-low",
+   "falseAlarmYear": 0.18815,
+   "detected": {
+    "1": 0.62535,
+    "2": 0.9435,
+    "3": 0.967
+   },
+   "medianChecksToFlag": {
+    "1": 5,
+    "2": 4,
+    "3": 3
+   }
+  },
+  {
+   "world": "True practice gain larger (3.0, rule assumes 1.0)",
+   "rule": "fixed-cutoff",
+   "falseAlarmYear": 0.11425,
+   "detected": {
+    "1": 0.2703,
+    "2": 0.60395,
+    "3": 0.86905
    },
    "medianChecksToFlag": {
     "1": 5,
@@ -243,28 +273,43 @@
    }
   },
   {
-   "world": "No practice gain at all (rule assumes 1.5)",
-   "rule": "single-low",
-   "falseAlarmYear": 0.37565,
+   "world": "No practice gain at all (rule assumes 1.0)",
+   "rule": "ours",
+   "falseAlarmYear": 0.04635,
    "detected": {
-    "1": 0.81175,
-    "2": 0.9263,
-    "3": 0.92605
+    "1": 0.36985,
+    "2": 0.8808,
+    "3": 0.9959
+   },
+   "medianChecksToFlag": {
+    "1": 6,
+    "2": 5,
+    "3": 4
+   }
+  },
+  {
+   "world": "No practice gain at all (rule assumes 1.0)",
+   "rule": "single-low",
+   "falseAlarmYear": 0.3223,
+   "detected": {
+    "1": 0.7399,
+    "2": 0.9346,
+    "3": 0.9365
    },
    "medianChecksToFlag": {
     "1": 4,
     "2": 3,
-    "3": 2
+    "3": 3
    }
   },
   {
-   "world": "No practice gain at all (rule assumes 1.5)",
+   "world": "No practice gain at all (rule assumes 1.0)",
    "rule": "fixed-cutoff",
-   "falseAlarmYear": 0.2153,
+   "falseAlarmYear": 0.22755,
    "detected": {
-    "1": 0.4306,
-    "2": 0.75225,
-    "3": 0.9068
+    "1": 0.40005,
+    "2": 0.72275,
+    "3": 0.88665
    },
    "medianChecksToFlag": {
     "1": 4,

@@ -18,7 +18,7 @@ export interface World {
   declineFrom: number
 }
 
-export const BASE_WORLD: World = { sem: 3.5, practiceGain: 1.5, miss: 0, slope: 0, betweenSd: 6, checks: 11, declineFrom: 4 }
+export const BASE_WORLD: World = { sem: 4.0, practiceGain: 1.0, miss: 0, slope: 0, betweenSd: 6, checks: 11, declineFrom: 4 }
 const POP_MEAN = 33
 
 export function rng(seed: number) {
@@ -66,9 +66,10 @@ export function runBenchmark(n: number, seed = 20261110): { n: number; rows: Row
     { name: 'As assumed', w: {} },
     { name: 'Each recogniser misses 8% of words', w: { miss: 0.08 } },
     { name: 'Each recogniser misses 15% of words', w: { miss: 0.15 } },
-    { name: 'True measurement error larger (4.5, rule assumes 3.5)', w: { sem: 4.5 } },
-    { name: 'True practice gain larger (3.0, rule assumes 1.5)', w: { practiceGain: 3 } },
-    { name: 'No practice gain at all (rule assumes 1.5)', w: { practiceGain: 0 } },
+    { name: 'True measurement error at the upper bound (4.5, rule assumes 4.0)', w: { sem: 4.5 } },
+    { name: 'True measurement error at the lower bound (3.5, rule assumes 4.0)', w: { sem: 3.5 } },
+    { name: 'True practice gain larger (3.0, rule assumes 1.0)', w: { practiceGain: 3 } },
+    { name: 'No practice gain at all (rule assumes 1.0)', w: { practiceGain: 0 } },
   ]
   const slopes = [1, 2, 3]
   const rows: Row[] = []

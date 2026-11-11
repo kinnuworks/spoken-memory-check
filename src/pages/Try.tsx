@@ -133,6 +133,7 @@ export default function Try() {
             : one
             ? <p className="note">One recogniser listened in this build, so the score has no range yet. With two, each animal is marked as heard by both or by one, and the score is a range.</p>
             : <p className="note">Green was heard by both recognisers, amber by one. The score is a range, and that range is carried into the comparison with your baseline.</p>}
+          {live.unmatched.length > 0 && <p className="muted" dir={lang === 'ar' ? 'rtl' : 'ltr'}>Heard but not on the accepted list, so not counted: {live.unmatched.slice(0, 12).join(lang === 'ar' ? '، ' : ', ')}. If one of these is an animal, the list needs it; such words are logged for review.</p>}
           <p>This is 20 seconds, not the real minute, so it is not compared with anyone. One number on one day says little.</p>
           <SurveyChart />
           <div className="stack">

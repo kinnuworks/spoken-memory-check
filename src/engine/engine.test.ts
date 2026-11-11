@@ -142,3 +142,11 @@ describe('change rule', () => {
     expect(JSON.stringify(evaluate(c))).toBe(JSON.stringify(evaluate(c)))
   })
 })
+
+describe('words outside the accepted list', () => {
+  it('are reported for review and never scored', () => {
+    const s = scoreTask({ a: 'dog unicorn zebra flibbertigibbet' }, ANIMALS.en, 'en')
+    expect(s.high).toBe(2)
+    expect(s.unmatched).toEqual(['unicorn', 'flibbertigibbet'])
+  })
+})
