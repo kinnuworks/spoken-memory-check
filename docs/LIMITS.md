@@ -21,7 +21,8 @@
 - In open online registries about half of people do a second cognitive session and a third do a third. With a loaned tablet and reminder calls, three quarters of 114 older adults completed every monthly session in one study. So the three baseline checks are asked for in the first two weeks, and reminders are part of the design, not an extra.
 
 ## Speech
-- This build uses one recogniser, the browser's own. Each score therefore has no range yet. The design uses two recognisers and reports a range.
+- Two listeners: the browser's own recogniser and an open speech model on the device. On phones the two often cannot share the microphone, and on weaker devices the second is skipped; then one listener scores and the screen says so.
+- The on-device listener was measured on a computer voice only: 19 of 20 English animals with the base model; in a separate test the small model heard 17 of 20 Arabic animals.
 - Recognition has not been measured on older speakers or on Gulf Arabic speakers.
 - Arabic word lists and prompts are drafts that no native Gulf Arabic speaker has reviewed. Prompts use the device's synthetic voice.
 - The two word lists per language have not been shown to be equally hard.
