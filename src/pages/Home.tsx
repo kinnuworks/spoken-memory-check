@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import data from '../data/benchmark.json'
+import speech from '../data/human-speech-bench.json'
+import { lostSignals } from '../engine/signals'
 import { evaluate } from '../engine/change'
 import { PERSONAS } from '../engine/histories'
 import { treatableContributors } from '../engine/packet'
@@ -21,6 +23,7 @@ const rows = data.rows.filter((r) => r.world === 'As assumed')
 const ours = rows.find((r) => r.rule === 'ours')!
 const single = rows.find((r) => r.rule === 'single-low')!
 const burden = data.burden.find((b) => b.prevalence === 0.02)!
+const audit = lostSignals()
 
 export default function Home() {
   useReveal()
@@ -203,7 +206,7 @@ export default function Home() {
           </div>
           <div className="grid grid-3">
             {[
-              { icon: <Ear />, t: 'Hearing comes first', d: 'A failed sound check holds the check instead of scoring it low. After two, the person is pointed to a hearing test.' },
+              { icon: <Ear />, t: 'Hearing comes first', d: 'A three-minute digits-in-noise hearing check runs before the memory check, and a failed sound check holds a check instead of scoring it low.' },
               { icon: <Moon />, t: 'Off days do not count', d: 'People can say a day was off. A low score on that day is left out of the comparison.' },
               { icon: <List />, t: 'Everyday tasks override scores', d: 'One spoken question about money, medicines and appointments. A yes goes to the physician whatever the scores say.' },
               { icon: <Alert />, t: 'Very large falls go urgent', d: 'A fall far outside normal variation tells the person to see a doctor the same day.' },
@@ -215,6 +218,40 @@ export default function Home() {
                 <div><p className="t-title">{x.t}</p><p>{x.d}</p></div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* What the programme gets */}
+      <section className="section">
+        <div className="container">
+          <div className="section-head reveal">
+            <span className="eyebrow"><span className="dot" />For the programme</span>
+            <h2>Three checks on the programme itself.</h2>
+            <p className="lead">A home check is only useful if the results lead somewhere. These three pages watch the people, the hearing care and the listeners.</p>
+          </div>
+          <div className="grid grid-3">
+            <Link to="/programme" className="card prog-card reveal">
+              <span className="lbl simulated">Simulated year</span>
+              <p className="stat">{audit.peopleWithAnyPer1000} <span>per 1,000</span></p>
+              <p className="t-title">Lost signals</p>
+              <p className="t-small">Members with an abnormal brain-relevant result from the screening visit (memory, hearing, mood, HbA1c, blood pressure, vision) and no recorded action by its target date. Each row is a list the facility can call.</p>
+              <span className="prog-link">Open the programme view<Arrow /></span>
+            </Link>
+            <Link to="/hearing" className="card prog-card reveal" style={{ '--i': 1 } as React.CSSProperties}>
+              <span className="lbl working">Working</span>
+              <p className="stat">3 <span>minutes</span></p>
+              <p className="t-title">Hearing, to an aid that is worn</p>
+              <p className="t-small">Digits in noise, answered by tapping, with no speech recognition. A fail goes to the physician as an audiology referral, and a weekly one-tap question shows who is still wearing the aid.</p>
+              <span className="prog-link">Take the hearing check<Arrow /></span>
+            </Link>
+            <Link to="/rescore" className="card prog-card reveal" style={{ '--i': 2 } as React.CSSProperties}>
+              <span className="lbl working">Working</span>
+              <p className="stat">1 <span>in 10</span></p>
+              <p className="t-title">Blind re-scoring</p>
+              <p className="t-small">One recorded check in ten is scored again by a person who cannot see the machine's result. Agreement is tracked by language, and a language whose agreement falls goes back to human scoring.</p>
+              <span className="prog-link">Try it as the reviewer<Arrow /></span>
+            </Link>
           </div>
         </div>
       </section>
@@ -294,9 +331,9 @@ export default function Home() {
               <p className="t-small">packets a year for physicians, {Math.round(burden.realPer1000)} of them real, if 2% of members are in real decline.</p>
             </div>
             <div className="span-2 reveal" style={{ '--i': 2 } as React.CSSProperties}>
-              <span className="lbl proposed">Not measured yet</span>
-              <p className="stat stat--muted">Real voices</p>
-              <p className="t-small">Completion, retest reliability and accuracy with older and Gulf Arabic speakers need volunteers. That is the next step.</p>
+              <span className="lbl working">Real recordings</span>
+              <p className="stat">{Math.round(speech.en.overall.correct / speech.en.overall.n * 100)}% <span>vs</span> {Math.round(speech.ar.overall.correct / speech.ar.overall.n * 100)}%</p>
+              <p className="t-small">of real single words heard right by the on-device listener, English against Arabic: {(speech.en.overall.n + speech.ar.overall.n).toLocaleString()} clips from public recordings of adult volunteers. Arabic needs the browser's listener and native recordings; neither set has older speakers.</p>
             </div>
           </div>
           <p className="center-link reveal"><Link className="btn btn-outline" to="/benchmark">How the flag was tested<Arrow /></Link></p>
@@ -312,7 +349,7 @@ export default function Home() {
             <details><summary>Why by voice?</summary><p>Many older adults in the Gulf had little schooling, and tests that need reading, typing or tapping are unfair to them. Saying words back and naming animals is how memory has been tested over the telephone for decades.</p></details>
             <details><summary>Where does my voice go?</summary><p>The speech model on the device sends nothing anywhere. The browser's own recogniser may send audio to the browser's maker. In a pilot, any cloud listener would run in a UAE region and only with the regulator's approval.</p></details>
             <details><summary>What if I don't hear well?</summary><p>Every check starts with a sound check. If it fails, the check is held, not scored low. After two held checks the app suggests a hearing test, which also makes later checks fairer.</p></details>
-            <details><summary>Has it been tested on real people?</summary><p>Not yet. The rule has been tested on simulated people and the listeners on a synthetic voice. Measuring it with volunteers, including older and Gulf Arabic speakers, is the next step.</p></details>
+            <details><summary>Has it been tested on real people?</summary><p>Partly. The on-device listener was measured on 1,107 real recordings of single words from public datasets of adult volunteers: it heard 62% right in English and 40% in Arabic, which is why every recording can also be scored by a person. The full check has not yet been taken by older or Gulf Arabic speakers, and the rule has been tested on simulated people only.</p></details>
             <details><summary>Who sees the scores?</summary><p>Only the ordering physician at the screening clinic, and only if the person agreed. The person hears about any result at an in-person visit.</p></details>
           </div>
         </div>

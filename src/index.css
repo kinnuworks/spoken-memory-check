@@ -141,3 +141,31 @@ audio { width: 100%; margin: 12px 0; }
   .barrow { grid-template-columns: 1fr 48px; }
   .barrow > span { grid-column: 1 / -1; margin-bottom: -6px; }
 }
+.lost-hero { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 18px; background: var(--accent-wash); box-shadow: none; }
+.lost-hero p { margin: 0 !important; }
+.big-unit { font-size: 20px; font-weight: 550; letter-spacing: -.01em; color: var(--ink-3); }
+
+/* Hearing check */
+.lead-p { font-size: 17.5px; }
+.steps { padding-left: 22px; color: var(--ink-2); max-width: var(--text-max); }
+.steps li { margin: 6px 0; }
+.din { display: grid; justify-items: center; text-align: center; gap: 10px; max-width: 420px; margin: 28px auto; }
+.din .meter { width: 100%; }
+.slots { display: flex; gap: 12px; margin: 10px 0 4px; }
+.slot { width: 72px; height: 84px; display: grid; place-items: center; border-radius: var(--r-md); background: var(--surface); box-shadow: inset 0 0 0 1.5px var(--line-2); font: var(--display-weight) 44px/1 var(--font-display); color: var(--ink); }
+.slot.filled { box-shadow: inset 0 0 0 2px var(--accent); background: var(--accent-wash); }
+.keypad { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 100%; margin-top: 8px; }
+.page .key { min-height: 68px !important; padding: 0 !important; font: var(--display-weight) 28px/1 var(--font-display) !important; border-radius: var(--r-lg) !important; box-shadow: inset 0 0 0 1px var(--line-2), 0 1.5px 0 rgba(var(--shadow-rgb)/.12) !important; }
+.page .key--wide { grid-column: span 4; min-height: 48px !important; font: 600 15px/1 var(--font-body) !important; }
+.tester summary { cursor: pointer; font-weight: 650; }
+.din-trace { display: flex; align-items: flex-end; gap: 4px; height: 110px; margin: 16px 0 6px; }
+.din-trace span { flex: 1; border-radius: 4px 4px 0 0; }
+.din-trace .ok { background: var(--both); opacity: .75; }
+.din-trace .miss { background: var(--line-2); }
+.funnel { display: grid; gap: 8px; margin: 18px 0; }
+.funnel__row { display: grid; grid-template-columns: 220px 1fr 56px 48px; gap: 12px; align-items: center; font-size: 15px; color: var(--ink-2); }
+.funnel__bar { height: 26px; border-radius: 7px; background: var(--tint); overflow: hidden; }
+.funnel__bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--accent-hi), var(--accent)); border-radius: 7px; }
+.funnel__row strong { font: 650 17px/1 var(--font-display); text-align: right; }
+.funnel__row em { font-style: normal; font-size: 13px; color: var(--ink-3); }
+@media (max-width: 640px) { .funnel__row { grid-template-columns: 1fr 52px 44px; } .funnel__row > span { grid-column: 1 / -1; margin-bottom: -4px; } .funnel__bar { grid-column: 1; } }

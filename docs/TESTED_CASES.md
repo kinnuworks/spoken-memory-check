@@ -46,3 +46,17 @@ Run them with `npm test`. Each line is one automated test.
 - A referral carries its due date.
 - Ten of fourteen risk factors map to a screening field.
 - Working days are counted Monday to Friday.
+
+## Hearing check (`src/engine/din.test.ts`)
+- Triplets are three different digits and never seven.
+- A triplet counts only when all three digits are right and in order.
+- The level goes down after a right answer and up after a wrong one, within limits.
+- The threshold is the mean of the counted sets and the next level; there is no result before enough sets.
+- Refer only above the provisional cut-off.
+- A simulated listener with a worse threshold gets a worse result and is referred.
+
+## Blind re-scoring (`src/engine/rescore.test.ts`)
+- About one check in ten is picked, the same one every time.
+- Items are split into heard by both, the person only and the machine only; agreement is both over either.
+- Two empty sides count as full agreement.
+- A running figure is kept per language.

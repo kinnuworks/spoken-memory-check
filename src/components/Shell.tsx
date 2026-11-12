@@ -28,6 +28,8 @@ export function Footer() {
         <span className="brand"><img className="app-icon" src={ICON} alt="" />Spoken memory check</span>
         <nav aria-label="More">
           <Link to="/check">Full four-minute check</Link>
+          <Link to="/hearing">Hearing check</Link>
+          <Link to="/rescore">Blind re-scoring</Link>
           <Link to="/me/decline">What the person sees</Link>
           <Link to="/programme">Programme view</Link>
           <Link to="/how">What is real</Link>
