@@ -18,7 +18,58 @@ function normEnglish(w: string): string {
 
 export function tokens(text: string, lang: Lang): string[] {
   const norm = lang === 'ar' ? normArabic : normEnglish
-  return text.split(/[\s,.;:!?،؛-]+/).map(norm).filter(Boolean)
+  return text.split(/[\s,.;:!?،؛؟-]+/).map(norm).filter(Boolean)
+}
+
+// ---- Arabic near misses ----
+// On real recordings the speech model often wrote a word one letter off: سفر for صفر, سمانيا for
+// ثمانية, حمسة for خمسة. These rules accept such near misses, and only inside a closed set.
+
+/** Letters the model swaps: emphatic and plain pairs, and the interdentals. */
+const AR_FOLD: Record<string, string> = { 'ص': 'س', 'ث': 'س', 'ط': 'ت', 'ظ': 'ز', 'ذ': 'ز', 'ض': 'د' }
+
+/** A normalised Arabic token with confusable letters folded and a final ة, ه or ا written as ه. */
+export function foldArabic(tok: string): string {
+  const s = [...tok].map((c) => AR_FOLD[c] ?? c).join('')
+  return s.length > 2 ? s.replace(/[ةها]$/, 'ه') : s
+}
+
+/** True when a and b differ by at most one inserted, deleted or changed letter. */
+function withinOne(a: string, b: string): boolean {
+  const x = [...a], y = [...b]
+  if (Math.abs(x.length - y.length) > 1) return false
+  let i = 0, j = 0, edits = 0
+  while (i < x.length && j < y.length) {
+    if (x[i] === y[j]) { i++; j++; continue }
+    if (++edits > 1) return false
+    if (x.length > y.length) i++
+    else if (y.length > x.length) j++
+    else { i++; j++ }
+  }
+  return edits + (x.length - i) + (y.length - j) <= 1
+}
+
+/** One-letter tolerance applies only to sets this small (the word lists), where a near miss has few neighbours. */
+export const NEAR_MAX_ROWS = 12
+/** ...and only to accepted forms at least this long after folding. */
+export const NEAR_MIN_LETTERS = 4
+
+/**
+ * The single row an unmatched Arabic token is a near miss of, or -1. Folded spellings count in
+ * any closed set. One changed, added or dropped letter counts only in small sets, only for forms
+ * of four letters or more, and only when the first letter agrees. A token close to two rows matches neither.
+ */
+function nearRow(tok: string, forms: { key: string; row: number }[], small: boolean): number {
+  const t = foldArabic(tok)
+  const tl = [...t].length
+  const rows = new Set<number>()
+  for (const f of forms) {
+    const k = foldArabic(f.key)
+    if (k === t) { rows.add(f.row); continue }
+    if (!small || [...k].length < NEAR_MIN_LETTERS || tl < NEAR_MIN_LETTERS - 1 || k[0] !== t[0]) continue
+    if (withinOne(t, k)) rows.add(f.row)
+  }
+  return rows.size === 1 ? [...rows][0] : -1
 }
 
 /**
@@ -47,6 +98,17 @@ export function matchWithRest(text: string, rows: string[][], lang: Lang): { fou
         found.add(row)
       }
     }
+  }
+  if (lang === 'ar') {
+    // Exact matches first; only words left over are tried as near misses, against single-word forms.
+    const exact = new Set(forms.flatMap((f) => f.key))
+    const single = forms.filter((f) => f.key.length === 1).map((f) => ({ key: f.key[0], row: f.row }))
+    const small = rows.length <= NEAR_MAX_ROWS
+    toks.forEach((t, i) => {
+      if (used[i] || exact.has(t)) return
+      const row = nearRow(t, single, small)
+      if (row >= 0) { used[i] = true; found.add(row) }
+    })
   }
   return { found, unmatched: [...new Set(toks.filter((_, i) => !used[i]))] }
 }

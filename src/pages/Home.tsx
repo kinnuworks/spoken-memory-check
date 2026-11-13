@@ -349,8 +349,8 @@ export default function Home() {
             </div>
             <div className="span-2 reveal" style={{ '--i': 2 } as React.CSSProperties}>
               <span className="lbl working">Real recordings</span>
-              <p className="stat">{Math.round(own.whisperAlone.rate * 100)}% <span>to</span> {Math.round(own.union.rate * 100)}%</p>
-              <p className="t-small">of real single Arabic words heard right: the on-device model alone, then with the speaker's own voice as the answer key ({own.whisperAlone.n} clips, {own.speakers} adult volunteers; {(own.templateFalseCredit.rate * 100).toFixed(1)}% wrong words credited). Read words, not recall, and no older speakers yet.</p>
+              <p className="stat">{Math.round(own.previousModelRate * 100)}% <span>to</span> {Math.round(own.union.rate * 100)}%</p>
+              <p className="t-small">of real single Arabic words heard right: the first on-device model, then an Arabic-tuned model ({Math.round(own.whisperAlone.rate * 100)}%) with the speaker's own voice as the answer key ({own.whisperAlone.n} clips, {own.speakers} adult volunteers; {(own.templateFalseCredit.rate * 100).toFixed(1)}% wrong words credited). Read words, not recall, and no older speakers yet.</p>
             </div>
           </div>
           <p className="center-link reveal"><Link className="btn btn-outline" to="/benchmark">How the flag was tested<Arrow /></Link></p>
@@ -407,7 +407,7 @@ export default function Home() {
             <details><summary>Why by voice?</summary><p>Many older adults in the Gulf had little schooling, and tests that need reading, typing or tapping are unfair to them. Saying words back and naming animals is how memory has been tested over the telephone for decades.</p></details>
             <details><summary>Where does my voice go?</summary><p>The speech model on the device sends nothing anywhere. The browser's own recogniser may send audio to the browser's maker. In a pilot, any cloud listener would run in a UAE region and only with the regulator's approval.</p></details>
             <details><summary>What if I don't hear well?</summary><p>Every check starts with a sound check. If it fails, the check is held, not scored low. After two held checks the app suggests a hearing test, which also makes later checks fairer.</p></details>
-            <details><summary>Has it been tested on real people?</summary><p>Partly. On 720 real recordings of single Arabic words from 30 adult volunteers, the on-device model alone heard 40% right; matching against each speaker's own voice as well raised that to 80%, with under 1% of wrong words credited. In English the model alone heard 62%. Every recording can also be scored by a person. The full check has not yet been taken by older or Gulf Arabic speakers, and the rule has been tested on simulated people only.</p></details>
+            <details><summary>Has it been tested on real people?</summary><p>Partly. On 720 real recordings of single Arabic words from 30 adult volunteers, the first on-device model heard 40% right. An Arabic-tuned model with careful matching heard 82%, and adding each speaker's own voice as the answer key raised that to 93%, with under 1% of wrong words credited. In English the on-device model heard 62%. These are read words, not recall, and no older or Gulf speakers yet. Every recording can also be scored by a person.</p></details>
             <details><summary>Who sees the scores?</summary><p>Only the ordering physician at the screening clinic, and only if the person agreed. The person hears about any result at an in-person visit.</p></details>
           </div>
         </div>

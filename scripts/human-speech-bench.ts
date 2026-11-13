@@ -8,7 +8,7 @@ import { existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { AutoProcessor, AutoTokenizer, WhisperForConditionalGeneration } from '@huggingface/transformers'
 import { ANIMALS, type Lang } from '../src/engine/lexicon'
-import { matchClosedSet, tokens } from '../src/engine/match'
+import { matchClosedSet } from '../src/engine/match'
 import { readYesNo } from '../src/engine/yesno'
 
 const ROOT = new URL('..', import.meta.url).pathname
@@ -18,13 +18,14 @@ const PER_WORD = 60
 const SR = 16000
 
 // ---- Copied from src/speech/whisper.worker.ts (that file cannot be imported outside a worker). ----
-const MODEL: Record<Lang, string> = { en: 'onnx-community/whisper-base', ar: 'onnx-community/whisper-small' }
+const MODEL: Record<Lang, string> = { en: 'onnx-community/whisper-base', ar: 'onnx-community/whisper-small-ar-ONNX' }
+const DTYPE: Record<Lang, 'q8' | 'q4'> = { en: 'q8', ar: 'q4' }
 const STYLE: Record<Lang, string> = {
   en: 'house, book, car, tree, school, door, chair, street, cup, shoe',
   ar: 'بيت، كتاب، سيارة، شجرة، مدرسة، باب، كرسي، شارع، كوب، حذاء',
 }
 
-function segments(audio: Float32Array): [number, number][] {
+export function segments(audio: Float32Array): [number, number][] {
   const frame = 480, hang = 10, pad = 2400
   const levels: number[] = []
   for (let i = 0; i + frame <= audio.length; i += frame) {
@@ -46,7 +47,7 @@ function segments(audio: Float32Array): [number, number][] {
   return segs
 }
 
-function compact(audio: Float32Array, segs: [number, number][]): Float32Array[] {
+export function compact(audio: Float32Array, segs: [number, number][]): Float32Array[] {
   const gap = Math.round(0.4 * SR), max = 28 * SR
   const windows: Float32Array[] = []
   let parts: Float32Array[] = [], len = 0
@@ -67,7 +68,7 @@ function compact(audio: Float32Array, segs: [number, number][]): Float32Array[] 
   return windows
 }
 
-function looped(text: string): boolean {
+export function looped(text: string): boolean {
   const w = text.split(/[\s,،]+/).filter(Boolean)
   return w.length >= 8 && new Set(w).size <= Math.max(2, w.length / 4)
 }
@@ -78,7 +79,8 @@ function checkWorkerUnchanged() {
   const src = readFileSync(join(ROOT, 'src/speech/whisper.worker.ts'), 'utf8')
   const needles = [
     `{ en: '${MODEL.en}', ar: '${MODEL.ar}' }`, `en: '${STYLE.en}'`, `ar: '${STYLE.ar}'`,
-    'const frame = 480, hang = 10, pad = 2400', 'Math.max(0.008, floor * 3)', "dtype: 'q8'",
+    `const DTYPE: Record<Lang, 'q8' | 'q4'> = { en: '${DTYPE.en}', ar: '${DTYPE.ar}' }`, 'dtype: DTYPE[lang]',
+    'const frame = 480, hang = 10, pad = 2400', 'Math.max(0.008, floor * 3)',
     'const gap = Math.round(0.4 * SR), max = 28 * SR', 'max_new_tokens: 120', '.slice(-223)',
   ]
   const missing = needles.filter((n) => !src.includes(n))
@@ -91,10 +93,10 @@ let loaded: { processor: any; tokenizer: any; model: any; device: string } | nul
 async function load(lang: Lang) {
   const id = MODEL[lang]
   const [processor, tokenizer] = await Promise.all([AutoProcessor.from_pretrained(id), AutoTokenizer.from_pretrained(id)])
-  // The browser uses the wasm backend; Node runs the same q8 ONNX weights on onnxruntime's CPU backend.
+  // The browser uses the wasm backend; Node runs the same ONNX weights on onnxruntime's CPU backend.
   let model, device = 'wasm'
-  try { model = await WhisperForConditionalGeneration.from_pretrained(id, { dtype: 'q8', device: 'wasm' }) }
-  catch { device = 'cpu'; model = await WhisperForConditionalGeneration.from_pretrained(id, { dtype: 'q8', device: 'cpu' }) }
+  try { model = await WhisperForConditionalGeneration.from_pretrained(id, { dtype: DTYPE[lang], device: 'wasm' }) }
+  catch { device = 'cpu'; model = await WhisperForConditionalGeneration.from_pretrained(id, { dtype: DTYPE[lang], device: 'cpu' }) }
   loaded = { processor, tokenizer, model, device }
 }
 
@@ -118,7 +120,7 @@ async function transcribe(audio: Float32Array, lang: Lang): Promise<string> {
 }
 
 /** 16-bit PCM mono WAV to float samples. Anything else is rejected, not guessed. */
-function readWav(path: string): Float32Array {
+export function readWav(path: string): Float32Array {
   const b = readFileSync(path)
   if (b.toString('ascii', 0, 4) !== 'RIFF' || b.toString('ascii', 8, 12) !== 'WAVE') throw new Error('not a wav: ' + path)
   let o = 12, fmt: { ch: number; rate: number; bits: number; tag: number } | null = null
@@ -139,7 +141,7 @@ function readWav(path: string): Float32Array {
 
 // ---- Number matcher (written here: the app has no number matcher yet). ----
 // Accepts the digit (0-9 or Eastern Arabic ٠-٩) and the spoken word in either language.
-const NUMBER_WORDS: string[][] = [
+export const NUMBER_WORDS: string[][] = [
   ['zero', 'صفر'],
   ['one', 'واحد', 'واحدة'],
   ['two', 'اثنان', 'اثنين', 'اثنتان', 'اثنتين', 'ثنين', 'اتنين'],
@@ -152,24 +154,23 @@ const NUMBER_WORDS: string[][] = [
   ['nine', 'تسعة', 'تسع'],
 ]
 
-/** Every number 0-9 said in the transcript, as digits or as words. */
+/**
+ * Every number 0-9 said in the transcript, as digits or as words. Words go through the app's
+ * closed-set matcher, so Arabic near misses count the same way they do for the word lists.
+ */
 export function readNumbers(text: string, lang: Lang): Set<number> {
-  const found = new Set<number>()
+  const found = matchClosedSet(text, NUMBER_WORDS, lang)
   const western = text.replace(/[٠-٩]/g, (d) => String(d.charCodeAt(0) - 0x0660))
   for (const m of western.match(/\d+/g) ?? []) if (m.length === 1) found.add(Number(m))
-  const toks = new Set(tokens(text, lang))
-  NUMBER_WORDS.forEach((forms, n) => {
-    if (forms.some((f) => toks.has(tokens(f, lang)[0] ?? ''))) found.add(n)
-  })
   return found
 }
 
 // ---- Items ----
 type Task = 'digits' | 'yes/no' | 'animals'
-interface Item { lang: Lang; task: Task; word: string; path: string; speaker: string }
+export interface Item { lang: Lang; task: Task; word: string; path: string; speaker: string }
 type Outcome = 'correct' | 'wrong' | 'nothing'
 
-const DIGITS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
+export const DIGITS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
 
 function outcome(item: Item, text: string): Outcome {
   if (!text.trim()) return 'nothing'
@@ -179,17 +180,17 @@ function outcome(item: Item, text: string): Outcome {
   return matchClosedSet(text, ANIMALS.en, 'en').has(row) ? 'correct' : 'wrong'
 }
 
-function rng(seed: number) {
+export function rng(seed: number) {
   let a = seed >>> 0
   return () => { a = (a + 0x6d2b79f5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296 }
 }
-function shuffle<T>(xs: T[], r: () => number): T[] {
+export function shuffle<T>(xs: T[], r: () => number): T[] {
   const a = [...xs]
   for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]] }
   return a
 }
 /** Up to n clips, spread across speakers: speakers in random order, one clip each per round. */
-function balanced(clips: { path: string; speaker: string }[], n: number, r: () => number) {
+export function balanced(clips: { path: string; speaker: string }[], n: number, r: () => number) {
   const by = new Map<string, string[]>()
   for (const c of [...clips].sort((a, b) => a.path.localeCompare(b.path))) by.set(c.speaker, [...(by.get(c.speaker) ?? []), c.path])
   const queues = shuffle([...by.keys()].sort(), r).map((s) => ({ s, q: shuffle(by.get(s)!, r) }))
@@ -201,7 +202,7 @@ function balanced(clips: { path: string; speaker: string }[], n: number, r: () =
 const EN_DIR = join(ROOT, 'external/speech-commands-en/x')
 const AR_DIR = join(ROOT, 'external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset')
 
-function itemsFor(lang: Lang): Item[] {
+export function itemsFor(lang: Lang): Item[] {
   const r = rng(SEED + (lang === 'ar' ? 1 : 0))
   const items: Item[] = []
   const add = (task: Task, word: string, clips: { path: string; speaker: string }[]) => {
@@ -224,7 +225,7 @@ function itemsFor(lang: Lang): Item[] {
 }
 
 // ---- Stats ----
-function wilson(k: number, n: number): [number, number] {
+export function wilson(k: number, n: number): [number, number] {
   if (!n) return [0, 1]
   const z = 1.959964, p = k / n, d = 1 + z * z / n
   const c = (p + z * z / (2 * n)) / d, h = (z * Math.sqrt(p * (1 - p) / n + z * z / (4 * n * n))) / d
@@ -260,7 +261,7 @@ async function run(lang: Lang) {
   }
   const topErrors = Object.fromEntries(Object.entries(errors).map(([w, m]) => [w, Object.entries(m).sort((a, b) => b[1] - a[1]).slice(0, 5)]))
   const block = {
-    model: MODEL[lang], dtype: 'q8', backend: loaded!.device, seed: SEED + (lang === 'ar' ? 1 : 0), perWordCap: PER_WORD,
+    model: MODEL[lang], dtype: DTYPE[lang], backend: loaded!.device, seed: SEED + (lang === 'ar' ? 1 : 0), perWordCap: PER_WORD,
     clips: results.length, loadSeconds: Math.round(loadS), runSeconds: Math.round(runS), secondsPerClip: +(runS / results.length).toFixed(2),
     byWord: words.map((w) => summarise(w, results.filter((x) => x.word === w))),
     byTask: tasks.map((t) => summarise(t, results.filter((x) => x.task === t))),
@@ -295,7 +296,10 @@ function markdown() {
   }
 }
 
-const arg = process.argv[2]
-if (arg === 'md') markdown()
-else if (arg === 'en' || arg === 'ar') await run(arg)
-else { console.error('usage: human-speech-bench.ts en|ar|md'); process.exit(1) }
+// Runs only when called directly, so other scripts can import the sampling and audio helpers.
+if (process.argv[1] && new URL(import.meta.url).pathname === process.argv[1]) {
+  const arg = process.argv[2]
+  if (arg === 'md') markdown()
+  else if (arg === 'en' || arg === 'ar') await run(arg)
+  else { console.error('usage: human-speech-bench.ts en|ar|md'); process.exit(1) }
+}

@@ -32,7 +32,7 @@ To run it yourself: `npm install`, then `npm run dev`. To redeploy: `scripts/dep
 
 - Real data: in a public US health survey (NHANES 2011 to 2014, 3,110 adults aged 60 and over), a fixed cutoff of 14 animals flags 48% of adults with under 9 years of school who report no memory problem, against 16% of graduates. `analysis/`
 - Simulation of the flag: 3.4% false alarms a year in stable people; 85% of members losing two points a check are flagged within the year; at an assumed 2% of members in real decline, about 50 packets per 1,000 members a year, 17 of them real. Same settings throughout. `npx tsx scripts/benchmark.ts`
-- Real recordings: the on-device listener alone heard 62% of 387 real single English words and 40% of 720 Arabic ones. Matching each speaker's words against their own voice as well raised Arabic to 80% (speaker interval 76 to 84%), with 0.8% wrong words credited. Public adult datasets, read words, not older or Gulf speakers. `docs/HUMAN_SPEECH_BENCH.md`, `docs/TEMPLATE_BENCH.md`
+- Real recordings: on 720 real single Arabic words from 30 adults, the first on-device model heard 40%; an Arabic-tuned model with near-miss matching heard 82%; adding each speaker's own voice as the answer key raised it to 93% (speaker interval 91 to 95%), with 0.8% wrong words credited. English: 62% of 387 words. Public adult datasets, read words, not older or Gulf speakers. `docs/HUMAN_SPEECH_BENCH.md`, `docs/TEMPLATE_BENCH.md`
 - 65 automated tests: `npm test`. Cases listed in `docs/TESTED_CASES.md`.
 
 ## Documents

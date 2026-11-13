@@ -4,8 +4,11 @@
 import { AutoProcessor, AutoTokenizer, WhisperForConditionalGeneration } from '@huggingface/transformers'
 
 type Lang = 'en' | 'ar'
-// The small model is needed for Arabic: the base model missed half the Arabic words in our tests.
-const MODEL: Record<Lang, string> = { en: 'onnx-community/whisper-base', ar: 'onnx-community/whisper-small' }
+// Arabic uses a small model fine-tuned on Arabic (ayoubkirouane/whisper-small-ar, Apache-2.0). On real
+// recordings of single Arabic words it found the right word far more often than the general small model
+// (scripts/arabic-asr-experiments.ts). Its 4-bit weights scored the same as 8-bit and download about 300 MB.
+const MODEL: Record<Lang, string> = { en: 'onnx-community/whisper-base', ar: 'onnx-community/whisper-small-ar-ONNX' }
+const DTYPE: Record<Lang, 'q8' | 'q4'> = { en: 'q8', ar: 'q4' }
 // A prompt that shows the wanted format (single nouns, comma separated) and none of the answers.
 // Putting the word list itself in the prompt made the model report words nobody said.
 const STYLE: Record<Lang, string> = {
@@ -31,7 +34,7 @@ async function load(lang: Lang) {
   const [processor, tokenizer, model] = await Promise.all([
     AutoProcessor.from_pretrained(id, { progress_callback }),
     AutoTokenizer.from_pretrained(id, { progress_callback }),
-    WhisperForConditionalGeneration.from_pretrained(id, { dtype: 'q8', device: 'wasm', progress_callback }),
+    WhisperForConditionalGeneration.from_pretrained(id, { dtype: DTYPE[lang], device: 'wasm', progress_callback }),
   ])
   loaded = { lang, processor, tokenizer, model }
 }

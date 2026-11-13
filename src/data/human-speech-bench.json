@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-11",
+ "generated": "2026-11-13",
  "en": {
   "model": "onnx-community/whisper-base",
   "dtype": "q8",
@@ -2972,30 +2972,30 @@
   ]
  },
  "ar": {
-  "model": "onnx-community/whisper-small",
-  "dtype": "q8",
+  "model": "onnx-community/whisper-small-ar-ONNX",
+  "dtype": "q4",
   "backend": "cpu",
   "seed": 20261113,
   "perWordCap": 60,
   "clips": 720,
-  "loadSeconds": 2,
-  "runSeconds": 2902,
-  "secondsPerClip": 4.03,
+  "loadSeconds": 1,
+  "runSeconds": 914,
+  "secondsPerClip": 1.27,
   "byWord": [
    {
     "group": "zero",
     "n": 60,
     "speakers": 30,
-    "correct": 7,
-    "wrong": 53,
+    "correct": 38,
+    "wrong": 22,
     "nothing": 0,
     "correctCi": [
-     0.057677206086183624,
-     0.22178788124005724
+     0.506830005299727,
+     0.7437908338911456
     ],
     "wrongCi": [
-     0.7782121187599428,
-     0.9423227939138165
+     0.2562091661088542,
+     0.49316999470027295
     ],
     "nothingCi": [
      0,
@@ -3006,16 +3006,16 @@
     "group": "one",
     "n": 60,
     "speakers": 30,
-    "correct": 40,
-    "wrong": 20,
+    "correct": 54,
+    "wrong": 6,
     "nothing": 0,
     "correctCi": [
-     0.5405686635056332,
-     0.7727073854829577
+     0.798505351773914,
+     0.9533571657987043
     ],
     "wrongCi": [
-     0.22729261451704227,
-     0.45943133649436674
+     0.04664283420129568,
+     0.2014946482260861
     ],
     "nothingCi": [
      0,
@@ -3024,186 +3024,6 @@
    },
    {
     "group": "two",
-    "n": 60,
-    "speakers": 30,
-    "correct": 20,
-    "wrong": 40,
-    "nothing": 0,
-    "correctCi": [
-     0.22729261451704227,
-     0.45943133649436674
-    ],
-    "wrongCi": [
-     0.5405686635056332,
-     0.7727073854829577
-    ],
-    "nothingCi": [
-     0,
-     0.060171853034227174
-    ]
-   },
-   {
-    "group": "three",
-    "n": 60,
-    "speakers": 30,
-    "correct": 9,
-    "wrong": 49,
-    "nothing": 2,
-    "correctCi": [
-     0.08097440540959933,
-     0.2611458917143597
-    ],
-    "wrongCi": [
-     0.7008024615073325,
-     0.8944220315709903
-    ],
-    "nothingCi": [
-     0.009189319173450283,
-     0.11363774365849509
-    ]
-   },
-   {
-    "group": "four",
-    "n": 60,
-    "speakers": 30,
-    "correct": 44,
-    "wrong": 16,
-    "nothing": 0,
-    "correctCi": [
-     0.6099128680007747,
-     0.8286736005832526
-    ],
-    "wrongCi": [
-     0.17132639941674732,
-     0.3900871319992253
-    ],
-    "nothingCi": [
-     0,
-     0.060171853034227174
-    ]
-   },
-   {
-    "group": "five",
-    "n": 60,
-    "speakers": 30,
-    "correct": 45,
-    "wrong": 15,
-    "nothing": 0,
-    "correctCi": [
-     0.6276792981955739,
-     0.8422347752873125
-    ],
-    "wrongCi": [
-     0.15776522471268753,
-     0.3723207018044261
-    ],
-    "nothingCi": [
-     0,
-     0.060171853034227174
-    ]
-   },
-   {
-    "group": "six",
-    "n": 60,
-    "speakers": 30,
-    "correct": 35,
-    "wrong": 25,
-    "nothing": 0,
-    "correctCi": [
-     0.4572808092532306,
-     0.699357215241065
-    ],
-    "wrongCi": [
-     0.30064278475893513,
-     0.5427191907467694
-    ],
-    "nothingCi": [
-     0,
-     0.060171853034227174
-    ]
-   },
-   {
-    "group": "seven",
-    "n": 60,
-    "speakers": 30,
-    "correct": 23,
-    "wrong": 37,
-    "nothing": 0,
-    "correctCi": [
-     0.27088272295617977,
-     0.5098240427518066
-    ],
-    "wrongCi": [
-     0.4901759572481935,
-     0.7291172770438202
-    ],
-    "nothingCi": [
-     0,
-     0.060171853034227174
-    ]
-   },
-   {
-    "group": "eight",
-    "n": 60,
-    "speakers": 30,
-    "correct": 11,
-    "wrong": 48,
-    "nothing": 1,
-    "correctCi": [
-     0.10557796842900966,
-     0.2991975384926676
-    ],
-    "wrongCi": [
-     0.6821819409122731,
-     0.8817149472671906
-    ],
-    "nothingCi": [
-     0.0029481597621904,
-     0.08855129817089587
-    ]
-   },
-   {
-    "group": "nine",
-    "n": 60,
-    "speakers": 30,
-    "correct": 1,
-    "wrong": 59,
-    "nothing": 0,
-    "correctCi": [
-     0.0029481597621904,
-     0.08855129817089587
-    ],
-    "wrongCi": [
-     0.9114487018291041,
-     0.9970518402378096
-    ],
-    "nothingCi": [
-     0,
-     0.060171853034227174
-    ]
-   },
-   {
-    "group": "yes",
-    "n": 60,
-    "speakers": 30,
-    "correct": 16,
-    "wrong": 44,
-    "nothing": 0,
-    "correctCi": [
-     0.17132639941674732,
-     0.3900871319992253
-    ],
-    "wrongCi": [
-     0.6099128680007747,
-     0.8286736005832526
-    ],
-    "nothingCi": [
-     0,
-     0.060171853034227174
-    ]
-   },
-   {
-    "group": "no",
     "n": 60,
     "speakers": 30,
     "correct": 34,
@@ -3221,6 +3041,186 @@
      0,
      0.060171853034227174
     ]
+   },
+   {
+    "group": "three",
+    "n": 60,
+    "speakers": 30,
+    "correct": 58,
+    "wrong": 2,
+    "nothing": 0,
+    "correctCi": [
+     0.886362256341505,
+     0.9908106808265498
+    ],
+    "wrongCi": [
+     0.009189319173450283,
+     0.11363774365849509
+    ],
+    "nothingCi": [
+     0,
+     0.060171853034227174
+    ]
+   },
+   {
+    "group": "four",
+    "n": 60,
+    "speakers": 30,
+    "correct": 54,
+    "wrong": 6,
+    "nothing": 0,
+    "correctCi": [
+     0.798505351773914,
+     0.9533571657987043
+    ],
+    "wrongCi": [
+     0.04664283420129568,
+     0.2014946482260861
+    ],
+    "nothingCi": [
+     0,
+     0.060171853034227174
+    ]
+   },
+   {
+    "group": "five",
+    "n": 60,
+    "speakers": 30,
+    "correct": 56,
+    "wrong": 4,
+    "nothing": 0,
+    "correctCi": [
+     0.8407464259125857,
+     0.9737713014577508
+    ],
+    "wrongCi": [
+     0.02622869854224924,
+     0.1592535740874143
+    ],
+    "nothingCi": [
+     0,
+     0.060171853034227174
+    ]
+   },
+   {
+    "group": "six",
+    "n": 60,
+    "speakers": 30,
+    "correct": 46,
+    "wrong": 14,
+    "nothing": 0,
+    "correctCi": [
+     0.6456372951896278,
+     0.855604383192118
+    ],
+    "wrongCi": [
+     0.14439561680788218,
+     0.35436270481037235
+    ],
+    "nothingCi": [
+     0,
+     0.060171853034227174
+    ]
+   },
+   {
+    "group": "seven",
+    "n": 60,
+    "speakers": 30,
+    "correct": 57,
+    "wrong": 3,
+    "nothing": 0,
+    "correctCi": [
+     0.8629948343000966,
+     0.9828504979690988
+    ],
+    "wrongCi": [
+     0.01714950203090107,
+     0.1370051656999034
+    ],
+    "nothingCi": [
+     0,
+     0.060171853034227174
+    ]
+   },
+   {
+    "group": "eight",
+    "n": 60,
+    "speakers": 30,
+    "correct": 57,
+    "wrong": 3,
+    "nothing": 0,
+    "correctCi": [
+     0.8629948343000966,
+     0.9828504979690988
+    ],
+    "wrongCi": [
+     0.01714950203090107,
+     0.1370051656999034
+    ],
+    "nothingCi": [
+     0,
+     0.060171853034227174
+    ]
+   },
+   {
+    "group": "nine",
+    "n": 60,
+    "speakers": 30,
+    "correct": 49,
+    "wrong": 11,
+    "nothing": 0,
+    "correctCi": [
+     0.7008024615073325,
+     0.8944220315709903
+    ],
+    "wrongCi": [
+     0.10557796842900966,
+     0.2991975384926676
+    ],
+    "nothingCi": [
+     0,
+     0.060171853034227174
+    ]
+   },
+   {
+    "group": "yes",
+    "n": 60,
+    "speakers": 30,
+    "correct": 29,
+    "wrong": 31,
+    "nothing": 0,
+    "correctCi": [
+     0.36175049450337826,
+     0.6069219005977627
+    ],
+    "wrongCi": [
+     0.39307809940223737,
+     0.6382495054966217
+    ],
+    "nothingCi": [
+     0,
+     0.060171853034227174
+    ]
+   },
+   {
+    "group": "no",
+    "n": 60,
+    "speakers": 30,
+    "correct": 59,
+    "wrong": 1,
+    "nothing": 0,
+    "correctCi": [
+     0.9114487018291041,
+     0.9970518402378096
+    ],
+    "wrongCi": [
+     0.0029481597621904,
+     0.08855129817089587
+    ],
+    "nothingCi": [
+     0,
+     0.060171853034227174
+    ]
    }
   ],
   "byTask": [
@@ -3228,36 +3228,36 @@
     "group": "digits",
     "n": 600,
     "speakers": 30,
-    "correct": 235,
-    "wrong": 362,
-    "nothing": 3,
+    "correct": 503,
+    "wrong": 97,
+    "nothing": 0,
     "correctCi": [
-     0.3534169421067004,
-     0.4312947598012079
+     0.8067388517739089,
+     0.8656230638060083
     ],
     "wrongCi": [
-     0.5636512398653014,
-     0.6417006752379247
+     0.1343769361939917,
+     0.19326114822609106
     ],
     "nothingCi": [
-     0.0017018776450543139,
-     0.014596206457234279
+     4.336808689942018e-19,
+     0.006361701113422819
     ]
    },
    {
     "group": "yes/no",
     "n": 120,
     "speakers": 30,
-    "correct": 50,
-    "wrong": 70,
+    "correct": 88,
+    "wrong": 32,
     "nothing": 0,
     "correctCi": [
-     0.3323835207797361,
-     0.5061196737024096
+     0.647875605424915,
+     0.8043154500250768
     ],
     "wrongCi": [
-     0.4938803262975904,
-     0.6676164792202639
+     0.19568454997492324,
+     0.35212439457508493
     ],
     "nothingCi": [
      0,
@@ -3269,276 +3269,232 @@
    "group": "all",
    "n": 720,
    "speakers": 30,
-   "correct": 285,
-   "wrong": 432,
-   "nothing": 3,
+   "correct": 591,
+   "wrong": 129,
+   "nothing": 0,
    "correctCi": [
-    0.3607563647704257,
-    0.43201593618090905
+    0.7911416448148951,
+    0.8471196682549937
    ],
    "wrongCi": [
-    0.5637765463755248,
-    0.6351620447111938
+    0.1528803317450062,
+    0.20885835518510487
    ],
    "nothingCi": [
-    0.0014180329583249112,
-    0.012178119570028564
+    0,
+    0.0053070445664068645
    ]
   },
   "topWrongTranscripts": {
    "zero": [
     [
-     "سفر",
-     30
+     "صف.",
+     6
     ],
     [
-     "صف",
-     4
-    ],
-    [
-     "سيف",
-     4
-    ],
-    [
-     "سوفر",
+     "صفح",
      2
     ],
     [
-     "صفل",
+     "صفة.",
      2
+    ],
+    [
+     "صفش.",
+     1
+    ],
+    [
+     "صبر.",
+     1
     ]
    ],
    "one": [
     [
-     "واحي",
-     4
-    ],
-    [
-     "وحد",
-     4
-    ],
-    [
-     "واشي",
+     "خواحي",
      1
     ],
     [
-     "واخر",
+     "وح!",
      1
     ],
     [
-     "وح",
+     "لاحظ",
+     1
+    ],
+    [
+     "لاحد.",
+     1
+    ],
+    [
+     "واه",
      1
     ]
    ],
    "two": [
     [
-     "اتنان",
-     6
-    ],
-    [
-     "نان",
+     "إسلام",
      4
     ],
     [
-     "إثناء",
+     "نان",
      3
     ],
     [
-     "سنان",
+     "سناً.",
      2
     ],
     [
-     "إذا لم تكن",
+     "إسنا",
+     2
+    ],
+    [
+     "سنان",
      2
     ]
    ],
    "three": [
     [
-     "سلامة",
-     5
+     "فلاس",
+     1
     ],
     [
-     "سلسة",
-     5
-    ],
-    [
-     "سلامة الله",
-     3
-    ],
-    [
-     "سلام عليكم",
-     3
-    ],
-    [
-     "سلاتة",
-     2
+     "فدافة",
+     1
     ]
    ],
    "four": [
-    [
-     "أرباء",
-     4
-    ],
-    [
-     "أربا",
-     2
-    ],
     [
      "أغباء",
      2
     ],
     [
-     "أتبع",
-     2
+     "رباه",
+     1
     ],
     [
-     "أربان",
+     "البا",
+     1
+    ],
+    [
+     "ارباو.",
+     1
+    ],
+    [
+     "ارباح",
      1
     ]
    ],
    "five": [
     [
+     "أمسا",
+     1
+    ],
+    [
+     "قمت",
+     1
+    ],
+    [
+     "فمسة.",
+     1
+    ],
+    [
      "حمسة",
-     3
-    ],
-    [
-     "خامسة",
-     3
-    ],
-    [
-     "كرمسة",
-     2
-    ],
-    [
-     "سمسة",
-     2
-    ],
-    [
-     "ومثل",
      1
     ]
    ],
    "six": [
     [
      "سيطة",
-     12
+     3
     ],
     [
-     "ثم",
-     8
+     "سدة.",
+     3
     ],
     [
-     "سبت",
+     "سدة",
+     2
+    ],
+    [
+     "سدّة",
      1
     ],
     [
-     "سطة",
-     1
-    ],
-    [
-     "سيكتاب",
+     "صدّة",
      1
     ]
    ],
    "seven": [
     [
-     "سبا",
-     14
+     "سابا",
+     1
     ],
     [
-     "سبب",
-     9
+     "صلى",
+     1
     ],
     [
-     "سببا",
-     5
-    ],
-    [
-     "سبال",
-     2
-    ],
-    [
-     "شباب",
+     "سبب.",
      1
     ]
    ],
    "eight": [
     [
-     "ثمانيا",
-     11
-    ],
-    [
-     "سمانيا",
-     8
-    ],
-    [
-     "سماني",
-     3
-    ],
-    [
-     "دمانيا",
+     "ثمانيوم",
      2
     ],
     [
-     "سمان يا",
-     2
+     "خمعني",
+     1
     ]
    ],
    "nine": [
     [
-     "تسعى",
-     6
-    ],
-    [
-     "تسأل",
-     5
-    ],
-    [
-     "تسال",
-     4
+     "تساو.",
+     2
     ],
     [
      "تساء",
-     3
+     2
     ],
     [
-     "، سارة",
-     3
+     "سا",
+     2
+    ],
+    [
+     "تسى",
+     2
+    ],
+    [
+     "جسعة.",
+     1
     ]
    ],
    "yes": [
     [
+     ".",
+     8
+    ],
+    [
      "نام",
-     19
+     8
     ],
     [
-     "نا",
-     18
+     "نوم",
+     7
     ],
     [
-     "ناو",
+     "نوم.",
      2
     ],
     [
-     "لا",
-     1
-    ],
-    [
-     "نه",
+     "نام.",
      1
     ]
    ],
    "no": [
     [
-     "ل",
-     20
-    ],
-    [
      "نا",
-     5
-    ],
-    [
-     "نه",
      1
     ]
    ]
@@ -3547,19 +3503,19 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000023_NO_07.wav",
     "word": "zero",
-    "text": "سفر",
-    "outcome": "wrong"
+    "text": "صفر",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000020_NO_06.wav",
     "word": "zero",
-    "text": "سفر",
-    "outcome": "wrong"
+    "text": "صفر",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000008_NO_09.wav",
     "word": "zero",
-    "text": "صفش",
+    "text": "صفش.",
     "outcome": "wrong"
    },
    {
@@ -3571,55 +3527,55 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000002_NO_01.wav",
     "word": "zero",
-    "text": "تفر",
-    "outcome": "wrong"
+    "text": "صفر",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000012_NO_05.wav",
     "word": "zero",
-    "text": "سفر",
+    "text": "صبر.",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000013_NO_10.wav",
     "word": "zero",
-    "text": "سفر",
-    "outcome": "wrong"
+    "text": "صفر",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000029_NO_05.wav",
     "word": "zero",
-    "text": "سفر",
-    "outcome": "wrong"
+    "text": "صفر",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000007_NO_09.wav",
     "word": "zero",
     "text": "سفر",
-    "outcome": "wrong"
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000019_NO_06.wav",
     "word": "zero",
-    "text": "صف",
+    "text": "صف.",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000017_NO_10.wav",
     "word": "zero",
-    "text": "سيم",
+    "text": "صيب",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000006_NO_01.wav",
     "word": "zero",
-    "text": "سفر",
-    "outcome": "wrong"
+    "text": "صفر",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000025_NO_05.wav",
     "word": "zero",
-    "text": "سفر",
+    "text": "سكور",
     "outcome": "wrong"
    },
    {
@@ -3631,80 +3587,80 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000003_NO_04.wav",
     "word": "zero",
-    "text": "سوف",
+    "text": "صفح",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000010_NO_04.wav",
     "word": "zero",
-    "text": "سفر",
-    "outcome": "wrong"
+    "text": "صفر",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000027_NO_06.wav",
     "word": "zero",
-    "text": "سفل",
+    "text": "صفل",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000015_NO_02.wav",
     "word": "zero",
-    "text": "سفر",
+    "text": "صهر",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000030_NO_06.wav",
     "word": "zero",
-    "text": "سفر",
-    "outcome": "wrong"
+    "text": "صفر.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000011_NO_04.wav",
-    "word": "zero",
-    "text": "سفر",
-    "outcome": "wrong"
-   },
-   {
-    "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000004_NO_01.wav",
-    "word": "zero",
-    "text": "سفر",
-    "outcome": "wrong"
-   },
-   {
-    "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000016_NO_01.wav",
-    "word": "zero",
-    "text": "سيف",
-    "outcome": "wrong"
-   },
-   {
-    "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000028_NO_04.wav",
-    "word": "zero",
-    "text": "سفر",
-    "outcome": "wrong"
-   },
-   {
-    "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000001_NO_04.wav",
-    "word": "zero",
-    "text": "سفر",
-    "outcome": "wrong"
-   },
-   {
-    "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000021_NO_08.wav",
     "word": "zero",
     "text": "صفر",
     "outcome": "correct"
    },
    {
+    "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000004_NO_01.wav",
+    "word": "zero",
+    "text": "صفر.",
+    "outcome": "correct"
+   },
+   {
+    "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000016_NO_01.wav",
+    "word": "zero",
+    "text": "صف.",
+    "outcome": "wrong"
+   },
+   {
+    "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000028_NO_04.wav",
+    "word": "zero",
+    "text": "صفر",
+    "outcome": "correct"
+   },
+   {
+    "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000001_NO_04.wav",
+    "word": "zero",
+    "text": "صفر",
+    "outcome": "correct"
+   },
+   {
+    "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000021_NO_08.wav",
+    "word": "zero",
+    "text": "سفر.",
+    "outcome": "correct"
+   },
+   {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000005_NO_06.wav",
     "word": "zero",
-    "text": "سوفر",
-    "outcome": "wrong"
+    "text": "صفر",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000026_NO_07.wav",
     "word": "zero",
     "text": "سفر",
-    "outcome": "wrong"
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000018_NO_01.wav",
@@ -3721,139 +3677,139 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000024_NO_04.wav",
     "word": "zero",
-    "text": "صف",
+    "text": "صف.",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000023_NO_03.wav",
     "word": "zero",
-    "text": "سفر",
-    "outcome": "wrong"
+    "text": "صفر",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000020_NO_03.wav",
     "word": "zero",
-    "text": "سيف",
-    "outcome": "wrong"
+    "text": "صفر",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000008_NO_04.wav",
     "word": "zero",
-    "text": "سفر",
+    "text": "صفش",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000022_NO_03.wav",
     "word": "zero",
-    "text": "سفر",
-    "outcome": "wrong"
+    "text": "صفر",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000002_NO_04.wav",
     "word": "zero",
-    "text": "سكر",
-    "outcome": "wrong"
+    "text": "صفر.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000012_NO_10.wav",
     "word": "zero",
-    "text": "صف",
+    "text": "صف.",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000013_NO_08.wav",
     "word": "zero",
-    "text": "صفق",
+    "text": "صفك",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000029_NO_09.wav",
     "word": "zero",
-    "text": "سفر",
-    "outcome": "wrong"
+    "text": "صفر",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000007_NO_02.wav",
     "word": "zero",
-    "text": "سفر",
-    "outcome": "wrong"
+    "text": "صفر",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000019_NO_04.wav",
     "word": "zero",
-    "text": "صف",
-    "outcome": "wrong"
+    "text": "صفر",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000017_NO_01.wav",
     "word": "zero",
-    "text": "سيف",
+    "text": "صف.",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000006_NO_03.wav",
     "word": "zero",
-    "text": "سفر",
-    "outcome": "wrong"
+    "text": "صفر",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000025_NO_07.wav",
     "word": "zero",
-    "text": "سفر",
-    "outcome": "wrong"
+    "text": "صفر",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000014_NO_02.wav",
     "word": "zero",
     "text": "سفر",
-    "outcome": "wrong"
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000003_NO_08.wav",
     "word": "zero",
-    "text": "سفر",
+    "text": "صفح",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000010_NO_01.wav",
     "word": "zero",
-    "text": "صفل",
+    "text": "صفّ.",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000027_NO_07.wav",
     "word": "zero",
-    "text": "سفور",
+    "text": "صفة.",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000015_NO_06.wav",
     "word": "zero",
-    "text": "سيف",
+    "text": "صيف.",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000030_NO_05.wav",
     "word": "zero",
-    "text": "سفر",
-    "outcome": "wrong"
+    "text": "صفر.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000011_NO_07.wav",
     "word": "zero",
-    "text": "سفر",
-    "outcome": "wrong"
+    "text": "صفر",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000004_NO_03.wav",
     "word": "zero",
-    "text": "بفر",
+    "text": "فف",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000016_NO_05.wav",
     "word": "zero",
-    "text": "صفة",
+    "text": "صفة.",
     "outcome": "wrong"
    },
    {
@@ -3865,32 +3821,32 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000001_NO_08.wav",
     "word": "zero",
-    "text": "سفر",
-    "outcome": "wrong"
+    "text": "صفر",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000021_NO_06.wav",
     "word": "zero",
-    "text": "سفر",
-    "outcome": "wrong"
+    "text": "صفر",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000005_NO_02.wav",
     "word": "zero",
-    "text": "صفل",
+    "text": "صفل.",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000026_NO_03.wav",
     "word": "zero",
-    "text": "سفر",
-    "outcome": "wrong"
+    "text": "صفر",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000018_NO_06.wav",
     "word": "zero",
-    "text": "سوفر",
-    "outcome": "wrong"
+    "text": "صفر",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000009_NO_09.wav",
@@ -3901,13 +3857,13 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/zero/00000024_NO_07.wav",
     "word": "zero",
-    "text": "سف",
+    "text": "صف.",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000029_NO_09.wav",
     "word": "one",
-    "text": "واحي",
+    "text": "خواحي",
     "outcome": "wrong"
    },
    {
@@ -3919,20 +3875,20 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000024_NO_09.wav",
     "word": "one",
-    "text": "واحد",
+    "text": "واحي",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000027_NO_09.wav",
     "word": "one",
     "text": "واحي",
-    "outcome": "wrong"
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000002_NO_09.wav",
     "word": "one",
-    "text": "واشي",
-    "outcome": "wrong"
+    "text": "واحد",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000009_NO_07.wav",
@@ -3943,8 +3899,8 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000021_NO_06.wav",
     "word": "one",
-    "text": "واخر",
-    "outcome": "wrong"
+    "text": "واحي",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000012_NO_01.wav",
@@ -3955,19 +3911,19 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000007_NO_09.wav",
     "word": "one",
-    "text": "وح",
+    "text": "وح!",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000017_NO_02.wav",
     "word": "one",
-    "text": "وحن",
-    "outcome": "wrong"
+    "text": "واحن",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000026_NO_05.wav",
     "word": "one",
-    "text": "واحد",
+    "text": "واحب",
     "outcome": "correct"
    },
    {
@@ -3997,14 +3953,14 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000030_NO_09.wav",
     "word": "one",
-    "text": "وحد",
-    "outcome": "wrong"
+    "text": "واحد",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000005_NO_01.wav",
     "word": "one",
-    "text": "ورد",
-    "outcome": "wrong"
+    "text": "واحد",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000014_NO_01.wav",
@@ -4021,7 +3977,7 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000020_NO_10.wav",
     "word": "one",
-    "text": "واحد",
+    "text": "واحد.",
     "outcome": "correct"
    },
    {
@@ -4033,7 +3989,7 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000013_NO_04.wav",
     "word": "one",
-    "text": "واحد",
+    "text": "واحل",
     "outcome": "correct"
    },
    {
@@ -4045,14 +4001,14 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000011_NO_06.wav",
     "word": "one",
-    "text": "وحد",
-    "outcome": "wrong"
+    "text": "واحد",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000019_NO_07.wav",
     "word": "one",
-    "text": "وعفة",
-    "outcome": "wrong"
+    "text": "واحد.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000001_NO_04.wav",
@@ -4075,8 +4031,8 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000022_NO_10.wav",
     "word": "one",
-    "text": "واحد",
-    "outcome": "correct"
+    "text": "لاحد.",
+    "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000006_NO_01.wav",
@@ -4087,19 +4043,19 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000029_NO_08.wav",
     "word": "one",
-    "text": "واحد",
+    "text": "واحب",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000016_NO_03.wav",
     "word": "one",
     "text": "واحي",
-    "outcome": "wrong"
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000024_NO_05.wav",
     "word": "one",
-    "text": "وعي",
+    "text": "واه",
     "outcome": "wrong"
    },
    {
@@ -4111,8 +4067,8 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000002_NO_01.wav",
     "word": "one",
-    "text": "وحد",
-    "outcome": "wrong"
+    "text": "وَرَحَد",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000009_NO_04.wav",
@@ -4124,7 +4080,7 @@
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000021_NO_02.wav",
     "word": "one",
     "text": "واحي",
-    "outcome": "wrong"
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000012_NO_06.wav",
@@ -4135,7 +4091,7 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000007_NO_10.wav",
     "word": "one",
-    "text": "وح!",
+    "text": "وه",
     "outcome": "wrong"
    },
    {
@@ -4147,13 +4103,13 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000026_NO_10.wav",
     "word": "one",
-    "text": "واحد",
+    "text": "واحيد",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000010_NO_10.wav",
     "word": "one",
-    "text": "واحد",
+    "text": "واحد.",
     "outcome": "correct"
    },
    {
@@ -4165,20 +4121,20 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000004_NO_01.wav",
     "word": "one",
-    "text": "وحد",
-    "outcome": "wrong"
+    "text": "واحد.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000028_NO_03.wav",
     "word": "one",
-    "text": "ورحب",
-    "outcome": "wrong"
+    "text": "واحب.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000030_NO_06.wav",
     "word": "one",
-    "text": "وحذ",
-    "outcome": "wrong"
+    "text": "واحف",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000005_NO_02.wav",
@@ -4189,7 +4145,7 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000014_NO_09.wav",
     "word": "one",
-    "text": "واحد",
+    "text": "واحد.",
     "outcome": "correct"
    },
    {
@@ -4201,13 +4157,13 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000020_NO_08.wav",
     "word": "one",
-    "text": "واحد",
+    "text": "واحي",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000025_NO_03.wav",
     "word": "one",
-    "text": "واحد",
+    "text": "واحي",
     "outcome": "correct"
    },
    {
@@ -4219,7 +4175,7 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000015_NO_05.wav",
     "word": "one",
-    "text": "واحد",
+    "text": "واحي",
     "outcome": "correct"
    },
    {
@@ -4231,8 +4187,8 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000019_NO_01.wav",
     "word": "one",
-    "text": "وافت",
-    "outcome": "wrong"
+    "text": "واحد.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/one/00000001_NO_07.wav",
@@ -4268,7 +4224,7 @@
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000021_NO_06.wav",
     "word": "two",
     "text": "إثناء",
-    "outcome": "wrong"
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000023_NO_02.wav",
@@ -4279,7 +4235,7 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000005_NO_01.wav",
     "word": "two",
-    "text": "بفنان",
+    "text": "بثنان",
     "outcome": "wrong"
    },
    {
@@ -4291,25 +4247,25 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000015_NO_07.wav",
     "word": "two",
-    "text": "إثنان",
-    "outcome": "correct"
+    "text": "إسلام",
+    "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000025_NO_05.wav",
     "word": "two",
-    "text": "بسنام",
+    "text": "إسلام",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000024_NO_01.wav",
     "word": "two",
-    "text": "لسنا",
+    "text": "سناً.",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000027_NO_09.wav",
     "word": "two",
-    "text": "بيسناة",
+    "text": "إسنا",
     "outcome": "wrong"
    },
    {
@@ -4321,13 +4277,13 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000019_NO_07.wav",
     "word": "two",
-    "text": "إذا لم تكن",
+    "text": "إفنام",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000030_NO_02.wav",
     "word": "two",
-    "text": "أثنان",
+    "text": "إثنان",
     "outcome": "correct"
    },
    {
@@ -4339,13 +4295,13 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000026_NO_02.wav",
     "word": "two",
-    "text": "نان",
+    "text": "إحناً.",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000008_NO_09.wav",
     "word": "two",
-    "text": "اثنان",
+    "text": "إثنام",
     "outcome": "correct"
    },
    {
@@ -4363,61 +4319,61 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000006_NO_05.wav",
     "word": "two",
-    "text": "اتنان",
-    "outcome": "wrong"
+    "text": "إثنان",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000014_NO_10.wav",
     "word": "two",
-    "text": "إذن",
-    "outcome": "wrong"
+    "text": "إثنان",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000018_NO_09.wav",
     "word": "two",
-    "text": "إسناً",
-    "outcome": "wrong"
+    "text": "اسنان",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000002_NO_03.wav",
     "word": "two",
-    "text": "إسمان",
+    "text": "إثمام",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000028_NO_06.wav",
     "word": "two",
-    "text": "سنار",
-    "outcome": "wrong"
+    "text": "اسنان",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000016_NO_04.wav",
     "word": "two",
-    "text": "سنة",
+    "text": "اسلام",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000003_NO_02.wav",
     "word": "two",
-    "text": "سنة",
+    "text": ".",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000010_NO_03.wav",
     "word": "two",
-    "text": "أحنا",
+    "text": "إحنا",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000007_NO_09.wav",
     "word": "two",
-    "text": "نعم",
+    "text": "نان.",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000012_NO_02.wav",
     "word": "two",
-    "text": "سنات",
+    "text": "إسناً.",
     "outcome": "wrong"
    },
    {
@@ -4441,14 +4397,14 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000020_NO_06.wav",
     "word": "two",
-    "text": "إسنان",
-    "outcome": "wrong"
+    "text": "إسنام",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000021_NO_07.wav",
     "word": "two",
-    "text": "إثناء",
-    "outcome": "wrong"
+    "text": "إثنان",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000023_NO_10.wav",
@@ -4459,25 +4415,25 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000005_NO_07.wav",
     "word": "two",
-    "text": "أفنان",
-    "outcome": "wrong"
+    "text": "أثنان",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000013_NO_07.wav",
     "word": "two",
-    "text": "إثنان",
+    "text": "إسنام",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000015_NO_09.wav",
     "word": "two",
-    "text": "إثنان",
+    "text": "إثنام",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000025_NO_06.wav",
     "word": "two",
-    "text": "إسنام",
+    "text": "إسلام",
     "outcome": "wrong"
    },
    {
@@ -4489,25 +4445,25 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000027_NO_03.wav",
     "word": "two",
-    "text": "إثناء",
+    "text": "إسلام",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000001_NO_01.wav",
     "word": "two",
-    "text": "سنن",
+    "text": "سنان",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000019_NO_10.wav",
     "word": "two",
-    "text": "إذا لم تكن",
-    "outcome": "wrong"
+    "text": "إخنان",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000030_NO_10.wav",
     "word": "two",
-    "text": "إسلام",
+    "text": "اسلام",
     "outcome": "wrong"
    },
    {
@@ -4519,8 +4475,8 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000026_NO_09.wav",
     "word": "two",
-    "text": "سنان",
-    "outcome": "wrong"
+    "text": "اسنان",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000008_NO_07.wav",
@@ -4531,20 +4487,20 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000022_NO_01.wav",
     "word": "two",
-    "text": "إسلام",
+    "text": "إسلام.",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000004_NO_02.wav",
     "word": "two",
-    "text": "اتنان",
-    "outcome": "wrong"
+    "text": "إثنان",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000006_NO_09.wav",
     "word": "two",
-    "text": "اتنان",
-    "outcome": "wrong"
+    "text": "إثنان",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000014_NO_07.wav",
@@ -4555,32 +4511,32 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000018_NO_08.wav",
     "word": "two",
-    "text": "إثنان",
-    "outcome": "correct"
+    "text": "إسناً.",
+    "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000002_NO_06.wav",
     "word": "two",
-    "text": "أثنان",
-    "outcome": "correct"
+    "text": "إثنة.",
+    "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000028_NO_04.wav",
     "word": "two",
-    "text": "اتنان",
-    "outcome": "wrong"
+    "text": "إذنان",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000016_NO_09.wav",
     "word": "two",
-    "text": "بس نان",
-    "outcome": "wrong"
+    "text": "اسنان",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000003_NO_09.wav",
     "word": "two",
-    "text": "نا",
-    "outcome": "wrong"
+    "text": "أثناء",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000010_NO_02.wav",
@@ -4591,7 +4547,7 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000007_NO_05.wav",
     "word": "two",
-    "text": "نا",
+    "text": "سناً.",
     "outcome": "wrong"
    },
    {
@@ -4603,14 +4559,14 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000017_NO_07.wav",
     "word": "two",
-    "text": "اتنان",
-    "outcome": "wrong"
+    "text": "إثنان",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000011_NO_08.wav",
     "word": "two",
-    "text": "اتنان",
-    "outcome": "wrong"
+    "text": "إثنان",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000029_NO_03.wav",
@@ -4621,344 +4577,344 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/two/00000020_NO_02.wav",
     "word": "two",
-    "text": "إثنان",
+    "text": "إثناء",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000004_NO_07.wav",
     "word": "three",
-    "text": "سلاتة",
-    "outcome": "wrong"
+    "text": "سلاثة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000015_NO_02.wav",
     "word": "three",
-    "text": "سلامة الله",
-    "outcome": "wrong"
+    "text": "ثلاثة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000001_NO_09.wav",
     "word": "three",
-    "text": "سلاسة",
-    "outcome": "wrong"
+    "text": "ثلاثة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000014_NO_06.wav",
     "word": "three",
-    "text": "تلثة",
-    "outcome": "wrong"
+    "text": "ثلاثة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000008_NO_01.wav",
     "word": "three",
-    "text": "سلاف",
-    "outcome": "wrong"
+    "text": "ثلاثة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000029_NO_10.wav",
     "word": "three",
-    "text": "بلاثة",
-    "outcome": "wrong"
+    "text": "ثلاثة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000007_NO_10.wav",
     "word": "three",
-    "text": "ثلاثة",
+    "text": "ثلاثة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000023_NO_09.wav",
     "word": "three",
-    "text": "سلاعظة",
-    "outcome": "wrong"
+    "text": "ثلاثة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000028_NO_01.wav",
     "word": "three",
-    "text": "سلامة",
-    "outcome": "wrong"
+    "text": "سلاسا",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000013_NO_01.wav",
     "word": "three",
-    "text": "سرسة",
-    "outcome": "wrong"
+    "text": "ثراثة",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000030_NO_10.wav",
     "word": "three",
-    "text": "",
-    "outcome": "nothing"
+    "text": "سلاسة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000002_NO_01.wav",
     "word": "three",
-    "text": "سالة",
-    "outcome": "wrong"
+    "text": "سلاة",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000026_NO_02.wav",
     "word": "three",
-    "text": "سلامة",
-    "outcome": "wrong"
+    "text": "ثلاثة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000009_NO_01.wav",
     "word": "three",
-    "text": "سلسل",
-    "outcome": "wrong"
+    "text": "ثلاثة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000024_NO_04.wav",
     "word": "three",
-    "text": "وليس",
+    "text": "فلاس",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000021_NO_06.wav",
     "word": "three",
-    "text": "تلاثة؟",
-    "outcome": "wrong"
+    "text": "ثلاثة",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000020_NO_05.wav",
     "word": "three",
-    "text": "سلالسة",
-    "outcome": "wrong"
+    "text": "سلاسا",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000005_NO_01.wav",
     "word": "three",
-    "text": "فلاسة",
-    "outcome": "wrong"
+    "text": "ثلاثة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000018_NO_03.wav",
     "word": "three",
-    "text": "سيارة",
-    "outcome": "wrong"
+    "text": "سلاسة",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000012_NO_10.wav",
     "word": "three",
-    "text": "تلافنة",
-    "outcome": "wrong"
+    "text": "ثلاثة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000011_NO_05.wav",
     "word": "three",
-    "text": "ثلاثة",
+    "text": "ثلاثة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000027_NO_02.wav",
     "word": "three",
-    "text": "، سلاسة",
-    "outcome": "wrong"
+    "text": "ثلاثة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000025_NO_01.wav",
     "word": "three",
-    "text": "سالياتسة",
-    "outcome": "wrong"
+    "text": "سلالسة",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000003_NO_07.wav",
     "word": "three",
-    "text": "سلامة",
-    "outcome": "wrong"
+    "text": "ثلاثة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000016_NO_07.wav",
     "word": "three",
-    "text": "سلاس",
-    "outcome": "wrong"
+    "text": "ثلاثة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000010_NO_07.wav",
     "word": "three",
-    "text": "ثلاثة",
+    "text": "ثلاثة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000019_NO_05.wav",
     "word": "three",
-    "text": "سيارة،",
+    "text": "فدافة",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000006_NO_09.wav",
     "word": "three",
-    "text": "سلسة",
-    "outcome": "wrong"
+    "text": "سلاثة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000017_NO_06.wav",
     "word": "three",
-    "text": "سلام عليكم",
-    "outcome": "wrong"
+    "text": "ثلاثة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000022_NO_01.wav",
     "word": "three",
-    "text": "سلازة",
-    "outcome": "wrong"
+    "text": "ثلاثة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000004_NO_05.wav",
     "word": "three",
-    "text": "سلافة",
-    "outcome": "wrong"
+    "text": "ثلاثة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000015_NO_04.wav",
     "word": "three",
-    "text": "سلامة",
-    "outcome": "wrong"
+    "text": "ثلاثة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000001_NO_05.wav",
     "word": "three",
-    "text": "ثلاثة",
+    "text": "ثلاثة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000014_NO_03.wav",
     "word": "three",
-    "text": "تلاته",
+    "text": "ثلاثة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000008_NO_09.wav",
     "word": "three",
-    "text": "ثلاثة",
+    "text": "ثلاثة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000029_NO_06.wav",
     "word": "three",
-    "text": "سلامة الله",
-    "outcome": "wrong"
+    "text": "ثلاثة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000007_NO_08.wav",
     "word": "three",
-    "text": "ثلاثة",
+    "text": "ثلاثة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000023_NO_03.wav",
     "word": "three",
-    "text": "سيارة، شارع،",
-    "outcome": "wrong"
+    "text": "سلافة",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000028_NO_02.wav",
     "word": "three",
-    "text": "ثلاثة",
+    "text": "ثلاثة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000013_NO_03.wav",
     "word": "three",
-    "text": "سلسة",
-    "outcome": "wrong"
+    "text": "ثلاثة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000030_NO_01.wav",
     "word": "three",
-    "text": "سلسة",
-    "outcome": "wrong"
+    "text": "ثلاثة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000002_NO_10.wav",
     "word": "three",
-    "text": "",
-    "outcome": "nothing"
+    "text": "ثلاثة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000026_NO_03.wav",
     "word": "three",
-    "text": "نلافظ",
-    "outcome": "wrong"
+    "text": "ثلاثة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000009_NO_08.wav",
     "word": "three",
-    "text": "سلات",
-    "outcome": "wrong"
+    "text": "ثلاثة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000024_NO_02.wav",
     "word": "three",
-    "text": "سالافة",
-    "outcome": "wrong"
+    "text": "سلافة",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000021_NO_08.wav",
     "word": "three",
-    "text": "تلاثة",
-    "outcome": "wrong"
+    "text": "ثلاثة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000020_NO_02.wav",
     "word": "three",
-    "text": "سلسة",
-    "outcome": "wrong"
+    "text": "ثلاثة",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000005_NO_08.wav",
     "word": "three",
-    "text": "سلام عليكم",
-    "outcome": "wrong"
+    "text": "ثلاثة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000018_NO_01.wav",
     "word": "three",
-    "text": "سلاتة",
-    "outcome": "wrong"
+    "text": "ثلاثة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000012_NO_05.wav",
     "word": "three",
-    "text": "سلامة الله",
-    "outcome": "wrong"
+    "text": "ثلاثة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000011_NO_04.wav",
     "word": "three",
-    "text": "كلافة",
-    "outcome": "wrong"
+    "text": "ثلاثة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000027_NO_06.wav",
     "word": "three",
-    "text": "سلامة",
-    "outcome": "wrong"
+    "text": "ثلاثة",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000025_NO_03.wav",
     "word": "three",
-    "text": "سالعسة",
-    "outcome": "wrong"
+    "text": "سلاسة",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000003_NO_06.wav",
     "word": "three",
-    "text": "سلام",
-    "outcome": "wrong"
+    "text": "ثلاث",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000016_NO_02.wav",
     "word": "three",
-    "text": "سلام",
-    "outcome": "wrong"
+    "text": "سلس",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000010_NO_01.wav",
     "word": "three",
-    "text": "سلام عليكم",
-    "outcome": "wrong"
+    "text": "سلاسا",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000019_NO_03.wav",
@@ -4969,121 +4925,121 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000006_NO_07.wav",
     "word": "three",
-    "text": "سلسة",
-    "outcome": "wrong"
+    "text": "ثلاثة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000017_NO_10.wav",
     "word": "three",
-    "text": "سلاعزة",
-    "outcome": "wrong"
+    "text": "سلاسة",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/three/00000022_NO_07.wav",
     "word": "three",
     "text": "سلاسة",
-    "outcome": "wrong"
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000003_NO_04.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "اربا",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000006_NO_03.wav",
     "word": "four",
-    "text": "أربان",
-    "outcome": "wrong"
+    "text": "أربعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000019_NO_07.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "أربعة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000010_NO_04.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "اربا",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000018_NO_06.wav",
     "word": "four",
-    "text": "أربعة",
+    "text": "اربعة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000007_NO_10.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "أربعة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000021_NO_02.wav",
     "word": "four",
-    "text": "أربا",
-    "outcome": "wrong"
+    "text": "أربع.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000026_NO_04.wav",
     "word": "four",
-    "text": "أربعة",
+    "text": "أربعة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000015_NO_03.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "اربعة",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000022_NO_04.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "أربى",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000017_NO_01.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "أربى",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000030_NO_01.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "أربى",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000009_NO_08.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "أربع.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000024_NO_10.wav",
     "word": "four",
-    "text": "أرباء",
-    "outcome": "wrong"
+    "text": "ارباع",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000023_NO_05.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "أربعة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000020_NO_07.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "اربا",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000005_NO_08.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "اربا",
     "outcome": "correct"
    },
    {
@@ -5101,170 +5057,170 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000004_NO_09.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "أربع.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000012_NO_09.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "اربعة",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000011_NO_10.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "أربعة",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000001_NO_06.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "اربعة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000027_NO_03.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "أربى",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000025_NO_07.wav",
     "word": "four",
-    "text": "أطبال",
-    "outcome": "wrong"
+    "text": "اربا",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000028_NO_02.wav",
     "word": "four",
-    "text": "أربا",
-    "outcome": "wrong"
+    "text": "أربعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000029_NO_01.wav",
     "word": "four",
-    "text": "ربا",
+    "text": "رباه",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000016_NO_03.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "أربعة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000014_NO_05.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "أربعة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000002_NO_04.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "أربعة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000003_NO_02.wav",
     "word": "four",
-    "text": "أرباء",
+    "text": "البا",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000006_NO_04.wav",
     "word": "four",
-    "text": "أتر باب",
-    "outcome": "wrong"
+    "text": "اربعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000019_NO_10.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "أربعة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000010_NO_02.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "البع",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000018_NO_05.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "اربعة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000007_NO_02.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "أربع.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000021_NO_08.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "أربع.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000026_NO_01.wav",
     "word": "four",
-    "text": "أتبع",
-    "outcome": "wrong"
+    "text": "اربعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000015_NO_05.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "اربا",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000022_NO_08.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "أربى",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000017_NO_02.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "أربعة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000030_NO_08.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "أربعة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000009_NO_07.wav",
     "word": "four",
-    "text": "أرباء",
+    "text": "ارباو.",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000024_NO_07.wav",
     "word": "four",
-    "text": "، ألباء",
+    "text": "ارباح",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000023_NO_10.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "أربعة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000020_NO_06.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "أربعة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000005_NO_06.wav",
     "word": "four",
-    "text": "أربال",
-    "outcome": "wrong"
+    "text": "أربع",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000013_NO_08.wav",
@@ -5281,109 +5237,109 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000004_NO_01.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "أربعة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000012_NO_08.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "اربعة",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000011_NO_08.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "أربعة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000001_NO_02.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "اربعة",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000027_NO_05.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "أربى",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000025_NO_05.wav",
     "word": "four",
-    "text": "أتبع",
-    "outcome": "wrong"
+    "text": "اربا",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000028_NO_10.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "أربعة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000029_NO_06.wav",
     "word": "four",
-    "text": "أرباء",
-    "outcome": "wrong"
+    "text": "اربا",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000016_NO_07.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "أربعة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000014_NO_09.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "أربعة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/four/00000002_NO_02.wav",
     "word": "four",
-    "text": "أربع",
+    "text": "اربعة",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000003_NO_07.wav",
     "word": "five",
-    "text": "حمسة",
-    "outcome": "wrong"
+    "text": "خمسة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000027_NO_10.wav",
     "word": "five",
-    "text": "حمسة",
-    "outcome": "wrong"
+    "text": "خلصة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000028_NO_06.wav",
     "word": "five",
-    "text": "ومثل",
+    "text": "أمسا",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000010_NO_01.wav",
     "word": "five",
-    "text": "خمسة",
+    "text": "خمسة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000017_NO_04.wav",
     "word": "five",
     "text": "خمتة",
-    "outcome": "wrong"
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000021_NO_07.wav",
     "word": "five",
-    "text": "خمسة",
+    "text": "خمسة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000019_NO_02.wav",
     "word": "five",
-    "text": "خمسة",
+    "text": "خمسة.",
     "outcome": "correct"
    },
    {
@@ -5395,91 +5351,91 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000018_NO_08.wav",
     "word": "five",
-    "text": "خمسة",
+    "text": "خمزة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000020_NO_09.wav",
     "word": "five",
-    "text": "خمسة",
+    "text": "خمسة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000022_NO_09.wav",
     "word": "five",
-    "text": "خمسة",
+    "text": "خمسة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000014_NO_07.wav",
     "word": "five",
-    "text": "خمسة",
+    "text": "خمسة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000007_NO_09.wav",
     "word": "five",
-    "text": "همس",
+    "text": "قمت",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000011_NO_03.wav",
     "word": "five",
-    "text": "خمسة",
+    "text": "خمسة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000009_NO_02.wav",
     "word": "five",
-    "text": "خمسة",
+    "text": "خمسة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000002_NO_05.wav",
     "word": "five",
-    "text": "خمسة",
+    "text": "خمسة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000016_NO_05.wav",
     "word": "five",
-    "text": "خمسة",
+    "text": "خمسة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000025_NO_07.wav",
     "word": "five",
-    "text": "كرمسة",
-    "outcome": "wrong"
+    "text": "خمسة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000024_NO_02.wav",
     "word": "five",
-    "text": "خمسة",
+    "text": "خمسة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000008_NO_09.wav",
     "word": "five",
-    "text": "سمسة",
-    "outcome": "wrong"
+    "text": "خمسة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000030_NO_07.wav",
     "word": "five",
-    "text": "خمسة",
+    "text": "خمسة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000006_NO_09.wav",
     "word": "five",
-    "text": "خمسة",
+    "text": "خمسة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000004_NO_07.wav",
     "word": "five",
-    "text": "خمسة",
+    "text": "خمسة.",
     "outcome": "correct"
    },
    {
@@ -5491,25 +5447,25 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000012_NO_06.wav",
     "word": "five",
-    "text": "خمسة",
+    "text": "خمسة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000005_NO_10.wav",
     "word": "five",
-    "text": "خامسة",
-    "outcome": "wrong"
+    "text": "خمسة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000013_NO_05.wav",
     "word": "five",
-    "text": "خمسة",
+    "text": "خمسة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000015_NO_10.wav",
     "word": "five",
-    "text": "خمسة",
+    "text": "خمسة.",
     "outcome": "correct"
    },
    {
@@ -5521,79 +5477,79 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000029_NO_02.wav",
     "word": "five",
-    "text": "خمسة",
+    "text": "خمسة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000003_NO_01.wav",
     "word": "five",
-    "text": "خمسة",
+    "text": "خمسة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000027_NO_06.wav",
     "word": "five",
-    "text": "خمسة",
+    "text": "خمسة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000028_NO_04.wav",
     "word": "five",
-    "text": "سمسة",
-    "outcome": "wrong"
+    "text": "خمسة",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000010_NO_08.wav",
     "word": "five",
-    "text": "خمسة",
+    "text": "خمسة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000017_NO_06.wav",
     "word": "five",
-    "text": "خمسة",
+    "text": "خمسة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000021_NO_04.wav",
     "word": "five",
-    "text": "خمسة",
+    "text": "خمسة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000019_NO_03.wav",
     "word": "five",
-    "text": "خمسة",
+    "text": "خمسة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000001_NO_06.wav",
     "word": "five",
-    "text": "خمسة",
+    "text": "خمسة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000018_NO_05.wav",
     "word": "five",
-    "text": "كومزة",
-    "outcome": "wrong"
+    "text": "خمزة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000020_NO_10.wav",
     "word": "five",
-    "text": "خمسة",
+    "text": "خمسة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000022_NO_04.wav",
     "word": "five",
-    "text": "خمسة",
+    "text": "خمسة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000014_NO_02.wav",
     "word": "five",
-    "text": "خمسة",
+    "text": "خمسة.",
     "outcome": "correct"
    },
    {
@@ -5605,31 +5561,31 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000011_NO_05.wav",
     "word": "five",
-    "text": "خمسة",
+    "text": "خمسة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000009_NO_04.wav",
     "word": "five",
-    "text": "خمسة",
+    "text": "خمسة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000002_NO_08.wav",
     "word": "five",
-    "text": "هم، سأ",
+    "text": "فمسة.",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000016_NO_07.wav",
     "word": "five",
-    "text": "خمسة",
+    "text": "خمسة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000025_NO_10.wav",
     "word": "five",
-    "text": "خمسة",
+    "text": "خمسة.",
     "outcome": "correct"
    },
    {
@@ -5641,49 +5597,49 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000008_NO_07.wav",
     "word": "five",
-    "text": "خمسة",
+    "text": "خمسة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000030_NO_10.wav",
     "word": "five",
-    "text": "خمسة",
+    "text": "خمسة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000006_NO_05.wav",
     "word": "five",
-    "text": "خامسة",
-    "outcome": "wrong"
+    "text": "خمسة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000004_NO_08.wav",
     "word": "five",
-    "text": "خمسة",
+    "text": "خمسة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000026_NO_05.wav",
     "word": "five",
-    "text": "كرمسة",
-    "outcome": "wrong"
+    "text": "خمسة",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000012_NO_07.wav",
     "word": "five",
-    "text": "خمسة",
+    "text": "خمسة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000005_NO_02.wav",
     "word": "five",
-    "text": "خامسة",
-    "outcome": "wrong"
+    "text": "خمسة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000013_NO_08.wav",
     "word": "five",
-    "text": "خمسة",
+    "text": "خمسة.",
     "outcome": "correct"
    },
    {
@@ -5695,7 +5651,7 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/five/00000023_NO_01.wav",
     "word": "five",
-    "text": "خمسة",
+    "text": "خمسة.",
     "outcome": "correct"
    },
    {
@@ -5713,109 +5669,109 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000017_NO_03.wav",
     "word": "six",
-    "text": "ثم",
-    "outcome": "wrong"
+    "text": "ستة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000026_NO_03.wav",
     "word": "six",
-    "text": "ستة",
-    "outcome": "correct"
+    "text": "سدّة",
+    "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000023_NO_01.wav",
     "word": "six",
-    "text": "سبت",
+    "text": "سيطة",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000025_NO_07.wav",
     "word": "six",
-    "text": "سيطة",
-    "outcome": "wrong"
+    "text": "صِتّة",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000019_NO_03.wav",
     "word": "six",
-    "text": "سيطة",
-    "outcome": "wrong"
+    "text": "ستة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000011_NO_04.wav",
     "word": "six",
-    "text": "ستة",
+    "text": "ستة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000002_NO_03.wav",
     "word": "six",
-    "text": "ثم",
-    "outcome": "wrong"
+    "text": "ستة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000022_NO_07.wav",
     "word": "six",
-    "text": "سيطة",
-    "outcome": "wrong"
+    "text": "ستة",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000020_NO_03.wav",
     "word": "six",
-    "text": "ثم",
-    "outcome": "wrong"
+    "text": "ستة",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000029_NO_01.wav",
     "word": "six",
-    "text": "ستة",
+    "text": "ستة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000016_NO_05.wav",
     "word": "six",
-    "text": "ستة",
+    "text": "ستة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000009_NO_05.wav",
     "word": "six",
-    "text": "ستة",
+    "text": "ستة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000005_NO_05.wav",
     "word": "six",
-    "text": "ستة",
+    "text": "ستة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000015_NO_05.wav",
     "word": "six",
-    "text": "سيطة",
-    "outcome": "wrong"
+    "text": "ستة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000013_NO_02.wav",
     "word": "six",
-    "text": "ثم",
-    "outcome": "wrong"
+    "text": "ستة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000014_NO_10.wav",
     "word": "six",
-    "text": "ثم",
-    "outcome": "wrong"
+    "text": "ستة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000030_NO_03.wav",
     "word": "six",
-    "text": "ثم",
-    "outcome": "wrong"
+    "text": "ستة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000004_NO_01.wav",
     "word": "six",
-    "text": "سطة",
+    "text": "سدة.",
     "outcome": "wrong"
    },
    {
@@ -5833,14 +5789,14 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000001_NO_01.wav",
     "word": "six",
-    "text": "ستة",
+    "text": "ستة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000024_NO_09.wav",
     "word": "six",
-    "text": "ستة",
-    "outcome": "correct"
+    "text": "سدة.",
+    "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000018_NO_08.wav",
@@ -5857,26 +5813,26 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000012_NO_05.wav",
     "word": "six",
-    "text": "ستة",
+    "text": "ستة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000006_NO_03.wav",
     "word": "six",
-    "text": "ستة",
+    "text": "ستة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000003_NO_07.wav",
     "word": "six",
-    "text": "ستة",
+    "text": "ستة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000027_NO_10.wav",
     "word": "six",
-    "text": "ستة",
-    "outcome": "correct"
+    "text": "سدة",
+    "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000021_NO_06.wav",
@@ -5893,43 +5849,43 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000017_NO_02.wav",
     "word": "six",
-    "text": "سيطة",
-    "outcome": "wrong"
+    "text": "ستة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000026_NO_06.wav",
     "word": "six",
-    "text": "ستة",
-    "outcome": "correct"
+    "text": "سدة",
+    "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000023_NO_10.wav",
     "word": "six",
-    "text": "ست",
+    "text": "ستة",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000025_NO_03.wav",
     "word": "six",
-    "text": "سيطة",
+    "text": "صدّة",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000019_NO_02.wav",
     "word": "six",
-    "text": "ستة",
+    "text": "ستة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000011_NO_05.wav",
     "word": "six",
-    "text": "ستة",
+    "text": "ستة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000002_NO_08.wav",
     "word": "six",
-    "text": "سيكتاب",
+    "text": "سكت",
     "outcome": "wrong"
    },
    {
@@ -5941,38 +5897,38 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000020_NO_05.wav",
     "word": "six",
-    "text": "ستة",
+    "text": "ستة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000029_NO_06.wav",
     "word": "six",
-    "text": "ستة",
+    "text": "ستة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000016_NO_09.wav",
     "word": "six",
-    "text": "ستة",
+    "text": "ستة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000009_NO_07.wav",
     "word": "six",
-    "text": "سيطة",
-    "outcome": "wrong"
+    "text": "ستة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000005_NO_01.wav",
     "word": "six",
-    "text": "ست",
-    "outcome": "correct"
+    "text": "سدّ.",
+    "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000015_NO_10.wav",
     "word": "six",
-    "text": "سيطة",
-    "outcome": "wrong"
+    "text": "ستة",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000013_NO_09.wav",
@@ -5983,19 +5939,19 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000014_NO_03.wav",
     "word": "six",
-    "text": "ثم",
-    "outcome": "wrong"
+    "text": "ستة",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000030_NO_10.wav",
     "word": "six",
-    "text": "ستة",
+    "text": "ستة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000004_NO_10.wav",
     "word": "six",
-    "text": "جد",
+    "text": "تدى",
     "outcome": "wrong"
    },
    {
@@ -6013,415 +5969,415 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000001_NO_05.wav",
     "word": "six",
-    "text": "ستة",
+    "text": "ستة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000024_NO_01.wav",
     "word": "six",
-    "text": "ستة",
+    "text": "ستة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000018_NO_05.wav",
     "word": "six",
-    "text": "ثم",
-    "outcome": "wrong"
+    "text": "ستة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000007_NO_06.wav",
     "word": "six",
-    "text": "سيطة",
-    "outcome": "wrong"
+    "text": "ستة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000012_NO_03.wav",
     "word": "six",
-    "text": "ستة",
-    "outcome": "correct"
+    "text": "سدة.",
+    "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000006_NO_04.wav",
     "word": "six",
-    "text": "ستة",
+    "text": "ستة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000003_NO_04.wav",
     "word": "six",
-    "text": "سيط",
+    "text": "سدك",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000027_NO_01.wav",
     "word": "six",
-    "text": "سيطة",
-    "outcome": "wrong"
+    "text": "ستة",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/six/00000021_NO_10.wav",
     "word": "six",
-    "text": "ستة",
+    "text": "ستة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000009_NO_01.wav",
     "word": "seven",
-    "text": "شباب",
-    "outcome": "wrong"
+    "text": "سبا",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000028_NO_01.wav",
     "word": "seven",
-    "text": "سبا",
-    "outcome": "wrong"
+    "text": "سبعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000024_NO_02.wav",
     "word": "seven",
-    "text": "سبع",
+    "text": "سبعة",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000012_NO_09.wav",
     "word": "seven",
-    "text": "سبا",
-    "outcome": "wrong"
+    "text": "سبعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000017_NO_08.wav",
     "word": "seven",
-    "text": "سبب",
-    "outcome": "wrong"
+    "text": "سبعة",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000010_NO_06.wav",
     "word": "seven",
-    "text": "سبان",
-    "outcome": "wrong"
+    "text": "سبعة",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000003_NO_05.wav",
     "word": "seven",
-    "text": "سبع",
+    "text": "سبعة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000029_NO_07.wav",
     "word": "seven",
-    "text": "سبع",
+    "text": "سبعة",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000007_NO_05.wav",
     "word": "seven",
-    "text": "سبع",
+    "text": "سبعة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000027_NO_05.wav",
     "word": "seven",
-    "text": "سبات",
-    "outcome": "wrong"
+    "text": "سبعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000021_NO_01.wav",
     "word": "seven",
     "text": "سبا",
-    "outcome": "wrong"
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000002_NO_06.wav",
     "word": "seven",
-    "text": "سبال",
-    "outcome": "wrong"
+    "text": "سبا",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000030_NO_04.wav",
     "word": "seven",
-    "text": "سبع",
+    "text": "سبا",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000001_NO_03.wav",
     "word": "seven",
-    "text": "سبال",
-    "outcome": "wrong"
+    "text": "سبعة",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000019_NO_02.wav",
     "word": "seven",
-    "text": "سببا",
-    "outcome": "wrong"
+    "text": "سبعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000026_NO_01.wav",
     "word": "seven",
-    "text": "سبب",
-    "outcome": "wrong"
+    "text": "سبعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000020_NO_03.wav",
     "word": "seven",
-    "text": "سبا",
-    "outcome": "wrong"
+    "text": "سبعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000014_NO_01.wav",
     "word": "seven",
-    "text": "سبع",
+    "text": "سبعة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000015_NO_09.wav",
     "word": "seven",
-    "text": "سبب",
+    "text": "سابا",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000004_NO_01.wav",
     "word": "seven",
-    "text": "سبا",
-    "outcome": "wrong"
+    "text": "سبعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000005_NO_08.wav",
     "word": "seven",
-    "text": "سلام",
+    "text": "صلى",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000022_NO_04.wav",
     "word": "seven",
-    "text": "سبع",
+    "text": "سبعة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000023_NO_03.wav",
     "word": "seven",
-    "text": "سبب",
-    "outcome": "wrong"
+    "text": "سبعة",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000025_NO_04.wav",
     "word": "seven",
-    "text": "سيارة",
-    "outcome": "wrong"
+    "text": "سبا",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000018_NO_06.wav",
     "word": "seven",
-    "text": "سبع",
+    "text": "سبعة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000013_NO_06.wav",
     "word": "seven",
-    "text": "سبب",
-    "outcome": "wrong"
+    "text": "صبا",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000006_NO_10.wav",
     "word": "seven",
-    "text": "سببا",
-    "outcome": "wrong"
+    "text": "سبعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000011_NO_04.wav",
     "word": "seven",
-    "text": "سبب",
-    "outcome": "wrong"
+    "text": "سبها.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000008_NO_02.wav",
     "word": "seven",
-    "text": "سبا",
-    "outcome": "wrong"
+    "text": "صبا",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000016_NO_01.wav",
     "word": "seven",
-    "text": "سبع",
+    "text": "سبعة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000009_NO_05.wav",
     "word": "seven",
-    "text": "سابة",
+    "text": "سبب.",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000028_NO_04.wav",
     "word": "seven",
-    "text": "سبع",
+    "text": "سبعة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000024_NO_07.wav",
     "word": "seven",
-    "text": "سبع",
+    "text": "سبعة",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000012_NO_07.wav",
     "word": "seven",
-    "text": "سبا",
-    "outcome": "wrong"
+    "text": "سبعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000017_NO_05.wav",
     "word": "seven",
-    "text": "سببا",
-    "outcome": "wrong"
+    "text": "سبعة",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000010_NO_09.wav",
     "word": "seven",
     "text": "سبا",
-    "outcome": "wrong"
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000003_NO_06.wav",
     "word": "seven",
     "text": "سبا",
-    "outcome": "wrong"
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000029_NO_05.wav",
     "word": "seven",
-    "text": "سبع",
+    "text": "سبعة",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000007_NO_10.wav",
     "word": "seven",
-    "text": "سبع",
+    "text": "سبعة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000027_NO_03.wav",
     "word": "seven",
-    "text": "سبع",
+    "text": "سبا",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000021_NO_06.wav",
     "word": "seven",
-    "text": "باب",
-    "outcome": "wrong"
+    "text": "سبا",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000002_NO_07.wav",
     "word": "seven",
-    "text": "سببا",
-    "outcome": "wrong"
+    "text": "صبّا",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000030_NO_08.wav",
     "word": "seven",
-    "text": "سبب",
-    "outcome": "wrong"
+    "text": "سبا",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000001_NO_06.wav",
     "word": "seven",
-    "text": "سبا",
-    "outcome": "wrong"
+    "text": "سبعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000019_NO_10.wav",
     "word": "seven",
-    "text": "سبع",
+    "text": "سبعة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000026_NO_10.wav",
     "word": "seven",
-    "text": "سبع",
+    "text": "سبعة",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000020_NO_04.wav",
     "word": "seven",
-    "text": "سبا",
-    "outcome": "wrong"
+    "text": "سبعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000014_NO_06.wav",
     "word": "seven",
-    "text": "سبع",
+    "text": "سبعة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000015_NO_04.wav",
     "word": "seven",
-    "text": "سبع",
+    "text": "سبعة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000004_NO_05.wav",
     "word": "seven",
-    "text": "سبا",
-    "outcome": "wrong"
+    "text": "سبعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000005_NO_02.wav",
     "word": "seven",
-    "text": "سبا",
-    "outcome": "wrong"
+    "text": "صبا",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000022_NO_06.wav",
     "word": "seven",
-    "text": "سبع",
+    "text": "سبعة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000023_NO_01.wav",
     "word": "seven",
-    "text": "سببا",
-    "outcome": "wrong"
+    "text": "سبعة",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000025_NO_06.wav",
     "word": "seven",
-    "text": "سبع",
+    "text": "سبا",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000018_NO_09.wav",
     "word": "seven",
-    "text": "سبع",
+    "text": "سبعة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000013_NO_08.wav",
     "word": "seven",
-    "text": "سبب",
-    "outcome": "wrong"
+    "text": "صبا",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000006_NO_08.wav",
     "word": "seven",
-    "text": "سبا",
-    "outcome": "wrong"
+    "text": "سبعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000011_NO_09.wav",
     "word": "seven",
-    "text": "سبع",
+    "text": "سبعة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000008_NO_06.wav",
     "word": "seven",
-    "text": "سبب",
-    "outcome": "wrong"
+    "text": "صبا",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/seven/00000016_NO_05.wav",
     "word": "seven",
-    "text": "سبع",
+    "text": "سبعة.",
     "outcome": "correct"
    },
    {
@@ -6434,25 +6390,25 @@
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000022_NO_05.wav",
     "word": "eight",
     "text": "سماني",
-    "outcome": "wrong"
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000010_NO_04.wav",
     "word": "eight",
-    "text": "ثمانيا",
-    "outcome": "wrong"
+    "text": "ثمانية",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000030_NO_06.wav",
     "word": "eight",
-    "text": "دمانيا",
-    "outcome": "wrong"
+    "text": "ثمانيا",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000029_NO_02.wav",
     "word": "eight",
-    "text": "بماني يا",
-    "outcome": "wrong"
+    "text": "ثمانية",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000009_NO_09.wav",
@@ -6463,26 +6419,26 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000005_NO_03.wav",
     "word": "eight",
-    "text": "خماني",
+    "text": "خمعني",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000023_NO_06.wav",
     "word": "eight",
-    "text": "سمانيون",
-    "outcome": "wrong"
+    "text": "ثمانية",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000025_NO_02.wav",
     "word": "eight",
     "text": "سمانيا",
-    "outcome": "wrong"
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000013_NO_08.wav",
     "word": "eight",
-    "text": "سمانيا",
-    "outcome": "wrong"
+    "text": "ثمانيا",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000004_NO_07.wav",
@@ -6499,32 +6455,32 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000008_NO_02.wav",
     "word": "eight",
-    "text": "بامانيا",
-    "outcome": "wrong"
+    "text": "ثمانية",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000012_NO_05.wav",
     "word": "eight",
     "text": "ثمانيا",
-    "outcome": "wrong"
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000018_NO_08.wav",
     "word": "eight",
-    "text": "سمانيا",
-    "outcome": "wrong"
+    "text": "ثمانيا",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000011_NO_01.wav",
     "word": "eight",
-    "text": "سمانيا",
-    "outcome": "wrong"
+    "text": "ثمانية",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000015_NO_08.wav",
     "word": "eight",
-    "text": "سيارة، باب، كرسي، شارع، كوب، حذاء",
-    "outcome": "wrong"
+    "text": "ثمانية",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000016_NO_02.wav",
@@ -6535,104 +6491,104 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000026_NO_04.wav",
     "word": "eight",
-    "text": "ثمانيا",
-    "outcome": "wrong"
+    "text": "ثمانية",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000021_NO_04.wav",
     "word": "eight",
-    "text": "في مني",
-    "outcome": "wrong"
+    "text": "ثمني",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000006_NO_08.wav",
     "word": "eight",
-    "text": "ثمانيا",
-    "outcome": "wrong"
+    "text": "ثمانية",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000028_NO_09.wav",
     "word": "eight",
-    "text": "سيارة، شجرة، شارع، كوب، حذاء",
-    "outcome": "wrong"
+    "text": "ثمانيا",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000019_NO_09.wav",
     "word": "eight",
-    "text": "سماني",
-    "outcome": "wrong"
+    "text": "ثمانية",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000001_NO_03.wav",
     "word": "eight",
-    "text": "ثمانيا",
-    "outcome": "wrong"
+    "text": "ثمانية",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000027_NO_04.wav",
     "word": "eight",
-    "text": "سمان يا",
-    "outcome": "wrong"
+    "text": "سمانيا",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000002_NO_10.wav",
     "word": "eight",
-    "text": "أمانيا",
-    "outcome": "wrong"
+    "text": "ثمانية",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000020_NO_03.wav",
     "word": "eight",
-    "text": "سمانيا",
-    "outcome": "wrong"
+    "text": "ثمانية",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000024_NO_10.wav",
     "word": "eight",
-    "text": "كمانيا",
-    "outcome": "wrong"
+    "text": "ثمانية",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000017_NO_07.wav",
     "word": "eight",
-    "text": "سمارك",
-    "outcome": "wrong"
+    "text": "ثمانية",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000003_NO_03.wav",
     "word": "eight",
-    "text": "أمانيا",
-    "outcome": "wrong"
+    "text": "ثمانية",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000007_NO_07.wav",
     "word": "eight",
-    "text": "بمانيو",
-    "outcome": "wrong"
+    "text": "ثمانية",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000022_NO_06.wav",
     "word": "eight",
-    "text": "سماني، أمام",
-    "outcome": "wrong"
+    "text": "ثمانية",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000010_NO_10.wav",
     "word": "eight",
-    "text": "شمانيا",
-    "outcome": "wrong"
+    "text": "ثمانية",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000030_NO_02.wav",
     "word": "eight",
-    "text": "دمانيا",
-    "outcome": "wrong"
+    "text": "ثمانيا",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000029_NO_04.wav",
     "word": "eight",
-    "text": "سمان يا",
-    "outcome": "wrong"
+    "text": "ثمانية",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000009_NO_06.wav",
@@ -6649,56 +6605,56 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000023_NO_04.wav",
     "word": "eight",
-    "text": "سماني",
+    "text": "ثمانيوم",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000025_NO_06.wav",
     "word": "eight",
     "text": "سمانيا",
-    "outcome": "wrong"
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000013_NO_01.wav",
     "word": "eight",
-    "text": "ثمانيا",
-    "outcome": "wrong"
+    "text": "ثمانية",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000004_NO_01.wav",
     "word": "eight",
-    "text": "دماني",
-    "outcome": "wrong"
+    "text": "ثمانية.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000014_NO_10.wav",
     "word": "eight",
-    "text": "ثمانيا",
-    "outcome": "wrong"
+    "text": "ثمانية",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000008_NO_04.wav",
     "word": "eight",
-    "text": "ثماني",
+    "text": "ثمانية",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000012_NO_08.wav",
     "word": "eight",
-    "text": "ثمانيا",
-    "outcome": "wrong"
+    "text": "ثمانية",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000018_NO_03.wav",
     "word": "eight",
-    "text": "سمانيا",
-    "outcome": "wrong"
+    "text": "ثمانية",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000011_NO_04.wav",
     "word": "eight",
-    "text": "كمان",
-    "outcome": "wrong"
+    "text": "تماني",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000015_NO_09.wav",
@@ -6710,55 +6666,55 @@
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000016_NO_06.wav",
     "word": "eight",
     "text": "سمانيا",
-    "outcome": "wrong"
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000026_NO_05.wav",
     "word": "eight",
-    "text": "زمانيا",
-    "outcome": "wrong"
+    "text": "ثمانية",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000021_NO_09.wav",
     "word": "eight",
-    "text": "دماني",
-    "outcome": "wrong"
+    "text": "ثمان.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000006_NO_03.wav",
     "word": "eight",
-    "text": "ثمانيا",
-    "outcome": "wrong"
+    "text": "ثمانية",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000028_NO_05.wav",
     "word": "eight",
-    "text": "دمان يوم",
+    "text": "ثمانيوم",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000019_NO_02.wav",
     "word": "eight",
-    "text": "ثمانيا",
-    "outcome": "wrong"
+    "text": "ثمانية",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000001_NO_09.wav",
     "word": "eight",
-    "text": "ثمانيا",
-    "outcome": "wrong"
+    "text": "ثمانية",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000027_NO_08.wav",
     "word": "eight",
-    "text": "",
-    "outcome": "nothing"
+    "text": "ثمانيا",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000002_NO_06.wav",
     "word": "eight",
-    "text": "تا مني",
-    "outcome": "wrong"
+    "text": "ثمانيا",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000020_NO_07.wav",
@@ -6769,14 +6725,14 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000024_NO_01.wav",
     "word": "eight",
-    "text": "ومانية",
-    "outcome": "wrong"
+    "text": "ثمانية",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000017_NO_10.wav",
     "word": "eight",
-    "text": "سمارنيو",
-    "outcome": "wrong"
+    "text": "ثمانية",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/eight/00000003_NO_05.wav",
@@ -6787,7 +6743,7 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000004_NO_03.wav",
     "word": "nine",
-    "text": "تسعو",
+    "text": "تساو.",
     "outcome": "wrong"
    },
    {
@@ -6799,8 +6755,8 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000003_NO_08.wav",
     "word": "nine",
-    "text": "دسار",
-    "outcome": "wrong"
+    "text": "تسعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000030_NO_08.wav",
@@ -6811,176 +6767,176 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000006_NO_03.wav",
     "word": "nine",
-    "text": "دسال",
-    "outcome": "wrong"
+    "text": "تسعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000012_NO_02.wav",
     "word": "nine",
-    "text": "، دسارة",
-    "outcome": "wrong"
+    "text": "تسعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000023_NO_10.wav",
     "word": "nine",
-    "text": "تصالب",
-    "outcome": "wrong"
+    "text": "تسعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000001_NO_04.wav",
     "word": "nine",
-    "text": "، سارة",
-    "outcome": "wrong"
+    "text": "تسعة",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000014_NO_01.wav",
     "word": "nine",
-    "text": "دي شار؟",
-    "outcome": "wrong"
+    "text": "تسعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000018_NO_06.wav",
     "word": "nine",
-    "text": "تسع",
+    "text": "تسعة.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000025_NO_02.wav",
     "word": "nine",
-    "text": "بيت، سارة",
-    "outcome": "wrong"
+    "text": "تسعة",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000017_NO_03.wav",
     "word": "nine",
-    "text": "بيت، سعر",
-    "outcome": "wrong"
+    "text": "تسعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000016_NO_08.wav",
     "word": "nine",
-    "text": "تسعى",
-    "outcome": "wrong"
+    "text": "تسعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000020_NO_06.wav",
     "word": "nine",
-    "text": "تساء",
+    "text": "تسى",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000005_NO_05.wav",
     "word": "nine",
-    "text": "تسال",
+    "text": "تساء",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000026_NO_03.wav",
     "word": "nine",
-    "text": "تسعى",
-    "outcome": "wrong"
+    "text": "تسعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000021_NO_08.wav",
     "word": "nine",
-    "text": "جسة",
-    "outcome": "wrong"
+    "text": "تسا",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000015_NO_09.wav",
     "word": "nine",
-    "text": "تسال",
+    "text": "تساو.",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000024_NO_07.wav",
     "word": "nine",
-    "text": "ديسة",
-    "outcome": "wrong"
+    "text": "تسعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000022_NO_10.wav",
     "word": "nine",
-    "text": "ديسة",
-    "outcome": "wrong"
+    "text": "تسعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000010_NO_10.wav",
     "word": "nine",
-    "text": "دسار",
-    "outcome": "wrong"
+    "text": "تسعة",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000008_NO_10.wav",
     "word": "nine",
-    "text": "تسال",
-    "outcome": "wrong"
+    "text": "تسعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000029_NO_04.wav",
     "word": "nine",
-    "text": "ده سه",
-    "outcome": "wrong"
+    "text": "تسعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000028_NO_02.wav",
     "word": "nine",
-    "text": "تسعى",
-    "outcome": "wrong"
+    "text": "تسعة",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000011_NO_06.wav",
     "word": "nine",
-    "text": "بسة",
-    "outcome": "wrong"
+    "text": "تسعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000007_NO_05.wav",
     "word": "nine",
-    "text": "تسال",
-    "outcome": "wrong"
+    "text": "تسعى",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000009_NO_05.wav",
     "word": "nine",
-    "text": "ديسة",
-    "outcome": "wrong"
+    "text": "تسع.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000027_NO_06.wav",
     "word": "nine",
-    "text": "جسة",
+    "text": "جسعة.",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000019_NO_06.wav",
     "word": "nine",
-    "text": "تسأل",
-    "outcome": "wrong"
+    "text": "تسعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000002_NO_06.wav",
     "word": "nine",
-    "text": "هذا صالح؟",
-    "outcome": "wrong"
+    "text": "تسة",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000004_NO_02.wav",
     "word": "nine",
-    "text": "بساء",
-    "outcome": "wrong"
+    "text": "تسع",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000013_NO_03.wav",
     "word": "nine",
-    "text": "تسأل",
-    "outcome": "wrong"
+    "text": "تسعى",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000003_NO_02.wav",
     "word": "nine",
-    "text": "تسأل",
-    "outcome": "wrong"
+    "text": "تسعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000030_NO_10.wav",
@@ -6991,236 +6947,236 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000006_NO_09.wav",
     "word": "nine",
-    "text": "this song",
-    "outcome": "wrong"
+    "text": "تسعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000012_NO_01.wav",
     "word": "nine",
-    "text": "ديسار",
-    "outcome": "wrong"
+    "text": "تسعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000023_NO_02.wav",
     "word": "nine",
-    "text": "تسطا",
-    "outcome": "wrong"
+    "text": "تسعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000001_NO_02.wav",
     "word": "nine",
-    "text": "، سارة",
-    "outcome": "wrong"
+    "text": "تسعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000014_NO_07.wav",
     "word": "nine",
-    "text": "تسار",
-    "outcome": "wrong"
+    "text": "تسعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000018_NO_05.wav",
     "word": "nine",
-    "text": "دي ساع",
-    "outcome": "wrong"
+    "text": "تسعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000025_NO_09.wav",
     "word": "nine",
-    "text": "ديسار",
-    "outcome": "wrong"
+    "text": "تسعة",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000017_NO_10.wav",
     "word": "nine",
-    "text": "جسدا",
-    "outcome": "wrong"
+    "text": "تسعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000016_NO_03.wav",
     "word": "nine",
-    "text": "تسعى",
-    "outcome": "wrong"
+    "text": "تسعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000020_NO_10.wav",
     "word": "nine",
-    "text": "تساء",
+    "text": "تسى",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000005_NO_01.wav",
     "word": "nine",
-    "text": "دس هم",
-    "outcome": "wrong"
+    "text": "تسع",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000026_NO_01.wav",
     "word": "nine",
-    "text": "، سارة",
-    "outcome": "wrong"
+    "text": "تسعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000021_NO_04.wav",
     "word": "nine",
-    "text": "جيس طفل",
+    "text": "تسطح.",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000015_NO_01.wav",
     "word": "nine",
-    "text": "تسال؟",
-    "outcome": "wrong"
+    "text": "تسعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000024_NO_01.wav",
     "word": "nine",
-    "text": "تسعى",
-    "outcome": "wrong"
+    "text": "تسعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000022_NO_08.wav",
     "word": "nine",
-    "text": "تسأل",
-    "outcome": "wrong"
+    "text": "تسا",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000010_NO_03.wav",
     "word": "nine",
-    "text": "تصار",
-    "outcome": "wrong"
+    "text": "تسعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000008_NO_07.wav",
     "word": "nine",
-    "text": "، سعر",
-    "outcome": "wrong"
+    "text": "تسع",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000029_NO_06.wav",
     "word": "nine",
-    "text": "دسة",
-    "outcome": "wrong"
+    "text": "تسعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000028_NO_01.wav",
     "word": "nine",
-    "text": "ديس طاول؟",
-    "outcome": "wrong"
+    "text": "تسعة.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000011_NO_03.wav",
     "word": "nine",
-    "text": "تسعى",
-    "outcome": "wrong"
+    "text": "تسعة",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000007_NO_04.wav",
     "word": "nine",
-    "text": "بسع",
-    "outcome": "wrong"
+    "text": "تسع.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000009_NO_03.wav",
     "word": "nine",
-    "text": "ده سال",
-    "outcome": "wrong"
+    "text": "تسا",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000027_NO_05.wav",
     "word": "nine",
-    "text": "بساء",
-    "outcome": "wrong"
+    "text": "تسعة",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000019_NO_09.wav",
     "word": "nine",
-    "text": "ديس طالب",
-    "outcome": "wrong"
+    "text": "تسع.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/nine/00000002_NO_07.wav",
     "word": "nine",
-    "text": "تسأل",
+    "text": "تصب.",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000023_NO_05.wav",
     "word": "yes",
-    "text": "نا",
+    "text": ".",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000029_NO_02.wav",
     "word": "yes",
-    "text": "نام",
-    "outcome": "wrong"
+    "text": "نعم.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000003_NO_01.wav",
     "word": "yes",
-    "text": "نعم",
-    "outcome": "correct"
+    "text": ".",
+    "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000022_NO_06.wav",
     "word": "yes",
-    "text": "نام",
+    "text": "نوم",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000015_NO_10.wav",
     "word": "yes",
-    "text": "نا",
+    "text": ".",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000002_NO_08.wav",
     "word": "yes",
-    "text": "نعم",
+    "text": "نعم.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000005_NO_02.wav",
     "word": "yes",
-    "text": "نام",
-    "outcome": "wrong"
+    "text": "نعم.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000009_NO_01.wav",
     "word": "yes",
-    "text": "نام",
+    "text": "نام.",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000011_NO_09.wav",
     "word": "yes",
-    "text": "نا",
-    "outcome": "wrong"
+    "text": "نعم.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000013_NO_03.wav",
     "word": "yes",
-    "text": "نام",
+    "text": ".",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000014_NO_05.wav",
     "word": "yes",
-    "text": "نعم",
+    "text": "نعم.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000024_NO_05.wav",
     "word": "yes",
-    "text": "نا",
-    "outcome": "wrong"
+    "text": "نعم.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000030_NO_06.wav",
     "word": "yes",
-    "text": "نا",
-    "outcome": "wrong"
+    "text": "نعم.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000007_NO_07.wav",
@@ -7231,50 +7187,50 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000004_NO_06.wav",
     "word": "yes",
-    "text": "نا",
-    "outcome": "wrong"
+    "text": "نعم.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000008_NO_07.wav",
     "word": "yes",
-    "text": "نا",
+    "text": "نوم",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000020_NO_10.wav",
     "word": "yes",
-    "text": "نعم",
-    "outcome": "correct"
+    "text": "نوم.",
+    "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000027_NO_03.wav",
     "word": "yes",
-    "text": "نا",
+    "text": "لا",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000028_NO_01.wav",
     "word": "yes",
-    "text": "ناو",
-    "outcome": "wrong"
+    "text": "نعم.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000006_NO_04.wav",
-    "word": "yes",
-    "text": "نا",
-    "outcome": "wrong"
-   },
-   {
-    "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000026_NO_07.wav",
     "word": "yes",
     "text": "نام",
     "outcome": "wrong"
    },
    {
+    "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000026_NO_07.wav",
+    "word": "yes",
+    "text": "نعم.",
+    "outcome": "correct"
+   },
+   {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000016_NO_02.wav",
     "word": "yes",
-    "text": "نعم",
-    "outcome": "correct"
+    "text": "لعب.",
+    "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000017_NO_05.wav",
@@ -7285,7 +7241,7 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000001_NO_04.wav",
     "word": "yes",
-    "text": "نام",
+    "text": ".",
     "outcome": "wrong"
    },
    {
@@ -7297,49 +7253,49 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000012_NO_01.wav",
     "word": "yes",
-    "text": "نا",
-    "outcome": "wrong"
+    "text": "نعم.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000019_NO_04.wav",
     "word": "yes",
-    "text": "نعم",
+    "text": "نعم.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000021_NO_07.wav",
     "word": "yes",
-    "text": "نا",
-    "outcome": "wrong"
+    "text": "نعم.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000025_NO_06.wav",
     "word": "yes",
-    "text": "لا",
-    "outcome": "wrong"
+    "text": "نعم",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000010_NO_10.wav",
     "word": "yes",
-    "text": "نعم",
+    "text": "نعم.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000023_NO_03.wav",
     "word": "yes",
-    "text": "نام",
+    "text": "نوم",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000029_NO_10.wav",
     "word": "yes",
-    "text": "نعم",
+    "text": "نعم.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000003_NO_05.wav",
     "word": "yes",
-    "text": "نه",
+    "text": ".",
     "outcome": "wrong"
    },
    {
@@ -7351,20 +7307,20 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000015_NO_06.wav",
     "word": "yes",
-    "text": "نا",
-    "outcome": "wrong"
+    "text": "نعم.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000002_NO_01.wav",
     "word": "yes",
-    "text": "نعم",
+    "text": "نعم.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000005_NO_06.wav",
     "word": "yes",
-    "text": "نا",
-    "outcome": "wrong"
+    "text": "نعم.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000009_NO_03.wav",
@@ -7375,91 +7331,91 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000011_NO_04.wav",
     "word": "yes",
-    "text": "نا",
-    "outcome": "wrong"
+    "text": "نعم.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000013_NO_01.wav",
     "word": "yes",
-    "text": "نام",
+    "text": ".",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000014_NO_02.wav",
     "word": "yes",
-    "text": "نام",
-    "outcome": "wrong"
+    "text": "نعم.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000024_NO_04.wav",
     "word": "yes",
-    "text": "نا",
-    "outcome": "wrong"
+    "text": "نعم.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000030_NO_10.wav",
     "word": "yes",
-    "text": "نعم",
-    "outcome": "correct"
+    "text": "نوم.",
+    "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000007_NO_05.wav",
     "word": "yes",
-    "text": "نام",
-    "outcome": "wrong"
+    "text": "نعم.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000004_NO_03.wav",
     "word": "yes",
-    "text": "نا",
+    "text": "نوم",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000008_NO_02.wav",
     "word": "yes",
-    "text": "نعم",
-    "outcome": "correct"
+    "text": "نوم",
+    "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000020_NO_03.wav",
     "word": "yes",
-    "text": "نعم",
-    "outcome": "correct"
+    "text": ".",
+    "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000027_NO_02.wav",
-    "word": "yes",
-    "text": "نل",
-    "outcome": "wrong"
-   },
-   {
-    "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000028_NO_08.wav",
-    "word": "yes",
-    "text": "ناو",
-    "outcome": "wrong"
-   },
-   {
-    "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000006_NO_09.wav",
     "word": "yes",
     "text": "نا",
     "outcome": "wrong"
    },
    {
+    "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000028_NO_08.wav",
+    "word": "yes",
+    "text": "نوم",
+    "outcome": "wrong"
+   },
+   {
+    "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000006_NO_09.wav",
+    "word": "yes",
+    "text": "نعم.",
+    "outcome": "correct"
+   },
+   {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000026_NO_03.wav",
     "word": "yes",
-    "text": "نام",
-    "outcome": "wrong"
+    "text": "نعم.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000016_NO_05.wav",
     "word": "yes",
-    "text": "نعم",
+    "text": "نعم.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000017_NO_06.wav",
     "word": "yes",
-    "text": "نعم",
+    "text": "نعم.",
     "outcome": "correct"
    },
    {
@@ -7483,49 +7439,49 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000019_NO_03.wav",
     "word": "yes",
-    "text": "نعم",
+    "text": "نعم.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000021_NO_04.wav",
     "word": "yes",
-    "text": "now",
+    "text": "ناء.",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000025_NO_03.wav",
     "word": "yes",
-    "text": "نا",
+    "text": "ناء",
     "outcome": "wrong"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/yes/00000010_NO_06.wav",
     "word": "yes",
-    "text": "نعم",
+    "text": "نعم.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000013_NO_02.wav",
     "word": "no",
-    "text": "ل",
-    "outcome": "wrong"
+    "text": "لا.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000017_NO_06.wav",
     "word": "no",
-    "text": "لا",
+    "text": "لا.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000003_NO_04.wav",
     "word": "no",
-    "text": "لا",
+    "text": "لا.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000025_NO_09.wav",
     "word": "no",
-    "text": "لا",
+    "text": "لا.",
     "outcome": "correct"
    },
    {
@@ -7537,19 +7493,19 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000026_NO_09.wav",
     "word": "no",
-    "text": "لا",
+    "text": "لا.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000024_NO_07.wav",
     "word": "no",
-    "text": "لأ",
+    "text": "لا",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000005_NO_04.wav",
     "word": "no",
-    "text": "لا",
+    "text": "لا.",
     "outcome": "correct"
    },
    {
@@ -7561,74 +7517,74 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000018_NO_02.wav",
     "word": "no",
-    "text": "ل",
-    "outcome": "wrong"
+    "text": "لا.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000020_NO_10.wav",
     "word": "no",
-    "text": "ل",
-    "outcome": "wrong"
+    "text": "لا.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000008_NO_04.wav",
     "word": "no",
-    "text": "ل",
-    "outcome": "wrong"
+    "text": "لا.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000004_NO_06.wav",
     "word": "no",
-    "text": "لا",
+    "text": "لا.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000028_NO_10.wav",
     "word": "no",
-    "text": "لا",
+    "text": "لا.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000011_NO_07.wav",
     "word": "no",
-    "text": "لا",
+    "text": "لا.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000027_NO_08.wav",
     "word": "no",
-    "text": "لأ",
+    "text": "لا.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000014_NO_02.wav",
     "word": "no",
-    "text": "نه",
-    "outcome": "wrong"
+    "text": "لا.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000012_NO_02.wav",
     "word": "no",
-    "text": "ل",
-    "outcome": "wrong"
+    "text": "لا.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000009_NO_06.wav",
     "word": "no",
-    "text": "ل",
-    "outcome": "wrong"
+    "text": "لا.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000022_NO_04.wav",
     "word": "no",
-    "text": "لأ",
+    "text": "لا",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000021_NO_01.wav",
     "word": "no",
-    "text": "ل",
-    "outcome": "wrong"
+    "text": "لا.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000010_NO_10.wav",
@@ -7639,67 +7595,67 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000002_NO_01.wav",
     "word": "no",
-    "text": "لأ",
+    "text": "لا.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000006_NO_08.wav",
     "word": "no",
-    "text": "لا",
+    "text": "لا.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000030_NO_07.wav",
     "word": "no",
-    "text": "ل",
-    "outcome": "wrong"
+    "text": "لا.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000001_NO_05.wav",
     "word": "no",
-    "text": "ل",
-    "outcome": "wrong"
+    "text": "لا.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000007_NO_03.wav",
     "word": "no",
-    "text": "لأ",
+    "text": "لا",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000016_NO_06.wav",
     "word": "no",
-    "text": "نا",
-    "outcome": "wrong"
+    "text": "لا.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000015_NO_03.wav",
     "word": "no",
-    "text": "لأ",
+    "text": "لا",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000019_NO_10.wav",
     "word": "no",
-    "text": "لا",
+    "text": "لا.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000013_NO_05.wav",
     "word": "no",
-    "text": "لأ",
+    "text": "لا.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000017_NO_09.wav",
     "word": "no",
-    "text": "لا",
+    "text": "لا.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000003_NO_05.wav",
     "word": "no",
-    "text": "لا",
+    "text": "لا.",
     "outcome": "correct"
    },
    {
@@ -7711,7 +7667,7 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000023_NO_09.wav",
     "word": "no",
-    "text": "لا",
+    "text": "لا.",
     "outcome": "correct"
    },
    {
@@ -7723,56 +7679,56 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000024_NO_03.wav",
     "word": "no",
-    "text": "نا",
-    "outcome": "wrong"
+    "text": "لا",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000005_NO_09.wav",
     "word": "no",
-    "text": "لا",
+    "text": "لا.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000029_NO_05.wav",
     "word": "no",
-    "text": "لأ",
+    "text": "لا.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000018_NO_05.wav",
     "word": "no",
-    "text": "ل",
-    "outcome": "wrong"
+    "text": "لا.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000020_NO_02.wav",
     "word": "no",
-    "text": "ل",
-    "outcome": "wrong"
+    "text": "لا.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000008_NO_05.wav",
     "word": "no",
-    "text": "لأ",
+    "text": "لا",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000004_NO_08.wav",
     "word": "no",
-    "text": "ل",
-    "outcome": "wrong"
+    "text": "لا.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000028_NO_05.wav",
     "word": "no",
-    "text": "ل",
-    "outcome": "wrong"
+    "text": "لا",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000011_NO_02.wav",
     "word": "no",
-    "text": "ل",
-    "outcome": "wrong"
+    "text": "لا.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000027_NO_04.wav",
@@ -7783,26 +7739,26 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000014_NO_07.wav",
     "word": "no",
-    "text": "ل",
-    "outcome": "wrong"
+    "text": "لا.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000012_NO_07.wav",
     "word": "no",
-    "text": "ل",
-    "outcome": "wrong"
+    "text": "لا.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000009_NO_07.wav",
     "word": "no",
-    "text": "ل",
-    "outcome": "wrong"
+    "text": "لا.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000022_NO_02.wav",
     "word": "no",
-    "text": "ل",
-    "outcome": "wrong"
+    "text": "لا.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000021_NO_06.wav",
@@ -7813,55 +7769,55 @@
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000010_NO_01.wav",
     "word": "no",
-    "text": "نا",
-    "outcome": "wrong"
+    "text": "لا.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000002_NO_05.wav",
     "word": "no",
-    "text": "نا",
-    "outcome": "wrong"
+    "text": "لا.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000006_NO_09.wav",
     "word": "no",
-    "text": "لا",
+    "text": "لا.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000030_NO_04.wav",
     "word": "no",
-    "text": "لا",
+    "text": "لا.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000001_NO_04.wav",
     "word": "no",
-    "text": "ل",
-    "outcome": "wrong"
+    "text": "لا.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000007_NO_02.wav",
     "word": "no",
-    "text": "ل",
-    "outcome": "wrong"
+    "text": "لا.",
+    "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000016_NO_03.wav",
     "word": "no",
-    "text": "لا",
+    "text": "لا.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000015_NO_08.wav",
     "word": "no",
-    "text": "لأ",
+    "text": "لا.",
     "outcome": "correct"
    },
    {
     "file": "external/speech-commands-ar/x/abdulkaderghandoura-arabic-speech-commands-dataset-72f3438/dataset/no/00000019_NO_04.wav",
     "word": "no",
-    "text": "لأ",
+    "text": "لا.",
     "outcome": "correct"
    }
   ]

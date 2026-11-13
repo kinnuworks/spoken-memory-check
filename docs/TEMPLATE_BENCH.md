@@ -9,7 +9,7 @@ The code is `src/engine/templates.ts` (MFCC features and dynamic time warping, p
 - With one template per word, the matcher picks the right word from a 10-word list 94% of the time in Arabic and 76% in English. That is closed-set picking with no option to say "none of these".
 - A real check also has to reject words that are not on the list. With thresholds set so about 5% of non-list words get through, it accepts the right word for 70% of Arabic list words and 53% of English ones. It almost never credits the wrong list word (0.1% Arabic, 1.7% English).
 - In simulated recall recordings (several words in a row, with pauses), it found 71% of the list words said when no noise was added, 52% with background noise at 20 dB in the same room, and 30% at 10 dB. False detections were rare (0.04 to 0.12 per recording). Errors are almost all misses, so the recall score comes out too low.
-- On the Whisper bench's own Arabic clips (single digits and yes/no), Whisper or the templates got 80.4% right, against 39.6% for Whisper alone. The templates added 0.8% false credits. English has only 113 clips that qualify and is weak evidence: 85.0% against 57.5%.
+- On the Whisper bench's own Arabic clips (single digits and yes/no), Whisper or the templates got 93.1% right (speaker interval 90.7 to 95.4%), against 82.1% for the Arabic-tuned Whisper alone. With the earlier Whisper model the figures were 80.4% and 39.6%. The templates added 0.8% false credits. English has only 113 clips that qualify and is weak evidence: 85.0% against 57.5%.
 - It is fast: about 1 to 2 ms to process a one-second clip in Node, and under 3.5 ms per second of recall audio.
 
 My view: it is not strong enough to score recall on its own. Read the section on putting it in the app before deciding.
@@ -139,6 +139,8 @@ A clip counts as correct for the combination if Whisper got it right or the temp
 
 Arabic: all 720 clips qualify (30 speakers, 10 repeats each).
 
+The table below was measured with the earlier Whisper model (whisper-small, 40% alone). With the Arabic-tuned model now in the app, the overall row is: Whisper alone 82.1%, templates alone 71.0%, either 93.1% (speaker interval 90.7 to 95.4%), template false credit 0.8%. Current figures are in `src/data/template-bench.json`.
+
 | Task | Clips | Whisper alone | Templates alone | Whisper or templates | Template false credit |
 |---|---|---|---|---|---|
 | Digits (10 candidates) | 600 | 39.2% (W 35.3-43.1; B 35.0-43.3) | 71.2% (W 67.4-74.6; B 65.5-77.0) | 80.2% (W 76.8-83.2; B 75.7-84.8) | 0.8% (W 0.4-1.9; B 0.2-1.5) |
@@ -161,7 +163,7 @@ English: only clips where the same speaker has another repeat of the word qualif
 
 With the digits added as distractors for yes/no (1 to 8 candidates, mean 3.4), templates alone scored 74.0% on yes/no, the combination 76.7%, and false credits stayed at 1 of 73.
 
-What this shows: on single isolated words, the two listeners fail on different clips. Together they get about 80% of Arabic digits and yes/no right, against 40% for Whisper alone, and the template matcher adds under 1% false credits. The caveats are the same as everywhere in this doc. The templates are read repeats from the same session, recorded on the same device. These are isolated one-second words, not a recall recording. Speakers are adult volunteers, not older adults. In the real check, the templates would come from the registration trial, and the person may say the word differently in recall. The simulated recall results above show how much worse the template matcher gets in continuous speech with room noise. This combination has not been tested in that setting.
+What this shows: on single isolated words, the two listeners fail on different clips. Together they got about 80% of Arabic digits and yes/no right with the earlier model, against 40% for Whisper; with the Arabic-tuned model the union is 93%, against 82% for Whisper alone, and the template matcher adds under 1% false credits. The caveats are the same as everywhere in this doc. The templates are read repeats from the same session, recorded on the same device. These are isolated one-second words, not a recall recording. Speakers are adult volunteers, not older adults. In the real check, the templates would come from the registration trial, and the person may say the word differently in recall. The simulated recall results above show how much worse the template matcher gets in continuous speech with room noise. This combination has not been tested in that setting.
 
 ### Speed (Node 26, this Mac)
 

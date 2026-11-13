@@ -2,7 +2,7 @@ import type { Lang } from '../engine/lexicon'
 
 // Main-thread handle on the second listener (see whisper.worker.ts).
 export const SECOND_NAME = 'On-device'
-export const DOWNLOAD_MB: Record<Lang, number> = { en: 77, ar: 249 }
+export const DOWNLOAD_MB: Record<Lang, number> = { en: 77, ar: 299 }
 
 let worker: Worker | null = null
 let seq = 0

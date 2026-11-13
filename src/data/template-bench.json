@@ -649,77 +649,77 @@
  "whisperComparison": {
   "note": "Different conditions. Whisper is speaker-independent open-vocabulary transcription (any text can come out; chance is near zero); templates are speaker-dependent, closed-set over 10 list words with the speaker's own registration repeat (chance 10%). Not a like-for-like contest.",
   "whisper": {
-   "model": "onnx-community/whisper-small",
+   "model": "onnx-community/whisper-small-ar-ONNX",
    "perWord": [
     {
      "word": "zero",
      "clips": 60,
-     "correct": 0.117
+     "correct": 0.633
     },
     {
      "word": "one",
      "clips": 60,
-     "correct": 0.667
+     "correct": 0.9
     },
     {
      "word": "two",
      "clips": 60,
-     "correct": 0.333
+     "correct": 0.567
     },
     {
      "word": "three",
      "clips": 60,
-     "correct": 0.15
+     "correct": 0.967
     },
     {
      "word": "four",
      "clips": 60,
-     "correct": 0.733
+     "correct": 0.9
     },
     {
      "word": "five",
      "clips": 60,
-     "correct": 0.75
+     "correct": 0.933
     },
     {
      "word": "six",
      "clips": 60,
-     "correct": 0.583
+     "correct": 0.767
     },
     {
      "word": "seven",
      "clips": 60,
-     "correct": 0.383
+     "correct": 0.95
     },
     {
      "word": "eight",
      "clips": 60,
-     "correct": 0.183
+     "correct": 0.95
     },
     {
      "word": "nine",
      "clips": 60,
-     "correct": 0.017
+     "correct": 0.817
     }
    ],
    "task": {
     "group": "digits",
     "n": 600,
     "speakers": 30,
-    "correct": 235,
-    "wrong": 362,
-    "nothing": 3,
+    "correct": 503,
+    "wrong": 97,
+    "nothing": 0,
     "correctCi": [
-     0.3534169421067004,
-     0.4312947598012079
+     0.8067388517739089,
+     0.8656230638060083
     ],
     "wrongCi": [
-     0.5636512398653014,
-     0.6417006752379247
+     0.1343769361939917,
+     0.19326114822609106
     ],
     "nothingCi": [
-     0.0017018776450543139,
-     0.014596206457234279
+     4.336808689942018e-19,
+     0.006361701113422819
     ]
    }
   }
@@ -1015,7 +1015,7 @@
      "-5": 1
     },
     "precision": 0.99,
-    "msPerAudioSecond": 1.672
+    "msPerAudioSecond": 0.737
    },
    "sameRoom20dB": {
     "recordings": 150,
@@ -1077,7 +1077,7 @@
      "-7": 2
     },
     "precision": 0.971,
-    "msPerAudioSecond": 1.782
+    "msPerAudioSecond": 0.76
    },
    "sameRoom10dB": {
     "recordings": 150,
@@ -1139,7 +1139,7 @@
      "-1": 12
     },
     "precision": 0.931,
-    "msPerAudioSecond": 1.488
+    "msPerAudioSecond": 0.649
    },
    "quietTemplatesNoisyRecall20dB": {
     "recordings": 150,
@@ -1202,7 +1202,7 @@
      "-1": 23
     },
     "precision": 0.984,
-    "msPerAudioSecond": 1.639
+    "msPerAudioSecond": 0.729
    },
    "sameRoom20dBTwoTemplates": {
     "recordings": 150,
@@ -1264,7 +1264,7 @@
      "-5": 9
     },
     "precision": 0.987,
-    "msPerAudioSecond": 2.683
+    "msPerAudioSecond": 1.15
    }
   },
   "english": {
@@ -1329,7 +1329,7 @@
      "-7": 1
     },
     "precision": 0.99,
-    "msPerAudioSecond": 1.465
+    "msPerAudioSecond": 0.618
    },
    "sameRoom20dB": {
     "recordings": 196,
@@ -1391,7 +1391,7 @@
      "-7": 4
     },
     "precision": 0.985,
-    "msPerAudioSecond": 1.523
+    "msPerAudioSecond": 0.628
    },
    "sameRoom10dB": {
     "recordings": 196,
@@ -1453,7 +1453,7 @@
      "-1": 6
     },
     "precision": 0.989,
-    "msPerAudioSecond": 1.332
+    "msPerAudioSecond": 0.51
    },
    "quietTemplatesNoisyRecall20dB": {
     "recordings": 196,
@@ -1515,7 +1515,7 @@
      "-7": 10
     },
     "precision": 0.978,
-    "msPerAudioSecond": 1.524
+    "msPerAudioSecond": 0.654
    },
    "sameRoom20dBTwoTemplates": {
     "recordings": 156,
@@ -1577,7 +1577,7 @@
      "-7": 1
     },
     "precision": 0.99,
-    "msPerAudioSecond": 2.162
+    "msPerAudioSecond": 0.913
    }
   },
   "examples": {
@@ -1899,16 +1899,16 @@
       "max": 10
      },
      "whisperAlone": {
-      "k": 285,
+      "k": 591,
       "n": 720,
-      "rate": 0.396,
+      "rate": 0.821,
       "wilson": [
-       0.361,
-       0.432
+       0.791,
+       0.847
       ],
       "speakerBootstrap": [
-       0.367,
-       0.426
+       0.792,
+       0.85
       ],
       "speakers": 30
      },
@@ -1927,16 +1927,16 @@
       "speakers": 30
      },
      "union": {
-      "k": 579,
+      "k": 670,
       "n": 720,
-      "rate": 0.804,
+      "rate": 0.931,
       "wilson": [
-       0.774,
-       0.832
+       0.91,
+       0.947
       ],
       "speakerBootstrap": [
-       0.764,
-       0.844
+       0.907,
+       0.954
       ],
       "speakers": 30
      },
@@ -1955,34 +1955,34 @@
       "speakers": 30
      },
      "templateFalseCreditWhenWhisperWrongWord": {
-      "k": 5,
+      "k": 3,
       "n": 720,
-      "rate": 0.007,
+      "rate": 0.004,
       "wilson": [
-       0.003,
-       0.016
+       0.001,
+       0.012
       ],
       "speakerBootstrap": [
-       0.001,
-       0.013
+       0,
+       0.01
       ],
       "speakers": 30
      },
      "templateFalseCreditAmongWhisperWrongWordClips": {
-      "k": 5,
-      "n": 432,
-      "rate": 0.012,
+      "k": 3,
+      "n": 129,
+      "rate": 0.023,
       "wilson": [
-       0.005,
-       0.027
+       0.008,
+       0.066
       ],
       "speakerBootstrap": [
-       0.002,
-       0.021
+       0,
+       0.049
       ],
-      "speakers": 30
+      "speakers": 28
      },
-     "whisperWrongWordClips": 432
+     "whisperWrongWordClips": 129
     },
     "digits": {
      "clips": 600,
@@ -1993,16 +1993,16 @@
       "max": 10
      },
      "whisperAlone": {
-      "k": 235,
+      "k": 503,
       "n": 600,
-      "rate": 0.392,
+      "rate": 0.838,
       "wilson": [
-       0.353,
-       0.431
+       0.807,
+       0.866
       ],
       "speakerBootstrap": [
-       0.35,
-       0.433
+       0.802,
+       0.872
       ],
       "speakers": 30
      },
@@ -2021,16 +2021,16 @@
       "speakers": 30
      },
      "union": {
-      "k": 481,
+      "k": 563,
       "n": 600,
-      "rate": 0.802,
+      "rate": 0.938,
       "wilson": [
-       0.768,
-       0.832
+       0.916,
+       0.955
       ],
       "speakerBootstrap": [
-       0.757,
-       0.848
+       0.913,
+       0.962
       ],
       "speakers": 30
      },
@@ -2049,34 +2049,34 @@
       "speakers": 30
      },
      "templateFalseCreditWhenWhisperWrongWord": {
-      "k": 4,
+      "k": 2,
       "n": 600,
-      "rate": 0.007,
+      "rate": 0.003,
       "wilson": [
-       0.003,
-       0.017
+       0.001,
+       0.012
       ],
       "speakerBootstrap": [
-       0.002,
-       0.013
+       0,
+       0.008
       ],
       "speakers": 30
      },
      "templateFalseCreditAmongWhisperWrongWordClips": {
-      "k": 4,
-      "n": 362,
-      "rate": 0.011,
+      "k": 2,
+      "n": 97,
+      "rate": 0.021,
       "wilson": [
-       0.004,
-       0.028
+       0.006,
+       0.072
       ],
       "speakerBootstrap": [
-       0.003,
-       0.022
+       0,
+       0.049
       ],
-      "speakers": 30
+      "speakers": 27
      },
-     "whisperWrongWordClips": 362
+     "whisperWrongWordClips": 97
     },
     "yes/no": {
      "clips": 120,
@@ -2087,16 +2087,16 @@
       "max": 2
      },
      "whisperAlone": {
-      "k": 50,
+      "k": 88,
       "n": 120,
-      "rate": 0.417,
+      "rate": 0.733,
       "wilson": [
-       0.332,
-       0.506
+       0.648,
+       0.804
       ],
       "speakerBootstrap": [
-       0.325,
-       0.508
+       0.667,
+       0.808
       ],
       "speakers": 30
      },
@@ -2115,16 +2115,16 @@
       "speakers": 30
      },
      "union": {
-      "k": 98,
+      "k": 107,
       "n": 120,
-      "rate": 0.817,
+      "rate": 0.892,
       "wilson": [
-       0.738,
-       0.876
+       0.823,
+       0.936
       ],
       "speakerBootstrap": [
-       0.75,
-       0.875
+       0.833,
+       0.95
       ],
       "speakers": 30
      },
@@ -2158,19 +2158,19 @@
      },
      "templateFalseCreditAmongWhisperWrongWordClips": {
       "k": 1,
-      "n": 70,
-      "rate": 0.014,
+      "n": 32,
+      "rate": 0.031,
       "wilson": [
-       0.003,
-       0.077
+       0.006,
+       0.157
       ],
       "speakerBootstrap": [
        0,
-       0.045
+       0.103
       ],
-      "speakers": 29
+      "speakers": 22
      },
-     "whisperWrongWordClips": 70
+     "whisperWrongWordClips": 32
     },
     "testSpeakersOnly": {
      "clips": 360,
@@ -2181,16 +2181,16 @@
       "max": 10
      },
      "whisperAlone": {
-      "k": 144,
+      "k": 296,
       "n": 360,
-      "rate": 0.4,
+      "rate": 0.822,
       "wilson": [
-       0.351,
-       0.451
+       0.779,
+       0.858
       ],
       "speakerBootstrap": [
-       0.364,
-       0.439
+       0.789,
+       0.853
       ],
       "speakers": 15
      },
@@ -2209,16 +2209,16 @@
       "speakers": 15
      },
      "union": {
-      "k": 289,
+      "k": 331,
       "n": 360,
-      "rate": 0.803,
+      "rate": 0.919,
       "wilson": [
-       0.759,
-       0.841
+       0.887,
+       0.943
       ],
       "speakerBootstrap": [
-       0.744,
-       0.853
+       0.889,
+       0.95
       ],
       "speakers": 15
      },
@@ -2237,34 +2237,34 @@
       "speakers": 15
      },
      "templateFalseCreditWhenWhisperWrongWord": {
-      "k": 2,
+      "k": 1,
       "n": 360,
-      "rate": 0.006,
+      "rate": 0.003,
       "wilson": [
-       0.002,
-       0.02
+       0,
+       0.016
       ],
       "speakerBootstrap": [
        0,
-       0.014
+       0.008
       ],
       "speakers": 15
      },
      "templateFalseCreditAmongWhisperWrongWordClips": {
-      "k": 2,
-      "n": 213,
-      "rate": 0.009,
+      "k": 1,
+      "n": 64,
+      "rate": 0.016,
       "wilson": [
        0.003,
-       0.034
+       0.083
       ],
       "speakerBootstrap": [
        0,
-       0.023
+       0.049
       ],
       "speakers": 15
      },
-     "whisperWrongWordClips": 213
+     "whisperWrongWordClips": 64
     }
    },
    "ynWithDigits": {
@@ -2278,16 +2278,16 @@
       "max": 12
      },
      "whisperAlone": {
-      "k": 285,
+      "k": 591,
       "n": 720,
-      "rate": 0.396,
+      "rate": 0.821,
       "wilson": [
-       0.361,
-       0.432
+       0.791,
+       0.847
       ],
       "speakerBootstrap": [
-       0.367,
-       0.426
+       0.792,
+       0.85
       ],
       "speakers": 30
      },
@@ -2306,16 +2306,16 @@
       "speakers": 30
      },
      "union": {
-      "k": 575,
+      "k": 672,
       "n": 720,
-      "rate": 0.799,
+      "rate": 0.933,
       "wilson": [
-       0.768,
-       0.826
+       0.913,
+       0.949
       ],
       "speakerBootstrap": [
-       0.758,
-       0.842
+       0.911,
+       0.956
       ],
       "speakers": 30
      },
@@ -2334,34 +2334,34 @@
       "speakers": 30
      },
      "templateFalseCreditWhenWhisperWrongWord": {
-      "k": 4,
+      "k": 2,
       "n": 720,
-      "rate": 0.006,
+      "rate": 0.003,
       "wilson": [
-       0.002,
-       0.014
+       0.001,
+       0.01
       ],
       "speakerBootstrap": [
-       0.001,
-       0.011
+       0,
+       0.007
       ],
       "speakers": 30
      },
      "templateFalseCreditAmongWhisperWrongWordClips": {
-      "k": 4,
-      "n": 432,
-      "rate": 0.009,
+      "k": 2,
+      "n": 129,
+      "rate": 0.016,
       "wilson": [
        0.004,
-       0.024
+       0.055
       ],
       "speakerBootstrap": [
-       0.002,
-       0.018
+       0,
+       0.037
       ],
-      "speakers": 30
+      "speakers": 28
      },
-     "whisperWrongWordClips": 432
+     "whisperWrongWordClips": 129
     },
     "digits": {
      "clips": 600,
@@ -2372,16 +2372,16 @@
       "max": 10
      },
      "whisperAlone": {
-      "k": 235,
+      "k": 503,
       "n": 600,
-      "rate": 0.392,
+      "rate": 0.838,
       "wilson": [
-       0.353,
-       0.431
+       0.807,
+       0.866
       ],
       "speakerBootstrap": [
-       0.35,
-       0.433
+       0.802,
+       0.872
       ],
       "speakers": 30
      },
@@ -2400,16 +2400,16 @@
       "speakers": 30
      },
      "union": {
-      "k": 481,
+      "k": 563,
       "n": 600,
-      "rate": 0.802,
+      "rate": 0.938,
       "wilson": [
-       0.768,
-       0.832
+       0.916,
+       0.955
       ],
       "speakerBootstrap": [
-       0.757,
-       0.848
+       0.913,
+       0.962
       ],
       "speakers": 30
      },
@@ -2428,34 +2428,34 @@
       "speakers": 30
      },
      "templateFalseCreditWhenWhisperWrongWord": {
-      "k": 4,
+      "k": 2,
       "n": 600,
-      "rate": 0.007,
+      "rate": 0.003,
       "wilson": [
-       0.003,
-       0.017
+       0.001,
+       0.012
       ],
       "speakerBootstrap": [
-       0.002,
-       0.013
+       0,
+       0.008
       ],
       "speakers": 30
      },
      "templateFalseCreditAmongWhisperWrongWordClips": {
-      "k": 4,
-      "n": 362,
-      "rate": 0.011,
+      "k": 2,
+      "n": 97,
+      "rate": 0.021,
       "wilson": [
-       0.004,
-       0.028
+       0.006,
+       0.072
       ],
       "speakerBootstrap": [
-       0.003,
-       0.022
+       0,
+       0.049
       ],
-      "speakers": 30
+      "speakers": 27
      },
-     "whisperWrongWordClips": 362
+     "whisperWrongWordClips": 97
     },
     "yes/no": {
      "clips": 120,
@@ -2466,16 +2466,16 @@
       "max": 12
      },
      "whisperAlone": {
-      "k": 50,
+      "k": 88,
       "n": 120,
-      "rate": 0.417,
+      "rate": 0.733,
       "wilson": [
-       0.332,
-       0.506
+       0.648,
+       0.804
       ],
       "speakerBootstrap": [
-       0.325,
-       0.508
+       0.667,
+       0.808
       ],
       "speakers": 30
      },
@@ -2494,16 +2494,16 @@
       "speakers": 30
      },
      "union": {
-      "k": 94,
+      "k": 109,
       "n": 120,
-      "rate": 0.783,
+      "rate": 0.908,
       "wilson": [
-       0.701,
-       0.848
+       0.843,
+       0.948
       ],
       "speakerBootstrap": [
-       0.708,
-       0.85
+       0.867,
+       0.95
       ],
       "speakers": 30
      },
@@ -2537,19 +2537,19 @@
      },
      "templateFalseCreditAmongWhisperWrongWordClips": {
       "k": 0,
-      "n": 70,
+      "n": 32,
       "rate": 0,
       "wilson": [
        0,
-       0.052
+       0.107
       ],
       "speakerBootstrap": [
        0,
        0
       ],
-      "speakers": 29
+      "speakers": 22
      },
-     "whisperWrongWordClips": 70
+     "whisperWrongWordClips": 32
     },
     "testSpeakersOnly": {
      "clips": 360,
@@ -2560,16 +2560,16 @@
       "max": 12
      },
      "whisperAlone": {
-      "k": 144,
+      "k": 296,
       "n": 360,
-      "rate": 0.4,
+      "rate": 0.822,
       "wilson": [
-       0.351,
-       0.451
+       0.779,
+       0.858
       ],
       "speakerBootstrap": [
-       0.364,
-       0.439
+       0.789,
+       0.853
       ],
       "speakers": 15
      },
@@ -2588,16 +2588,16 @@
       "speakers": 15
      },
      "union": {
-      "k": 288,
+      "k": 335,
       "n": 360,
-      "rate": 0.8,
+      "rate": 0.931,
       "wilson": [
-       0.756,
-       0.838
+       0.899,
+       0.953
       ],
       "speakerBootstrap": [
-       0.739,
-       0.856
+       0.903,
+       0.961
       ],
       "speakers": 15
      },
@@ -2616,34 +2616,34 @@
       "speakers": 15
      },
      "templateFalseCreditWhenWhisperWrongWord": {
-      "k": 1,
+      "k": 0,
       "n": 360,
-      "rate": 0.003,
+      "rate": 0,
       "wilson": [
        0,
-       0.016
+       0.011
       ],
       "speakerBootstrap": [
        0,
-       0.008
+       0
       ],
       "speakers": 15
      },
      "templateFalseCreditAmongWhisperWrongWordClips": {
-      "k": 1,
-      "n": 213,
-      "rate": 0.005,
+      "k": 0,
+      "n": 64,
+      "rate": 0,
       "wilson": [
-       0.001,
-       0.026
+       0,
+       0.057
       ],
       "speakerBootstrap": [
        0,
-       0.014
+       0
       ],
       "speakers": 15
      },
-     "whisperWrongWordClips": 213
+     "whisperWrongWordClips": 64
     }
    },
    "note": "Thresholds were tuned on 15 of these 30 speakers; testSpeakersOnly excludes them."
@@ -3225,9 +3225,9 @@
  },
  "runtime": {
   "node": "v26.12.0",
-  "featureMsPerClip": 1.429,
-  "classifyMsPerClipAgainst10Templates": 0.841,
+  "featureMsPerClip": 0.584,
+  "classifyMsPerClipAgainst10Templates": 0.337,
   "clipsFeaturised": 11848,
-  "totalSeconds": 110
+  "totalSeconds": 47
  }
 }
