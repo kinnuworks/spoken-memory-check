@@ -6,6 +6,18 @@ Why speech: many older adults in the Gulf had little schooling, and a test that 
 
 A prototype for Abu Dhabi's adult screening programme, built for Statement 8 of the Future Health challenge, "Protecting Brain Health Earlier". It does not diagnose. The people and histories in the demo are synthetic and labelled.
 
+## For judges: what is measured
+
+| | |
+|---|---|
+| Arabic words heard right | 93% of 720 real single words from 30 adults, with the speaker's own voice as the answer key (82% for the on-device model alone; 40% before tuning). Read words, no older or Gulf speakers yet. `docs/TEMPLATE_BENCH.md` |
+| Where it fits | The memory step of Thiqa's "Comprehensive hearing and dementia screening" packages 52-45 and 52-46 (IFHAS 3.0, Addendum 06), which name no memory tool. `docs/COMMERCIAL.md` |
+| Hand-off | FHIR R4 with 0 errors from the official HL7 validator 7.0.5; referral as the HL7 v2 REF message with SNOMED specialty that Malaffi asks for (Circular 2026/144). `docs/FHIR_VALIDATION.md` |
+| Fairness | Real US survey data: a fixed animal cutoff flags 48% of healthy adults with under 9 years of school against 16% of graduates. `analysis/` |
+| Safety rule | Simulated: 3.4% false alarms a year; 85% of people losing 2 points a check flagged within the year. `scripts/benchmark.ts` |
+| Quality | 105 automated tests; 0 accessibility violations in 48 axe checks. `docs/ACCESSIBILITY.md` |
+| Rules | Compliance map, intended use, risk register. `docs/COMPLIANCE.md`, `docs/INTENDED_USE.md`, `docs/RISK_REGISTER.md` |
+
 ## Try it in 30 seconds
 
 Live: https://spoken-memory-check.vercel.app (no sign-up)

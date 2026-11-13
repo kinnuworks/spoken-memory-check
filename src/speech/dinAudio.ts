@@ -45,7 +45,7 @@ export async function prepare(lang: 'en' | 'ar'): Promise<void> {
 export function play(lang: 'en' | 'ar', digits: number[], snr: number, noiseLevel = 0.5): Promise<void> {
   const c = ctx!
   const t0 = c.currentTime + 0.05
-  const lead = 0.5, gap = 0.25
+  const lead = 0.35, gap = 0.18
   const bufs = digits.map((d) => cache.get(`${lang}${d}`)!)
   const speechLen = bufs.reduce((a, b) => a + b.duration, 0) + gap * (bufs.length - 1)
   const total = lead * 2 + speechLen

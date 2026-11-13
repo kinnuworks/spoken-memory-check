@@ -206,6 +206,7 @@ export default function Check() {
       {stage === 'done' && last && (
         <>
           <p>Thank you. {last.low === null ? 'This check could not be scored, so it does not count. In real use it is repeated another day with a different list.' : `That was check ${history.length}.`}</p>
+          <p className="note">{loadConsent().sharePhysician ? 'You agreed that your physician is told if your scores stay lower than usual. Nothing is sent after a single check.' : 'You have not agreed to share with your physician, so nothing from this check goes to a physician. You can change this on your choices screen.'}</p>
           <div className="card">
             <p><strong>What we heard</strong> <span className="tag">shown to you as a tester</span></p>
             <table><tbody>

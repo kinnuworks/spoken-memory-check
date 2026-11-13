@@ -62,7 +62,7 @@ export default function Hearing() {
       setResult(r)
       setStage('result')
     } else {
-      window.setTimeout(() => void next(nextSnr(snr, ok)), 450)
+      window.setTimeout(() => void next(nextSnr(snr, ok)), 250)
     }
   }
 
