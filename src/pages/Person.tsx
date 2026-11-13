@@ -58,10 +58,11 @@ export default function Person() {
       <label className="choice"><input className="switch" type="checkbox" checked={consent.takeChecks} onChange={(e) => set({ takeChecks: e.target.checked })} /><span>Take memory checks at home and keep my scores on this device</span></label>
       <label className="choice"><input className="switch" type="checkbox" checked={consent.sharePhysician} onChange={(e) => set({ sharePhysician: e.target.checked })} /><span>If my scores stay lower than usual, tell the physician at my screening clinic</span></label>
       <label className="choice"><input className="switch" type="checkbox" disabled={!consent.sharePhysician} checked={consent.keepClips} onChange={(e) => set({ keepClips: e.target.checked })} /><span>Let that physician listen to a recording when the check was unsure what I said</span></label>
+      <label className="choice"><input className="switch" type="checkbox" checked={consent.cloudListener} onChange={(e) => set({ cloudListener: e.target.checked })} /><span>Let a speech service hosted in the UAE also hear my checks, which has a Gulf Arabic model (not yet measured in this check). Recordings leave this device for this and are not kept.</span></label>
       {consent.updated && (
         <div className="card">
           <strong>Your receipt</strong>
-          <p className="muted">Last changed {consent.updated.slice(0, 16).replace('T', ' ')} UTC. Home checks: {consent.takeChecks ? 'yes' : 'no'}. Tell my physician: {consent.sharePhysician ? 'yes' : 'no'}. Recordings for my physician: {consent.keepClips ? 'yes' : 'no'}. Kept on this device in this prototype.</p>
+          <p className="muted">Last changed {consent.updated.slice(0, 16).replace('T', ' ')} UTC. Home checks: {consent.takeChecks ? 'yes' : 'no'}. Tell my physician: {consent.sharePhysician ? 'yes' : 'no'}. Recordings for my physician: {consent.keepClips ? 'yes' : 'no'}. UAE speech service: {consent.cloudListener ? 'yes' : 'no'}. Kept on this device in this prototype.</p>
         </div>
       )}
       <div className="stack"><Link className="btn" to={`/year/${person.id}`}>See what the rule said about these checks</Link></div>

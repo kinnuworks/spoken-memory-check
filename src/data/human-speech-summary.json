@@ -1,0 +1,17 @@
+{
+ "en": {
+  "overall": {
+   "n": 387,
+   "speakers": 168,
+   "correct": 240
+  }
+ },
+ "ar": {
+  "overall": {
+   "n": 720,
+   "speakers": 30,
+   "correct": 285
+  }
+ },
+ "generated": "2026-11-11"
+}

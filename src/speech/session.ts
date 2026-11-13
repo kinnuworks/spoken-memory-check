@@ -2,6 +2,7 @@ import type { Lang } from '../engine/lexicon'
 import { level, startCapture } from './capture'
 import { browserRecogniser, type ListenControl } from './recogniser'
 import { SECOND_NAME, secondLoading, secondSupported, transcribeSecond } from './second'
+import { CLOUD_NAME, transcribeCloud } from './cloud'
 
 export interface Heard {
   /** What the browser's recogniser heard, available as soon as listening ends. */
@@ -15,9 +16,10 @@ export interface Heard {
  * and given to the on-device listener afterwards. On phones the two often cannot share the
  * microphone, so a silent recording simply means one listener, which the screen states.
  */
-export async function listenTask(lang: Lang, ms: number, onPartial: (text: string) => void, control?: ListenControl, useSecond = true): Promise<Heard> {
+export async function listenTask(lang: Lang, ms: number, onPartial: (text: string) => void, control?: ListenControl, useSecond = true, useCloud = false): Promise<Heard> {
   const wantSecond = useSecond && secondSupported() && secondLoading(lang)
-  const capture = wantSecond ? await startCapture() : null
+  const wantCloud = useSecond && useCloud
+  const capture = wantSecond || wantCloud ? await startCapture() : null
   let text: string
   try {
     text = await browserRecogniser.listen(lang, ms, onPartial, control)
@@ -29,8 +31,12 @@ export async function listenTask(lang: Lang, ms: number, onPartial: (text: strin
   const both = (async () => {
     const clip = capture ? await capture.stop() : null
     if (!clip || level(clip) < 0.002) return first
-    const second = await transcribeSecond(clip, lang)
-    return second === null ? first : { ...first, [SECOND_NAME]: second }
+    // The on-device and cloud listeners work through the same recording at the same time.
+    const [second, cloud] = await Promise.all([
+      wantSecond ? transcribeSecond(clip, lang) : Promise.resolve(null),
+      wantCloud ? transcribeCloud(clip, lang) : Promise.resolve(null),
+    ])
+    return { ...first, ...(second === null ? {} : { [SECOND_NAME]: second }), ...(cloud === null ? {} : { [CLOUD_NAME]: cloud }) }
   })()
   return { first, both }
 }

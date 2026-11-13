@@ -1,8 +1,8 @@
 // Consent is asked for in separate parts, each off until the person turns it on, and each
 // can be withdrawn at any time. The receipt records what was agreed and when.
-export interface Consent { takeChecks: boolean; sharePhysician: boolean; keepClips: boolean; updated: string | null }
+export interface Consent { takeChecks: boolean; sharePhysician: boolean; keepClips: boolean; cloudListener: boolean; updated: string | null }
 
-export const NO_CONSENT: Consent = { takeChecks: false, sharePhysician: false, keepClips: false, updated: null }
+export const NO_CONSENT: Consent = { takeChecks: false, sharePhysician: false, keepClips: false, cloudListener: false, updated: null }
 const KEY = 'smc.consent.v1'
 
 export function loadConsent(): Consent {

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import data from '../data/benchmark.json'
-import speech from '../data/human-speech-bench.json'
+import speech from '../data/human-speech-summary.json'
 import { lostSignals } from '../engine/signals'
 import { evaluate } from '../engine/change'
 import { PERSONAS } from '../engine/histories'
@@ -337,6 +337,47 @@ export default function Home() {
             </div>
           </div>
           <p className="center-link reveal"><Link className="btn btn-outline" to="/benchmark">How the flag was tested<Arrow /></Link></p>
+        </div>
+      </section>
+
+      {/* Path to a pilot */}
+      <section className="section">
+        <div className="container">
+          <div className="section-head reveal">
+            <span className="eyebrow"><span className="dot" />Path to a pilot</span>
+            <h2>Twelve months, one screening provider, two arms.</h2>
+            <p className="lead">A feasibility pilot after ethics approval. It measures whether people finish a baseline and whether approved packets reach a specialist on time. True decline is too rare at 50 to 64 for one site to measure detection, so the pilot does not claim to.</p>
+          </div>
+          <div className="pilot reveal">
+            <div className="pilot__col">
+              <p className="eyebrow">Design</p>
+              <ul className="checks">
+                <li>Members aged 50 to 64, randomised at the screening visit</li>
+                <li>Usual care, or usual care plus a check about every six weeks</li>
+                <li>250 per arm, sized on baseline completion (55% expected, within 7 points)</li>
+                <li>Agreement with a human listener and retest, by language, age and schooling</li>
+              </ul>
+            </div>
+            <div className="pilot__col">
+              <p className="eyebrow">Stop and review if</p>
+              <ul className="checks">
+                <li>Physicians dismiss more than half of packets over three months</li>
+                <li>More than one distress complaint per 100 members</li>
+                <li>Any serious event where a home check delayed care</li>
+                <li>More than 20% of checks cannot be scored</li>
+              </ul>
+            </div>
+            <div className="pilot__col">
+              <p className="eyebrow">Cost lines, estimated before measuring</p>
+              <ul className="checks">
+                <li>On-device listener: nothing per check</li>
+                <li>Physician: about 10 minutes a packet, about 8 hours per 1,000 members a year (simulated packet rate)</li>
+                <li>Hosting and any cloud listener in a UAE region</li>
+                <li>Paid first by the screening programme; then insurers and employers for residents outside it</li>
+              </ul>
+            </div>
+          </div>
+          <p className="pilot-note reveal">Regulatory route: the pilot runs as research under ethics approval; registration as medical-device software would follow on its evidence. Cloud processing of health data needs the Department of Health's approval. No price is quoted before the cost lines are measured.</p>
         </div>
       </section>
 

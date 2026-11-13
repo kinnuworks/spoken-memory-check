@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { evaluate } from '../engine/change'
 import { ANIMALS, ARABIC_REVIEWED, SOUND_CHECK_WORDS, WORD_LISTS, type Lang } from '../engine/lexicon'
@@ -8,6 +8,8 @@ import { clearChecks, loadChecks, saveCheck, type StoredCheck } from '../engine/
 import { browserSpeechAvailable, type ListenControl } from '../speech/recogniser'
 import { DOWNLOAD_MB, loadSecond, secondLoading, secondSupported } from '../speech/second'
 import { listenTask, type Heard } from '../speech/session'
+import { cloudAvailable } from '../speech/cloud'
+import { loadConsent, saveConsent } from '../engine/consent'
 import { pause, speak, speakList } from '../speech/speak'
 import TrajectoryChart from './TrajectoryChart'
 
@@ -48,6 +50,10 @@ export default function Check() {
   const [last, setLast] = useState<StoredCheck | null>(null)
   const control = useRef<ListenControl>({})
   const [percent, setPercent] = useState<number | null>(null)
+  const [cloudReady, setCloudReady] = useState(false)
+  const [cloudOn, setCloudOn] = useState(loadConsent().cloudListener)
+  useEffect(() => { void cloudAvailable().then(setCloudReady) }, [])
+  const useCloud = cloudReady && cloudOn
   const listIndex = history.length % WORD_LISTS[lang].length
   const words = WORD_LISTS[lang][listIndex]
 
@@ -60,7 +66,7 @@ export default function Check() {
   async function listen(ms: number, rows: string[][], show = true, useSecond = true): Promise<Heard> {
     control.current = {}
     setLive(null)
-    const heard = await listenTask(lang, ms, (t) => { if (show) setLive(scoreTask({ Browser: t }, rows, lang)) }, control.current, useSecond)
+    const heard = await listenTask(lang, ms, (t) => { if (show) setLive(scoreTask({ Browser: t }, rows, lang)) }, control.current, useSecond, useCloud)
     if (show) setLive(scoreTask(heard.first, rows, lang))
     return heard
   }
@@ -146,7 +152,8 @@ export default function Check() {
             <button className="seg" lang="ar" onClick={() => setLang('ar')} aria-pressed={lang === 'ar'}>العربية</button>
           </div>
           {lang === 'ar' && !ARABIC_REVIEWED && <p className="note">The Arabic wording and word lists are a draft, not yet reviewed by a native Gulf Arabic speaker, and the voice is the device's synthetic one.</p>}
-          <p><label><input type="checkbox" checked={offDay} onChange={(e) => setOffDay(e.target.checked)} /> I slept badly or feel unwell today</label></p>
+          <label className="choice"><input className="switch" type="checkbox" checked={offDay} onChange={(e) => setOffDay(e.target.checked)} /><span>I slept badly or feel unwell today</span></label>
+          {cloudReady && <label className="choice"><input className="switch" type="checkbox" checked={cloudOn} onChange={(e) => { setCloudOn(e.target.checked); saveConsent({ ...loadConsent(), cloudListener: e.target.checked }) }} /><span>Also let a speech service hosted in the UAE hear this check. It has a Gulf Arabic model; how well it hears Gulf speakers in this check has not been measured yet. Your recording leaves this device for this, is not kept, and you can turn this off at any time.</span></label>}
           <p className="note">Two listeners score what you say: your browser's own speech service, which may send audio to the browser's maker, and an open speech model that runs on this device and sends your recording nowhere{secondSupported() ? ` (one-time download of about ${DOWNLOAD_MB[lang]} MB from huggingface.co)` : ' (not available on this device, so one listener will score)'}. Prompts use your device's voice. Your scores stay on this device. This is a prototype and does not diagnose.</p>
           {lang === 'ar' && secondSupported() && percent === null && !secondLoading('ar') && <p><button className="small" onClick={startSecond}>Add the second listener for Arabic ({DOWNLOAD_MB.ar} MB)</button></p>}
           <div className="stack"><button className="primary" onClick={run}>Start the check</button></div>
@@ -163,7 +170,7 @@ export default function Check() {
 
       {percent !== null && <p className="muted">Second listener: {percent}%</p>}
       {stage === 'function' && <p dir={dir}>{T[lang].fn}</p>}
-      {stage === 'scoring' && <p className="muted">The second listener is going through your recordings on this device. This can take up to a minute.</p>}
+      {stage === 'scoring' && <p className="listening"><i />{useCloud ? 'The on-device and UAE listeners are going through your recordings.' : 'The second listener is going through your recordings on this device.'} This can take up to a minute.</p>}
       {stage === 'sound' && <><p className="prompt-words" dir={dir}>{SOUND_CHECK_WORDS[lang].join(lang === 'ar' ? '، ' : ', ')}</p><p className="listening"><i />Listening…</p></>}
       {stage === 'hear-list' && <p className="muted">Reading the words aloud. Nothing is shown on screen.</p>}
       {stage === 'animals' && <div className="chips" dir={dir}>{live?.items.map((it) => <span key={it.row} className="chip">{it.label}</span>)}</div>}

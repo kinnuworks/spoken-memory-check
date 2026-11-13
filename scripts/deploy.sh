@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Builds the app and deploys only the built files to Vercel.
-# Source files never leave this machine; only dist/ is uploaded.
+# Builds the app and deploys the built files plus the api/ function to Vercel.
+# Other source files never leave this machine.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
@@ -10,6 +10,10 @@ out="${DEPLOY_DIR:-$(mktemp -d)}"
 rm -rf "$out/site"
 mkdir -p "$out/site"
 cp -R dist/. "$out/site/"
+# The token function for the optional UAE speech listener (no audio passes through it).
+mkdir -p "$out/site/api"
+cp api/*.js "$out/site/api/"
+echo '{ "private": true, "type": "module" }' > "$out/site/package.json"
 
 # Cross-origin isolation lets the on-device speech model use several threads.
 cat > "$out/site/vercel.json" <<'JSON'
