@@ -7,6 +7,10 @@ export interface StoredCheck extends Check {
   list: number
   parts: { immediate: [number, number]; delayed: [number, number]; animals: [number, number] }
   recognisers: string[]
+  /** App and word-list versions, and what each listener heard per task, so a score can be traced. */
+  appVersion?: string
+  listVersion?: string
+  heard?: Record<string, Record<string, string>>
 }
 
 const KEY = 'smc.checks.v1'

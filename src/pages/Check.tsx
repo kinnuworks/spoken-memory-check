@@ -10,6 +10,7 @@ import { DOWNLOAD_MB, loadSecond, secondLoading, secondSupported } from '../spee
 import { listenTask, type Heard } from '../speech/session'
 import { cloudAvailable } from '../speech/cloud'
 import { loadConsent, saveConsent } from '../engine/consent'
+import { APP_VERSION } from '../engine/audit'
 import { pause, speak, speakList } from '../speech/speak'
 import TrajectoryChart from './TrajectoryChart'
 
@@ -52,6 +53,7 @@ export default function Check() {
   const [percent, setPercent] = useState<number | null>(null)
   const [cloudReady, setCloudReady] = useState(false)
   const [cloudOn, setCloudOn] = useState(loadConsent().cloudListener)
+  const [agreed, setAgreed] = useState(loadConsent().takeChecks)
   useEffect(() => { void cloudAvailable().then(setCloudReady) }, [])
   const useCloud = cloudReady && cloudOn
   const listIndex = history.length % WORD_LISTS[lang].length
@@ -125,6 +127,7 @@ export default function Check() {
         offDay, lang, list: listIndex, ...(functionChange === true ? { functionChange } : {}),
         parts: { immediate: [immediate.low, immediate.high], delayed: [delayed.low, delayed.high], animals: [animals.low, animals.high] },
         recognisers: Object.keys(ani),
+        appVersion: APP_VERSION, listVersion: `${lang}-${listIndex + 1}`, heard: { immediate: imm, animals: ani, delayed: del },
       }
       saveCheck(check)
       setLast(check)
@@ -156,7 +159,8 @@ export default function Check() {
           {cloudReady && <label className="choice"><input className="switch" type="checkbox" checked={cloudOn} onChange={(e) => { setCloudOn(e.target.checked); saveConsent({ ...loadConsent(), cloudListener: e.target.checked }) }} /><span>Also let a speech service hosted in the UAE hear this check. It has a Gulf Arabic model; how well it hears Gulf speakers in this check has not been measured yet. Your recording leaves this device for this, is not kept, and you can turn this off at any time.</span></label>}
           <p className="note">Two listeners score what you say: your browser's own speech service, which may send audio to the browser's maker, and an open speech model that runs on this device and sends your recording nowhere{secondSupported() ? ` (one-time download of about ${DOWNLOAD_MB[lang]} MB from huggingface.co)` : ' (not available on this device, so one listener will score)'}. Prompts use your device's voice. Your scores stay on this device. This is a prototype and does not diagnose.</p>
           {lang === 'ar' && secondSupported() && percent === null && !secondLoading('ar') && <p><button className="small" onClick={startSecond}>Add the second listener for Arabic ({DOWNLOAD_MB.ar} MB)</button></p>}
-          <div className="stack"><button className="primary" onClick={run}>Start the check</button></div>
+          <label className="choice"><input className="switch" type="checkbox" checked={agreed} onChange={(e) => { setAgreed(e.target.checked); saveConsent({ ...loadConsent(), takeChecks: e.target.checked }) }} /><span>I agree to take memory checks at home and keep my scores on this device. I can turn this off and delete my checks at any time.</span></label>
+          <div className="stack"><button className="primary" disabled={!agreed} onClick={run}>Start the check</button>{!agreed && <p className="muted">Turn on the agreement above to start.</p>}</div>
           {history.length > 0 && (
             <>
               <h2>Your checks on this device</h2>
@@ -169,11 +173,11 @@ export default function Check() {
       )}
 
       {percent !== null && <p className="muted">Second listener: {percent}%</p>}
-      {stage === 'function' && <p dir={dir}>{T[lang].fn}</p>}
+      {stage === 'function' && <p lang={lang} dir={dir}>{T[lang].fn}</p>}
       {stage === 'scoring' && <p className="listening"><i />{useCloud ? 'The on-device and UAE listeners are going through your recordings.' : 'The second listener is going through your recordings on this device.'} This can take up to a minute.</p>}
-      {stage === 'sound' && <><p className="prompt-words" dir={dir}>{SOUND_CHECK_WORDS[lang].join(lang === 'ar' ? '، ' : ', ')}</p><p className="listening"><i />Listening…</p></>}
+      {stage === 'sound' && <><p className="prompt-words" lang={lang} dir={dir}>{SOUND_CHECK_WORDS[lang].join(lang === 'ar' ? '، ' : ', ')}</p><p className="listening"><i />Listening…</p></>}
       {stage === 'hear-list' && <p className="muted">Reading the words aloud. Nothing is shown on screen.</p>}
-      {stage === 'animals' && <div className="chips" dir={dir}>{live?.items.map((it) => <span key={it.row} className="chip">{it.label}</span>)}</div>}
+      {stage === 'animals' && <div className="chips" lang={lang} dir={dir}>{live?.items.map((it) => <span key={it.row} className="chip">{it.label}</span>)}</div>}
       {listening && (
         <>
           <p className="listening"><i />Listening…</p>
@@ -200,7 +204,7 @@ export default function Check() {
               <tr><td>Everyday tasks harder?</td><td>{last.functionChange ? 'Yes: this goes to the physician whatever the scores say' : 'No, or unclear'}</td></tr>
             </tbody></table>
             <p className="muted">{last.recognisers.length > 1 ? 'Both listeners scored this check, so each figure is a range where they disagreed.' : 'One listener scored this check, so there are no ranges.'}</p>
-            <p className="muted">The words were list {last.list + 1}: <span dir={dir}>{WORD_LISTS[last.lang][last.list].join(lang === 'ar' ? '، ' : ', ')}</span>. A patient sees only "Check received" and their trend.</p>
+            <p className="muted">The words were list {last.list + 1}: <span lang={last.lang} dir={last.lang === 'ar' ? 'rtl' : 'ltr'}>{WORD_LISTS[last.lang][last.list].join(lang === 'ar' ? '، ' : ', ')}</span>. A patient sees only "Check received" and their trend.</p>
           </div>
           <div className="card"><TrajectoryChart checks={history} traj={traj} /></div>
           <p>{history.filter((c) => c.low !== null).length < 3 ? 'Three checks within two weeks set your baseline. One score on its own is not compared with anything.' : 'Your baseline is set. Later checks are compared with it.'}</p>

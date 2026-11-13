@@ -28,16 +28,16 @@ export default function Benchmark() {
       </div>
 
       <h3>Confusion matrix, simulated year, {b2.members.toLocaleString()} members</h3>
-      <div className="scroll"><table>
-        <thead><tr><th></th><th>Packet sent</th><th>No packet</th></tr></thead>
+      <div className="scroll" tabIndex={0} role="region" aria-label="Confusion matrix"><table>
+        <thead><tr><th><span className="sr-only">Group</span></th><th>Packet sent</th><th>No packet</th></tr></thead>
         <tbody>
-          <tr><td>In real decline</td><td>{b2.tp.toLocaleString()}</td><td>{b2.fn.toLocaleString()}</td></tr>
-          <tr><td>Stable</td><td>{b2.fp.toLocaleString()}</td><td>{b2.tn.toLocaleString()}</td></tr>
+          <tr><th scope="row">In real decline</th><td>{b2.tp.toLocaleString()}</td><td>{b2.fn.toLocaleString()}</td></tr>
+          <tr><th scope="row">Stable</th><td>{b2.fp.toLocaleString()}</td><td>{b2.tn.toLocaleString()}</td></tr>
         </tbody>
       </table></div>
 
       <h3>Workload for physicians, by how common real decline is</h3>
-      <div className="scroll"><table>
+      <div className="scroll" tabIndex={0} role="region" aria-label="Workload for physicians"><table>
         <thead><tr><th>Members in real decline (assumed)</th><th>Packets per 1,000 a year</th><th>Real ones</th><th>Share of packets that are real</th></tr></thead>
         <tbody>{data.burden.map((b) => <tr key={b.prevalence}><td>{pct(b.prevalence)}</td><td>{b.packetsPer1000.toFixed(0)}</td><td>{b.realPer1000.toFixed(0)}</td><td>{pct(b.realPer1000 / b.packetsPer1000)}</td></tr>)}</tbody>
       </table></div>
@@ -54,7 +54,7 @@ export default function Benchmark() {
       {worlds.map((w) => (
         <div key={w}>
           <h3>{w}</h3>
-          <div className="scroll"><table>
+          <div className="scroll" tabIndex={0} role="region" aria-label={w}><table>
             <thead><tr><th>Rule</th><th>False alarms in a year (stable people)</th><th>Caught within the year, losing 1 / 2 / 3 points per check</th><th>Median checks to flag</th></tr></thead>
             <tbody>
               {data.rows.filter((r) => r.world === w).map((r) => (

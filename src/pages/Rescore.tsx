@@ -59,9 +59,9 @@ export default function Rescore() {
         {stage === 'listen' && (
           <>
             <label>Type every animal you hear, in any order
-              <textarea dir={dir} value={typed} onChange={(e) => setTyped(e.target.value)} placeholder={lang === 'ar' ? 'جمل، حصان، كلب' : 'dog, cat, horse'} />
+              <textarea lang={lang} dir={dir} value={typed} onChange={(e) => setTyped(e.target.value)} placeholder={lang === 'ar' ? 'جمل، حصان، كلب' : 'dog, cat, horse'} />
             </label>
-            {typed.trim() && <div className="chips" dir={dir}>{scoreTask({ Reviewer: typed }, ANIMALS[lang], lang).items.map((i) => <span key={i.row} className="chip">{i.label}</span>)}</div>}
+            {typed.trim() && <div className="chips" lang={lang} dir={dir}>{scoreTask({ Reviewer: typed }, ANIMALS[lang], lang).items.map((i) => <span key={i.row} className="chip">{i.label}</span>)}</div>}
             <p className="muted">The machine's score stays hidden until you submit. It runs on this device and needs a one-time download of about {DOWNLOAD_MB[lang]} MB.</p>
             <div className="stack"><button className="primary" disabled={!typed.trim()} onClick={submit}>Submit my score</button></div>
           </>
@@ -78,7 +78,7 @@ export default function Rescore() {
             <div className="card"><p className="muted">The machine heard</p><p className="big small-big">{machine.high}</p></div>
             <div className="card"><p className="muted">Agreement on items</p><p className="big small-big">{Math.round(cmp.agreement * 100)}%</p><p className="muted">Heard by both, over heard by either.</p></div>
           </div>
-          <div className="chips" dir={dir}>
+          <div className="chips" lang={lang} dir={dir}>
             {cmp.both.map((r) => <span key={r} className="chip both">{label(r)}</span>)}
             {cmp.humanOnly.map((r) => <span key={r} className="chip one">{label(r)} · you only</span>)}
             {cmp.machineOnly.map((r) => <span key={r} className="chip one">{label(r)} · machine only</span>)}
@@ -87,7 +87,7 @@ export default function Rescore() {
       )}
 
       <h2>Running agreement on this device</h2>
-      <div className="scroll"><table>
+      <div className="scroll" tabIndex={0} role="region" aria-label="Running agreement on this device"><table>
         <thead><tr><th>Language</th><th>Reviews</th><th>Mean agreement</th><th>Machine minus person, items</th></tr></thead>
         <tbody>{t.map((r) => (
           <tr key={r.lang}><td>{r.lang === 'en' ? 'English' : 'Arabic'}</td><td>{r.n}</td><td>{r.agreement === null ? '–' : `${Math.round(r.agreement * 100)}%`}</td><td>{r.countGap === null ? '–' : r.countGap.toFixed(1)}</td></tr>

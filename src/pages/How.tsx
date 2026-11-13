@@ -5,7 +5,7 @@ type L = 'working' | 'simulated' | 'proposed'
 const Lbl = ({ l }: { l: L }) => <span className={`lbl ${l}`}>{l === 'working' ? 'Working' : l === 'simulated' ? 'Simulated' : 'Proposed'}</span>
 
 const STEPS: { step: string; what: string; l: L; note: string }[] = [
-  { step: '1. Screening visit', what: 'The person enrols at their adult screening visit and gives consent in three separate parts.', l: 'simulated', note: 'Consent screens work; enrolment at a real clinic is proposed.' },
+  { step: '1. Screening visit', what: 'The person enrols at their adult screening visit and gives consent in four separate parts.', l: 'simulated', note: 'Consent screens work; enrolment at a real clinic is proposed.' },
   { step: '2. Spoken check at home', what: 'Four minutes by voice: sound check, ten words said back, a minute of animals, counting backwards, the words again, and one question about everyday tasks.', l: 'working', note: 'Runs in the browser today. Prompts use the device voice until native recordings exist.' },
   { step: '3. Two listeners', what: "The browser's recogniser and an open model on the device hear the same speech. Each word is marked heard by both, one or neither.", l: 'working', note: 'On-device listener measured on 1,107 real recorded single words from public adult datasets: 62% right in English, 40% in Arabic. Browser listener not measured; no older or Gulf Arabic speakers yet.' },
   { step: '4. Personal baseline', what: 'The mean of the first three scored checks.', l: 'working', note: 'Fixed rule in code, tested.' },
@@ -37,7 +37,7 @@ export default function How() {
     <>
       <h1>How it works, and what is real</h1>
       <p>Every part is labelled: <Lbl l="working" /> runs today, <Lbl l="simulated" /> runs on synthetic people or dates, <Lbl l="proposed" /> is planned.</p>
-      <div className="scroll"><table>
+      <div className="scroll" tabIndex={0} role="region" aria-label="What each part does and whether it is real"><table>
         <thead><tr><th>Step</th><th>What happens</th><th>Status</th></tr></thead>
         <tbody>{STEPS.map((s) => <tr key={s.step}><td><strong>{s.step}</strong></td><td>{s.what}<br /><span className="muted">{s.note}</span></td><td><Lbl l={s.l} /></td></tr>)}</tbody>
       </table></div>
@@ -45,9 +45,9 @@ export default function How() {
       <p>Nowhere. Speech recognition turns sound into words. Everything after that, the matching, the scores, the flags, the routing, is fixed rules in code that give the same answer every time. Patient wording is fixed templates.</p>
       <h2>Next to what exists</h2>
       <p className="muted">"Clinic test" is the memory test at the screening visit; "tablet tests" are commercial cognitive tests used in clinics; "reference build" is the clinician-facing prototype shown in the organisers' session on 4 Nov. Filled in from public information, as fairly as we can.</p>
-      <div className="scroll"><table>
-        <thead><tr><th></th><th>Clinic test</th><th>Tablet tests</th><th>Reference build</th><th>This check</th></tr></thead>
-        <tbody>{COMPARE.map((c) => <tr key={c.what}><td><strong>{c.what}</strong></td><td>{c.clinic}</td><td>{c.tablet}</td><td>{c.ref}</td><td>{c.ours}</td></tr>)}</tbody>
+      <div className="scroll" tabIndex={0} role="region" aria-label="Next to what exists"><table>
+        <thead><tr><th><span className="sr-only">Feature</span></th><th>Clinic test</th><th>Tablet tests</th><th>Reference build</th><th>This check</th></tr></thead>
+        <tbody>{COMPARE.map((c) => <tr key={c.what}><th scope="row"><strong>{c.what}</strong></th><td>{c.clinic}</td><td>{c.tablet}</td><td>{c.ref}</td><td>{c.ours}</td></tr>)}</tbody>
       </table></div>
       <p>This check does not replace the clinic test. It fills the years between clinic tests and cannot detect impairment already present at enrolment.</p>
       <div className="stack"><Link className="btn" to="/programme">Programme view</Link><Link className="btn" to="/benchmark">How the flag was tested</Link></div>

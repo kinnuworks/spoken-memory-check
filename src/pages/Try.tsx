@@ -105,8 +105,8 @@ export default function Try() {
       {stage === 'sound' && (
         <>
           <h2>Say these three words</h2>
-          <p className="prompt-words" dir={lang === 'ar' ? 'rtl' : 'ltr'}>{SOUND_CHECK_WORDS[lang].join(lang === 'ar' ? '، ' : ', ')}</p>
-          <div className="chips" dir={lang === 'ar' ? 'rtl' : 'ltr'}>{chips}</div>
+          <p className="prompt-words" lang={lang} dir={lang === 'ar' ? 'rtl' : 'ltr'}>{SOUND_CHECK_WORDS[lang].join(lang === 'ar' ? '، ' : ', ')}</p>
+          <div className="chips" lang={lang} dir={lang === 'ar' ? 'rtl' : 'ltr'}>{chips}</div>
           <p className="listening"><i />Listening…</p>
         </>
       )}
@@ -126,7 +126,7 @@ export default function Try() {
       {stage === 'ready' && (
         <>
           <h2>We can hear you</h2>
-          <div className="chips" dir={lang === 'ar' ? 'rtl' : 'ltr'}>{chips}</div>
+          <div className="chips" lang={lang} dir={lang === 'ar' ? 'rtl' : 'ltr'}>{chips}</div>
           <p>Next: name as many animals as you can in {ANIMAL_SECONDS} seconds. Any animals, in any order.</p>
           <div className="stack"><button className="primary" onClick={animals}>Start naming animals</button></div>
         </>
@@ -137,7 +137,7 @@ export default function Try() {
           <h2>Name animals</h2>
           <p className="big">{left}s</p>
           <p className="listening"><i />Listening</p>
-          <div className="chips" dir={lang === 'ar' ? 'rtl' : 'ltr'}>{chips}</div>
+          <div className="chips" lang={lang} dir={lang === 'ar' ? 'rtl' : 'ltr'}>{chips}</div>
         </>
       )}
 
@@ -145,7 +145,7 @@ export default function Try() {
         <>
           <h2>What we heard</h2>
           <p className="big">{live.low === live.high ? live.high : `${live.low} to ${live.high}`} animals</p>
-          <div className="chips" dir={lang === 'ar' ? 'rtl' : 'ltr'}>{chips}</div>
+          <div className="chips" lang={lang} dir={lang === 'ar' ? 'rtl' : 'ltr'}>{chips}</div>
           {viaTyping
             ? <p className="note">You typed these, so no speech was recognised. The matching and counting are the same ones the spoken check uses: each animal counts once, whatever form you give it.</p>
             : second === 'checking'
@@ -153,7 +153,7 @@ export default function Try() {
             : one
             ? <p className="note">One recogniser listened this time, so the score has no range. That happens when the second listener is not downloaded yet, on phones that cannot share the microphone, and on older devices. With two, each animal is marked as heard by both or by one.</p>
             : <p className="note">Green was heard by both recognisers, amber by one. The score is a range, and that range is carried into the comparison with your baseline.</p>}
-          {live.unmatched.length > 0 && <p className="muted" dir={lang === 'ar' ? 'rtl' : 'ltr'}>Heard but not on the accepted list, so not counted: {live.unmatched.slice(0, 12).join(lang === 'ar' ? '، ' : ', ')}. If one of these is an animal, the list needs it; such words are logged for review.</p>}
+          {live.unmatched.length > 0 && <p className="muted">Heard but not on the accepted list, so not counted: <span lang={lang} dir={lang === 'ar' ? 'rtl' : 'ltr'}>{live.unmatched.slice(0, 12).join(lang === 'ar' ? '، ' : ', ')}</span>. If one of these is an animal, the list needs it; such words are logged for review.</p>}
           <p>This is 20 seconds, not the real minute, so it is not compared with anyone. One number on one day says little.</p>
           <SurveyChart />
           <div className="stack">
@@ -167,7 +167,7 @@ export default function Try() {
         <>
           <h2>Type some animals</h2>
           <p>This is for testing without a microphone. Patients never type. Separate the animals with spaces or commas.</p>
-          <p><label>Animals<textarea dir={lang === 'ar' ? 'rtl' : 'ltr'} value={typed} onChange={(e) => setTyped(e.target.value)} placeholder={lang === 'ar' ? 'جمل، حصان، صقر' : 'camel, horse, falcon, polar bear, horses'} /></label></p>
+          <p><label>Animals<textarea lang={lang} dir={lang === 'ar' ? 'rtl' : 'ltr'} value={typed} onChange={(e) => setTyped(e.target.value)} placeholder={lang === 'ar' ? 'جمل، حصان، صقر' : 'camel, horse, falcon, polar bear, horses'} /></label></p>
           <div className="stack"><button className="primary" disabled={!typed.trim()} onClick={scoreTyped}>Score what I typed</button></div>
         </>
       )}

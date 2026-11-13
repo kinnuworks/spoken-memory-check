@@ -35,7 +35,7 @@ export default function Home() {
   const contributors = treatableContributors(decline.record).slice(0, 3)
 
   return (
-    <>
+    <main>
       {/* Hero: the three ways in, then the product doing its thing. */}
       <section className="hero">
         <div className="container">
@@ -122,6 +122,23 @@ export default function Home() {
               <p className="t-micro">{PERSONAS[0].name}, synthetic: a year of checks with one off day and no flag.</p>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Where it fits in Abu Dhabi */}
+      <section className="section">
+        <div className="container">
+          <div className="section-head reveal">
+            <span className="eyebrow"><span className="dot" />Where it fits</span>
+            <h2>The memory step of a screening package Abu Dhabi already pays for.</h2>
+            <p className="lead">Since 1 September 2026 the adult screening programme has two Thiqa-funded packages called "Comprehensive hearing and dementia screening": code 52-45 every three years at 50 to 64, and 52-46 every year at 65 to 75. They bundle a nurse visit and a hearing screen. They name no memory tool.</p>
+          </div>
+          <div className="fit reveal">
+            <div className="fit__step"><span className="fit__n">1</span><p className="t-title">Hearing first</p><p className="t-small">The hearing check runs before any memory score is trusted. A fail goes to ENT and holds the memory check, so poor hearing is not read as poor memory.</p></div>
+            <div className="fit__step"><span className="fit__n">2</span><p className="t-title">A baseline at the visit, checks at home</p><p className="t-small">The first checks set the person's own baseline. Home checks fill the years between visits, which the package alone does not cover.</p></div>
+            <div className="fit__step"><span className="fit__n">3</span><p className="t-title">Referral the way Malaffi wants it</p><p className="t-small">An approved packet becomes a referral with a priority and a SNOMED-coded specialty, as an HL7 v2 REF message and a FHIR ServiceRequest.</p></div>
+          </div>
+          <p className="pilot-note reveal">Source: DoH Claims Adjudication Rules, Addendum 06 (IFHAS 3.0). Package prices are not public. No health data reaches this site's server: scoring runs on the device, and the optional UAE speech listener is used only with consent.</p>
         </div>
       </section>
 
@@ -407,6 +424,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-    </>
+    </main>
   )
 }

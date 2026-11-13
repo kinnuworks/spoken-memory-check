@@ -25,7 +25,7 @@ export default function Programme() {
         <p className="big">{audit.peopleWithAnyPer1000} <span className="big-unit">per 1,000 members</span></p>
         <p className="muted">have at least one abnormal result with no recorded action ({cell(audit.peopleWithAny)} of {audit.members.toLocaleString()} in this simulated year).</p>
       </div>
-      <div className="scroll"><table>
+      <div className="scroll" tabIndex={0} role="region" aria-label="Lost signals by signal"><table>
         <thead><tr><th>Signal</th><th>Abnormal when</th><th>Expected action</th><th>Target</th><th>Abnormal</th><th>Acted in time</th><th>Late</th><th>No action</th><th>No action per 1,000</th></tr></thead>
         <tbody>
           {audit.rows.map((s) => (
@@ -52,7 +52,7 @@ export default function Programme() {
       <p className="muted">Simulated. Settings: {Math.round(HEARING_SETTINGS.checked * 100)}% do the check, {Math.round(HEARING_SETTINGS.refer * 100)}% are referred, {Math.round(HEARING_SETTINGS.seen * 100)}% of those are seen, {Math.round(HEARING_SETTINGS.fitted * 100)}% of those fitted, {Math.round(HEARING_SETTINGS.wearing * 100)}% of those still wearing at three months. In use, the last step comes from the weekly one-tap question in the <Link to="/hearing">hearing check</Link>.</p>
 
       <h2>Home checks and referrals, by facility</h2>
-      <div className="scroll"><table>
+      <div className="scroll" tabIndex={0} role="region" aria-label="Home checks and referrals, by facility"><table>
         <thead><tr><th>Facility</th><th>Enrolled</th><th>Baseline done</th><th>Held for hearing</th><th>Packets</th><th>Approved</th><th>Dismissed with reason</th><th>Seen within 15 working days</th><th>Seen later</th><th>Still open</th><th>Lost to follow-up</th><th>Urgent route</th></tr></thead>
         <tbody>
           {all.map((r) => (

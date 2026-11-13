@@ -73,7 +73,7 @@ export default function Hearing() {
   }
 
   const keypad = (
-    <div className="keypad" aria-label="Digits">
+    <div className="keypad" role="group" aria-label="Digits">
       {DIN.digits.map((d) => <button key={d} className="key" disabled={stage !== 'answer'} onClick={() => press(d)}>{d}</button>)}
       <button className="key key--wide" disabled={stage !== 'answer' || !answer.length} onClick={() => setAnswer(answer.slice(0, -1))}>Undo</button>
     </div>
@@ -128,7 +128,7 @@ export default function Hearing() {
           <details className="card tester">
             <summary>For the tester: how this was scored</summary>
             <p>Speech reception threshold {result.srt.toFixed(1)} dB signal-to-noise (the mean of sets {DIN.firstCounted + 1} to {DIN.trials} and the next level). Lower is better. Refer above {DIN.referAbove} dB: a provisional setting, not a validated cut-off. Published cut-offs depend on the recordings and the noise and have to be set on local listeners with normal hearing.</p>
-            <div className="din-trace" aria-label="Level of each set">
+            <div className="din-trace" role="img" aria-label={`Level of the digits in each set, in dB signal-to-noise: ${result.trials.map((t, i) => `set ${i + 1}, ${t.snr} dB, ${t.correct ? 'all right' : 'not all right'}`).join('; ')}.`}>
               {result.trials.map((t, i) => <span key={i} title={`${t.snr} dB`} className={t.correct ? 'ok' : 'miss'} style={{ height: `${(t.snr - DIN.minSnr) * 3 + 6}px` }} />)}
             </div>
             <p className="muted">Each bar is one set: its height is the level of the digits, green when all three were right.</p>
@@ -139,7 +139,7 @@ export default function Hearing() {
               <p>Many people stop wearing their aid within months, so the app asks one question a week. The programme sees who is still wearing it.</p>
               <p><strong>How much did you wear your hearing aid yesterday?</strong></p>
               <div className="row">{(Object.keys(WEAR_LABEL) as Wear[]).map((w) => <button key={w} className="small" onClick={() => recordWear(w)}>{WEAR_LABEL[w]}</button>)}</div>
-              {wear.length > 0 && <div className="ticks">{wear.map((w, i) => <span key={i} className={`tick${w.wear === 'none' ? ' off' : ''}`}>{w.date.slice(5)} · {WEAR_LABEL[w.wear].toLowerCase()}</span>)}</div>}
+              {wear.length > 0 && <div className="ticks" role="list" aria-label="Hearing aid answers">{wear.map((w, i) => <span key={i} role="listitem" className={`tick${w.wear === 'none' ? ' off' : ''}`}>{w.date.slice(5)} · {WEAR_LABEL[w.wear].toLowerCase()}</span>)}</div>}
               <p className="muted">In a pilot, "not at all" two weeks running would go to the audiology clinic. That message is not built in this prototype.</p>
             </div>
           )}

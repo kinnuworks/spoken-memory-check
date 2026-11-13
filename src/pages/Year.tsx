@@ -26,7 +26,7 @@ export default function Year() {
         <p className="muted">Each dot is one check (total of words said back, words recalled later and animals named). The thick bar is the range from the two recognisers. The dashed line is this person's own baseline, the mean of their first three checks, and the shaded band is normal variation. Hollow dots are days the person reported as off days. A dash is a missed check.</p>
       </div>
       <h2>What the rule said, check by check</h2>
-      <div className="scroll"><table>
+      <div className="scroll" tabIndex={0} role="region" aria-label="What the rule said, check by check"><table>
         <thead><tr><th>Date</th><th>Score</th><th>Against baseline</th><th>Result</th></tr></thead>
         <tbody>
           {traj.results.map((r) => {

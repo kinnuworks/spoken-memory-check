@@ -33,9 +33,9 @@ export default function Person() {
       ) : (
         <p>{person.checks.length} checks this year, {scored} of them scored. Thank you. Your next check is due in about six weeks; we will remind you.</p>
       )}
-      <div className="ticks" aria-label="Checks received">
+      <div className="ticks" role="list" aria-label="Checks received">
         {person.checks.map((c, i) => (
-          <span key={i} className={`tick${c.low === null ? ' off' : ''}`} title={c.date}>{c.low !== null && <Tick />}{c.date.slice(5)}{c.low === null ? (c.hearingLimited ? ' · sound check' : ' · missed') : ''}</span>
+          <span key={i} role="listitem" className={`tick${c.low === null ? ' off' : ''}`} title={c.date}>{c.low !== null && <Tick />}{c.date.slice(5)}{c.low === null ? (c.hearingLimited ? ' · sound check' : ' · missed') : ''}</span>
         ))}
       </div>
       {person.checks.filter((c) => c.hearingLimited).length >= 2 && (

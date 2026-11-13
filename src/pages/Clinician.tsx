@@ -3,7 +3,9 @@ import { Link, useParams } from 'react-router-dom'
 import { DEFAULT_PARAMS, evaluate } from '../engine/change'
 import { PERSONAS } from '../engine/histories'
 import { REFERRAL_TARGET_WORKING_DAYS, addWorkingDays, riskFactors, treatableContributors, workingDaysBetween } from '../engine/packet'
-import { bundle, checkObservation, referralRequest } from '../engine/fhir'
+import { bundle, checkObservation, referralRequest, SPECIALTY, type Specialty } from '../engine/fhir'
+import { refMessage } from '../engine/hl7'
+import { appendAudit, loadAudit } from '../engine/audit'
 import TrajectoryChart from './TrajectoryChart'
 
 type Decision = 'pending' | 'approved' | 'dismissed'
@@ -31,6 +33,9 @@ function Clinician({ id }: { id?: string }) {
   const [referredOn, setReferredOn] = useState<string | null>(null)
   const [seenOn, setSeenOn] = useState<string | null>(null)
   const [invite, setInvite] = useState(INVITE)
+  const [specialty, setSpecialty] = useState<Specialty>('neurology')
+  const [log, setLog] = useState(() => loadAudit().filter((a) => a.case === person.id))
+  const record = (action: Parameters<typeof appendAudit>[0]['action'], detail?: string) => setLog(appendAudit({ case: person.id, action, detail }).filter((a) => a.case === person.id))
 
   // Illustrative dates on working days: approval two working days after the flag, the visit five after that.
   const approvedOn = addWorkingDays(flag.date, 2)
@@ -77,15 +82,15 @@ function Clinician({ id }: { id?: string }) {
       </div>
 
       <h2>3. Treatable contributors to check first</h2>
-      <div className="scroll"><table>
+      <div className="scroll" tabIndex={0} role="region" aria-label="Treatable contributors to check first"><table>
         <thead><tr><th>Check</th><th>Why for this person</th><th>Suggested action</th></tr></thead>
         <tbody>{contributors.map((c) => <tr key={c.name}><td><strong>{c.name}</strong></td><td>{c.why}</td><td>{c.action}</td></tr>)}</tbody>
       </table></div>
 
       <h2>4. Risk factors already in the screening record</h2>
       <p className="muted">Ten of the fourteen modifiable risk factors in the 2024 Lancet Commission report have a matching field in the screening record. Four do not.</p>
-      <div className="scroll"><table>
-        <thead><tr><th>Factor</th><th>Screening field</th><th>Value</th><th></th></tr></thead>
+      <div className="scroll" tabIndex={0} role="region" aria-label="Risk factors already in the screening record"><table>
+        <thead><tr><th>Factor</th><th>Screening field</th><th>Value</th><th><span className="sr-only">Status</span></th></tr></thead>
         <tbody>
           {factors.map((f) => (
             <tr key={f.name}>
@@ -100,12 +105,12 @@ function Clinician({ id }: { id?: string }) {
       {decision === 'pending' && (
         <>
           <p>Until you decide, the person sees only "Check received". If you approve, the app sends the invitation below and nothing else. You give the result in person.</p>
-          <div className="card"><p className="muted">Invitation wording. The template is offered to the public health centre for approval; you may edit it for this person before sending.</p><textarea value={invite} onChange={(e) => setInvite(e.target.value)} style={{ minHeight: 80 }} /></div>
+          <div className="card"><p className="muted" id="invite-help">Invitation wording. The template is offered to the public health centre for approval; you may edit it for this person before sending.</p><textarea aria-label="Invitation wording" aria-describedby="invite-help" value={invite} onChange={(e) => setInvite(e.target.value)} style={{ minHeight: 80 }} /></div>
           <p><label>Your note for the record (optional)<textarea value={note} onChange={(e) => setNote(e.target.value)} /></label></p>
           <div className="stack">
-            <button className="primary" onClick={() => setDecision('approved')}>Approve and invite the person to a visit</button>
+            <button className="primary" onClick={() => { setDecision('approved'); record('approved', invite !== INVITE ? 'invitation edited' : undefined) }}>Approve and invite the person to a visit</button>
             <p><label>Reason for dismissing<textarea style={{ minHeight: 60 }} value={reason} onChange={(e) => setReason(e.target.value)} /></label></p>
-            <button disabled={!reason.trim()} onClick={() => setDecision('dismissed')}>Dismiss with this reason</button>
+            <button disabled={!reason.trim()} onClick={() => { setDecision('dismissed'); record('dismissed', reason) }}>Dismiss with this reason</button>
           </div>
         </>
       )}
@@ -116,8 +121,8 @@ function Clinician({ id }: { id?: string }) {
           <h2>6. Follow-up clock</h2>
           <p>Target: referral to a neurologist or geriatrician completed within {REFERRAL_TARGET_WORKING_DAYS} working days of the visit. The number is borrowed from the screening programme's own referral indicator.</p>
           <div className="stack">
-            {!referredOn && <button className="primary" onClick={() => setReferredOn(visitOn)}>Record: result given in person on {visitOn}, referral made the same day</button>}
-            {referredOn && !seenOn && <button className="primary" onClick={() => setSeenOn(addWorkingDays(visitOn, 12))}>Record: specialist appointment attended</button>}
+            {!referredOn && <button className="primary" onClick={() => { setReferredOn(visitOn); record('result given in person', `referral to ${SPECIALTY[specialty].display}`) }}>Record: result given in person on {visitOn}, referral made the same day</button>}
+            {referredOn && !seenOn && <button className="primary" onClick={() => { setSeenOn(addWorkingDays(visitOn, 12)); record('specialist seen') }}>Record: specialist appointment attended</button>}
           </div>
           {referredOn && (
             <div className="card">
@@ -128,14 +133,32 @@ function Clinician({ id }: { id?: string }) {
         </>
       )}
 
+      {referredOn && (
+        <>
+          <h2>Referral to Malaffi</h2>
+          <p>Abu Dhabi asks every referral to reach Malaffi as an HL7 v2 REF message with a priority and a SNOMED-coded specialty (DoH Circular 2026/144). The partner facility's record system sends it; this is the message it would carry.</p>
+          <div className="segmented" role="group" aria-label="Specialty">
+            {(['neurology', 'geriatrics'] as Specialty[]).map((k) => <button key={k} className="seg" aria-pressed={specialty === k} onClick={() => setSpecialty(k)}>{SPECIALTY[k].display}</button>)}
+          </div>
+          <pre className="hl7" tabIndex={0} role="region" aria-label="HL7 v2 referral message">{refMessage({ messageId: `msg-${person.id}`, sentAt: `${referredOn}T09:00:00`, patientId: `synthetic-${person.id}`, referralId: `ref-${person.id}`, referredOn, specialty, priority: 'routine', reason: byReport ? 'Reported change in everyday tasks; packet approved by ordering physician' : 'Sustained fall from personal baseline on spoken memory check; packet approved by ordering physician', orderingFacility: 'FACILITY1' }).split('\r').join('\n')}</pre>
+          <p className="muted">Draft mapping: Malaffi's own REF profile is not public, so segment use follows HL7 v2.5. SNOMED CT {SPECIALTY[specialty].code} = {SPECIALTY[specialty].display}. Synthetic patient.</p>
+        </>
+      )}
+
       <h2>Hand-off to other systems</h2>
       <p className="muted">The checks and the referral as FHIR R4 resources, for an exchange or a record system to take in.</p>
       <button className="small" onClick={() => {
-        const res = [...person.checks.map((c) => checkObservation(`Patient/synthetic-${person.id}`, c)), ...(referredOn ? [referralRequest(`Patient/synthetic-${person.id}`, 'Practitioner/ordering', referredOn, addDays(visitOn, 21))] : [])]
+        const res = [...person.checks.map((c) => checkObservation(`Patient/synthetic-${person.id}`, c)), ...(referredOn ? [referralRequest(`Patient/synthetic-${person.id}`, 'Practitioner/ordering', referredOn, addDays(visitOn, 21), specialty)] : [])]
         const url = URL.createObjectURL(new Blob([JSON.stringify(bundle(res), null, 2)], { type: 'application/fhir+json' }))
         Object.assign(document.createElement('a'), { href: url, download: `synthetic-${person.id}.fhir.json` }).click()
         URL.revokeObjectURL(url)
       }}>Download FHIR bundle (synthetic)</button>
+
+      <h2>Decision log</h2>
+      {log.length === 0 ? <p className="muted">No decisions recorded for this case on this device yet.</p> : (
+        <ol className="trace">{log.map((a, i) => <li key={i}><strong>{a.action}</strong>{a.detail ? `: ${a.detail}` : ''} <span className="muted">({a.at.slice(0, 16).replace('T', ' ')} UTC, app {a.appVersion})</span></li>)}</ol>
+      )}
+      <p className="muted">Kept on this device in the prototype. In a pilot each entry goes to the facility's record system with the physician's identity.</p>
 
       <h2>Step trace</h2>
       <ol className="trace">{trace.map((t) => <li key={t.step}><strong className={t.ok ? 'status-usual-range' : 'status-watch'}>{t.ok ? 'Passed' : 'Held'}</strong>: {t.step}{t.detail ? ` (${t.detail})` : ''}</li>)}</ol>

@@ -47,6 +47,7 @@
 .segmented .seg:disabled { cursor: default; opacity: .6; }
 .personas { display: flex; gap: 8px; overflow-x: auto; padding: 4px 2px 10px; margin: 18px -2px 6px; scrollbar-width: none; }
 .personas::-webkit-scrollbar { display: none; }
+.personas .persona:focus-visible { outline-offset: -2px; }
 .persona { flex: none; display: grid; gap: 2px; padding: 10px 16px; border-radius: var(--r-md); background: var(--surface); box-shadow: var(--ring); text-decoration: none; color: var(--ink); transition: box-shadow var(--dur-hover) var(--ease-out), transform var(--dur-hover) var(--ease-out); }
 .persona:hover { box-shadow: var(--shadow-1); transform: translateY(-1px); }
 .persona b { font-size: 15px; font-weight: 650; letter-spacing: -.01em; }
@@ -97,6 +98,7 @@
 .page table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
 .page th { text-align: left; padding: 12px 14px; font-size: 12px; font-weight: 650; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); border-bottom: 1px solid var(--line); background: var(--surface-2); }
 .page td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: top; color: var(--ink-2); }
+.page tbody th[scope="row"] { padding: 12px 14px; font-size: inherit; font-weight: inherit; letter-spacing: normal; text-transform: none; color: var(--ink-2); background: transparent; vertical-align: top; }
 .page tr:last-child td { border-bottom: 0; }
 
 /* Status words (tester and physician views only; the person never sees these) */
@@ -133,7 +135,8 @@ audio { width: 100%; margin: 12px 0; }
 
 /* Footer */
 .footer .brand { display: flex; align-items: center; gap: 10px; font-weight: 650; color: var(--ink); }
-.footer nav { display: flex; flex-wrap: wrap; gap: 6px 18px; }
+.footer nav { display: flex; flex-wrap: wrap; gap: 0 18px; }
+.footer nav a { display: inline-flex; align-items: center; min-height: 44px; }
 .footer nav a:hover { color: var(--ink); }
 
 @media (max-width: 640px) {
@@ -169,3 +172,7 @@ audio { width: 100%; margin: 12px 0; }
 .funnel__row strong { font: 650 17px/1 var(--font-display); text-align: right; }
 .funnel__row em { font-style: normal; font-size: 13px; color: var(--ink-3); }
 @media (max-width: 640px) { .funnel__row { grid-template-columns: 1fr 52px 44px; } .funnel__row > span { grid-column: 1 / -1; margin-bottom: -4px; } .funnel__bar { grid-column: 1; } }
+.hl7 { margin: 14px 0; padding: 16px 18px; border-radius: var(--r-md); background: #201B15; color: #F3ECE1; font: 12.5px/1.6 var(--font-mono); overflow-x: auto; white-space: pre; }
+
+/* Text for screen readers only. */
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }

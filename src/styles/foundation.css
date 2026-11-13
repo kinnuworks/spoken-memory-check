@@ -33,7 +33,7 @@
 }
 [data-mood="cream"]{
   --bg:#FAF6EF; --bg-alt:#F3ECE1; --surface:#FFFEFC; --surface-2:#FBF8F3;
-  --ink:#17150F; --ink-2:#423C33; --ink-3:#6D6459; --ink-4:#857B6E;
+  --ink:#17150F; --ink-2:#423C33; --ink-3:#6D6459; --ink-4:#857B6E; --chrome-ink:#6D6459;
   --line:#EBE3D7; --line-2:#DDD2C2; --tint:rgba(23,21,15,.055); --shadow-rgb:23 16 14;
   --font-display:"Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   --display-track:-.035em;
@@ -106,7 +106,7 @@ h3,.t-h3{margin:0;font-family:var(--font-display);font-size:var(--fs-h3);font-we
 /* ---------- Nav (floating glass pill) ---------- */
 .nav{position:fixed;inset:12px 0 auto;z-index:50;display:flex;justify-content:center;padding-inline:12px;pointer-events:none}
 .nav__bar{pointer-events:auto;width:min(100%,980px);height:56px;display:flex;align-items:center;gap:8px;padding:0 8px 0 14px;border-radius:var(--r-pill);background:color-mix(in oklab,var(--surface) 74%,transparent);-webkit-backdrop-filter:blur(20px) saturate(1.6);backdrop-filter:blur(20px) saturate(1.6);box-shadow:0 0 0 1px var(--line),0 10px 30px -14px rgba(var(--shadow-rgb)/.22)}
-.nav__brand{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:650;letter-spacing:-.02em}
+.nav__brand{display:flex;align-items:center;min-height:44px;gap:10px;font-size:16px;font-weight:650;letter-spacing:-.02em}
 .nav__links{display:flex;gap:2px;margin-inline:auto}
 .nav__links a{padding:8px 12px;border-radius:var(--r-pill);font-size:14px;font-weight:500;color:var(--ink-2);transition:background-color var(--dur-hover),color var(--dur-hover)}
 .nav__links a:hover{background:var(--tint);color:var(--ink)}
