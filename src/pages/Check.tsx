@@ -6,19 +6,21 @@ import { scoreTask, type RangeScore } from '../engine/score'
 import { readYesNo } from '../engine/yesno'
 import { clearChecks, loadChecks, saveCheck, type StoredCheck } from '../engine/store'
 import { browserSpeechAvailable, type ListenControl } from '../speech/recogniser'
+import { level, startCapture } from '../speech/capture'
+import { features, type Templates } from '../engine/templates'
 import { DOWNLOAD_MB, loadSecond, secondLoading, secondSupported } from '../speech/second'
 import { listenTask, type Heard } from '../speech/session'
 import { cloudAvailable } from '../speech/cloud'
 import { loadConsent, saveConsent } from '../engine/consent'
 import { APP_VERSION } from '../engine/audit'
-import { pause, speak, speakList } from '../speech/speak'
+import { pause, speak } from '../speech/speak'
 import TrajectoryChart from './TrajectoryChart'
 
 type Stage = 'intro' | 'sound' | 'sound-failed' | 'hear-list' | 'recall-1' | 'animals' | 'count' | 'recall-2' | 'function' | 'scoring' | 'done' | 'blocked'
 
 const T: Record<Lang, Record<string, string>> = {
   en: {
-    list: 'I will read ten words. Listen, then say back as many as you can, in any order.',
+    list: 'I will read ten words, one at a time. Say each word back after me.',
     recallNow: 'Now say the words you remember.',
     animals: 'Now name as many animals as you can. You have one minute.',
     count: 'Now count backwards from twenty to one.',
@@ -27,7 +29,7 @@ const T: Record<Lang, Record<string, string>> = {
     thanks: 'Thank you. That is the end of the check.',
   },
   ar: {
-    list: 'سأقرأ عشر كلمات. استمع ثم قل ما تتذكره منها بأي ترتيب.',
+    list: 'سأقرأ عشر كلمات، كلمة بعد كلمة. كرر كل كلمة بعدي.',
     recallNow: 'الآن قل الكلمات التي تتذكرها.',
     animals: 'الآن اذكر أكبر عدد من الحيوانات. لديك دقيقة واحدة.',
     count: 'الآن عد تنازلياً من عشرين إلى واحد.',
@@ -38,7 +40,7 @@ const T: Record<Lang, Record<string, string>> = {
 }
 
 const HEAD: Record<Stage, string> = {
-  intro: 'The full check', sound: 'Say these three words', 'sound-failed': "We can't hear you clearly here", 'hear-list': 'Listen to the ten words',
+  intro: 'The full check', sound: 'Say these three words', 'sound-failed': "We can't hear you clearly here", 'hear-list': 'Say each word back',
   'recall-1': 'Say the words you remember', animals: 'Name animals for one minute', count: 'Count backwards from twenty', 'recall-2': 'Say the ten words again', function: 'One last question', scoring: 'Scoring your check', done: 'Check received', blocked: "The microphone isn't available here",
 }
 
@@ -65,10 +67,10 @@ export default function Check() {
     loadSecond(lang, setPercent).then(() => setPercent(null)).catch(() => setPercent(null))
   }
 
-  async function listen(ms: number, rows: string[][], show = true, useSecond = true): Promise<Heard> {
+  async function listen(ms: number, rows: string[][], show = true, useSecond = true, own?: Templates): Promise<Heard> {
     control.current = {}
     setLive(null)
-    const heard = await listenTask(lang, ms, (t) => { if (show) setLive(scoreTask({ Browser: t }, rows, lang)) }, control.current, useSecond, useCloud)
+    const heard = await listenTask(lang, ms, (t) => { if (show) setLive(scoreTask({ Browser: t }, rows, lang)) }, control.current, useSecond, useCloud, own)
     if (show) setLive(scoreTask(heard.first, rows, lang))
     return heard
   }
@@ -92,11 +94,20 @@ export default function Check() {
       setStage('hear-list'); setLive(null)
       await speak(T[lang].list, lang)
       await pause(600)
-      await speakList(words, lang)
+      // Registration: the person says each word back once. Those recordings become their own
+      // answer key for both recall tasks, so recall is matched against their own voice too.
+      const own: Templates = {}
+      for (const w of words) {
+        await speak(w, lang)
+        const cap = await startCapture()
+        await pause(2200)
+        const clip = cap ? await cap.stop() : null
+        if (clip && level(clip) >= 0.002) own[w] = [features(clip)]
+      }
       await speak(T[lang].recallNow, lang)
       setStage('recall-1')
       // Recalled words are not shown while the person speaks: seeing them would be a cue for the later recall.
-      const immediateHeard = await listen(45000, rows, false)
+      const immediateHeard = await listen(45000, rows, false, true, own)
 
       await speak(T[lang].animals, lang)
       setStage('animals')
@@ -108,7 +119,7 @@ export default function Check() {
 
       await speak(T[lang].recallLater, lang)
       setStage('recall-2')
-      const delayedHeard = await listen(45000, rows, false)
+      const delayedHeard = await listen(45000, rows, false, true, own)
       await speak(T[lang].fn, lang)
       setStage('function')
       const fnHeard = await listen(8000, [], false, false)
@@ -176,7 +187,7 @@ export default function Check() {
       {stage === 'function' && <p lang={lang} dir={dir}>{T[lang].fn}</p>}
       {stage === 'scoring' && <p className="listening"><i />{useCloud ? 'The on-device and UAE listeners are going through your recordings.' : 'The second listener is going through your recordings on this device.'} This can take up to a minute.</p>}
       {stage === 'sound' && <><p className="prompt-words" lang={lang} dir={dir}>{SOUND_CHECK_WORDS[lang].join(lang === 'ar' ? '، ' : ', ')}</p><p className="listening"><i />Listening…</p></>}
-      {stage === 'hear-list' && <p className="muted">Reading the words aloud. Nothing is shown on screen.</p>}
+      {stage === 'hear-list' && <p className="listening"><i />Say each word back after you hear it. Your own voice becomes the answer key for later.</p>}
       {stage === 'animals' && <div className="chips" lang={lang} dir={dir}>{live?.items.map((it) => <span key={it.row} className="chip">{it.label}</span>)}</div>}
       {listening && (
         <>

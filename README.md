@@ -18,7 +18,7 @@ To run it yourself: `npm install`, then `npm run dev`. To redeploy: `scripts/dep
 
 ## What it does
 
-- **Two listeners.** The browser's recogniser and an open speech model running on the device hear the same speech. Each word is marked heard by both, one or neither, so every score is a range.
+- **Three listeners.** The browser's recogniser and an open speech model running on the device hear the same speech, and word recall is also matched against the person's own voice from when they said each word back. A word heard by two is confirmed, so every score is a range.
 - **Compared with yourself.** The first three checks set a baseline. A later check counts as low only after the expected practice gain and the measurement error are taken into account, and a flag needs two low checks in a row.
 - **Three other routes.** A reported change in everyday tasks goes to the physician whatever the score. A failed sound check holds the check instead of scoring it low. A very large fall sends the person to urgent assessment.
 - **A physician decides.** The ordering physician approves, edits or dismisses a packet: the trajectory, treatable contributors first, and the risk factors the screening record already holds. After approval the app only invites the person to a visit.
@@ -32,7 +32,7 @@ To run it yourself: `npm install`, then `npm run dev`. To redeploy: `scripts/dep
 
 - Real data: in a public US health survey (NHANES 2011 to 2014, 3,110 adults aged 60 and over), a fixed cutoff of 14 animals flags 48% of adults with under 9 years of school who report no memory problem, against 16% of graduates. `analysis/`
 - Simulation of the flag: 3.4% false alarms a year in stable people; 85% of members losing two points a check are flagged within the year; at an assumed 2% of members in real decline, about 50 packets per 1,000 members a year, 17 of them real. Same settings throughout. `npx tsx scripts/benchmark.ts`
-- Real recordings: the on-device listener heard 62% of 387 real single English words and 40% of 720 Arabic ones (public adult datasets, not older or Gulf speakers). `docs/HUMAN_SPEECH_BENCH.md`
+- Real recordings: the on-device listener alone heard 62% of 387 real single English words and 40% of 720 Arabic ones. Matching each speaker's words against their own voice as well raised Arabic to 80% (speaker interval 76 to 84%), with 0.8% wrong words credited. Public adult datasets, read words, not older or Gulf speakers. `docs/HUMAN_SPEECH_BENCH.md`, `docs/TEMPLATE_BENCH.md`
 - 65 automated tests: `npm test`. Cases listed in `docs/TESTED_CASES.md`.
 
 ## Documents

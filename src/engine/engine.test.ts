@@ -165,3 +165,15 @@ describe('spoken yes or no', () => {
     expect(readYesNo('I am not sure', 'en')).toBeUndefined()
   })
 })
+
+describe('scoring with three listeners', () => {
+  it('confirms a word heard by two of three, and counts a word heard by one as possible', async () => {
+    const { scoreTask } = await import('./score')
+    const rows = [['dog'], ['cat'], ['horse'], ['camel']]
+    const r = scoreTask({ Browser: 'dog cat', 'On-device': 'dog horse', 'Own voice': 'dog cat camel' }, rows, 'en')
+    expect(r.low).toBe(2) // dog (3), cat (2)
+    expect(r.high).toBe(4) // plus horse, camel (1 each)
+    expect(r.items.find((i) => i.label === 'cat')?.heard).toBe('both')
+    expect(r.items.find((i) => i.label === 'horse')?.heard).toBe('one')
+  })
+})

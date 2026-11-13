@@ -1,0 +1,3233 @@
+{
+ "generated": "2026-11-13",
+ "seed": 20261114,
+ "method": "MFCC (13 + deltas, CMN) + DTW (Sakoe-Chiba band 0.2, length-normalised), src/engine/templates.ts",
+ "arabic": {
+  "dataset": "Arabic Speech Commands v1.0, 30 speakers x 40 words x 10 repeats, 1 s clips at 16 kHz",
+  "split": {
+   "devSpeakers": [
+    "00000003",
+    "00000005",
+    "00000009",
+    "00000011",
+    "00000013",
+    "00000014",
+    "00000015",
+    "00000016",
+    "00000019",
+    "00000021",
+    "00000024",
+    "00000025",
+    "00000026",
+    "00000028",
+    "00000029"
+   ],
+   "testSpeakers": [
+    "00000001",
+    "00000002",
+    "00000004",
+    "00000006",
+    "00000007",
+    "00000008",
+    "00000010",
+    "00000012",
+    "00000017",
+    "00000018",
+    "00000020",
+    "00000022",
+    "00000023",
+    "00000027",
+    "00000030"
+   ],
+   "note": "Thresholds chosen on dev speakers (random-10 lists) only; all figures below are test speakers unless marked."
+  },
+  "thresholds": {
+   "maxCost": 4.8,
+   "minMargin": 0.2,
+   "devCorrectAccept": 0.73,
+   "devFalseAccept": 0.049,
+   "rule": "most correct accepts on dev with false accepts <= 0.05"
+  },
+  "random10": {
+   "description": "Per speaker: 10 random list words of 40, 10 other random words as non-list. 1 template per list word, 9 test repeats each; 10 repeats of each non-list word.",
+   "listClips": 1350,
+   "nonListClips": 1500,
+   "argmaxAccuracy": {
+    "k": 1270,
+    "n": 1350,
+    "rate": 0.941,
+    "wilson": [
+     0.927,
+     0.952
+    ],
+    "speakerBootstrap": [
+     0.907,
+     0.97
+    ],
+    "speakers": 15
+   },
+   "correctAccept": {
+    "k": 951,
+    "n": 1350,
+    "rate": 0.704,
+    "wilson": [
+     0.68,
+     0.728
+    ],
+    "speakerBootstrap": [
+     0.651,
+     0.756
+    ],
+    "speakers": 15
+   },
+   "wrongAccept": {
+    "k": 2,
+    "n": 1350,
+    "rate": 0.001,
+    "wilson": [
+     0,
+     0.005
+    ],
+    "speakerBootstrap": [
+     0,
+     0.004
+    ],
+    "speakers": 15
+   },
+   "falseAccept": {
+    "k": 51,
+    "n": 1500,
+    "rate": 0.034,
+    "wilson": [
+     0.026,
+     0.044
+    ],
+    "speakerBootstrap": [
+     0.017,
+     0.054
+    ],
+    "speakers": 15
+   },
+   "perSpeakerSpread": {
+    "min": 0.822,
+    "median": 0.978,
+    "max": 1
+   },
+   "perSpeaker": [
+    {
+     "speaker": "00000007",
+     "clips": 90,
+     "argmaxAccuracy": 0.822
+    },
+    {
+     "speaker": "00000010",
+     "clips": 90,
+     "argmaxAccuracy": 0.833
+    },
+    {
+     "speaker": "00000004",
+     "clips": 90,
+     "argmaxAccuracy": 0.844
+    },
+    {
+     "speaker": "00000020",
+     "clips": 90,
+     "argmaxAccuracy": 0.889
+    },
+    {
+     "speaker": "00000002",
+     "clips": 90,
+     "argmaxAccuracy": 0.922
+    },
+    {
+     "speaker": "00000018",
+     "clips": 90,
+     "argmaxAccuracy": 0.922
+    },
+    {
+     "speaker": "00000030",
+     "clips": 90,
+     "argmaxAccuracy": 0.967
+    },
+    {
+     "speaker": "00000008",
+     "clips": 90,
+     "argmaxAccuracy": 0.978
+    },
+    {
+     "speaker": "00000022",
+     "clips": 90,
+     "argmaxAccuracy": 0.978
+    },
+    {
+     "speaker": "00000023",
+     "clips": 90,
+     "argmaxAccuracy": 0.978
+    },
+    {
+     "speaker": "00000001",
+     "clips": 90,
+     "argmaxAccuracy": 0.989
+    },
+    {
+     "speaker": "00000017",
+     "clips": 90,
+     "argmaxAccuracy": 0.989
+    },
+    {
+     "speaker": "00000006",
+     "clips": 90,
+     "argmaxAccuracy": 1
+    },
+    {
+     "speaker": "00000012",
+     "clips": 90,
+     "argmaxAccuracy": 1
+    },
+    {
+     "speaker": "00000027",
+     "clips": 90,
+     "argmaxAccuracy": 1
+    }
+   ],
+   "curve": [
+    {
+     "maxCost": 3,
+     "minMargin": 0.2,
+     "correctAccept": 0.126,
+     "wrongAccept": 0,
+     "falseAccept": 0
+    },
+    {
+     "maxCost": 3.5,
+     "minMargin": 0.2,
+     "correctAccept": 0.314,
+     "wrongAccept": 0,
+     "falseAccept": 0.001
+    },
+    {
+     "maxCost": 4,
+     "minMargin": 0.2,
+     "correctAccept": 0.5,
+     "wrongAccept": 0.001,
+     "falseAccept": 0.007
+    },
+    {
+     "maxCost": 4.5,
+     "minMargin": 0.2,
+     "correctAccept": 0.643,
+     "wrongAccept": 0.001,
+     "falseAccept": 0.021
+    },
+    {
+     "maxCost": 5,
+     "minMargin": 0.2,
+     "correctAccept": 0.733,
+     "wrongAccept": 0.002,
+     "falseAccept": 0.041
+    },
+    {
+     "maxCost": 5.5,
+     "minMargin": 0.2,
+     "correctAccept": 0.757,
+     "wrongAccept": 0.004,
+     "falseAccept": 0.052
+    },
+    {
+     "maxCost": 6,
+     "minMargin": 0.2,
+     "correctAccept": 0.764,
+     "wrongAccept": 0.008,
+     "falseAccept": 0.059
+    },
+    {
+     "maxCost": 6.5,
+     "minMargin": 0.2,
+     "correctAccept": 0.765,
+     "wrongAccept": 0.008,
+     "falseAccept": 0.063
+    },
+    {
+     "maxCost": 7,
+     "minMargin": 0.2,
+     "correctAccept": 0.765,
+     "wrongAccept": 0.008,
+     "falseAccept": 0.063
+    },
+    {
+     "maxCost": 8,
+     "minMargin": 0.2,
+     "correctAccept": 0.765,
+     "wrongAccept": 0.008,
+     "falseAccept": 0.064
+    },
+    {
+     "maxCost": 9,
+     "minMargin": 0.2,
+     "correctAccept": 0.765,
+     "wrongAccept": 0.008,
+     "falseAccept": 0.064
+    },
+    {
+     "maxCost": null,
+     "minMargin": 0.2,
+     "correctAccept": 0.765,
+     "wrongAccept": 0.008,
+     "falseAccept": 0.064
+    }
+   ]
+  },
+  "random10TwoTemplates": {
+   "description": "Same lists and seed, but 2 templates per list word (8 test repeats each).",
+   "listClips": 1200,
+   "nonListClips": 1500,
+   "argmaxAccuracy": {
+    "k": 1164,
+    "n": 1200,
+    "rate": 0.97,
+    "wilson": [
+     0.959,
+     0.978
+    ],
+    "speakerBootstrap": [
+     0.944,
+     0.989
+    ],
+    "speakers": 15
+   },
+   "correctAccept": {
+    "k": 974,
+    "n": 1200,
+    "rate": 0.812,
+    "wilson": [
+     0.789,
+     0.833
+    ],
+    "speakerBootstrap": [
+     0.759,
+     0.86
+    ],
+    "speakers": 15
+   },
+   "wrongAccept": {
+    "k": 1,
+    "n": 1200,
+    "rate": 0.001,
+    "wilson": [
+     0,
+     0.005
+    ],
+    "speakerBootstrap": [
+     0,
+     0.003
+    ],
+    "speakers": 15
+   },
+   "falseAccept": {
+    "k": 78,
+    "n": 1500,
+    "rate": 0.052,
+    "wilson": [
+     0.042,
+     0.064
+    ],
+    "speakerBootstrap": [
+     0.03,
+     0.076
+    ],
+    "speakers": 15
+   }
+  },
+  "digits": {
+   "description": "List = digits zero to nine; non-list = 10 random other words. Test speakers.",
+   "listClips": 1350,
+   "nonListClips": 1500,
+   "argmaxAccuracy": {
+    "k": 1254,
+    "n": 1350,
+    "rate": 0.929,
+    "wilson": [
+     0.914,
+     0.941
+    ],
+    "speakerBootstrap": [
+     0.891,
+     0.961
+    ],
+    "speakers": 15
+   },
+   "correctAccept": {
+    "k": 945,
+    "n": 1350,
+    "rate": 0.7,
+    "wilson": [
+     0.675,
+     0.724
+    ],
+    "speakerBootstrap": [
+     0.63,
+     0.757
+    ],
+    "speakers": 15
+   },
+   "wrongAccept": {
+    "k": 6,
+    "n": 1350,
+    "rate": 0.004,
+    "wilson": [
+     0.002,
+     0.01
+    ],
+    "speakerBootstrap": [
+     0.001,
+     0.009
+    ],
+    "speakers": 15
+   },
+   "falseAccept": {
+    "k": 54,
+    "n": 1500,
+    "rate": 0.036,
+    "wilson": [
+     0.028,
+     0.047
+    ],
+    "speakerBootstrap": [
+     0.018,
+     0.057
+    ],
+    "speakers": 15
+   },
+   "perSpeakerSpread": {
+    "min": 0.767,
+    "median": 0.956,
+    "max": 1
+   },
+   "curve": [
+    {
+     "maxCost": 3,
+     "minMargin": 0.2,
+     "correctAccept": 0.127,
+     "wrongAccept": 0,
+     "falseAccept": 0
+    },
+    {
+     "maxCost": 3.5,
+     "minMargin": 0.2,
+     "correctAccept": 0.306,
+     "wrongAccept": 0.001,
+     "falseAccept": 0
+    },
+    {
+     "maxCost": 4,
+     "minMargin": 0.2,
+     "correctAccept": 0.496,
+     "wrongAccept": 0.003,
+     "falseAccept": 0.006
+    },
+    {
+     "maxCost": 4.5,
+     "minMargin": 0.2,
+     "correctAccept": 0.653,
+     "wrongAccept": 0.004,
+     "falseAccept": 0.023
+    },
+    {
+     "maxCost": 5,
+     "minMargin": 0.2,
+     "correctAccept": 0.724,
+     "wrongAccept": 0.004,
+     "falseAccept": 0.043
+    },
+    {
+     "maxCost": 5.5,
+     "minMargin": 0.2,
+     "correctAccept": 0.745,
+     "wrongAccept": 0.007,
+     "falseAccept": 0.059
+    },
+    {
+     "maxCost": 6,
+     "minMargin": 0.2,
+     "correctAccept": 0.75,
+     "wrongAccept": 0.007,
+     "falseAccept": 0.064
+    },
+    {
+     "maxCost": 6.5,
+     "minMargin": 0.2,
+     "correctAccept": 0.75,
+     "wrongAccept": 0.007,
+     "falseAccept": 0.067
+    },
+    {
+     "maxCost": 7,
+     "minMargin": 0.2,
+     "correctAccept": 0.75,
+     "wrongAccept": 0.007,
+     "falseAccept": 0.067
+    },
+    {
+     "maxCost": 8,
+     "minMargin": 0.2,
+     "correctAccept": 0.75,
+     "wrongAccept": 0.007,
+     "falseAccept": 0.067
+    },
+    {
+     "maxCost": 9,
+     "minMargin": 0.2,
+     "correctAccept": 0.75,
+     "wrongAccept": 0.007,
+     "falseAccept": 0.067
+    },
+    {
+     "maxCost": null,
+     "minMargin": 0.2,
+     "correctAccept": 0.75,
+     "wrongAccept": 0.007,
+     "falseAccept": 0.067
+    }
+   ]
+  },
+  "digitsAllSpeakersArgmax": {
+   "description": "Closed-set (no rejection) digit accuracy over all 30 speakers; no threshold involved, so dev speakers are fair to include.",
+   "overall": {
+    "k": 2502,
+    "n": 2700,
+    "rate": 0.927,
+    "wilson": [
+     0.916,
+     0.936
+    ],
+    "speakerBootstrap": [
+     0.897,
+     0.953
+    ],
+    "speakers": 30
+   },
+   "perWord": [
+    {
+     "word": "zero",
+     "clips": 270,
+     "argmaxAccuracy": 0.822
+    },
+    {
+     "word": "one",
+     "clips": 270,
+     "argmaxAccuracy": 0.967
+    },
+    {
+     "word": "two",
+     "clips": 270,
+     "argmaxAccuracy": 0.922
+    },
+    {
+     "word": "three",
+     "clips": 270,
+     "argmaxAccuracy": 0.904
+    },
+    {
+     "word": "four",
+     "clips": 270,
+     "argmaxAccuracy": 0.944
+    },
+    {
+     "word": "five",
+     "clips": 270,
+     "argmaxAccuracy": 0.948
+    },
+    {
+     "word": "six",
+     "clips": 270,
+     "argmaxAccuracy": 0.97
+    },
+    {
+     "word": "seven",
+     "clips": 270,
+     "argmaxAccuracy": 0.867
+    },
+    {
+     "word": "eight",
+     "clips": 270,
+     "argmaxAccuracy": 0.981
+    },
+    {
+     "word": "nine",
+     "clips": 270,
+     "argmaxAccuracy": 0.941
+    }
+   ]
+  },
+  "devCurve": [
+   {
+    "maxCost": 3,
+    "minMargin": 0.2,
+    "correctAccept": 0.142,
+    "wrongAccept": 0.001,
+    "falseAccept": 0.001
+   },
+   {
+    "maxCost": 3.5,
+    "minMargin": 0.2,
+    "correctAccept": 0.313,
+    "wrongAccept": 0.001,
+    "falseAccept": 0.006
+   },
+   {
+    "maxCost": 4,
+    "minMargin": 0.2,
+    "correctAccept": 0.506,
+    "wrongAccept": 0.004,
+    "falseAccept": 0.019
+   },
+   {
+    "maxCost": 4.5,
+    "minMargin": 0.2,
+    "correctAccept": 0.672,
+    "wrongAccept": 0.005,
+    "falseAccept": 0.041
+   },
+   {
+    "maxCost": 5,
+    "minMargin": 0.2,
+    "correctAccept": 0.764,
+    "wrongAccept": 0.005,
+    "falseAccept": 0.055
+   },
+   {
+    "maxCost": 5.5,
+    "minMargin": 0.2,
+    "correctAccept": 0.802,
+    "wrongAccept": 0.005,
+    "falseAccept": 0.071
+   },
+   {
+    "maxCost": 6,
+    "minMargin": 0.2,
+    "correctAccept": 0.814,
+    "wrongAccept": 0.005,
+    "falseAccept": 0.087
+   },
+   {
+    "maxCost": 6.5,
+    "minMargin": 0.2,
+    "correctAccept": 0.814,
+    "wrongAccept": 0.005,
+    "falseAccept": 0.093
+   },
+   {
+    "maxCost": 7,
+    "minMargin": 0.2,
+    "correctAccept": 0.815,
+    "wrongAccept": 0.005,
+    "falseAccept": 0.095
+   },
+   {
+    "maxCost": 8,
+    "minMargin": 0.2,
+    "correctAccept": 0.815,
+    "wrongAccept": 0.005,
+    "falseAccept": 0.095
+   },
+   {
+    "maxCost": 9,
+    "minMargin": 0.2,
+    "correctAccept": 0.815,
+    "wrongAccept": 0.005,
+    "falseAccept": 0.095
+   },
+   {
+    "maxCost": null,
+    "minMargin": 0.2,
+    "correctAccept": 0.815,
+    "wrongAccept": 0.005,
+    "falseAccept": 0.095
+   }
+  ]
+ },
+ "whisperComparison": {
+  "note": "Different conditions. Whisper is speaker-independent open-vocabulary transcription (any text can come out; chance is near zero); templates are speaker-dependent, closed-set over 10 list words with the speaker's own registration repeat (chance 10%). Not a like-for-like contest.",
+  "whisper": {
+   "model": "onnx-community/whisper-small",
+   "perWord": [
+    {
+     "word": "zero",
+     "clips": 60,
+     "correct": 0.117
+    },
+    {
+     "word": "one",
+     "clips": 60,
+     "correct": 0.667
+    },
+    {
+     "word": "two",
+     "clips": 60,
+     "correct": 0.333
+    },
+    {
+     "word": "three",
+     "clips": 60,
+     "correct": 0.15
+    },
+    {
+     "word": "four",
+     "clips": 60,
+     "correct": 0.733
+    },
+    {
+     "word": "five",
+     "clips": 60,
+     "correct": 0.75
+    },
+    {
+     "word": "six",
+     "clips": 60,
+     "correct": 0.583
+    },
+    {
+     "word": "seven",
+     "clips": 60,
+     "correct": 0.383
+    },
+    {
+     "word": "eight",
+     "clips": 60,
+     "correct": 0.183
+    },
+    {
+     "word": "nine",
+     "clips": 60,
+     "correct": 0.017
+    }
+   ],
+   "task": {
+    "group": "digits",
+    "n": 600,
+    "speakers": 30,
+    "correct": 235,
+    "wrong": 362,
+    "nothing": 3,
+    "correctCi": [
+     0.3534169421067004,
+     0.4312947598012079
+    ],
+    "wrongCi": [
+     0.5636512398653014,
+     0.6417006752379247
+    ],
+    "nothingCi": [
+     0.0017018776450543139,
+     0.014596206457234279
+    ]
+   }
+  }
+ },
+ "english": {
+  "dataset": "Google Speech Commands v0.02 test set; speakers with at least 2 repeats of each of the 10 core words",
+  "speakers": 49,
+  "description": "List = the 10 core words (yes no up down left right on off stop go). 1 random template per word, every other repeat tested. Non-list: each core word in turn left out of the list (9 templates), plus the speaker's other words from _unknown_. Thresholds are the Arabic dev ones, not retuned.",
+  "listClips": 1807,
+  "nonListClips": 2489,
+  "argmaxAccuracy": {
+   "k": 1373,
+   "n": 1807,
+   "rate": 0.76,
+   "wilson": [
+    0.74,
+    0.779
+   ],
+   "speakerBootstrap": [
+    0.702,
+    0.814
+   ],
+   "speakers": 49
+  },
+  "correctAccept": {
+   "k": 948,
+   "n": 1807,
+   "rate": 0.525,
+   "wilson": [
+    0.502,
+    0.548
+   ],
+   "speakerBootstrap": [
+    0.46,
+    0.589
+   ],
+   "speakers": 49
+  },
+  "wrongAccept": {
+   "k": 31,
+   "n": 1807,
+   "rate": 0.017,
+   "wilson": [
+    0.012,
+    0.024
+   ],
+   "speakerBootstrap": [
+    0.009,
+    0.026
+   ],
+   "speakers": 49
+  },
+  "falseAccept": {
+   "k": 178,
+   "n": 2489,
+   "rate": 0.072,
+   "wilson": [
+    0.062,
+    0.082
+   ],
+   "speakerBootstrap": [
+    0.055,
+    0.089
+   ],
+   "speakers": 49
+  },
+  "perSpeakerSpread": {
+   "min": 0.438,
+   "median": 0.795,
+   "max": 1
+  },
+  "curve": [
+   {
+    "maxCost": 3,
+    "minMargin": 0.2,
+    "correctAccept": 0.132,
+    "wrongAccept": 0.001,
+    "falseAccept": 0.002
+   },
+   {
+    "maxCost": 3.5,
+    "minMargin": 0.2,
+    "correctAccept": 0.291,
+    "wrongAccept": 0.005,
+    "falseAccept": 0.008
+   },
+   {
+    "maxCost": 4,
+    "minMargin": 0.2,
+    "correctAccept": 0.416,
+    "wrongAccept": 0.009,
+    "falseAccept": 0.028
+   },
+   {
+    "maxCost": 4.5,
+    "minMargin": 0.2,
+    "correctAccept": 0.496,
+    "wrongAccept": 0.015,
+    "falseAccept": 0.056
+   },
+   {
+    "maxCost": 5,
+    "minMargin": 0.2,
+    "correctAccept": 0.535,
+    "wrongAccept": 0.019,
+    "falseAccept": 0.08
+   },
+   {
+    "maxCost": 5.5,
+    "minMargin": 0.2,
+    "correctAccept": 0.547,
+    "wrongAccept": 0.026,
+    "falseAccept": 0.099
+   },
+   {
+    "maxCost": 6,
+    "minMargin": 0.2,
+    "correctAccept": 0.551,
+    "wrongAccept": 0.027,
+    "falseAccept": 0.112
+   },
+   {
+    "maxCost": 6.5,
+    "minMargin": 0.2,
+    "correctAccept": 0.552,
+    "wrongAccept": 0.03,
+    "falseAccept": 0.119
+   },
+   {
+    "maxCost": 7,
+    "minMargin": 0.2,
+    "correctAccept": 0.552,
+    "wrongAccept": 0.03,
+    "falseAccept": 0.121
+   },
+   {
+    "maxCost": 8,
+    "minMargin": 0.2,
+    "correctAccept": 0.552,
+    "wrongAccept": 0.03,
+    "falseAccept": 0.123
+   },
+   {
+    "maxCost": 9,
+    "minMargin": 0.2,
+    "correctAccept": 0.552,
+    "wrongAccept": 0.03,
+    "falseAccept": 0.123
+   },
+   {
+    "maxCost": null,
+    "minMargin": 0.2,
+    "correctAccept": 0.552,
+    "wrongAccept": 0.032,
+    "falseAccept": 0.124
+   }
+  ]
+ },
+ "continuous": {
+  "sameRoom20dBThresholdCurve": [
+   {
+    "maxCost": 4.8,
+    "minMargin": 0.2,
+    "arabicHitRate": 0.522,
+    "arabicFalsePerRecording": 0.087,
+    "arabicPrecision": 0.971,
+    "englishHitRate": 0.431,
+    "englishFalsePerRecording": 0.036,
+    "englishPrecision": 0.985
+   },
+   {
+    "maxCost": 5.5,
+    "minMargin": 0.15,
+    "arabicHitRate": 0.622,
+    "arabicFalsePerRecording": 0.233,
+    "arabicPrecision": 0.936,
+    "englishHitRate": 0.547,
+    "englishFalsePerRecording": 0.122,
+    "englishPrecision": 0.961
+   },
+   {
+    "maxCost": 6,
+    "minMargin": 0.1,
+    "arabicHitRate": 0.694,
+    "arabicFalsePerRecording": 0.373,
+    "arabicPrecision": 0.911,
+    "englishHitRate": 0.654,
+    "englishFalsePerRecording": 0.291,
+    "englishPrecision": 0.925
+   },
+   {
+    "maxCost": 7,
+    "minMargin": 0.05,
+    "arabicHitRate": 0.79,
+    "arabicFalsePerRecording": 0.62,
+    "arabicPrecision": 0.875,
+    "englishHitRate": 0.752,
+    "englishFalsePerRecording": 0.531,
+    "englishPrecision": 0.886
+   },
+   {
+    "maxCost": null,
+    "minMargin": 0,
+    "arabicHitRate": 0.855,
+    "arabicFalsePerRecording": 1.1,
+    "arabicPrecision": 0.81,
+    "englishHitRate": 0.808,
+    "englishFalsePerRecording": 0.872,
+    "englishPrecision": 0.835
+   }
+  ],
+  "description": "Synthetic recall recordings: 4-7 of the speaker's list words (repeats other than the template) plus 1-2 non-list words, trimmed, shuffled, joined with 0.3-0.8 s gaps, 0.5 s lead-in. Noise: one real background recording per speaker (Arabic dataset background_noise folder: street, kitchen, boiler and so on) as \"their room\", mixed at the given SNR into the recall recording and, in the sameRoom conditions, into the template clips too (registration and recall happen minutes apart in the same place). Detection by spot(): energy segmentation then DTW per segment. Each list word is credited once.",
+  "conditions": {
+   "noNoiseAdded": {
+    "snrDb": null,
+    "onTemplates": false
+   },
+   "sameRoom20dB": {
+    "snrDb": 20,
+    "onTemplates": true
+   },
+   "sameRoom10dB": {
+    "snrDb": 10,
+    "onTemplates": true
+   },
+   "quietTemplatesNoisyRecall20dB": {
+    "snrDb": 20,
+    "onTemplates": false
+   },
+   "sameRoom20dBTwoTemplates": {
+    "snrDb": 20,
+    "onTemplates": true,
+    "templates": 2
+   }
+  },
+  "arabic": {
+   "noNoiseAdded": {
+    "recordings": 150,
+    "segmentsPerWordSpoken": 1.008,
+    "listWordsSaid": 831,
+    "hitRate": {
+     "k": 593,
+     "n": 831,
+     "rate": 0.714,
+     "wilson": [
+      0.682,
+      0.743
+     ],
+     "speakerBootstrap": [
+      0.635,
+      0.793
+     ],
+     "speakers": 15
+    },
+    "falseDetectionsPerRecording": 0.04,
+    "recordingsWithAnyFalse": {
+     "k": 6,
+     "n": 150,
+     "rate": 0.04,
+     "wilson": [
+      0.018,
+      0.085
+     ],
+     "speakerBootstrap": [
+      0.02,
+      0.067
+     ],
+     "speakers": 15
+    },
+    "exactRecordings": {
+     "k": 30,
+     "n": 150,
+     "rate": 0.2,
+     "wilson": [
+      0.144,
+      0.271
+     ],
+     "speakerBootstrap": [
+      0.107,
+      0.307
+     ],
+     "speakers": 15
+    },
+    "countErrorMean": -1.547,
+    "countErrorAbsMean": 1.547,
+    "countErrorHistogram": {
+     "0": 33,
+     "-2": 39,
+     "-1": 46,
+     "-3": 25,
+     "-6": 2,
+     "-4": 4,
+     "-5": 1
+    },
+    "precision": 0.99,
+    "msPerAudioSecond": 1.672
+   },
+   "sameRoom20dB": {
+    "recordings": 150,
+    "segmentsPerWordSpoken": 1.039,
+    "listWordsSaid": 823,
+    "hitRate": {
+     "k": 430,
+     "n": 823,
+     "rate": 0.522,
+     "wilson": [
+      0.488,
+      0.556
+     ],
+     "speakerBootstrap": [
+      0.393,
+      0.639
+     ],
+     "speakers": 15
+    },
+    "falseDetectionsPerRecording": 0.087,
+    "recordingsWithAnyFalse": {
+     "k": 13,
+     "n": 150,
+     "rate": 0.087,
+     "wilson": [
+      0.051,
+      0.143
+     ],
+     "speakerBootstrap": [
+      0.033,
+      0.153
+     ],
+     "speakers": 15
+    },
+    "exactRecordings": {
+     "k": 15,
+     "n": 150,
+     "rate": 0.1,
+     "wilson": [
+      0.062,
+      0.158
+     ],
+     "speakerBootstrap": [
+      0.027,
+      0.187
+     ],
+     "speakers": 15
+    },
+    "countErrorMean": -2.533,
+    "countErrorAbsMean": 2.533,
+    "countErrorHistogram": {
+     "0": 20,
+     "-4": 14,
+     "-3": 32,
+     "-2": 38,
+     "-1": 23,
+     "-6": 10,
+     "-5": 11,
+     "-7": 2
+    },
+    "precision": 0.971,
+    "msPerAudioSecond": 1.782
+   },
+   "sameRoom10dB": {
+    "recordings": 150,
+    "segmentsPerWordSpoken": 1.02,
+    "listWordsSaid": 823,
+    "hitRate": {
+     "k": 244,
+     "n": 823,
+     "rate": 0.296,
+     "wilson": [
+      0.266,
+      0.329
+     ],
+     "speakerBootstrap": [
+      0.209,
+      0.378
+     ],
+     "speakers": 15
+    },
+    "falseDetectionsPerRecording": 0.12,
+    "recordingsWithAnyFalse": {
+     "k": 17,
+     "n": 150,
+     "rate": 0.113,
+     "wilson": [
+      0.072,
+      0.174
+     ],
+     "speakerBootstrap": [
+      0.067,
+      0.173
+     ],
+     "speakers": 15
+    },
+    "exactRecordings": {
+     "k": 1,
+     "n": 150,
+     "rate": 0.007,
+     "wilson": [
+      0.001,
+      0.037
+     ],
+     "speakerBootstrap": [
+      0,
+      0.02
+     ],
+     "speakers": 15
+    },
+    "countErrorMean": -3.74,
+    "countErrorAbsMean": 3.74,
+    "countErrorHistogram": {
+     "0": 1,
+     "-5": 28,
+     "-4": 36,
+     "-2": 25,
+     "-3": 27,
+     "-7": 8,
+     "-6": 13,
+     "-1": 12
+    },
+    "precision": 0.931,
+    "msPerAudioSecond": 1.488
+   },
+   "quietTemplatesNoisyRecall20dB": {
+    "recordings": 150,
+    "segmentsPerWordSpoken": 1.038,
+    "listWordsSaid": 816,
+    "hitRate": {
+     "k": 368,
+     "n": 816,
+     "rate": 0.451,
+     "wilson": [
+      0.417,
+      0.485
+     ],
+     "speakerBootstrap": [
+      0.358,
+      0.54
+     ],
+     "speakers": 15
+    },
+    "falseDetectionsPerRecording": 0.04,
+    "recordingsWithAnyFalse": {
+     "k": 6,
+     "n": 150,
+     "rate": 0.04,
+     "wilson": [
+      0.018,
+      0.085
+     ],
+     "speakerBootstrap": [
+      0.007,
+      0.08
+     ],
+     "speakers": 15
+    },
+    "exactRecordings": {
+     "k": 3,
+     "n": 150,
+     "rate": 0.02,
+     "wilson": [
+      0.007,
+      0.057
+     ],
+     "speakerBootstrap": [
+      0,
+      0.053
+     ],
+     "speakers": 15
+    },
+    "countErrorMean": -2.947,
+    "countErrorAbsMean": 2.96,
+    "countErrorHistogram": {
+     "0": 4,
+     "1": 1,
+     "-7": 4,
+     "-3": 39,
+     "-4": 29,
+     "-6": 5,
+     "-5": 13,
+     "-2": 32,
+     "-1": 23
+    },
+    "precision": 0.984,
+    "msPerAudioSecond": 1.639
+   },
+   "sameRoom20dBTwoTemplates": {
+    "recordings": 150,
+    "segmentsPerWordSpoken": 1.088,
+    "listWordsSaid": 820,
+    "hitRate": {
+     "k": 392,
+     "n": 820,
+     "rate": 0.478,
+     "wilson": [
+      0.444,
+      0.512
+     ],
+     "speakerBootstrap": [
+      0.386,
+      0.567
+     ],
+     "speakers": 15
+    },
+    "falseDetectionsPerRecording": 0.033,
+    "recordingsWithAnyFalse": {
+     "k": 5,
+     "n": 150,
+     "rate": 0.033,
+     "wilson": [
+      0.014,
+      0.076
+     ],
+     "speakerBootstrap": [
+      0.013,
+      0.06
+     ],
+     "speakers": 15
+    },
+    "exactRecordings": {
+     "k": 9,
+     "n": 150,
+     "rate": 0.06,
+     "wilson": [
+      0.032,
+      0.11
+     ],
+     "speakerBootstrap": [
+      0.013,
+      0.133
+     ],
+     "speakers": 15
+    },
+    "countErrorMean": -2.82,
+    "countErrorAbsMean": 2.82,
+    "countErrorHistogram": {
+     "0": 10,
+     "-3": 39,
+     "-1": 24,
+     "-4": 29,
+     "-2": 29,
+     "-6": 7,
+     "-7": 3,
+     "-5": 9
+    },
+    "precision": 0.987,
+    "msPerAudioSecond": 2.683
+   }
+  },
+  "english": {
+   "note": "English list is 8 of the 10 core words; non-list words are the other 2.",
+   "noNoiseAdded": {
+    "recordings": 196,
+    "segmentsPerWordSpoken": 1.021,
+    "listWordsSaid": 1081,
+    "hitRate": {
+     "k": 576,
+     "n": 1081,
+     "rate": 0.533,
+     "wilson": [
+      0.503,
+      0.562
+     ],
+     "speakerBootstrap": [
+      0.47,
+      0.597
+     ],
+     "speakers": 49
+    },
+    "falseDetectionsPerRecording": 0.031,
+    "recordingsWithAnyFalse": {
+     "k": 6,
+     "n": 196,
+     "rate": 0.031,
+     "wilson": [
+      0.014,
+      0.065
+     ],
+     "speakerBootstrap": [
+      0.005,
+      0.061
+     ],
+     "speakers": 49
+    },
+    "exactRecordings": {
+     "k": 15,
+     "n": 196,
+     "rate": 0.077,
+     "wilson": [
+      0.047,
+      0.122
+     ],
+     "speakerBootstrap": [
+      0.026,
+      0.143
+     ],
+     "speakers": 49
+    },
+    "countErrorMean": -2.546,
+    "countErrorAbsMean": 2.546,
+    "countErrorHistogram": {
+     "0": 16,
+     "-3": 47,
+     "-2": 46,
+     "-1": 37,
+     "-4": 29,
+     "-5": 14,
+     "-6": 6,
+     "-7": 1
+    },
+    "precision": 0.99,
+    "msPerAudioSecond": 1.465
+   },
+   "sameRoom20dB": {
+    "recordings": 196,
+    "segmentsPerWordSpoken": 1.057,
+    "listWordsSaid": 1071,
+    "hitRate": {
+     "k": 462,
+     "n": 1071,
+     "rate": 0.431,
+     "wilson": [
+      0.402,
+      0.461
+     ],
+     "speakerBootstrap": [
+      0.371,
+      0.492
+     ],
+     "speakers": 49
+    },
+    "falseDetectionsPerRecording": 0.036,
+    "recordingsWithAnyFalse": {
+     "k": 7,
+     "n": 196,
+     "rate": 0.036,
+     "wilson": [
+      0.017,
+      0.072
+     ],
+     "speakerBootstrap": [
+      0.005,
+      0.071
+     ],
+     "speakers": 49
+    },
+    "exactRecordings": {
+     "k": 7,
+     "n": 196,
+     "rate": 0.036,
+     "wilson": [
+      0.017,
+      0.072
+     ],
+     "speakerBootstrap": [
+      0.01,
+      0.066
+     ],
+     "speakers": 49
+    },
+    "countErrorMean": -3.071,
+    "countErrorAbsMean": 3.071,
+    "countErrorHistogram": {
+     "0": 9,
+     "-5": 17,
+     "-4": 47,
+     "-3": 48,
+     "-1": 21,
+     "-2": 41,
+     "-6": 9,
+     "-7": 4
+    },
+    "precision": 0.985,
+    "msPerAudioSecond": 1.523
+   },
+   "sameRoom10dB": {
+    "recordings": 196,
+    "segmentsPerWordSpoken": 1.038,
+    "listWordsSaid": 1071,
+    "hitRate": {
+     "k": 263,
+     "n": 1071,
+     "rate": 0.246,
+     "wilson": [
+      0.221,
+      0.272
+     ],
+     "speakerBootstrap": [
+      0.196,
+      0.3
+     ],
+     "speakers": 49
+    },
+    "falseDetectionsPerRecording": 0.015,
+    "recordingsWithAnyFalse": {
+     "k": 3,
+     "n": 196,
+     "rate": 0.015,
+     "wilson": [
+      0.005,
+      0.044
+     ],
+     "speakerBootstrap": [
+      0,
+      0.036
+     ],
+     "speakers": 49
+    },
+    "exactRecordings": {
+     "k": 3,
+     "n": 196,
+     "rate": 0.015,
+     "wilson": [
+      0.005,
+      0.044
+     ],
+     "speakerBootstrap": [
+      0,
+      0.041
+     ],
+     "speakers": 49
+    },
+    "countErrorMean": -4.107,
+    "countErrorAbsMean": 4.107,
+    "countErrorHistogram": {
+     "0": 3,
+     "-6": 21,
+     "-5": 37,
+     "-4": 59,
+     "-2": 22,
+     "-3": 32,
+     "-7": 16,
+     "-1": 6
+    },
+    "precision": 0.989,
+    "msPerAudioSecond": 1.332
+   },
+   "quietTemplatesNoisyRecall20dB": {
+    "recordings": 196,
+    "segmentsPerWordSpoken": 1.066,
+    "listWordsSaid": 1087,
+    "hitRate": {
+     "k": 315,
+     "n": 1087,
+     "rate": 0.29,
+     "wilson": [
+      0.264,
+      0.317
+     ],
+     "speakerBootstrap": [
+      0.238,
+      0.344
+     ],
+     "speakers": 49
+    },
+    "falseDetectionsPerRecording": 0.036,
+    "recordingsWithAnyFalse": {
+     "k": 7,
+     "n": 196,
+     "rate": 0.036,
+     "wilson": [
+      0.017,
+      0.072
+     ],
+     "speakerBootstrap": [
+      0.01,
+      0.066
+     ],
+     "speakers": 49
+    },
+    "exactRecordings": {
+     "k": 2,
+     "n": 196,
+     "rate": 0.01,
+     "wilson": [
+      0.003,
+      0.036
+     ],
+     "speakerBootstrap": [
+      0,
+      0.026
+     ],
+     "speakers": 49
+    },
+    "countErrorMean": -3.903,
+    "countErrorAbsMean": 3.903,
+    "countErrorHistogram": {
+     "0": 2,
+     "-5": 33,
+     "-3": 44,
+     "-6": 17,
+     "-4": 61,
+     "-2": 23,
+     "-1": 6,
+     "-7": 10
+    },
+    "precision": 0.978,
+    "msPerAudioSecond": 1.524
+   },
+   "sameRoom20dBTwoTemplates": {
+    "recordings": 156,
+    "segmentsPerWordSpoken": 1.07,
+    "listWordsSaid": 871,
+    "hitRate": {
+     "k": 389,
+     "n": 871,
+     "rate": 0.447,
+     "wilson": [
+      0.414,
+      0.48
+     ],
+     "speakerBootstrap": [
+      0.382,
+      0.51
+     ],
+     "speakers": 39
+    },
+    "falseDetectionsPerRecording": 0.026,
+    "recordingsWithAnyFalse": {
+     "k": 4,
+     "n": 156,
+     "rate": 0.026,
+     "wilson": [
+      0.01,
+      0.064
+     ],
+     "speakerBootstrap": [
+      0.006,
+      0.051
+     ],
+     "speakers": 39
+    },
+    "exactRecordings": {
+     "k": 7,
+     "n": 156,
+     "rate": 0.045,
+     "wilson": [
+      0.022,
+      0.09
+     ],
+     "speakerBootstrap": [
+      0.013,
+      0.09
+     ],
+     "speakers": 39
+    },
+    "countErrorMean": -3.064,
+    "countErrorAbsMean": 3.064,
+    "countErrorHistogram": {
+     "0": 9,
+     "-3": 36,
+     "-1": 16,
+     "-2": 34,
+     "-5": 19,
+     "-4": 31,
+     "-6": 10,
+     "-7": 1
+    },
+    "precision": 0.99,
+    "msPerAudioSecond": 2.162
+   }
+  },
+  "examples": {
+   "arabic": [
+    {
+     "speaker": "00000001",
+     "said": [
+      "no",
+      "digit",
+      "down",
+      "two",
+      "next",
+      "stop",
+      "backward"
+     ],
+     "nonList": [
+      "zero"
+     ],
+     "detected": [
+      "digit",
+      "down",
+      "next"
+     ],
+     "spoken": 8,
+     "segments": 9,
+     "hits": 3,
+     "misses": 4,
+     "falseList": 0,
+     "seconds": 8.743
+    },
+    {
+     "speaker": "00000001",
+     "said": [
+      "down",
+      "no",
+      "two",
+      "three",
+      "seven"
+     ],
+     "nonList": [
+      "receive",
+      "yes"
+     ],
+     "detected": [
+      "three",
+      "seven"
+     ],
+     "spoken": 7,
+     "segments": 7,
+     "hits": 2,
+     "misses": 3,
+     "falseList": 0,
+     "seconds": 8.21
+    },
+    {
+     "speaker": "00000001",
+     "said": [
+      "record",
+      "stop",
+      "two",
+      "three"
+     ],
+     "nonList": [
+      "disable",
+      "nine"
+     ],
+     "detected": [
+      "three",
+      "record"
+     ],
+     "spoken": 6,
+     "segments": 7,
+     "hits": 2,
+     "misses": 2,
+     "falseList": 0,
+     "seconds": 7.861
+    },
+    {
+     "speaker": "00000001",
+     "said": [
+      "two",
+      "seven",
+      "digit",
+      "next",
+      "no",
+      "three",
+      "stop"
+     ],
+     "nonList": [
+      "close"
+     ],
+     "detected": [
+      "seven",
+      "no",
+      "next",
+      "three"
+     ],
+     "spoken": 8,
+     "segments": 9,
+     "hits": 4,
+     "misses": 3,
+     "falseList": 0,
+     "seconds": 10.258
+    },
+    {
+     "speaker": "00000001",
+     "said": [
+      "no",
+      "down",
+      "stop",
+      "three",
+      "next",
+      "backward"
+     ],
+     "nonList": [
+      "zoom in"
+     ],
+     "detected": [
+      "next",
+      "record",
+      "three"
+     ],
+     "spoken": 7,
+     "segments": 7,
+     "hits": 2,
+     "misses": 4,
+     "falseList": 1,
+     "seconds": 8.324
+    },
+    {
+     "speaker": "00000001",
+     "said": [
+      "record",
+      "three",
+      "digit",
+      "next",
+      "down"
+     ],
+     "nonList": [
+      "move"
+     ],
+     "detected": [
+      "record",
+      "three",
+      "down",
+      "digit"
+     ],
+     "spoken": 6,
+     "segments": 6,
+     "hits": 4,
+     "misses": 1,
+     "falseList": 0,
+     "seconds": 6.967
+    }
+   ],
+   "english": [
+    {
+     "speaker": "0cb74144",
+     "said": [
+      "down",
+      "up",
+      "left",
+      "no",
+      "yes",
+      "go",
+      "right"
+     ],
+     "nonList": [
+      "on"
+     ],
+     "detected": [
+      "up",
+      "yes"
+     ],
+     "spoken": 8,
+     "segments": 7,
+     "hits": 2,
+     "misses": 5,
+     "falseList": 0,
+     "seconds": 8.613
+    },
+    {
+     "speaker": "0cb74144",
+     "said": [
+      "no",
+      "yes",
+      "right",
+      "up",
+      "off"
+     ],
+     "nonList": [
+      "on",
+      "stop"
+     ],
+     "detected": [
+      "up"
+     ],
+     "spoken": 7,
+     "segments": 9,
+     "hits": 1,
+     "misses": 4,
+     "falseList": 0,
+     "seconds": 8.502
+    },
+    {
+     "speaker": "0cb74144",
+     "said": [
+      "off",
+      "no",
+      "yes",
+      "right",
+      "down"
+     ],
+     "nonList": [
+      "on"
+     ],
+     "detected": [
+      "yes"
+     ],
+     "spoken": 6,
+     "segments": 6,
+     "hits": 1,
+     "misses": 4,
+     "falseList": 0,
+     "seconds": 6.489
+    },
+    {
+     "speaker": "0cb74144",
+     "said": [
+      "left",
+      "no",
+      "right",
+      "up"
+     ],
+     "nonList": [
+      "on",
+      "stop"
+     ],
+     "detected": [
+      "right"
+     ],
+     "spoken": 6,
+     "segments": 6,
+     "hits": 1,
+     "misses": 3,
+     "falseList": 0,
+     "seconds": 7.389
+    },
+    {
+     "speaker": "189cbabe",
+     "said": [
+      "on",
+      "up",
+      "off",
+      "down",
+      "left",
+      "yes"
+     ],
+     "nonList": [
+      "right"
+     ],
+     "detected": [
+      "up",
+      "on",
+      "down",
+      "yes",
+      "left"
+     ],
+     "spoken": 7,
+     "segments": 7,
+     "hits": 5,
+     "misses": 1,
+     "falseList": 0,
+     "seconds": 8.513
+    },
+    {
+     "speaker": "189cbabe",
+     "said": [
+      "no",
+      "on",
+      "yes",
+      "go",
+      "off"
+     ],
+     "nonList": [
+      "right",
+      "stop"
+     ],
+     "detected": [
+      "on",
+      "yes"
+     ],
+     "spoken": 7,
+     "segments": 7,
+     "hits": 2,
+     "misses": 3,
+     "falseList": 0,
+     "seconds": 8.802
+    }
+   ]
+  }
+ },
+ "unionWithWhisper": {
+  "description": "Whisper bench clips (digits and yes/no). Per clip, templates are a different repeat by the same speaker of each word in the closed set (digits 0-9 for digit clips; yes/no for yes/no clips, or yes/no plus the 10 digits as distractors in ynWithDigits). Strict thresholds. Union = Whisper correct OR template accepts the right word. Template false credit = template accepts a wrong word. Whisper's own wrong-word credits are not counted here. Same-session read repeats; in the real check, templates would come from the registration trial.",
+  "thresholds": {
+   "maxCost": 4.8,
+   "minMargin": 0.2
+  },
+  "arabic": {
+   "whisperClipsConsidered": 720,
+   "own": {
+    "skippedNoOtherRepeat": 0,
+    "overall": {
+     "clips": 720,
+     "speakers": 30,
+     "candidateWords": {
+      "min": 2,
+      "mean": 8.667,
+      "max": 10
+     },
+     "whisperAlone": {
+      "k": 285,
+      "n": 720,
+      "rate": 0.396,
+      "wilson": [
+       0.361,
+       0.432
+      ],
+      "speakerBootstrap": [
+       0.367,
+       0.426
+      ],
+      "speakers": 30
+     },
+     "templatesAlone": {
+      "k": 511,
+      "n": 720,
+      "rate": 0.71,
+      "wilson": [
+       0.676,
+       0.742
+      ],
+      "speakerBootstrap": [
+       0.653,
+       0.767
+      ],
+      "speakers": 30
+     },
+     "union": {
+      "k": 579,
+      "n": 720,
+      "rate": 0.804,
+      "wilson": [
+       0.774,
+       0.832
+      ],
+      "speakerBootstrap": [
+       0.764,
+       0.844
+      ],
+      "speakers": 30
+     },
+     "templateFalseCredit": {
+      "k": 6,
+      "n": 720,
+      "rate": 0.008,
+      "wilson": [
+       0.004,
+       0.018
+      ],
+      "speakerBootstrap": [
+       0.003,
+       0.015
+      ],
+      "speakers": 30
+     },
+     "templateFalseCreditWhenWhisperWrongWord": {
+      "k": 5,
+      "n": 720,
+      "rate": 0.007,
+      "wilson": [
+       0.003,
+       0.016
+      ],
+      "speakerBootstrap": [
+       0.001,
+       0.013
+      ],
+      "speakers": 30
+     },
+     "templateFalseCreditAmongWhisperWrongWordClips": {
+      "k": 5,
+      "n": 432,
+      "rate": 0.012,
+      "wilson": [
+       0.005,
+       0.027
+      ],
+      "speakerBootstrap": [
+       0.002,
+       0.021
+      ],
+      "speakers": 30
+     },
+     "whisperWrongWordClips": 432
+    },
+    "digits": {
+     "clips": 600,
+     "speakers": 30,
+     "candidateWords": {
+      "min": 10,
+      "mean": 10,
+      "max": 10
+     },
+     "whisperAlone": {
+      "k": 235,
+      "n": 600,
+      "rate": 0.392,
+      "wilson": [
+       0.353,
+       0.431
+      ],
+      "speakerBootstrap": [
+       0.35,
+       0.433
+      ],
+      "speakers": 30
+     },
+     "templatesAlone": {
+      "k": 427,
+      "n": 600,
+      "rate": 0.712,
+      "wilson": [
+       0.674,
+       0.746
+      ],
+      "speakerBootstrap": [
+       0.655,
+       0.77
+      ],
+      "speakers": 30
+     },
+     "union": {
+      "k": 481,
+      "n": 600,
+      "rate": 0.802,
+      "wilson": [
+       0.768,
+       0.832
+      ],
+      "speakerBootstrap": [
+       0.757,
+       0.848
+      ],
+      "speakers": 30
+     },
+     "templateFalseCredit": {
+      "k": 5,
+      "n": 600,
+      "rate": 0.008,
+      "wilson": [
+       0.004,
+       0.019
+      ],
+      "speakerBootstrap": [
+       0.002,
+       0.015
+      ],
+      "speakers": 30
+     },
+     "templateFalseCreditWhenWhisperWrongWord": {
+      "k": 4,
+      "n": 600,
+      "rate": 0.007,
+      "wilson": [
+       0.003,
+       0.017
+      ],
+      "speakerBootstrap": [
+       0.002,
+       0.013
+      ],
+      "speakers": 30
+     },
+     "templateFalseCreditAmongWhisperWrongWordClips": {
+      "k": 4,
+      "n": 362,
+      "rate": 0.011,
+      "wilson": [
+       0.004,
+       0.028
+      ],
+      "speakerBootstrap": [
+       0.003,
+       0.022
+      ],
+      "speakers": 30
+     },
+     "whisperWrongWordClips": 362
+    },
+    "yes/no": {
+     "clips": 120,
+     "speakers": 30,
+     "candidateWords": {
+      "min": 2,
+      "mean": 2,
+      "max": 2
+     },
+     "whisperAlone": {
+      "k": 50,
+      "n": 120,
+      "rate": 0.417,
+      "wilson": [
+       0.332,
+       0.506
+      ],
+      "speakerBootstrap": [
+       0.325,
+       0.508
+      ],
+      "speakers": 30
+     },
+     "templatesAlone": {
+      "k": 84,
+      "n": 120,
+      "rate": 0.7,
+      "wilson": [
+       0.613,
+       0.775
+      ],
+      "speakerBootstrap": [
+       0.6,
+       0.8
+      ],
+      "speakers": 30
+     },
+     "union": {
+      "k": 98,
+      "n": 120,
+      "rate": 0.817,
+      "wilson": [
+       0.738,
+       0.876
+      ],
+      "speakerBootstrap": [
+       0.75,
+       0.875
+      ],
+      "speakers": 30
+     },
+     "templateFalseCredit": {
+      "k": 1,
+      "n": 120,
+      "rate": 0.008,
+      "wilson": [
+       0.001,
+       0.046
+      ],
+      "speakerBootstrap": [
+       0,
+       0.025
+      ],
+      "speakers": 30
+     },
+     "templateFalseCreditWhenWhisperWrongWord": {
+      "k": 1,
+      "n": 120,
+      "rate": 0.008,
+      "wilson": [
+       0.001,
+       0.046
+      ],
+      "speakerBootstrap": [
+       0,
+       0.025
+      ],
+      "speakers": 30
+     },
+     "templateFalseCreditAmongWhisperWrongWordClips": {
+      "k": 1,
+      "n": 70,
+      "rate": 0.014,
+      "wilson": [
+       0.003,
+       0.077
+      ],
+      "speakerBootstrap": [
+       0,
+       0.045
+      ],
+      "speakers": 29
+     },
+     "whisperWrongWordClips": 70
+    },
+    "testSpeakersOnly": {
+     "clips": 360,
+     "speakers": 15,
+     "candidateWords": {
+      "min": 2,
+      "mean": 8.667,
+      "max": 10
+     },
+     "whisperAlone": {
+      "k": 144,
+      "n": 360,
+      "rate": 0.4,
+      "wilson": [
+       0.351,
+       0.451
+      ],
+      "speakerBootstrap": [
+       0.364,
+       0.439
+      ],
+      "speakers": 15
+     },
+     "templatesAlone": {
+      "k": 252,
+      "n": 360,
+      "rate": 0.7,
+      "wilson": [
+       0.651,
+       0.745
+      ],
+      "speakerBootstrap": [
+       0.622,
+       0.783
+      ],
+      "speakers": 15
+     },
+     "union": {
+      "k": 289,
+      "n": 360,
+      "rate": 0.803,
+      "wilson": [
+       0.759,
+       0.841
+      ],
+      "speakerBootstrap": [
+       0.744,
+       0.853
+      ],
+      "speakers": 15
+     },
+     "templateFalseCredit": {
+      "k": 2,
+      "n": 360,
+      "rate": 0.006,
+      "wilson": [
+       0.002,
+       0.02
+      ],
+      "speakerBootstrap": [
+       0,
+       0.014
+      ],
+      "speakers": 15
+     },
+     "templateFalseCreditWhenWhisperWrongWord": {
+      "k": 2,
+      "n": 360,
+      "rate": 0.006,
+      "wilson": [
+       0.002,
+       0.02
+      ],
+      "speakerBootstrap": [
+       0,
+       0.014
+      ],
+      "speakers": 15
+     },
+     "templateFalseCreditAmongWhisperWrongWordClips": {
+      "k": 2,
+      "n": 213,
+      "rate": 0.009,
+      "wilson": [
+       0.003,
+       0.034
+      ],
+      "speakerBootstrap": [
+       0,
+       0.023
+      ],
+      "speakers": 15
+     },
+     "whisperWrongWordClips": 213
+    }
+   },
+   "ynWithDigits": {
+    "skippedNoOtherRepeat": 0,
+    "overall": {
+     "clips": 720,
+     "speakers": 30,
+     "candidateWords": {
+      "min": 10,
+      "mean": 10.333,
+      "max": 12
+     },
+     "whisperAlone": {
+      "k": 285,
+      "n": 720,
+      "rate": 0.396,
+      "wilson": [
+       0.361,
+       0.432
+      ],
+      "speakerBootstrap": [
+       0.367,
+       0.426
+      ],
+      "speakers": 30
+     },
+     "templatesAlone": {
+      "k": 502,
+      "n": 720,
+      "rate": 0.697,
+      "wilson": [
+       0.663,
+       0.73
+      ],
+      "speakerBootstrap": [
+       0.639,
+       0.757
+      ],
+      "speakers": 30
+     },
+     "union": {
+      "k": 575,
+      "n": 720,
+      "rate": 0.799,
+      "wilson": [
+       0.768,
+       0.826
+      ],
+      "speakerBootstrap": [
+       0.758,
+       0.842
+      ],
+      "speakers": 30
+     },
+     "templateFalseCredit": {
+      "k": 5,
+      "n": 720,
+      "rate": 0.007,
+      "wilson": [
+       0.003,
+       0.016
+      ],
+      "speakerBootstrap": [
+       0.001,
+       0.014
+      ],
+      "speakers": 30
+     },
+     "templateFalseCreditWhenWhisperWrongWord": {
+      "k": 4,
+      "n": 720,
+      "rate": 0.006,
+      "wilson": [
+       0.002,
+       0.014
+      ],
+      "speakerBootstrap": [
+       0.001,
+       0.011
+      ],
+      "speakers": 30
+     },
+     "templateFalseCreditAmongWhisperWrongWordClips": {
+      "k": 4,
+      "n": 432,
+      "rate": 0.009,
+      "wilson": [
+       0.004,
+       0.024
+      ],
+      "speakerBootstrap": [
+       0.002,
+       0.018
+      ],
+      "speakers": 30
+     },
+     "whisperWrongWordClips": 432
+    },
+    "digits": {
+     "clips": 600,
+     "speakers": 30,
+     "candidateWords": {
+      "min": 10,
+      "mean": 10,
+      "max": 10
+     },
+     "whisperAlone": {
+      "k": 235,
+      "n": 600,
+      "rate": 0.392,
+      "wilson": [
+       0.353,
+       0.431
+      ],
+      "speakerBootstrap": [
+       0.35,
+       0.433
+      ],
+      "speakers": 30
+     },
+     "templatesAlone": {
+      "k": 427,
+      "n": 600,
+      "rate": 0.712,
+      "wilson": [
+       0.674,
+       0.746
+      ],
+      "speakerBootstrap": [
+       0.655,
+       0.77
+      ],
+      "speakers": 30
+     },
+     "union": {
+      "k": 481,
+      "n": 600,
+      "rate": 0.802,
+      "wilson": [
+       0.768,
+       0.832
+      ],
+      "speakerBootstrap": [
+       0.757,
+       0.848
+      ],
+      "speakers": 30
+     },
+     "templateFalseCredit": {
+      "k": 5,
+      "n": 600,
+      "rate": 0.008,
+      "wilson": [
+       0.004,
+       0.019
+      ],
+      "speakerBootstrap": [
+       0.002,
+       0.015
+      ],
+      "speakers": 30
+     },
+     "templateFalseCreditWhenWhisperWrongWord": {
+      "k": 4,
+      "n": 600,
+      "rate": 0.007,
+      "wilson": [
+       0.003,
+       0.017
+      ],
+      "speakerBootstrap": [
+       0.002,
+       0.013
+      ],
+      "speakers": 30
+     },
+     "templateFalseCreditAmongWhisperWrongWordClips": {
+      "k": 4,
+      "n": 362,
+      "rate": 0.011,
+      "wilson": [
+       0.004,
+       0.028
+      ],
+      "speakerBootstrap": [
+       0.003,
+       0.022
+      ],
+      "speakers": 30
+     },
+     "whisperWrongWordClips": 362
+    },
+    "yes/no": {
+     "clips": 120,
+     "speakers": 30,
+     "candidateWords": {
+      "min": 12,
+      "mean": 12,
+      "max": 12
+     },
+     "whisperAlone": {
+      "k": 50,
+      "n": 120,
+      "rate": 0.417,
+      "wilson": [
+       0.332,
+       0.506
+      ],
+      "speakerBootstrap": [
+       0.325,
+       0.508
+      ],
+      "speakers": 30
+     },
+     "templatesAlone": {
+      "k": 75,
+      "n": 120,
+      "rate": 0.625,
+      "wilson": [
+       0.536,
+       0.706
+      ],
+      "speakerBootstrap": [
+       0.533,
+       0.708
+      ],
+      "speakers": 30
+     },
+     "union": {
+      "k": 94,
+      "n": 120,
+      "rate": 0.783,
+      "wilson": [
+       0.701,
+       0.848
+      ],
+      "speakerBootstrap": [
+       0.708,
+       0.85
+      ],
+      "speakers": 30
+     },
+     "templateFalseCredit": {
+      "k": 0,
+      "n": 120,
+      "rate": 0,
+      "wilson": [
+       0,
+       0.031
+      ],
+      "speakerBootstrap": [
+       0,
+       0
+      ],
+      "speakers": 30
+     },
+     "templateFalseCreditWhenWhisperWrongWord": {
+      "k": 0,
+      "n": 120,
+      "rate": 0,
+      "wilson": [
+       0,
+       0.031
+      ],
+      "speakerBootstrap": [
+       0,
+       0
+      ],
+      "speakers": 30
+     },
+     "templateFalseCreditAmongWhisperWrongWordClips": {
+      "k": 0,
+      "n": 70,
+      "rate": 0,
+      "wilson": [
+       0,
+       0.052
+      ],
+      "speakerBootstrap": [
+       0,
+       0
+      ],
+      "speakers": 29
+     },
+     "whisperWrongWordClips": 70
+    },
+    "testSpeakersOnly": {
+     "clips": 360,
+     "speakers": 15,
+     "candidateWords": {
+      "min": 10,
+      "mean": 10.333,
+      "max": 12
+     },
+     "whisperAlone": {
+      "k": 144,
+      "n": 360,
+      "rate": 0.4,
+      "wilson": [
+       0.351,
+       0.451
+      ],
+      "speakerBootstrap": [
+       0.364,
+       0.439
+      ],
+      "speakers": 15
+     },
+     "templatesAlone": {
+      "k": 253,
+      "n": 360,
+      "rate": 0.703,
+      "wilson": [
+       0.654,
+       0.748
+      ],
+      "speakerBootstrap": [
+       0.619,
+       0.783
+      ],
+      "speakers": 15
+     },
+     "union": {
+      "k": 288,
+      "n": 360,
+      "rate": 0.8,
+      "wilson": [
+       0.756,
+       0.838
+      ],
+      "speakerBootstrap": [
+       0.739,
+       0.856
+      ],
+      "speakers": 15
+     },
+     "templateFalseCredit": {
+      "k": 1,
+      "n": 360,
+      "rate": 0.003,
+      "wilson": [
+       0,
+       0.016
+      ],
+      "speakerBootstrap": [
+       0,
+       0.008
+      ],
+      "speakers": 15
+     },
+     "templateFalseCreditWhenWhisperWrongWord": {
+      "k": 1,
+      "n": 360,
+      "rate": 0.003,
+      "wilson": [
+       0,
+       0.016
+      ],
+      "speakerBootstrap": [
+       0,
+       0.008
+      ],
+      "speakers": 15
+     },
+     "templateFalseCreditAmongWhisperWrongWordClips": {
+      "k": 1,
+      "n": 213,
+      "rate": 0.005,
+      "wilson": [
+       0.001,
+       0.026
+      ],
+      "speakerBootstrap": [
+       0,
+       0.014
+      ],
+      "speakers": 15
+     },
+     "whisperWrongWordClips": 213
+    }
+   },
+   "note": "Thresholds were tuned on 15 of these 30 speakers; testSpeakersOnly excludes them."
+  },
+  "english": {
+   "whisperClipsConsidered": 360,
+   "own": {
+    "skippedNoOtherRepeat": 247,
+    "overall": {
+     "clips": 113,
+     "speakers": 68,
+     "candidateWords": {
+      "min": 1,
+      "mean": 2.23,
+      "max": 6
+     },
+     "whisperAlone": {
+      "k": 65,
+      "n": 113,
+      "rate": 0.575,
+      "wilson": [
+       0.483,
+       0.662
+      ],
+      "speakerBootstrap": [
+       0.467,
+       0.675
+      ],
+      "speakers": 68
+     },
+     "templatesAlone": {
+      "k": 86,
+      "n": 113,
+      "rate": 0.761,
+      "wilson": [
+       0.675,
+       0.83
+      ],
+      "speakerBootstrap": [
+       0.658,
+       0.85
+      ],
+      "speakers": 68
+     },
+     "union": {
+      "k": 96,
+      "n": 113,
+      "rate": 0.85,
+      "wilson": [
+       0.772,
+       0.904
+      ],
+      "speakerBootstrap": [
+       0.777,
+       0.916
+      ],
+      "speakers": 68
+     },
+     "templateFalseCredit": {
+      "k": 1,
+      "n": 113,
+      "rate": 0.009,
+      "wilson": [
+       0.002,
+       0.048
+      ],
+      "speakerBootstrap": [
+       0,
+       0.029
+      ],
+      "speakers": 68
+     },
+     "templateFalseCreditWhenWhisperWrongWord": {
+      "k": 0,
+      "n": 113,
+      "rate": 0,
+      "wilson": [
+       0,
+       0.033
+      ],
+      "speakerBootstrap": [
+       0,
+       0
+      ],
+      "speakers": 68
+     },
+     "templateFalseCreditAmongWhisperWrongWordClips": {
+      "k": 0,
+      "n": 45,
+      "rate": 0,
+      "wilson": [
+       0,
+       0.079
+      ],
+      "speakerBootstrap": [
+       0,
+       0
+      ],
+      "speakers": 36
+     },
+     "whisperWrongWordClips": 45
+    },
+    "digits": {
+     "clips": 40,
+     "speakers": 18,
+     "candidateWords": {
+      "min": 1,
+      "mean": 3.05,
+      "max": 6
+     },
+     "whisperAlone": {
+      "k": 29,
+      "n": 40,
+      "rate": 0.725,
+      "wilson": [
+       0.572,
+       0.839
+      ],
+      "speakerBootstrap": [
+       0.55,
+       0.875
+      ],
+      "speakers": 18
+     },
+     "templatesAlone": {
+      "k": 30,
+      "n": 40,
+      "rate": 0.75,
+      "wilson": [
+       0.598,
+       0.858
+      ],
+      "speakerBootstrap": [
+       0.556,
+       0.905
+      ],
+      "speakers": 18
+     },
+     "union": {
+      "k": 39,
+      "n": 40,
+      "rate": 0.975,
+      "wilson": [
+       0.871,
+       0.996
+      ],
+      "speakerBootstrap": [
+       0.917,
+       1
+      ],
+      "speakers": 18
+     },
+     "templateFalseCredit": {
+      "k": 0,
+      "n": 40,
+      "rate": 0,
+      "wilson": [
+       0,
+       0.088
+      ],
+      "speakerBootstrap": [
+       0,
+       0
+      ],
+      "speakers": 18
+     },
+     "templateFalseCreditWhenWhisperWrongWord": {
+      "k": 0,
+      "n": 40,
+      "rate": 0,
+      "wilson": [
+       0,
+       0.088
+      ],
+      "speakerBootstrap": [
+       0,
+       0
+      ],
+      "speakers": 18
+     },
+     "templateFalseCreditAmongWhisperWrongWordClips": {
+      "k": 0,
+      "n": 11,
+      "rate": 0,
+      "wilson": [
+       0,
+       0.259
+      ],
+      "speakerBootstrap": [
+       0,
+       0
+      ],
+      "speakers": 8
+     },
+     "whisperWrongWordClips": 11
+    },
+    "yes/no": {
+     "clips": 73,
+     "speakers": 61,
+     "candidateWords": {
+      "min": 1,
+      "mean": 1.781,
+      "max": 2
+     },
+     "whisperAlone": {
+      "k": 36,
+      "n": 73,
+      "rate": 0.493,
+      "wilson": [
+       0.382,
+       0.605
+      ],
+      "speakerBootstrap": [
+       0.375,
+       0.614
+      ],
+      "speakers": 61
+     },
+     "templatesAlone": {
+      "k": 56,
+      "n": 73,
+      "rate": 0.767,
+      "wilson": [
+       0.658,
+       0.849
+      ],
+      "speakerBootstrap": [
+       0.662,
+       0.863
+      ],
+      "speakers": 61
+     },
+     "union": {
+      "k": 57,
+      "n": 73,
+      "rate": 0.781,
+      "wilson": [
+       0.673,
+       0.86
+      ],
+      "speakerBootstrap": [
+       0.684,
+       0.873
+      ],
+      "speakers": 61
+     },
+     "templateFalseCredit": {
+      "k": 1,
+      "n": 73,
+      "rate": 0.014,
+      "wilson": [
+       0.002,
+       0.074
+      ],
+      "speakerBootstrap": [
+       0,
+       0.043
+      ],
+      "speakers": 61
+     },
+     "templateFalseCreditWhenWhisperWrongWord": {
+      "k": 0,
+      "n": 73,
+      "rate": 0,
+      "wilson": [
+       0,
+       0.05
+      ],
+      "speakerBootstrap": [
+       0,
+       0
+      ],
+      "speakers": 61
+     },
+     "templateFalseCreditAmongWhisperWrongWordClips": {
+      "k": 0,
+      "n": 34,
+      "rate": 0,
+      "wilson": [
+       0,
+       0.102
+      ],
+      "speakerBootstrap": [
+       0,
+       0
+      ],
+      "speakers": 32
+     },
+     "whisperWrongWordClips": 34
+    }
+   },
+   "ynWithDigits": {
+    "skippedNoOtherRepeat": 247,
+    "overall": {
+     "clips": 113,
+     "speakers": 68,
+     "candidateWords": {
+      "min": 1,
+      "mean": 3.283,
+      "max": 8
+     },
+     "whisperAlone": {
+      "k": 65,
+      "n": 113,
+      "rate": 0.575,
+      "wilson": [
+       0.483,
+       0.662
+      ],
+      "speakerBootstrap": [
+       0.467,
+       0.675
+      ],
+      "speakers": 68
+     },
+     "templatesAlone": {
+      "k": 84,
+      "n": 113,
+      "rate": 0.743,
+      "wilson": [
+       0.656,
+       0.815
+      ],
+      "speakerBootstrap": [
+       0.645,
+       0.835
+      ],
+      "speakers": 68
+     },
+     "union": {
+      "k": 95,
+      "n": 113,
+      "rate": 0.841,
+      "wilson": [
+       0.762,
+       0.897
+      ],
+      "speakerBootstrap": [
+       0.768,
+       0.909
+      ],
+      "speakers": 68
+     },
+     "templateFalseCredit": {
+      "k": 1,
+      "n": 113,
+      "rate": 0.009,
+      "wilson": [
+       0.002,
+       0.048
+      ],
+      "speakerBootstrap": [
+       0,
+       0.029
+      ],
+      "speakers": 68
+     },
+     "templateFalseCreditWhenWhisperWrongWord": {
+      "k": 0,
+      "n": 113,
+      "rate": 0,
+      "wilson": [
+       0,
+       0.033
+      ],
+      "speakerBootstrap": [
+       0,
+       0
+      ],
+      "speakers": 68
+     },
+     "templateFalseCreditAmongWhisperWrongWordClips": {
+      "k": 0,
+      "n": 45,
+      "rate": 0,
+      "wilson": [
+       0,
+       0.079
+      ],
+      "speakerBootstrap": [
+       0,
+       0
+      ],
+      "speakers": 36
+     },
+     "whisperWrongWordClips": 45
+    },
+    "digits": {
+     "clips": 40,
+     "speakers": 18,
+     "candidateWords": {
+      "min": 1,
+      "mean": 3.05,
+      "max": 6
+     },
+     "whisperAlone": {
+      "k": 29,
+      "n": 40,
+      "rate": 0.725,
+      "wilson": [
+       0.572,
+       0.839
+      ],
+      "speakerBootstrap": [
+       0.55,
+       0.875
+      ],
+      "speakers": 18
+     },
+     "templatesAlone": {
+      "k": 30,
+      "n": 40,
+      "rate": 0.75,
+      "wilson": [
+       0.598,
+       0.858
+      ],
+      "speakerBootstrap": [
+       0.556,
+       0.905
+      ],
+      "speakers": 18
+     },
+     "union": {
+      "k": 39,
+      "n": 40,
+      "rate": 0.975,
+      "wilson": [
+       0.871,
+       0.996
+      ],
+      "speakerBootstrap": [
+       0.917,
+       1
+      ],
+      "speakers": 18
+     },
+     "templateFalseCredit": {
+      "k": 0,
+      "n": 40,
+      "rate": 0,
+      "wilson": [
+       0,
+       0.088
+      ],
+      "speakerBootstrap": [
+       0,
+       0
+      ],
+      "speakers": 18
+     },
+     "templateFalseCreditWhenWhisperWrongWord": {
+      "k": 0,
+      "n": 40,
+      "rate": 0,
+      "wilson": [
+       0,
+       0.088
+      ],
+      "speakerBootstrap": [
+       0,
+       0
+      ],
+      "speakers": 18
+     },
+     "templateFalseCreditAmongWhisperWrongWordClips": {
+      "k": 0,
+      "n": 11,
+      "rate": 0,
+      "wilson": [
+       0,
+       0.259
+      ],
+      "speakerBootstrap": [
+       0,
+       0
+      ],
+      "speakers": 8
+     },
+     "whisperWrongWordClips": 11
+    },
+    "yes/no": {
+     "clips": 73,
+     "speakers": 61,
+     "candidateWords": {
+      "min": 1,
+      "mean": 3.411,
+      "max": 8
+     },
+     "whisperAlone": {
+      "k": 36,
+      "n": 73,
+      "rate": 0.493,
+      "wilson": [
+       0.382,
+       0.605
+      ],
+      "speakerBootstrap": [
+       0.375,
+       0.614
+      ],
+      "speakers": 61
+     },
+     "templatesAlone": {
+      "k": 54,
+      "n": 73,
+      "rate": 0.74,
+      "wilson": [
+       0.629,
+       0.827
+      ],
+      "speakerBootstrap": [
+       0.635,
+       0.841
+      ],
+      "speakers": 61
+     },
+     "union": {
+      "k": 56,
+      "n": 73,
+      "rate": 0.767,
+      "wilson": [
+       0.658,
+       0.849
+      ],
+      "speakerBootstrap": [
+       0.667,
+       0.863
+      ],
+      "speakers": 61
+     },
+     "templateFalseCredit": {
+      "k": 1,
+      "n": 73,
+      "rate": 0.014,
+      "wilson": [
+       0.002,
+       0.074
+      ],
+      "speakerBootstrap": [
+       0,
+       0.043
+      ],
+      "speakers": 61
+     },
+     "templateFalseCreditWhenWhisperWrongWord": {
+      "k": 0,
+      "n": 73,
+      "rate": 0,
+      "wilson": [
+       0,
+       0.05
+      ],
+      "speakerBootstrap": [
+       0,
+       0
+      ],
+      "speakers": 61
+     },
+     "templateFalseCreditAmongWhisperWrongWordClips": {
+      "k": 0,
+      "n": 34,
+      "rate": 0,
+      "wilson": [
+       0,
+       0.102
+      ],
+      "speakerBootstrap": [
+       0,
+       0
+      ],
+      "speakers": 32
+     },
+     "whisperWrongWordClips": 34
+    }
+   },
+   "note": "The English test set has few repeats per speaker outside yes/no, so digit clips often have only a few candidate words (see candidateWords); with fewer candidates, rejection is easier and the margin rule behaves differently."
+  }
+ },
+ "runtime": {
+  "node": "v26.12.0",
+  "featureMsPerClip": 1.429,
+  "classifyMsPerClipAgainst10Templates": 0.841,
+  "clipsFeaturised": 11848,
+  "totalSeconds": 110
+ }
+}

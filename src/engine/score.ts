@@ -6,7 +6,7 @@ export type Heard = 'both' | 'one' | 'none'
 export interface ItemResult { row: number; label: string; heard: Heard; by: string[] }
 
 export interface RangeScore {
-  /** Count every recogniser heard. */
+  /** Count confirmed: heard by every recogniser when there are two, by at least two when there are more. */
   low: number
   /** Count at least one recogniser heard. */
   high: number
@@ -34,7 +34,8 @@ export function scoreTask(transcripts: Record<string, string>, rows: string[][],
   const items: ItemResult[] = []
   rows.forEach((row, i) => {
     const by = names.filter((_, k) => sets[k].has(i))
-    if (by.length) items.push({ row: i, label: row[0], heard: by.length === names.length && names.length > 1 ? 'both' : names.length === 1 ? 'both' : 'one', by })
+    // 'both' means confirmed: by two listeners or more. With a single listener the range has no width.
+    if (by.length) items.push({ row: i, label: row[0], heard: names.length === 1 || by.length >= 2 ? 'both' : 'one', by })
   })
   const high = items.length
   const low = items.filter((it) => it.heard === 'both').length

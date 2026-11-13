@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import data from '../data/benchmark.json'
-import speech from '../data/human-speech-summary.json'
+import own from '../data/own-voice-summary.json'
 import { lostSignals } from '../engine/signals'
 import { evaluate } from '../engine/change'
 import { PERSONAS } from '../engine/histories'
@@ -147,9 +147,9 @@ export default function Home() {
         <div className="container vstack">
           <div className="split reveal">
             <div>
-              <span className="eyebrow"><Mic />Two listeners</span>
+              <span className="eyebrow"><Mic />Three listeners</span>
               <h3>Every score shows how sure it is.</h3>
-              <p className="lead">The browser's recogniser and an open speech model on the device hear the same words. A word heard by both counts for certain; a word heard by one widens the range. When the range is too wide, the check is marked "not scored" and never counted as low.</p>
+              <p className="lead">The browser's recogniser and an open speech model on the device hear the same words. For word recall there is a third: the person says each word back once while learning the list, and later recall is matched against their own voice, in any dialect. A word heard by two counts for certain; a word heard by one widens the range. When the range is too wide, the check is marked "not scored" and never counted as low.</p>
               <div className="chips"><span className="chip">Speech model runs on the device</span><span className="chip">Gulf Arabic and English</span><span className="chip">No language model</span></div>
             </div>
             <div className="stage stage--soft">
@@ -349,8 +349,8 @@ export default function Home() {
             </div>
             <div className="span-2 reveal" style={{ '--i': 2 } as React.CSSProperties}>
               <span className="lbl working">Real recordings</span>
-              <p className="stat">{Math.round(speech.en.overall.correct / speech.en.overall.n * 100)}% <span>vs</span> {Math.round(speech.ar.overall.correct / speech.ar.overall.n * 100)}%</p>
-              <p className="t-small">of real single words heard right by the on-device listener, English against Arabic: {(speech.en.overall.n + speech.ar.overall.n).toLocaleString()} clips from public recordings of adult volunteers. Arabic needs the browser's listener and native recordings; neither set has older speakers.</p>
+              <p className="stat">{Math.round(own.whisperAlone.rate * 100)}% <span>to</span> {Math.round(own.union.rate * 100)}%</p>
+              <p className="t-small">of real single Arabic words heard right: the on-device model alone, then with the speaker's own voice as the answer key ({own.whisperAlone.n} clips, {own.speakers} adult volunteers; {(own.templateFalseCredit.rate * 100).toFixed(1)}% wrong words credited). Read words, not recall, and no older speakers yet.</p>
             </div>
           </div>
           <p className="center-link reveal"><Link className="btn btn-outline" to="/benchmark">How the flag was tested<Arrow /></Link></p>
@@ -407,7 +407,7 @@ export default function Home() {
             <details><summary>Why by voice?</summary><p>Many older adults in the Gulf had little schooling, and tests that need reading, typing or tapping are unfair to them. Saying words back and naming animals is how memory has been tested over the telephone for decades.</p></details>
             <details><summary>Where does my voice go?</summary><p>The speech model on the device sends nothing anywhere. The browser's own recogniser may send audio to the browser's maker. In a pilot, any cloud listener would run in a UAE region and only with the regulator's approval.</p></details>
             <details><summary>What if I don't hear well?</summary><p>Every check starts with a sound check. If it fails, the check is held, not scored low. After two held checks the app suggests a hearing test, which also makes later checks fairer.</p></details>
-            <details><summary>Has it been tested on real people?</summary><p>Partly. The on-device listener was measured on 1,107 real recordings of single words from public datasets of adult volunteers: it heard 62% right in English and 40% in Arabic, which is why every recording can also be scored by a person. The full check has not yet been taken by older or Gulf Arabic speakers, and the rule has been tested on simulated people only.</p></details>
+            <details><summary>Has it been tested on real people?</summary><p>Partly. On 720 real recordings of single Arabic words from 30 adult volunteers, the on-device model alone heard 40% right; matching against each speaker's own voice as well raised that to 80%, with under 1% of wrong words credited. In English the model alone heard 62%. Every recording can also be scored by a person. The full check has not yet been taken by older or Gulf Arabic speakers, and the rule has been tested on simulated people only.</p></details>
             <details><summary>Who sees the scores?</summary><p>Only the ordering physician at the screening clinic, and only if the person agreed. The person hears about any result at an in-person visit.</p></details>
           </div>
         </div>

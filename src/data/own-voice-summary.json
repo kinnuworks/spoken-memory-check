@@ -1,0 +1,39 @@
+{
+ "whisperAlone": {
+  "k": 285,
+  "n": 720,
+  "rate": 0.396,
+  "speakerBootstrap": [
+   0.367,
+   0.426
+  ]
+ },
+ "templatesAlone": {
+  "k": 511,
+  "n": 720,
+  "rate": 0.71,
+  "speakerBootstrap": [
+   0.653,
+   0.767
+  ]
+ },
+ "union": {
+  "k": 579,
+  "n": 720,
+  "rate": 0.804,
+  "speakerBootstrap": [
+   0.764,
+   0.844
+  ]
+ },
+ "templateFalseCredit": {
+  "k": 6,
+  "n": 720,
+  "rate": 0.008,
+  "speakerBootstrap": [
+   0.003,
+   0.015
+  ]
+ },
+ "speakers": 30
+}
