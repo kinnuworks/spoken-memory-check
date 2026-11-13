@@ -10,6 +10,7 @@ export function Nav() {
       <div className="nav__bar">
         <Link to="/" className="nav__brand"><img className="app-icon" src={ICON} alt="" />Spoken memory check</Link>
         <nav className="nav__links" aria-label="Main">
+          <NavLink to="/story">One case</NavLink>
           <NavLink to="/year">A year of checks</NavLink>
           <NavLink to="/clinician">Physician's view</NavLink>
           <NavLink to="/benchmark">Evidence</NavLink>

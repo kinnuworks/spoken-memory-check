@@ -45,7 +45,7 @@ export default function Home() {
           <div className="cta-row">
             <Link to="/try" className="btn btn-ink btn-lg"><Mic />Try it with your voice<span className="tag">30 s</span></Link>
             <Link to="/recorded" className="btn btn-outline btn-lg"><Play />Play a recorded check</Link>
-            <Link to="/clinician" className="btn btn-outline btn-lg"><Stethoscope />Physician's view</Link>
+            <Link to="/story" className="btn btn-outline btn-lg"><Stethoscope />See one case, both screens</Link>
           </div>
           <p className="trust"><span>No sign-up</span><span>Works in the browser</span><span>People shown are synthetic</span><span>Does not diagnose</span></p>
 

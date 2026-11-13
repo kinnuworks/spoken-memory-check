@@ -11,6 +11,7 @@ import Programme from './pages/Programme'
 import How from './pages/How'
 import Hearing from './pages/Hearing'
 import Rescore from './pages/Rescore'
+import Story from './pages/Story'
 import { Footer, Nav, ScrollToTop } from './components/Shell'
 
 function Page() {
@@ -37,6 +38,7 @@ export default function App() {
           <Route path="/how" element={<How />} />
           <Route path="/hearing" element={<Hearing />} />
           <Route path="/rescore" element={<Rescore />} />
+          <Route path="/story" element={<Story />} />
           <Route path="/me" element={<Person />} />
           <Route path="/me/:id" element={<Person />} />
         </Route>
