@@ -35,7 +35,7 @@ export default function Year() {
               <tr key={r.index}>
                 <td>{r.date}</td>
                 <td>{c.low === null ? 'missed' : c.low === c.high ? c.high : `${c.low} to ${c.high}`}</td>
-                <td>{r.change === null ? '' : `${r.change > 0 ? '+' : ''}${r.change.toFixed(1)} (z ${(r.z as number).toFixed(2)}, p below ${(r.pBelow as number).toFixed(2)})`}</td>
+                <td>{r.change === null ? '' : `${r.change > 0 ? '+' : ''}${r.change.toFixed(1)} points, ${Math.abs(r.z as number).toFixed(1)} × measurement error ${(r.z as number) < 0 ? 'below' : 'above'}`}</td>
                 <td className={`status-${r.status}`}><strong>{r.scored ? (person.checks[r.index].offDay && r.status === 'watch' ? 'Off day, not counted' : LABEL[r.status]) : person.checks[r.index].hearingLimited ? 'Held' : 'Not scored'}</strong><br /><span className="muted">{r.note}</span></td>
               </tr>
             )
