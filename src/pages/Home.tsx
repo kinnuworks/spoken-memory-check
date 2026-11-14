@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import data from '../data/benchmark.json'
 import own from '../data/own-voice-summary.json'
 import tests from '../data/tests.json'
+import sada from '../data/sada-bench.json'
+import mutation from '../data/mutation-summary.json'
 import { lostSignals } from '../engine/signals'
 import { PACKET_STATUSES, STATUS_LABEL, evaluate } from '../engine/change'
 import { PERSONAS } from '../engine/histories'
@@ -358,7 +360,17 @@ export default function Home() {
             <div className="span-2 reveal" style={{ '--i': 2 } as React.CSSProperties}>
               <span className="lbl working">Real recordings</span>
               <p className="stat">{Math.round(own.previousModelRate * 100)}% <span>to</span> {Math.round(own.union.rate * 100)}%</p>
-              <p className="t-small">of real single Arabic words heard right: the first on-device model, then an Arabic-tuned model ({Math.round(own.whisperAlone.rate * 100)}%) with the speaker's own voice as the answer key ({own.whisperAlone.n} clips, {own.speakers} adult volunteers; {(own.templateFalseCredit.rate * 100).toFixed(1)}% wrong words credited). Read words, not recall, and no older speakers yet.</p>
+              <p className="t-small">of real single Arabic words heard right: the first on-device model, then an Arabic-tuned model ({Math.round(own.whisperAlone.rate * 100)}%) with the speaker's own voice as the answer key ({own.whisperAlone.n} clips, {own.speakers} adult volunteers; {(own.templateFalseCredit.rate * 100).toFixed(1)}% wrong words credited). Read words, not recall, from adult volunteers of unstated age.</p>
+            </div>
+            <div className="span-3 reveal">
+              <span className="lbl working">Real recordings, public data</span>
+              <p className="stat">{Math.round(sada.results.jaisAsr['Older, Gulf (Khaliji)'].wer * 100)}% <span>vs</span> {Math.round(sada.results.jaisAsr['Adult, Gulf (Khaliji)'].wer * 100)}%</p>
+              <p className="t-small">Word error for older Gulf speakers against adult Gulf speakers, Jais-ASR on Saudi TV speech ({sada.results.jaisAsr['Older, Gulf (Khaliji)'].clips} and {sada.results.jaisAsr['Adult, Gulf (Khaliji)'].clips} clips). No sign that older Gulf voices are heard worse. TV sentences, not a memory check.</p>
+            </div>
+            <div className="span-3 reveal" style={{ '--i': 1 } as React.CSSProperties}>
+              <span className="lbl working">Tested code</span>
+              <p className="stat">{Math.round(mutation.score * 100)}% <span>of deliberate bugs caught</span></p>
+              <p className="t-small">{mutation.mutants} small bugs were put into the decision rules one at a time; the {tests.passed} tests caught {mutation.caught}. Most of the rest only change wording.</p>
             </div>
           </div>
           <p className="center-link reveal"><Link className="btn btn-outline" to="/benchmark">How the flag was tested<Arrow /></Link></p>

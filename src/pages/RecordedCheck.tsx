@@ -242,7 +242,7 @@ export default function RecordedCheck() {
             {tasks.delayed && <tr><td>Words recalled later</td><td>{tasks.delayed.seconds} s</td></tr>}
             <tr><td><strong>Scoring all three tasks</strong></td><td><strong>{total.seconds} s</strong></td></tr>
           </tbody></table>
-          <p className="note">A clear computer voice is the easy case. How well these listeners hear real older speakers, and Gulf Arabic speakers above all, has not been measured yet. The words a perfect listener would get are stated under each recording, so you can see every miss.</p>
+          <p className="note">A clear computer voice is the easy case. On public Saudi TV speech these listeners heard older Gulf speakers no worse than younger ones, but Gulf speech was harder than other dialects, and older Emirati volunteers doing this check have not been measured yet. The words a perfect listener would get are stated under each recording, so you can see every miss.</p>
           <div className="stack"><button onClick={run}>Score it again</button><Link className="btn primary" to="/year">See a year of checks</Link></div>
         </>
       )}

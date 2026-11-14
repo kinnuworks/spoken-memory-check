@@ -1,0 +1,59 @@
+{
+ "generated": "2026-11-14",
+ "tool": "StrykerJS 10.1 with the Vitest runner",
+ "mutants": 897,
+ "caught": 826,
+ "score": 0.921,
+ "note": "Most bugs the tests miss are changes to wording shown to people, not to the decision itself.",
+ "files": [
+  {
+   "file": "rescore.ts",
+   "role": "Blind re-scoring",
+   "mutants": 50,
+   "caught": 47,
+   "score": 0.94
+  },
+  {
+   "file": "change.ts",
+   "role": "Flag rule: baseline, two low checks, slow decline, urgent, held and off-day checks",
+   "mutants": 299,
+   "caught": 286,
+   "score": 0.957
+  },
+  {
+   "file": "consent.ts",
+   "role": "Consent parts",
+   "mutants": 19,
+   "caught": 16,
+   "score": 0.842
+  },
+  {
+   "file": "din.ts",
+   "role": "Hearing check threshold and referral",
+   "mutants": 55,
+   "caught": 54,
+   "score": 0.982
+  },
+  {
+   "file": "match.ts",
+   "role": "Word matching, Arabic folding and near misses",
+   "mutants": 260,
+   "caught": 237,
+   "score": 0.912
+  },
+  {
+   "file": "packet.ts",
+   "role": "Physician packet: risk factors, treatable causes, referral clock",
+   "mutants": 174,
+   "caught": 147,
+   "score": 0.845
+  },
+  {
+   "file": "score.ts",
+   "role": "Scoring ranges from the listeners",
+   "mutants": 40,
+   "caught": 39,
+   "score": 0.975
+  }
+ ]
+}

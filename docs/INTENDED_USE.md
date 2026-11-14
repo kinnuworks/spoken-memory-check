@@ -39,7 +39,7 @@ Languages: English and Gulf Arabic. The Arabic word lists and prompts are drafts
 - Not fluent in English or Arabic: only those two languages exist.
 - Cannot do the check alone: someone in the room can prompt the person, and the check cannot tell.
 - Acute illness or a bad night: the person can mark an off day, and that check does not count towards a flag.
-- Not validated in patients anywhere. Recognition has not been measured on older speakers or Gulf Arabic speakers. The measurement error in the rule comes from published studies of similar tasks, not from this check (`docs/LIMITS.md`).
+- Not validated in patients anywhere. Recognition has not been measured on older adults doing this check or on Emirati speakers; a public-data comparison of older and adult Gulf speakers is in `docs/OLDER_SPEAKERS_BENCH.md`. The measurement error in the rule comes from published studies of similar tasks, not from this check (`docs/LIMITS.md`).
 - The hearing check's refer cut-off is a provisional setting, not validated (`src/engine/din.ts`).
 - Risk fields in the packet exist only for programme members who attended a screening visit.
 

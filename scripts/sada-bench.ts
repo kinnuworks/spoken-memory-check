@@ -96,6 +96,17 @@ function stat(rows: { ref: string[]; hyp: string[] }[], seed: number): GroupStat
 }
 const round = (x: number) => Math.round(x * 1000) / 1000
 
+/** Word error of group a minus group b, with a 95% bootstrap interval over clips in each group. */
+function diff(a: { ref: string[]; hyp: string[] }[], b: { ref: string[]; hyp: string[] }[], seed: number) {
+  if (!a.length || !b.length) return null
+  const wer = (rs: typeof a) => rs.reduce((s, r) => s + edits(r.ref, r.hyp), 0) / rs.reduce((s, r) => s + r.ref.length, 0)
+  const r = rng(seed), ds: number[] = []
+  const draw = (xs: typeof a) => Array.from({ length: xs.length }, () => xs[Math.floor(r() * xs.length)])
+  for (let i = 0; i < 1000; i++) ds.push(wer(draw(a)) - wer(draw(b)))
+  ds.sort((x, y) => x - y)
+  return { werDifference: round(wer(a) - wer(b)), ci: [round(ds[25]), round(ds[974])] }
+}
+
 function report() {
   const out: Record<string, unknown> = {
     generated: new Date().toISOString().slice(0, 10),
@@ -129,7 +140,12 @@ function report() {
       'Adult, Hijazi': rows.filter((r) => r.age === 'Adult' && r.dialect === 'Hijazi'),
       'Adult, all': rows.filter((r) => r.age === 'Adult'),
     }
-    ;(out.results as Record<string, unknown>)[key] =Object.fromEntries(Object.entries(groups).map(([k, v], i) => [k, stat(v, 7 + i)]))
+    ;(out.results as Record<string, unknown>)[key] = Object.fromEntries(Object.entries(groups).map(([k, v], i) => [k, stat(v, 7 + i)]))
+    // The question asked: older minus adult word error among Gulf speakers, and among all.
+    ;(out.results as Record<string, Record<string, unknown>>)[key].olderMinusAdult = {
+      gulf: diff(groups['Older, Gulf (Khaliji)'], groups['Adult, Gulf (Khaliji)'], 31),
+      all: diff(groups['Older, all'], groups['Adult, all'], 37),
+    }
   }
   writeFileSync(join(ROOT, 'src/data/sada-bench.json'), JSON.stringify(out, null, 1) + '\n')
   console.log(JSON.stringify(out.results, null, 1))

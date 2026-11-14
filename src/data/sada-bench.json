@@ -1,0 +1,362 @@
+{
+ "generated": "2026-11-14",
+ "dataset": "SADA 2022 test split (Saudi Data and AI Authority; Saudi TV programmes), CC BY-NC-SA 4.0, via huggingface.co/datasets/MohamedRashad/SADA22",
+ "sample": "Every clip labelled Elderly (120) plus seeded random adult clips: 200 Khaliji, 100 Najdi, 100 Hijazi (seed 20261115, scripts/sada-extract.py)",
+ "model": "onnx-community/whisper-small-ar-ONNX (q4), the app's on-device Arabic listener, run in Node with the app's speech gate and windowing",
+ "metric": "Word error rate after the app's Arabic letter folding; \"words heard\" is the share of reference words that appear anywhere in the transcript. 95% bootstrap over clips.",
+ "caveats": [
+  "TV speech, not older adults doing a memory check; sentences, not single words.",
+  "Age and dialect are annotator labels; SADA has no speaker ids, so clips are not independent and intervals are too narrow.",
+  "Reference transcripts are SADA's own and contain spelling variation that counts as error for every group alike."
+ ],
+ "results": {
+  "appSetting": {
+   "Older, Gulf (Khaliji)": {
+    "clips": 83,
+    "refWords": 652,
+    "wer": 0.678,
+    "werCi": [
+     0.625,
+     0.739
+    ],
+    "heard": 0.35,
+    "heardCi": [
+     0.288,
+     0.403
+    ]
+   },
+   "Older, other Saudi dialects": {
+    "clips": 37,
+    "refWords": 323,
+    "wer": 0.802,
+    "werCi": [
+     0.69,
+     0.917
+    ],
+    "heard": 0.22,
+    "heardCi": [
+     0.102,
+     0.333
+    ]
+   },
+   "Older, all": {
+    "clips": 120,
+    "refWords": 975,
+    "wer": 0.719,
+    "werCi": [
+     0.669,
+     0.778
+    ],
+    "heard": 0.307,
+    "heardCi": [
+     0.248,
+     0.356
+    ]
+   },
+   "Adult, Gulf (Khaliji)": {
+    "clips": 200,
+    "refWords": 1517,
+    "wer": 0.748,
+    "werCi": [
+     0.711,
+     0.785
+    ],
+    "heard": 0.28,
+    "heardCi": [
+     0.245,
+     0.318
+    ]
+   },
+   "Adult, Najdi": {
+    "clips": 100,
+    "refWords": 1075,
+    "wer": 0.607,
+    "werCi": [
+     0.548,
+     0.686
+    ],
+    "heard": 0.415,
+    "heardCi": [
+     0.339,
+     0.473
+    ]
+   },
+   "Adult, Hijazi": {
+    "clips": 100,
+    "refWords": 1234,
+    "wer": 0.61,
+    "werCi": [
+     0.544,
+     0.69
+    ],
+    "heard": 0.41,
+    "heardCi": [
+     0.332,
+     0.476
+    ]
+   },
+   "Adult, all": {
+    "clips": 400,
+    "refWords": 3826,
+    "wer": 0.664,
+    "werCi": [
+     0.63,
+     0.701
+    ],
+    "heard": 0.36,
+    "heardCi": [
+     0.322,
+     0.393
+    ]
+   },
+   "olderMinusAdult": {
+    "gulf": {
+     "werDifference": -0.07,
+     "ci": [
+      -0.134,
+      -0.003
+     ]
+    },
+    "all": {
+     "werDifference": 0.055,
+     "ci": [
+      -0.013,
+      0.121
+     ]
+    }
+   }
+  },
+  "noPrompt": {
+   "Older, Gulf (Khaliji)": {
+    "clips": 8,
+    "refWords": 72,
+    "wer": 0.736,
+    "werCi": [
+     0.574,
+     0.861
+    ],
+    "heard": 0.292,
+    "heardCi": [
+     0.162,
+     0.458
+    ]
+   },
+   "Older, other Saudi dialects": {
+    "clips": 0,
+    "refWords": 0,
+    "wer": null,
+    "werCi": [
+     null,
+     null
+    ],
+    "heard": null,
+    "heardCi": [
+     null,
+     null
+    ]
+   },
+   "Older, all": {
+    "clips": 8,
+    "refWords": 72,
+    "wer": 0.736,
+    "werCi": [
+     0.571,
+     0.857
+    ],
+    "heard": 0.292,
+    "heardCi": [
+     0.167,
+     0.464
+    ]
+   },
+   "Adult, Gulf (Khaliji)": {
+    "clips": 12,
+    "refWords": 110,
+    "wer": 0.718,
+    "werCi": [
+     0.564,
+     0.952
+    ],
+    "heard": 0.345,
+    "heardCi": [
+     0.082,
+     0.51
+    ]
+   },
+   "Adult, Najdi": {
+    "clips": 0,
+    "refWords": 0,
+    "wer": null,
+    "werCi": [
+     null,
+     null
+    ],
+    "heard": null,
+    "heardCi": [
+     null,
+     null
+    ]
+   },
+   "Adult, Hijazi": {
+    "clips": 0,
+    "refWords": 0,
+    "wer": null,
+    "werCi": [
+     null,
+     null
+    ],
+    "heard": null,
+    "heardCi": [
+     null,
+     null
+    ]
+   },
+   "Adult, all": {
+    "clips": 12,
+    "refWords": 110,
+    "wer": 0.718,
+    "werCi": [
+     0.567,
+     0.951
+    ],
+    "heard": 0.345,
+    "heardCi": [
+     0.098,
+     0.503
+    ]
+   },
+   "olderMinusAdult": {
+    "gulf": {
+     "werDifference": 0.018,
+     "ci": [
+      -0.269,
+      0.223
+     ]
+    },
+    "all": {
+     "werDifference": 0.018,
+     "ci": [
+      -0.286,
+      0.226
+     ]
+    }
+   }
+  },
+  "jaisAsr": {
+   "Older, Gulf (Khaliji)": {
+    "clips": 83,
+    "refWords": 652,
+    "wer": 0.305,
+    "werCi": [
+     0.256,
+     0.364
+    ],
+    "heard": 0.73,
+    "heardCi": [
+     0.676,
+     0.774
+    ]
+   },
+   "Older, other Saudi dialects": {
+    "clips": 37,
+    "refWords": 323,
+    "wer": 0.375,
+    "werCi": [
+     0.285,
+     0.497
+    ],
+    "heard": 0.703,
+    "heardCi": [
+     0.618,
+     0.766
+    ]
+   },
+   "Older, all": {
+    "clips": 120,
+    "refWords": 975,
+    "wer": 0.328,
+    "werCi": [
+     0.284,
+     0.377
+    ],
+    "heard": 0.721,
+    "heardCi": [
+     0.683,
+     0.757
+    ]
+   },
+   "Adult, Gulf (Khaliji)": {
+    "clips": 200,
+    "refWords": 1517,
+    "wer": 0.329,
+    "werCi": [
+     0.291,
+     0.367
+    ],
+    "heard": 0.714,
+    "heardCi": [
+     0.683,
+     0.743
+    ]
+   },
+   "Adult, Najdi": {
+    "clips": 100,
+    "refWords": 1075,
+    "wer": 0.223,
+    "werCi": [
+     0.18,
+     0.285
+    ],
+    "heard": 0.796,
+    "heardCi": [
+     0.737,
+     0.837
+    ]
+   },
+   "Adult, Hijazi": {
+    "clips": 100,
+    "refWords": 1234,
+    "wer": 0.234,
+    "werCi": [
+     0.192,
+     0.284
+    ],
+    "heard": 0.795,
+    "heardCi": [
+     0.753,
+     0.829
+    ]
+   },
+   "Adult, all": {
+    "clips": 400,
+    "refWords": 3826,
+    "wer": 0.269,
+    "werCi": [
+     0.244,
+     0.296
+    ],
+    "heard": 0.763,
+    "heardCi": [
+     0.739,
+     0.785
+    ]
+   },
+   "olderMinusAdult": {
+    "gulf": {
+     "werDifference": -0.024,
+     "ci": [
+      -0.082,
+      0.036
+     ]
+    },
+    "all": {
+     "werDifference": 0.06,
+     "ci": [
+      0.005,
+      0.116
+     ]
+    }
+   }
+  }
+ }
+}

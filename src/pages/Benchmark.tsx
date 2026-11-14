@@ -1,5 +1,6 @@
 import data from '../data/benchmark.json'
 import SurveyChart from './SurveyChart'
+import { OlderSpeakers, RuleChecks } from './EvidenceExtra'
 
 const RULE: Record<string, string> = {
   ours: 'This check: two low checks in a row, or a slowly falling line',
@@ -94,6 +95,10 @@ export default function Benchmark() {
 
       <h2>Settings and limits</h2>
       <p className="muted">Simulated scores are totals with a mean of 33 and a spread between people of 6 points. One check varies within a person by 4.0 points (from published retest studies of animal naming and phone word recall; 3.5 and 4.5 are shown as bounds) and practice adds up to 1.0 point (0.6 published for animal naming, the rest assumed). Decline starts at the fifth check. A flag raised before decline starts is counted as a false alarm, not a detection. Recogniser misses are set at 8% and 15% as illustrations; the measured rates will replace them once the two-recogniser benchmark has run. A simulation shows how the rule behaves under stated assumptions. It does not show that the check detects disease.</p>
+
+      <RuleChecks />
+
+      <OlderSpeakers />
 
       <h2>Real data we have</h2>
       <SurveyChart />
