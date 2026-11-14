@@ -57,15 +57,21 @@ export const NEAR_MIN_LETTERS = 4
 /**
  * The single row an unmatched Arabic token is a near miss of, or -1. Folded spellings count in
  * any closed set. One changed, added or dropped letter counts only in small sets, only for forms
- * of four letters or more, and only when the first letter agrees. A token close to two rows matches neither.
+ * of four letters or more, and only when the first letter agrees. The accusative ending and a dropped
+ * feminine ending count in any set. A token close to two rows matches neither.
  */
 function nearRow(tok: string, forms: { key: string; row: number }[], small: boolean): number {
   const t = foldArabic(tok)
   const tl = [...t].length
   const rows = new Set<number>()
+  // Two regular word forms, in any closed set: the accusative ending (جسرا for جسر) and a
+  // dropped feminine ending, as Gulf speech often says it (زراف for زرافة).
+  const caseEnding = [...tok].length >= 4 && tok.endsWith('ا') ? foldArabic(tok.slice(0, -1)) : null
+  const noFeminine = [...tok].length >= 3 ? foldArabic(`${tok}ه`) : null
   for (const f of forms) {
     const k = foldArabic(f.key)
     if (k === t) { rows.add(f.row); continue }
+    if (k === caseEnding || (f.key.endsWith('ه') && k === noFeminine)) { rows.add(f.row); continue }
     if (!small || [...k].length < NEAR_MIN_LETTERS || tl < NEAR_MIN_LETTERS - 1 || k[0] !== t[0]) continue
     if (withinOne(t, k)) rows.add(f.row)
   }

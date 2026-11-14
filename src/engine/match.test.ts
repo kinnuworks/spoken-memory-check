@@ -71,3 +71,27 @@ describe('Arabic near-miss false-accept guards', () => {
     expect(matchClosedSet(animalWords, LIST2, 'ar').size).toBe(0)
   })
 })
+
+describe('Arabic word forms', () => {
+  const list = WORD_LISTS.ar[0].map((w) => [w])
+  const animals = ANIMALS.ar
+  const row = (w: string) => animals.findIndex((r) => r.includes(w))
+
+  it('accepts the accusative ending on a list word, even a three-letter one', () => {
+    const i = list.findIndex((r) => r[0] === 'جسر')
+    expect(i).toBeGreaterThanOrEqual(0)
+    expect(matchClosedSet('نهر جسرا', list, 'ar').has(i)).toBe(true)
+  })
+
+  it('accepts a dropped feminine ending, in the large animal set too', () => {
+    expect(matchClosedSet('زراف', animals, 'ar').has(row('زرافة'))).toBe(true)
+    expect(matchClosedSet('ناق', animals, 'ar').has(row('ناقة'))).toBe(true)
+  })
+
+  it('does not stretch either rule to other changes', () => {
+    // A letter dropped from the middle, or an ending added to a word not on the list, still fails in the animal set.
+    expect(matchWithRest('زافة', animals, 'ar').found.size).toBe(0)
+    expect(matchWithRest('كرسيا', list, 'ar').found.size).toBe(0)
+    expect(matchWithRest('في', animals, 'ar').found.size).toBe(0)
+  })
+})

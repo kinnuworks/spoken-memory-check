@@ -52,6 +52,18 @@ export default function How() {
         <tbody>{COMPARE.map((c) => <tr key={c.what}><th scope="row"><strong>{c.what}</strong></th><td>{c.clinic}</td><td>{c.tablet}</td><td>{c.ref}</td><td>{c.ours}</td></tr>)}</tbody>
       </table></div>
       <p>This check does not replace the clinic test. It fills the years between clinic tests and cannot detect impairment already present at enrolment.</p>
+      <h2>Path to a pilot</h2>
+      <p>A 12-month feasibility pilot at one screening provider, after ethics approval. Members aged 50 to 64 are randomised at the screening visit to usual care, or usual care plus a check about every six weeks: 250 per arm, sized on baseline completion (55% expected, within 7 points). It also measures agreement with a human listener and retest, by language, age and schooling. True decline is too rare at 50 to 64 for one site to measure detection, so the pilot does not claim to.</p>
+      <p>Stop and review if physicians dismiss more than half of packets over three months, if there is more than one distress complaint per 100 members, if any serious event shows a home check delayed care, or if more than 20% of checks cannot be scored. Full design in <code>docs/PILOT.md</code>.</p>
+      <h2>Questions people ask</h2>
+      <div className="faq">
+        <details><summary>Does it diagnose dementia?</summary><p>No. It looks for change against the person's own earlier checks and asks a physician to decide what to do. A score in the usual range does not rule out impairment, and the clinic memory test at the screening visit continues as before.</p></details>
+        <details><summary>Why by voice?</summary><p>Many older adults in the Gulf had little schooling, and tests that need reading, typing or tapping are unfair to them. Saying words back and naming animals is how memory has been tested over the telephone for decades.</p></details>
+        <details><summary>Where does my voice go?</summary><p>The speech model on the device sends nothing anywhere. The browser's own recogniser may send audio to the browser's maker. In a pilot, any cloud listener would run in a UAE region and only with the regulator's approval.</p></details>
+        <details><summary>What if I don't hear well?</summary><p>Every check starts with a sound check. If it fails, the check is held, not scored low. After two held checks the app suggests a hearing test, which also makes later checks fairer.</p></details>
+        <details><summary>Has it been tested on real people?</summary><p>Partly. On 720 real recordings of single Arabic words from 30 adult volunteers, the first on-device model heard 40% right. An Arabic-tuned model with careful matching heard 82%, and adding each speaker's own voice as the answer key raised that to 93%, with under 1% of wrong words credited. In English the on-device model heard 62%. These are read words, not recall. On public Saudi TV speech, both listeners heard older Gulf speakers no worse than adult Gulf speakers, but no older volunteers have done the check yet. Every recording can also be scored by a person.</p></details>
+        <details><summary>Who sees the scores?</summary><p>Only the ordering physician at the screening clinic, and only if the person agreed. The person hears about any result at an in-person visit.</p></details>
+      </div>
       <div className="stack"><Link className="btn" to="/programme">Programme view</Link><Link className="btn" to="/benchmark">How the flag was tested</Link></div>
     </>
   )

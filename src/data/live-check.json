@@ -1,6 +1,6 @@
 {
  "url": "https://spoken-memory-check.vercel.app",
- "ranAt": "2026-11-14T21:32:08.686Z",
+ "ranAt": "2026-11-14T22:30:33.194Z",
  "passed": 5,
  "total": 5,
  "steps": [
@@ -19,14 +19,14 @@
   {
    "name": "Recorded check in English, scored on the device",
    "ok": true,
-   "detail": "24 to 27 of a true 27, scored in 3.9 s",
-   "seconds": 11.8
+   "detail": "24 to 27 of a true 27, scored in 2.5 s",
+   "seconds": 11
   },
   {
    "name": "Recorded check in Arabic, scored on the device",
    "ok": true,
-   "detail": "20 to 22 of a true 27, scored in 15.7 s",
-   "seconds": 27.6
+   "detail": "21 to 24 of a true 27, scored in 11.7 s",
+   "seconds": 25
   },
   {
    "name": "Packet to closed referral, with the Malaffi message and FHIR file",

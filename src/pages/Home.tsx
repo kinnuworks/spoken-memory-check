@@ -9,8 +9,7 @@ import coverage from '../data/coverage-summary.json'
 import live from '../data/live-check.json'
 import reading from '../data/reading-grade.json'
 import { COST_DEFAULTS, yearlyCost } from '../engine/cost'
-import { lostSignals } from '../engine/signals'
-import { PACKET_STATUSES, STATUS_LABEL, evaluate } from '../engine/change'
+import { evaluate } from '../engine/change'
 import { PERSONAS } from '../engine/histories'
 import { treatableContributors } from '../engine/packet'
 import { ICON, useReveal } from '../components/brand'
@@ -20,7 +19,6 @@ import { SurveyBars } from './SurveyChart'
 import TrajectoryChart from './TrajectoryChart'
 import '../styles/home.css'
 
-const STATUS: Record<string, string> = STATUS_LABEL
 const pct = (x: number) => `${(x * 100).toFixed(1)}%`
 
 const decline = PERSONAS.find((p) => p.id === 'decline')!
@@ -30,15 +28,9 @@ const rows = data.rows.filter((r) => r.world === 'As assumed')
 const ours = rows.find((r) => r.rule === 'ours')!
 const single = rows.find((r) => r.rule === 'single-low')!
 const burden = data.burden.find((b) => b.prevalence === 0.02)!
-const audit = lostSignals()
 
 export default function Home() {
   useReveal()
-  const [pick, setPick] = useState('decline')
-  const person = PERSONAS.find((p) => p.id === pick)!
-  const traj = evaluate(person.checks)
-  const raised = traj.results.find((r) => PACKET_STATUSES.includes(r.status))
-  const last = traj.results[traj.results.length - 1]
   const contributors = treatableContributors(decline.record).slice(0, 3)
 
   return (
@@ -58,9 +50,9 @@ export default function Home() {
           <p className="trust"><span>No sign-up</span><span>Works in the browser</span><span>People shown are synthetic</span><span>Does not diagnose</span></p>
           <ul className="proof" aria-label="What is measured so far">
             <li><b>{Math.round(own.union.rate * 100)}%</b><span>of {own.whisperAlone.n} real Arabic words heard right on the device, with the speaker's own voice as the answer key; 99% in a lab test adding MBZUAI and Inception's Jais-ASR</span></li>
+            <li><b>{Math.round(sada.results.jaisAsr['Older, Gulf (Khaliji)'].wer * 100)}% vs {Math.round(sada.results.jaisAsr['Adult, Gulf (Khaliji)'].wer * 100)}%</b><span>word error for older against adult Gulf speakers on public Saudi TV speech: older voices heard no worse</span></li>
             <li><b>52-45 · 52-46</b><span>the Thiqa hearing and dementia screening packages it fills the memory step of</span></li>
             <li><b>0 errors</b><span>from the official HL7 FHIR validator; referrals in the HL7 form Malaffi asks for</span></li>
-            <li><b>0 violations</b><span>in 48 accessibility checks; {tests.passed} automated tests</span></li>
           </ul>
 
           <div className="hero__visual bleed">
@@ -112,6 +104,60 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Evidence, labelled by kind */}
+      <section className="section section--alt">
+        <div className="container">
+          <div className="section-head reveal">
+            <span className="eyebrow"><span className="dot" />Evidence so far</span>
+            <h2>What we measured, and what we have not.</h2>
+            <p className="lead">Each figure says whether it comes from real recordings, a simulation or the code. No patients yet.</p>
+          </div>
+          <div className="bento">
+            <div className="span-3 reveal">
+              <span className="lbl working">Real recordings</span>
+              <p className="stat">{Math.round(own.union.rate * 100)}% <span>of Arabic words heard right</span></p>
+              <p className="t-small">{own.whisperAlone.n} real single words from {own.speakers} adult volunteers, scored on the device with the speaker's own voice as the answer key ({Math.round(own.whisperAlone.rate * 100)}% by the speech model alone; {(own.templateFalseCredit.rate * 100).toFixed(1)}% wrong words credited). Read words, not recall.</p>
+            </div>
+            <div className="span-3 reveal" style={{ '--i': 1 } as React.CSSProperties}>
+              <span className="lbl working">Older speakers, public data</span>
+              <p className="stat">{Math.round(sada.results.jaisAsr['Older, Gulf (Khaliji)'].wer * 100)}% <span>vs</span> {Math.round(sada.results.jaisAsr['Adult, Gulf (Khaliji)'].wer * 100)}%</p>
+              <p className="t-small">Word error for older against adult Gulf speakers on Saudi TV speech ({sada.results.jaisAsr['Older, Gulf (Khaliji)'].clips} and {sada.results.jaisAsr['Adult, Gulf (Khaliji)'].clips} clips). Both listeners heard older Gulf voices no worse. Not yet older Emirati volunteers doing the check.</p>
+            </div>
+            <div className="span-2 reveal">
+              <span className="lbl simulated">Simulated</span>
+              <p className="stat">{pct(ours.falseAlarmYear)} <span>false alarms a year</span></p>
+              <p className="t-small">in stable people, against {pct(single.falseAlarmYear)} for a rule that flags on one low check.</p>
+            </div>
+            <div className="span-2 reveal" style={{ '--i': 1 } as React.CSSProperties}>
+              <span className="lbl simulated">Simulated</span>
+              <p className="stat">{Math.round(ours.detected['2'] * 100)}% <span>/</span> {Math.round(ours.detected['1'] * 100)}%</p>
+              <p className="t-small">of people losing two points a check, and one point a check, flagged within the year.</p>
+            </div>
+            <div className="span-2 reveal" style={{ '--i': 2 } as React.CSSProperties}>
+              <span className="lbl simulated">Simulated</span>
+              <p className="stat">{Math.round(burden.packetsPer1000)} <span>per 1,000</span></p>
+              <p className="t-small">physician packets a year, {Math.round(burden.realPer1000)} of them real, if 2% of members are in real decline.</p>
+            </div>
+            <div className="span-2 reveal">
+              <span className="lbl working">Tested code</span>
+              <p className="stat">{Math.round(coverage.engine.lines * 100)}% <span>of lines</span></p>
+              <p className="t-small">of the decision code run by {tests.passed} tests, which catch {Math.round(mutation.score * 100)}% of {mutation.mutants} deliberate bugs put into the rules.</p>
+            </div>
+            <div className="span-2 reveal" style={{ '--i': 1 } as React.CSSProperties}>
+              <span className="lbl working">Live site</span>
+              <p className="stat">{live.passed} <span>of</span> {live.total}</p>
+              <p className="t-small">steps passed end to end on the live site in a real browser ({live.ranAt.slice(0, 10)}), both recorded checks included.</p>
+            </div>
+            <div className="span-2 reveal" style={{ '--i': 2 } as React.CSSProperties}>
+              <span className="lbl working">Plain language</span>
+              <p className="stat">Grade {Math.ceil(Math.max(...reading.screens.map((x) => x.grade)))}</p>
+              <p className="t-small">reading level or under on every screen and prompt the person meets, in English. Arabic not graded.</p>
+            </div>
+          </div>
+          <p className="center-link reveal"><Link className="btn btn-outline" to="/benchmark">How the flag was tested<Arrow /></Link></p>
+        </div>
+      </section>
+
       {/* Why a personal baseline */}
       <section className="section section--alt after-bleed">
         <div className="container">
@@ -139,23 +185,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Where it fits in Abu Dhabi */}
-      <section className="section">
-        <div className="container">
-          <div className="section-head reveal">
-            <span className="eyebrow"><span className="dot" />Where it fits</span>
-            <h2>The memory step of a screening package Abu Dhabi already pays for.</h2>
-            <p className="lead">Since 1 September 2026 the adult screening programme has two Thiqa-funded packages called "Comprehensive hearing and dementia screening": code 52-45 every three years at 50 to 64, and 52-46 every year at 65 to 75. They bundle a nurse visit and a hearing screen. They name no memory tool.</p>
-          </div>
-          <div className="fit reveal">
-            <div className="fit__step"><span className="fit__n">1</span><p className="t-title">Hearing first</p><p className="t-small">The hearing check runs before any memory score is trusted. A fail goes to ENT and holds the memory check, so poor hearing is not read as poor memory.</p></div>
-            <div className="fit__step"><span className="fit__n">2</span><p className="t-title">A baseline at the visit, checks at home</p><p className="t-small">The first checks set the person's own baseline. Home checks fill the years between visits, which the package alone does not cover.</p></div>
-            <div className="fit__step"><span className="fit__n">3</span><p className="t-title">Referral the way Malaffi wants it</p><p className="t-small">An approved packet becomes a referral with a priority and a SNOMED-coded specialty, as an HL7 v2 REF message and a FHIR ServiceRequest.</p></div>
-          </div>
-          <p className="pilot-note reveal">Source: DoH Claims Adjudication Rules, Addendum 06 (IFHAS 3.0). Package prices are not public. No health data reaches this site's server: scoring runs on the device, and the optional UAE speech listener is used only with consent.</p>
-        </div>
-      </section>
-
       {/* How it works, in three blocks */}
       <section className="section">
         <div className="container vstack">
@@ -163,7 +192,7 @@ export default function Home() {
             <div>
               <span className="eyebrow"><Mic />Three listeners</span>
               <h3>Every score shows how sure it is.</h3>
-              <p className="lead">The browser's recogniser and an open speech model on the device hear the same words. For word recall there is a third: the person says each word back once while learning the list, and later recall is matched against their own voice, in any dialect. A word heard by two counts for certain; a word heard by one widens the range. When the range is too wide, the check is marked "not scored" and never counted as low.</p>
+              <p className="lead">The browser's recogniser and a speech model on the device hear the same words, and recalled words are also matched against the person's own voice from when they said each word back. A word heard by two counts; a word heard by one widens the range. A range too wide is "not scored", never low.</p>
               <div className="chips"><span className="chip">Speech model runs on the device</span><span className="chip">Gulf Arabic and English</span><span className="chip">No language model</span></div>
             </div>
             <div className="stage stage--soft">
@@ -186,7 +215,7 @@ export default function Home() {
             <div>
               <span className="eyebrow"><Stethoscope />The physician decides</span>
               <h3>A physician reads the packet before anyone is told.</h3>
-              <p className="lead">After two low checks in a row, the ordering physician at the screening clinic gets the trajectory, the treatable causes to rule out first, and the risk factors already in the screening record. If they approve, the app sends one invitation to a visit. The result is given in person.</p>
+              <p className="lead">After two low checks in a row, the ordering physician gets the trajectory, the treatable causes to rule out first and the risk factors already on record. If they approve, the person is invited to a visit and hears the result in person.</p>
               <div className="chips"><span className="chip">Approve, edit or dismiss</span><span className="chip">Treatable causes first</span><span className="chip">FHIR R4 export</span></div>
             </div>
             <div className="stage stage--soft">
@@ -207,7 +236,7 @@ export default function Home() {
             <div>
               <span className="eyebrow"><List />Closing the loop</span>
               <h3>Each referral is tracked until the appointment.</h3>
-              <p className="lead">The clock runs against a 15-working-day target, borrowed from the screening programme's own referral indicator. A programme view counts every member by facility, including people lost to follow-up.</p>
+              <p className="lead">The clock runs against the screening programme's own 15-working-day target. A <Link to="/programme">programme view</Link> counts every member by facility, including people lost to follow-up.</p>
               <div className="chips"><span className="chip">Owner: the ordering physician</span><span className="chip">Small groups suppressed</span></div>
             </div>
             <div className="stage stage--soft">
@@ -233,7 +262,7 @@ export default function Home() {
           <div className="section-head reveal">
             <span className="eyebrow"><span className="dot" />Built into the rule</span>
             <h2>Low scores have more than one cause.</h2>
-            <p className="lead">The rule checks for the common ones before anything reaches a physician, and sends a few things straight there.</p>
+            
           </div>
           <div className="grid grid-3">
             {[
@@ -253,207 +282,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* What the programme gets */}
-      <section className="section">
-        <div className="container">
-          <div className="section-head reveal">
-            <span className="eyebrow"><span className="dot" />For the programme</span>
-            <h2>Three checks on the programme itself.</h2>
-            <p className="lead">A home check is only useful if the results lead somewhere. These three pages watch the people, the hearing care and the listeners.</p>
-          </div>
-          <div className="grid grid-3">
-            <Link to="/programme" className="card prog-card reveal">
-              <span className="lbl simulated">Simulated year</span>
-              <p className="stat">{audit.peopleWithAnyPer1000} <span>per 1,000</span></p>
-              <p className="t-title">Lost signals</p>
-              <p className="t-small">Members with an abnormal brain-relevant result from the screening visit (memory, hearing, mood, HbA1c, blood pressure, vision) and no recorded action by its target date. Each row is a list the facility can call.</p>
-              <span className="prog-link">Open the programme view<Arrow /></span>
-            </Link>
-            <Link to="/hearing" className="card prog-card reveal" style={{ '--i': 1 } as React.CSSProperties}>
-              <span className="lbl working">Working</span>
-              <p className="stat">3 <span>minutes</span></p>
-              <p className="t-title">Hearing, to an aid that is worn</p>
-              <p className="t-small">Digits in noise, answered by tapping, with no speech recognition. A fail goes to the physician as an audiology referral, and a weekly one-tap question shows who is still wearing the aid.</p>
-              <span className="prog-link">Take the hearing check<Arrow /></span>
-            </Link>
-            <Link to="/rescore" className="card prog-card reveal" style={{ '--i': 2 } as React.CSSProperties}>
-              <span className="lbl working">Working</span>
-              <p className="stat">1 <span>in 10</span></p>
-              <p className="t-title">Blind re-scoring</p>
-              <p className="t-small">One recorded check in ten is scored again by a person who cannot see the machine's result. Agreement is tracked by language, and a language whose agreement falls goes back to human scoring.</p>
-              <span className="prog-link">Try it as the reviewer<Arrow /></span>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Try it here: the real rule on six synthetic people */}
-      <section className="section">
-        <div className="container">
-          <div className="section-head reveal">
-            <span className="eyebrow"><span className="dot" />Try it here</span>
-            <h2>Six people, one rule.</h2>
-            <p className="lead">Each synthetic person takes a route through the rule. Pick one to see a year of checks and what the rule decided.</p>
-          </div>
-          <div className="try reveal">
-            <div className="card try-controls">
-              <p className="t-title">Choose a person</p>
-              <div className="try-list">
-                {PERSONAS.map((p) => (
-                  <button key={p.id} className="try-pick" aria-pressed={p.id === pick} onClick={() => setPick(p.id)}>
-                    <b>{p.name}</b><span>{p.path}</span>
-                  </button>
-                ))}
-              </div>
-              <p className="t-micro">Synthetic histories, not patients.</p>
-            </div>
-            <div className="stage stage--soft try-stage">
-              <div className="window">
-                <div className="window__bar"><span className="lights"><i /><i /><i /></span><span className="window__title">{person.name} · a year of checks</span></div>
-                <div className="mock-pad">
-                  <div className="hero-window__head">
-                    <div>
-                      <p className="mock-eyebrow">Rule says</p>
-                      <p className="mock-title">{person.path}<span className="mock-sub"> · {person.checks.some((c) => c.hearingLimited) ? 'sound check failed twice' : STATUS[traj.status] ?? STATUS[last.status]}</span></p>
-                    </div>
-                    {raised && <span className="tag syn">Packet raised {raised.date}</span>}
-                  </div>
-                  <TrajectoryChart key={person.id} checks={person.checks} traj={traj} compact />
-                  <p className="t-small try-story">{person.story}</p>
-                  <div className="mock-actions">
-                    <Link className="btn btn-ink btn-sm" to={`/year/${person.id}`}>See every check<Arrow /></Link>
-                    {raised && <Link className="btn btn-outline btn-sm" to={`/clinician/${person.id}`}>Open the packet</Link>}
-                    <Link className="btn btn-outline btn-sm" to={`/me/${person.id}`}>What they see</Link>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Evidence, labelled by kind */}
-      <section className="section section--alt">
-        <div className="container">
-          <div className="section-head reveal">
-            <span className="eyebrow"><span className="dot" />Evidence so far</span>
-            <h2>What we measured, and what we have not.</h2>
-            <p className="lead">Each figure says where it comes from. Anyone can rerun the simulation from the repository.</p>
-          </div>
-          <div className="bento">
-            <div className="span-3 reveal">
-              <span className="lbl working">Real survey data</span>
-              <p className="stat">48% <span>vs</span> 16%</p>
-              <p className="t-small">Adults over 60 with no memory complaint who fall under a common animal-naming cutoff: under 9 years of school against college graduates.</p>
-            </div>
-            <div className="span-3 reveal" style={{ '--i': 1 } as React.CSSProperties}>
-              <span className="lbl simulated">Simulated</span>
-              <p className="stat">{pct(ours.falseAlarmYear)} <span>false alarms a year</span></p>
-              <p className="t-small">In stable people, against {pct(single.falseAlarmYear)} for a rule that flags on one low check. {data.n.toLocaleString()} simulated people per setting.</p>
-            </div>
-            <div className="span-2 reveal">
-              <span className="lbl simulated">Simulated</span>
-              <p className="stat">{Math.round(ours.detected['2'] * 100)}%</p>
-              <p className="t-small">of people losing two points a check are flagged within the year.</p>
-            </div>
-            <div className="span-2 reveal" style={{ '--i': 1 } as React.CSSProperties}>
-              <span className="lbl simulated">Simulated</span>
-              <p className="stat">{Math.round(burden.packetsPer1000)} <span>per 1,000</span></p>
-              <p className="t-small">packets a year for physicians, {Math.round(burden.realPer1000)} of them real, if 2% of members are in real decline.</p>
-            </div>
-            <div className="span-2 reveal" style={{ '--i': 2 } as React.CSSProperties}>
-              <span className="lbl working">Real recordings</span>
-              <p className="stat">{Math.round(own.previousModelRate * 100)}% <span>to</span> {Math.round(own.union.rate * 100)}%</p>
-              <p className="t-small">of real single Arabic words heard right: the first on-device model, then an Arabic-tuned model ({Math.round(own.whisperAlone.rate * 100)}%) with the speaker's own voice as the answer key ({own.whisperAlone.n} clips, {own.speakers} adult volunteers; {(own.templateFalseCredit.rate * 100).toFixed(1)}% wrong words credited). Read words, not recall, from adult volunteers of unstated age.</p>
-            </div>
-            <div className="span-3 reveal">
-              <span className="lbl working">Real recordings, public data</span>
-              <p className="stat">{Math.round(sada.results.jaisAsr['Older, Gulf (Khaliji)'].wer * 100)}% <span>vs</span> {Math.round(sada.results.jaisAsr['Adult, Gulf (Khaliji)'].wer * 100)}%</p>
-              <p className="t-small">Word error for older Gulf speakers against adult Gulf speakers, Jais-ASR on Saudi TV speech ({sada.results.jaisAsr['Older, Gulf (Khaliji)'].clips} and {sada.results.jaisAsr['Adult, Gulf (Khaliji)'].clips} clips). No sign that older Gulf voices are heard worse. TV sentences, not a memory check.</p>
-            </div>
-            <div className="span-3 reveal" style={{ '--i': 1 } as React.CSSProperties}>
-              <span className="lbl working">Tested code</span>
-              <p className="stat">{Math.round(mutation.score * 100)}% <span>of deliberate bugs caught</span></p>
-              <p className="t-small">{mutation.mutants} small bugs were put into the decision rules one at a time; the tests caught {mutation.caught}. Most of the rest only change wording.</p>
-            </div>
-            <div className="span-2 reveal">
-              <span className="lbl working">Tested code</span>
-              <p className="stat">{Math.round(coverage.engine.lines * 100)}% <span>of lines</span></p>
-              <p className="t-small">of the decision code run under the tests ({coverage.engine.linesCovered} lines). The rules that decide what happens to a person are covered on every branch.</p>
-            </div>
-            <div className="span-2 reveal" style={{ '--i': 1 } as React.CSSProperties}>
-              <span className="lbl working">Live site</span>
-              <p className="stat">{live.passed} <span>of</span> {live.total}</p>
-              <p className="t-small">end-to-end steps passed on the live site in a real browser on {live.ranAt.slice(0, 10)}, both recorded checks scored on the device included.</p>
-            </div>
-            <div className="span-2 reveal" style={{ '--i': 2 } as React.CSSProperties}>
-              <span className="lbl working">Plain language</span>
-              <p className="stat">Grade {Math.ceil(Math.max(...reading.screens.map((x) => x.grade)))}</p>
-              <p className="t-small">reading level or under on every screen the person reads and every spoken prompt (English; guidance asks for 6 to 8). Arabic not yet graded.</p>
-            </div>
-          </div>
-          <p className="center-link reveal"><Link className="btn btn-outline" to="/benchmark">How the flag was tested<Arrow /></Link></p>
-        </div>
-      </section>
-
-      {/* Path to a pilot */}
-      <section className="section">
-        <div className="container">
-          <div className="section-head reveal">
-            <span className="eyebrow"><span className="dot" />Path to a pilot</span>
-            <h2>Twelve months, one screening provider, two arms.</h2>
-            <p className="lead">A feasibility pilot after ethics approval. It measures whether people finish a baseline and whether approved packets reach a specialist on time. True decline is too rare at 50 to 64 for one site to measure detection, so the pilot does not claim to.</p>
-          </div>
-          <div className="pilot reveal">
-            <div className="pilot__col">
-              <p className="eyebrow">Design</p>
-              <ul className="checks">
-                <li>Members aged 50 to 64, randomised at the screening visit</li>
-                <li>Usual care, or usual care plus a check about every six weeks</li>
-                <li>250 per arm, sized on baseline completion (55% expected, within 7 points)</li>
-                <li>Agreement with a human listener and retest, by language, age and schooling</li>
-              </ul>
-            </div>
-            <div className="pilot__col">
-              <p className="eyebrow">Stop and review if</p>
-              <ul className="checks">
-                <li>Physicians dismiss more than half of packets over three months</li>
-                <li>More than one distress complaint per 100 members</li>
-                <li>Any serious event where a home check delayed care</li>
-                <li>More than 20% of checks cannot be scored</li>
-              </ul>
-            </div>
-            <div className="pilot__col">
-              <p className="eyebrow">Cost lines, estimated before measuring</p>
-              <ul className="checks">
-                <li>On-device listener: nothing per check</li>
-                <li>Physician: about 10 minutes a packet, about 11 hours per 1,000 members a year (simulated packet rate)</li>
-                <li>Hosting and any cloud listener in a UAE region</li>
-                <li>Paid first by the screening programme; then insurers and employers for residents outside it</li>
-              </ul>
-            </div>
-          </div>
-          <p className="pilot-note reveal">Regulatory route: the pilot runs as research under ethics approval; registration as medical-device software would follow on its evidence. Cloud processing of health data needs the Department of Health's approval. No price is quoted before the cost lines are measured.</p>
-        </div>
-      </section>
-
       {/* Who pays */}
       <WhoPays />
-
-      {/* Questions */}
-      <section className="section">
-        <div className="container">
-          <div className="section-head reveal"><h2>Questions people ask.</h2></div>
-          <div className="faq reveal">
-            <details><summary>Does it diagnose dementia?</summary><p>No. It looks for change against the person's own earlier checks and asks a physician to decide what to do. A score in the usual range does not rule out impairment, and the clinic memory test at the screening visit continues as before.</p></details>
-            <details><summary>Why by voice?</summary><p>Many older adults in the Gulf had little schooling, and tests that need reading, typing or tapping are unfair to them. Saying words back and naming animals is how memory has been tested over the telephone for decades.</p></details>
-            <details><summary>Where does my voice go?</summary><p>The speech model on the device sends nothing anywhere. The browser's own recogniser may send audio to the browser's maker. In a pilot, any cloud listener would run in a UAE region and only with the regulator's approval.</p></details>
-            <details><summary>What if I don't hear well?</summary><p>Every check starts with a sound check. If it fails, the check is held, not scored low. After two held checks the app suggests a hearing test, which also makes later checks fairer.</p></details>
-            <details><summary>Has it been tested on real people?</summary><p>Partly. On 720 real recordings of single Arabic words from 30 adult volunteers, the first on-device model heard 40% right. An Arabic-tuned model with careful matching heard 82%, and adding each speaker's own voice as the answer key raised that to 93%, with under 1% of wrong words credited. In English the on-device model heard 62%. These are read words, not recall. On public Saudi TV speech, both listeners heard older Gulf speakers no worse than adult Gulf speakers, but no older volunteers have done the check yet. Every recording can also be scored by a person.</p></details>
-            <details><summary>Who sees the scores?</summary><p>Only the ordering physician at the screening clinic, and only if the person agreed. The person hears about any result at an in-person visit.</p></details>
-          </div>
-        </div>
-      </section>
 
       {/* Final call */}
       <section className="section section--alt final">
@@ -480,9 +310,14 @@ function WhoPays() {
     <section className="section section--alt">
       <div className="container">
         <div className="section-head reveal">
-          <span className="eyebrow"><span className="dot" />Who pays</span>
+          <span className="eyebrow"><span className="dot" />Where it fits, and who pays</span>
           <h2>About AED {Math.round(yearlyCost().perEligibleAed)} per eligible member a year.</h2>
-          <p className="lead">The screening programme pays, through a package it already funds. Thiqa packages 52-45 (ages 50 to 64, every three years) and 52-46 (65 to 75, yearly) are called "Comprehensive hearing and dementia screening" and name no memory tool. The check is the memory step between those visits, run on the member's own phone.</p>
+          <p className="lead">Since 1 September 2026 the adult screening programme has two Thiqa-funded packages called "Comprehensive hearing and dementia screening": 52-45 every three years at 50 to 64, and 52-46 every year at 65 to 75. They name no memory tool. This check is that memory step, done at home between visits, and the programme pays through the package.</p>
+        </div>
+        <div className="fit reveal" style={{ marginBottom: 24 }}>
+          <div className="fit__step"><span className="fit__n">1</span><p className="t-title">Hearing first</p><p className="t-small">A failed hearing check goes to ENT and holds the memory check, so poor hearing is not read as poor memory.</p></div>
+          <div className="fit__step"><span className="fit__n">2</span><p className="t-title">Baseline at the visit, checks at home</p><p className="t-small">The first checks set the person's own baseline; home checks fill the years between visits.</p></div>
+          <div className="fit__step"><span className="fit__n">3</span><p className="t-title">Referral the way Malaffi wants it</p><p className="t-small">An approved packet becomes an HL7 v2 REF message with a SNOMED-coded specialty, and a FHIR ServiceRequest.</p></div>
         </div>
         <div className="pilot reveal">
           <div className="pilot__col">
@@ -493,8 +328,8 @@ function WhoPays() {
             <p className="t-small">{aed(c.perCheckAed)} per check; {c.checks.toLocaleString('en')} checks and {c.packets.toLocaleString('en')} physician packets a year, about {Math.round(c.physicianHours)} physician hours in all.</p>
             <table>
               <tbody>
-                {c.lines.map((l) => <tr key={l.name}><th scope="row">{l.name}</th><td>{aed(l.aed)}</td></tr>)}
-                <tr><th scope="row">Total a year</th><td><strong>{aed(c.totalAed)}</strong></td></tr>
+                {c.lines.map((l) => <tr key={l.name}><th scope="row" style={{ textAlign: 'left', fontWeight: 400 }}>{l.name}</th><td style={{ whiteSpace: 'nowrap', textAlign: 'right' }}>{aed(l.aed)}</td></tr>)}
+                <tr><th scope="row" style={{ textAlign: 'left' }}>Total a year</th><td style={{ whiteSpace: 'nowrap', textAlign: 'right' }}><strong>{aed(c.totalAed)}</strong></td></tr>
               </tbody>
             </table>
             <p className="t-small">Fixed costs dominate. The on-device listener costs nothing per check, and cloud speech in a UAE region is under 2% of the total. Most inputs are our assumptions until a pilot measures them; each one is listed with its source in the commercial case.</p>
@@ -516,7 +351,7 @@ function WhoPays() {
               <li>SEHA clinics that deliver the programme, with the memory clinic at Sheikh Shakhbout Medical City</li>
               <li>M42 (Cleveland Clinic Abu Dhabi, Healthpoint), which also reaches privately insured residents</li>
             </ul>
-            <p className="t-small">The ask is a 12-month feasibility pilot at one screening clinic after ethics approval, with a clinical lead, ethics sponsorship and a few hours a week of a family physician. The partner keeps the data. No partner has agreed yet.</p>
+            <p className="t-small">The ask is a 12-month feasibility pilot at one screening clinic after ethics approval: members aged 50 to 64 randomised to usual care or usual care plus home checks, 250 per arm, with stop rules (for example, physicians dismissing over half of packets). The partner keeps the data. No partner has agreed yet. <Link to="/how" style={{ textDecoration: 'underline', color: 'inherit' }}>Pilot design and questions</Link></p>
           </div>
         </div>
         <p className="pilot-note reveal">Sources: DoH Claims Adjudication Rules, Addendum 06 (IFHAS 3.0) and Addendum 30 (telemedicine); Azure retail prices for UAE North. Package prices sit in the mandatory tariff, which we have not seen.</p>
