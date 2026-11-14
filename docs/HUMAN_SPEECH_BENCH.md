@@ -103,7 +103,7 @@ Animals (English only) did best, at 89% (72-96) on 27 clips, but the sample is s
 | whisper-small-ar q8, style prompt | 406 MB | 68% (61-75) | 83% (77-88) | 0.65 |
 | whisper-small-ar q8, prompt of other number words or short replies | 406 MB | 72% (65-78) | 83% (77-88) | 0.66 |
 | whisper-small-ar q4, no prompt | 299 MB | 66% (59-73) | 82% (76-87) | 1.15 |
-| whisper-small-ar q4, style prompt (new app setting) | 299 MB | 63% (56-70) | 81% (75-86) | 1.26 |
+| whisper-small-ar q4, style prompt | 299 MB | 63% (56-70) | 81% (75-86) | 1.26 |
 | whisper-small-arabic-dialectal-v2 (OpenVoiceOS ONNX), no prompt | about 706 MB | 59% (52-66) | 71% (64-77) | 0.85 |
 | whisper-small-arabic-dialectal-v2, style prompt | about 706 MB | 53% (46-60) | 64% (57-71) | 0.61 |
 | whisper-large-v3-turbo q4, no prompt | about 760 MB | 43% (36-51) | 59% (52-66) | 8.64 |
@@ -144,3 +144,17 @@ Both datasets are used unchanged, under CC BY 4.0. They are extracted under `ext
 2. `npx tsx scripts/human-speech-bench.ts en`, then `npx tsx scripts/human-speech-bench.ts ar`. Each run merges its language into `src/data/human-speech-bench.json`.
 3. `npx tsx scripts/human-speech-bench.ts md` prints the tables above from that file.
 4. The Arabic experiments: `npx tsx scripts/arabic-asr-experiments.ts run <config> subset|other|seq`, then `report subset`, `report seq` and `lexicon`.
+
+## A smaller copy of the Arabic model (15 Nov)
+
+The 4-bit build of whisper-small-ar leaves the decoder's token-embedding table (51,865 x 768) at 32 bits: 159 MB of the 232 MB decoder. `scripts/shrink-arabic-model.py` stores that table as 4-bit numbers, packed two to a byte, with one 16-bit scale per block of 64, and restores it with standard ONNX operators when the model loads. Nothing else changes. The download falls from about 299 MB to about 165 MB, and every file is under 100 MB, so this site serves the model itself (`scripts/build-arabic-model.sh`).
+
+On all 720 real Arabic clips of the bench, with the style prompt and the app's matcher:
+
+| Model | Download | Words heard right, all 720 clips | Wrong words credited |
+|---|---|---|---|
+| whisper-small-ar q4, as published | 299 MB | 82% (79 to 85) | 0% (0 to 1) |
+| Same, embedding table at 4 bits (now in the app) | 165 MB | 83% (80 to 86) | 0% (0 to 1) |
+
+The difference is inside the interval: the smaller copy hears as well as the original. `npx tsx scripts/arabic-asr-experiments.ts report full`, configurations `smallarq4-style` and `smallarq4emb4-style`.
+

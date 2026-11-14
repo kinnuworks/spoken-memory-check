@@ -5,7 +5,7 @@ import { ANIMALS, WORD_LISTS, type Lang } from '../engine/lexicon'
 import { scoreTask, type RangeScore } from '../engine/score'
 import { addConfirmed, features, spot, type Templates } from '../engine/templates'
 import { decodeTo16k, level } from '../speech/capture'
-import { DOWNLOAD_MB, SECOND_NAME, loadSecond, transcribeSecond } from '../speech/second'
+import { DOWNLOAD_FROM, DOWNLOAD_MB, SECOND_NAME, loadSecond, transcribeSecond } from '../speech/second'
 import { OWN_NAME } from '../speech/session'
 
 // The first check anyone takes uses list 1, so the recording does too.
@@ -191,7 +191,7 @@ export default function RecordedCheck() {
         <button className="seg" lang="ar" aria-pressed={lang === 'ar'} disabled={busy} onClick={() => reset('ar')}>العربية</button>
       </div>
       <p>No microphone needed. A computer voice plays the person's side of the whole four-minute check. Your device then scores it the way the real check would: the ten words said back become the answer key, and two listeners go through each recall and the minute of animals.</p>
-      <p className="note">Two listeners score here. <strong>On-device</strong> is an open speech model that runs in this browser and sends nothing anywhere (one-time download of about {DOWNLOAD_MB[lang]} MB from huggingface.co). <strong>{OWN_NAME}</strong> matches recall against the ten words as this speaker said them back. The real check also has the browser's own speech recogniser, but that only listens to a live microphone, so it is left out here.</p>
+      <p className="note">Two listeners score here. <strong>On-device</strong> is an open speech model that runs in this browser and sends nothing anywhere (one-time download of about {DOWNLOAD_MB[lang]} MB from {DOWNLOAD_FROM[lang]}). <strong>{OWN_NAME}</strong> matches recall against the ten words as this speaker said them back. The real check also has the browser's own speech recogniser, but that only listens to a live microphone, so it is left out here.</p>
 
       {stage === 'intro' && <div className="stack"><button className="primary" onClick={run}>Score the whole check on my device</button></div>}
       {busy && <p className="listening"><i />{step}</p>}

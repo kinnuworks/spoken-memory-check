@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { ANIMALS, type Lang } from '../engine/lexicon'
 import { scoreTask, type RangeScore } from '../engine/score'
 import { decodeTo16k } from '../speech/capture'
-import { DOWNLOAD_MB, SECOND_NAME, loadSecond, transcribeSecond } from '../speech/second'
+import { DOWNLOAD_FROM, DOWNLOAD_MB, SECOND_NAME, loadSecond, transcribeSecond } from '../speech/second'
 import SurveyChart from './SurveyChart'
 
 const CLIP: Record<Lang, string> = { en: 'samples/synthetic-voice-animals-en.wav', ar: 'samples/synthetic-voice-animals-ar.wav' }
@@ -49,7 +49,7 @@ export default function Recorded() {
 
       {stage === 'intro' && (
         <>
-          <p className="note">The listener is an open speech model that runs on this device. It needs a one-time download of about {DOWNLOAD_MB[lang]} MB from huggingface.co. The recording is not sent anywhere.</p>
+          <p className="note">The listener is an open speech model that runs on this device. It needs a one-time download of about {DOWNLOAD_MB[lang]} MB from {DOWNLOAD_FROM[lang]}. The recording is not sent anywhere.</p>
           <div className="stack"><button className="primary" onClick={run}>Score this recording on my device</button></div>
         </>
       )}

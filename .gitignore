@@ -36,3 +36,4 @@ output/
 coverage/
 reports/
 .stryker-tmp/
+public/models/

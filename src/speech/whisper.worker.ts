@@ -1,13 +1,18 @@
 /// <reference lib="webworker" />
 // The second listener: an open speech model that runs on this device, in this worker.
 // It hears the finished clip, never a live stream, and sends nothing anywhere.
-import { AutoProcessor, AutoTokenizer, WhisperForConditionalGeneration } from '@huggingface/transformers'
+import { AutoProcessor, AutoTokenizer, WhisperForConditionalGeneration, env } from '@huggingface/transformers'
 
 type Lang = 'en' | 'ar'
 // Arabic uses a small model fine-tuned on Arabic (ayoubkirouane/whisper-small-ar, Apache-2.0). On real
 // recordings of single Arabic words it found the right word far more often than the general small model
-// (scripts/arabic-asr-experiments.ts). Its 4-bit weights scored the same as 8-bit and download about 300 MB.
-const MODEL: Record<Lang, string> = { en: 'onnx-community/whisper-base', ar: 'onnx-community/whisper-small-ar-ONNX' }
+// (scripts/arabic-asr-experiments.ts). Its 4-bit weights scored the same as 8-bit. This site serves its own copy
+// with the token-embedding table, left at 32 bits in that build, also stored as 4-bit (scripts/shrink-arabic-model.py):
+// about 165 MB to download instead of 299, every file under 100 MB. English still comes from huggingface.co.
+const MODEL: Record<Lang, string> = { en: 'onnx-community/whisper-base', ar: 'whisper-small-ar-q4emb' }
+const FROM_THIS_SITE: Record<Lang, boolean> = { en: false, ar: true }
+const ORIGINAL: Record<Lang, string> = { en: 'onnx-community/whisper-base', ar: 'onnx-community/whisper-small-ar-ONNX' }
+env.localModelPath = `${self.location.origin}/models/`
 const DTYPE: Record<Lang, 'q8' | 'q4'> = { en: 'q8', ar: 'q4' }
 // A prompt that shows the wanted format (single nouns, comma separated) and none of the answers.
 // Putting the word list itself in the prompt made the model report words nobody said.
@@ -31,11 +36,14 @@ async function load(lang: Lang) {
       postMessage({ type: 'progress', percent: Math.round(vals.reduce((a, b) => a + b, 0) / vals.length) })
     }
   }
-  const [processor, tokenizer, model] = await Promise.all([
-    AutoProcessor.from_pretrained(id, { progress_callback }),
-    AutoTokenizer.from_pretrained(id, { progress_callback }),
-    WhisperForConditionalGeneration.from_pretrained(id, { dtype: DTYPE[lang], device: 'wasm', progress_callback }),
+  // The tokenizer and audio settings are the original model's, unchanged, so they come from its own repository.
+  env.allowLocalModels = false
+  const [processor, tokenizer] = await Promise.all([
+    AutoProcessor.from_pretrained(ORIGINAL[lang], { progress_callback }),
+    AutoTokenizer.from_pretrained(ORIGINAL[lang], { progress_callback }),
   ])
+  env.allowLocalModels = FROM_THIS_SITE[lang]
+  const model = await WhisperForConditionalGeneration.from_pretrained(id, { local_files_only: FROM_THIS_SITE[lang], dtype: DTYPE[lang], device: 'wasm', progress_callback })
   loaded = { lang, processor, tokenizer, model }
 }
 

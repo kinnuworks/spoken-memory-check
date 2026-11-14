@@ -2,7 +2,9 @@ import type { Lang } from '../engine/lexicon'
 
 // Main-thread handle on the second listener (see whisper.worker.ts).
 export const SECOND_NAME = 'On-device'
-export const DOWNLOAD_MB: Record<Lang, number> = { en: 77, ar: 299 }
+export const DOWNLOAD_MB: Record<Lang, number> = { en: 77, ar: 165 }
+/** Where the one-time download comes from. The Arabic model is a smaller copy served by this site. */
+export const DOWNLOAD_FROM: Record<Lang, string> = { en: 'huggingface.co', ar: 'this site' }
 
 let worker: Worker | null = null
 let seq = 0

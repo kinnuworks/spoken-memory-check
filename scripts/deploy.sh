@@ -7,6 +7,9 @@ cd "$(dirname "$0")/.."
 bash scripts/count-tests.sh
 npm run build
 
+# The Arabic speech model is served from this site (built by scripts/build-arabic-model.sh, not in git).
+test -s dist/models/whisper-small-ar-q4emb/onnx/decoder_model_merged_q4.onnx || { echo "Arabic model missing: run scripts/build-arabic-model.sh"; exit 1; }
+
 out="${DEPLOY_DIR:-$(mktemp -d)}"
 rm -rf "$out/site"
 mkdir -p "$out/site"
@@ -29,6 +32,10 @@ cat > "$out/site/vercel.json" <<'JSON'
         { "key": "Referrer-Policy", "value": "no-referrer" },
         { "key": "Permissions-Policy", "value": "microphone=(self), camera=(), geolocation=()" }
       ]
+    },
+    {
+      "source": "/models/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=604800" }]
     },
     {
       "source": "/assets/(.*)",

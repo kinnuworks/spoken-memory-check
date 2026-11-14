@@ -8,7 +8,7 @@ import { clearChecks, loadChecks, saveCheck, type StoredCheck } from '../engine/
 import { browserSpeechAvailable, type ListenControl } from '../speech/recogniser'
 import { level, startCapture } from '../speech/capture'
 import { addConfirmed, features, type Templates } from '../engine/templates'
-import { DOWNLOAD_MB, loadSecond, secondLoading, secondSupported } from '../speech/second'
+import { DOWNLOAD_FROM, DOWNLOAD_MB, loadSecond, secondLoading, secondSupported } from '../speech/second'
 import { OWN_NAME, listenTask, type Heard } from '../speech/session'
 import { cloudAvailable } from '../speech/cloud'
 import { loadConsent, saveConsent } from '../engine/consent'
@@ -175,7 +175,7 @@ export default function Check() {
           {lang === 'ar' && !ARABIC_REVIEWED && <p className="note">The Arabic wording and word lists are a draft, not yet reviewed by a native Gulf Arabic speaker, and the voice is the device's synthetic one.</p>}
           <label className="choice"><input className="switch" type="checkbox" checked={offDay} onChange={(e) => setOffDay(e.target.checked)} /><span>I slept badly or feel unwell today</span></label>
           {cloudReady && <label className="choice"><input className="switch" type="checkbox" checked={cloudOn} onChange={(e) => { setCloudOn(e.target.checked); saveConsent({ ...loadConsent(), cloudListener: e.target.checked }) }} /><span>Also let a speech service hosted in the UAE hear this check. It has a Gulf Arabic model; how well it hears Gulf speakers in this check has not been measured yet. Your recording leaves this device for this, is not kept, and you can turn this off at any time.</span></label>}
-          <p className="note">Two listeners score what you say: your browser's own speech service, which may send audio to the browser's maker, and an open speech model that runs on this device and sends your recording nowhere{secondSupported() ? ` (one-time download of about ${DOWNLOAD_MB[lang]} MB from huggingface.co)` : ' (not available on this device, so one listener will score)'}. Prompts use your device's voice. Your scores stay on this device. This is a prototype and does not diagnose.</p>
+          <p className="note">Two listeners score what you say: your browser's own speech service, which may send audio to the browser's maker, and an open speech model that runs on this device and sends your recording nowhere{secondSupported() ? ` (one-time download of about ${DOWNLOAD_MB[lang]} MB from ${DOWNLOAD_FROM[lang]})` : ' (not available on this device, so one listener will score)'}. Prompts use your device's voice. Your scores stay on this device. This is a prototype and does not diagnose.</p>
           {lang === 'ar' && secondSupported() && percent === null && !secondLoading('ar') && <p><button className="small" onClick={startSecond}>Add the second listener for Arabic ({DOWNLOAD_MB.ar} MB)</button></p>}
           <label className="choice"><input className="switch" type="checkbox" checked={agreed} onChange={(e) => { setAgreed(e.target.checked); saveConsent({ ...loadConsent(), takeChecks: e.target.checked }) }} /><span>I agree to take memory checks at home and keep my scores on this device. I can turn this off and delete my checks at any time.</span></label>
           <div className="stack"><button className="primary" disabled={!agreed} onClick={run}>Start the check</button>{!agreed && <p className="muted">Turn on the agreement above to start.</p>}</div>

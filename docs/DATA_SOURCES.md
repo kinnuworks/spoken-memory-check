@@ -18,3 +18,7 @@ Not used: any licensed cognitive test (for example MoCA, MMSE, TICS, CERAD); any
 ## SADA 2022 (Saudi TV speech)
 
 Saudi Data and AI Authority, test split, from huggingface.co/datasets/MohamedRashad/SADA22. CC BY-NC-SA 4.0. Used only to measure the listeners by speaker age group and dialect (`docs/OLDER_SPEAKERS_BENCH.md`). Not redistributed, not used to train or tune anything, not shipped in the app.
+
+## Arabic speech model served by this site
+
+A modified copy of onnx-community/whisper-small-ar-ONNX (from ayoubkirouane/whisper-small-ar, Apache-2.0): the decoder's token-embedding table is stored as 4-bit numbers (`scripts/shrink-arabic-model.py`). Apache-2.0 allows modified copies to be redistributed; the model card and licence go with the files.

@@ -35,6 +35,8 @@ const CONFIGS: Record<string, Config> = {
   'smallar-style': { model: 'onnx-community/whisper-small-ar-ONNX', dtype: 'q8', prompt: 'style', note: 'as above, style prompt' },
   'smallarq4-none': { model: 'onnx-community/whisper-small-ar-ONNX', dtype: 'q4', prompt: 'none', note: 'as smallar, 4-bit weights' },
   'smallarq4-style': { model: 'onnx-community/whisper-small-ar-ONNX', dtype: 'q4', prompt: 'style', note: 'as smallar, 4-bit weights, style prompt' },
+  'smallarq4emb4-style': { model: 'whisper-small-ar-q4emb', dtype: 'q4', prompt: 'style', local: true, note: 'as smallarq4-style, token-embedding table stored as 4-bit in blocks of 64 (scripts/shrink-arabic-model.py), about 165 MB instead of 299; the version the app serves' },
+  'smallarq4emb8-style': { model: 'whisper-small-ar-q8emb', dtype: 'q4', prompt: 'style', local: true, note: 'as smallarq4-style, token-embedding table stored as 8-bit (scripts/shrink-arabic-model.py), about 184 MB instead of 299' },
   'smallar-task': { model: 'onnx-community/whisper-small-ar-ONNX', dtype: 'q8', prompt: 'task', note: 'as smallar, task prompt' },
   'dialect-none': { model: 'ovos-small-dialect', dtype: 'int8', prompt: 'none', local: true, tokenizer: 'onnx-community/whisper-small', note: 'oddadmix/whisper-small-arabic-dialectal-v2 via OpenVoiceOS ONNX, Apache-2.0' },
   'dialect-style': { model: 'ovos-small-dialect', dtype: 'int8', prompt: 'style', local: true, tokenizer: 'onnx-community/whisper-small', note: 'as above, style prompt' },

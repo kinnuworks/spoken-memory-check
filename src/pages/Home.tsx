@@ -5,6 +5,7 @@ import own from '../data/own-voice-summary.json'
 import tests from '../data/tests.json'
 import sada from '../data/sada-bench.json'
 import mutation from '../data/mutation-summary.json'
+import { COST_DEFAULTS, yearlyCost } from '../engine/cost'
 import { lostSignals } from '../engine/signals'
 import { PACKET_STATUSES, STATUS_LABEL, evaluate } from '../engine/change'
 import { PERSONAS } from '../engine/histories'
@@ -418,6 +419,9 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Who pays */}
+      <WhoPays />
+
       {/* Questions */}
       <section className="section">
         <div className="container">
@@ -427,7 +431,7 @@ export default function Home() {
             <details><summary>Why by voice?</summary><p>Many older adults in the Gulf had little schooling, and tests that need reading, typing or tapping are unfair to them. Saying words back and naming animals is how memory has been tested over the telephone for decades.</p></details>
             <details><summary>Where does my voice go?</summary><p>The speech model on the device sends nothing anywhere. The browser's own recogniser may send audio to the browser's maker. In a pilot, any cloud listener would run in a UAE region and only with the regulator's approval.</p></details>
             <details><summary>What if I don't hear well?</summary><p>Every check starts with a sound check. If it fails, the check is held, not scored low. After two held checks the app suggests a hearing test, which also makes later checks fairer.</p></details>
-            <details><summary>Has it been tested on real people?</summary><p>Partly. On 720 real recordings of single Arabic words from 30 adult volunteers, the first on-device model heard 40% right. An Arabic-tuned model with careful matching heard 82%, and adding each speaker's own voice as the answer key raised that to 93%, with under 1% of wrong words credited. In English the on-device model heard 62%. These are read words, not recall, and no older or Gulf speakers yet. Every recording can also be scored by a person.</p></details>
+            <details><summary>Has it been tested on real people?</summary><p>Partly. On 720 real recordings of single Arabic words from 30 adult volunteers, the first on-device model heard 40% right. An Arabic-tuned model with careful matching heard 82%, and adding each speaker's own voice as the answer key raised that to 93%, with under 1% of wrong words credited. In English the on-device model heard 62%. These are read words, not recall. On public Saudi TV speech, both listeners heard older Gulf speakers no worse than adult Gulf speakers, but no older volunteers have done the check yet. Every recording can also be scored by a person.</p></details>
             <details><summary>Who sees the scores?</summary><p>Only the ordering physician at the screening clinic, and only if the person agreed. The person hears about any result at an in-person visit.</p></details>
           </div>
         </div>
@@ -447,3 +451,59 @@ export default function Home() {
     </main>
   )
 }
+
+const aed = (x: number) => `AED ${Math.round(x).toLocaleString('en')}`
+
+/** Who pays, the modelled yearly cost for one screening provider, and the first pilot ask. */
+function WhoPays() {
+  const [uptake, setUptake] = useState(COST_DEFAULTS.uptake)
+  const c = yearlyCost({ ...COST_DEFAULTS, uptake })
+  return (
+    <section className="section section--alt">
+      <div className="container">
+        <div className="section-head reveal">
+          <span className="eyebrow"><span className="dot" />Who pays</span>
+          <h2>About AED {Math.round(yearlyCost().perEligibleAed)} per eligible member a year.</h2>
+          <p className="lead">The screening programme pays, through a package it already funds. Thiqa packages 52-45 (ages 50 to 64, every three years) and 52-46 (65 to 75, yearly) are called "Comprehensive hearing and dementia screening" and name no memory tool. The check is the memory step between those visits, run on the member's own phone.</p>
+        </div>
+        <div className="pilot reveal">
+          <div className="pilot__col">
+            <p className="eyebrow">Modelled cost, one provider with {COST_DEFAULTS.eligible.toLocaleString('en')} members</p>
+            <label className="t-small" htmlFor="uptake">Members who take part: <strong>{Math.round(uptake * 100)}%</strong></label>
+            <input id="uptake" type="range" min={0.1} max={0.8} step={0.05} value={uptake} onChange={(e) => setUptake(Number(e.target.value))} style={{ width: '100%', accentColor: 'var(--accent)' }} />
+            <p className="stat">{aed(c.perEligibleAed)} <span>per eligible member a year</span></p>
+            <p className="t-small">{aed(c.perCheckAed)} per check; {c.checks.toLocaleString('en')} checks and {c.packets.toLocaleString('en')} physician packets a year, about {Math.round(c.physicianHours)} physician hours in all.</p>
+            <table>
+              <tbody>
+                {c.lines.map((l) => <tr key={l.name}><th scope="row">{l.name}</th><td>{aed(l.aed)}</td></tr>)}
+                <tr><th scope="row">Total a year</th><td><strong>{aed(c.totalAed)}</strong></td></tr>
+              </tbody>
+            </table>
+            <p className="t-small">Fixed costs dominate. The on-device listener costs nothing per check, and cloud speech in a UAE region is under 2% of the total. Most inputs are our assumptions until a pilot measures them; each one is listed with its source in the commercial case.</p>
+          </div>
+          <div className="pilot__col">
+            <p className="eyebrow">Billing routes to confirm</p>
+            <ul className="checks">
+              <li>The memory step of packages 52-45 and 52-46, paid per enrolled member by the programme</li>
+              <li>Physician packet review as a remote service: DoH's telemedicine addendum lists remote data review (99091) and e-consults (99446 to 99448). Whether a packet qualifies is for the partner's billing team to confirm</li>
+              <li>For residents outside the programme: insurers and employers, at the same cost per member</li>
+            </ul>
+            <p className="eyebrow">For comparison</p>
+            <p className="t-small">Published prices of other digital memory tests: about US$40 a test (Cognivue clinics), US$25 a test (BrainTest eSAGE, 2022) and US$299 a month for up to ten patients (BrainCheck). Those are prices; ours is a cost before any margin.</p>
+          </div>
+          <div className="pilot__col">
+            <p className="eyebrow">Who we would ask first</p>
+            <ul className="checks">
+              <li>ADPHC, which runs the adult screening programme and counts referrals within 15 days</li>
+              <li>SEHA clinics that deliver the programme, with the memory clinic at Sheikh Shakhbout Medical City</li>
+              <li>M42 (Cleveland Clinic Abu Dhabi, Healthpoint), which also reaches privately insured residents</li>
+            </ul>
+            <p className="t-small">The ask is a 12-month feasibility pilot at one screening clinic after ethics approval, with a clinical lead, ethics sponsorship and a few hours a week of a family physician. The partner keeps the data. No partner has agreed yet.</p>
+          </div>
+        </div>
+        <p className="pilot-note reveal">Sources: DoH Claims Adjudication Rules, Addendum 06 (IFHAS 3.0) and Addendum 30 (telemedicine); Azure retail prices for UAE North. Package prices sit in the mandatory tariff, which we have not seen.</p>
+      </div>
+    </section>
+  )
+}
+
