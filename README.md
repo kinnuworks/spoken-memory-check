@@ -15,7 +15,7 @@ A prototype for Abu Dhabi's adult screening programme, built for Statement 8 of 
 | Hand-off | FHIR R4 with 0 errors from the official HL7 validator 7.0.5; referral as the HL7 v2 REF message with SNOMED specialty that Malaffi asks for (Circular 2026/144). `docs/FHIR_VALIDATION.md` |
 | Fairness | Real US survey data: a fixed animal cutoff flags 48% of healthy adults with under 9 years of school against 16% of graduates. `analysis/` |
 | Safety rule | Simulated: two routes (two low checks in a row, and a steady slow fall). 4.9% false alarms a year; flagged within the year: 45% of people losing 1 point a check, 94% losing 2. `scripts/benchmark.ts` |
-| Quality | 105 automated tests; 0 accessibility violations in 48 axe checks. `docs/ACCESSIBILITY.md` |
+| Quality | 115 automated tests; 0 accessibility violations in 48 axe checks. `docs/ACCESSIBILITY.md` |
 | Rules | Compliance map, intended use, risk register. `docs/COMPLIANCE.md`, `docs/INTENDED_USE.md`, `docs/RISK_REGISTER.md` |
 
 ## Try it in 30 seconds
@@ -45,7 +45,7 @@ To run it yourself: `npm install`, then `npm run dev`. To redeploy: `scripts/dep
 - Real data: in a public US health survey (NHANES 2011 to 2014, 3,110 adults aged 60 and over), a fixed cutoff of 14 animals flags 48% of adults with under 9 years of school who report no memory problem, against 16% of graduates. `analysis/`
 - Simulation of the flag: 4.9% false alarms a year in stable people (3.4% with the two-in-a-row route alone); flagged within the year: 45% of members losing one point a check and 94% losing two; at an assumed 2% of members in real decline, about 65 packets per 1,000 members a year, 18 of them real. Same settings throughout. `npx tsx scripts/benchmark.ts`
 - Real recordings: on 720 real single Arabic words from 30 adults, the first on-device model heard 40%; an Arabic-tuned model with near-miss matching heard 82%; adding each speaker's own voice as the answer key raised it to 93% (speaker interval 91 to 95%), with 0.8% wrong words credited. English: 62% of 387 words. Public adult datasets, read words, not older or Gulf speakers. `docs/HUMAN_SPEECH_BENCH.md`, `docs/TEMPLATE_BENCH.md`
-- 105 automated tests: `npm test`. Cases listed in `docs/TESTED_CASES.md`.
+- 115 automated tests: `npm test`. Cases listed in `docs/TESTED_CASES.md`.
 
 ## Documents
 

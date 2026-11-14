@@ -5,7 +5,7 @@ Live demo: open the link, no sign-up. Three buttons on the first screen. Everyth
 | Criterion | Where to look | What is real |
 |---|---|---|
 | Health impact and clinical relevance | Home page; "A year of checks" (six cases, every route); the physician's packet; `docs/LIMITS.md` | Our analysis of a public US survey: a fixed animal-naming cutoff flags 48% of healthy adults with under 9 years of school against 16% of graduates |
-| Technical depth and architecture | "How it works, and what is real"; `src/engine/` (matcher, range scoring, rule); `src/speech/` (two listeners, one on the device) | 105 automated tests; listed in `docs/TESTED_CASES.md` |
+| Technical depth and architecture | "How it works, and what is real"; `src/engine/` (matcher, range scoring, rule); `src/speech/` (two listeners, one on the device) | 115 automated tests; listed in `docs/TESTED_CASES.md` |
 | Working solution and demonstration quality | "Try it with your voice" (30 seconds); "Play a recorded check" (no microphone); the full four-minute check | Runs in Chrome, Edge and Safari on a laptop |
 | Responsible AI, safety and data governance | No language model anywhere; the rule shown in full on the packet; `docs/SAFETY_CASE.md`; `docs/DATA_SOURCES.md`; consent in four parts | Deterministic rule, tested |
 | Scalability and deployment readiness | Programme view; FHIR export; on-device listener; `docs/PILOT.md` | FHIR resources generated and tested |
