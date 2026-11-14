@@ -39,7 +39,7 @@ export function simulateProgramme(seed = 7): FacilityRow[] {
       const t = evaluate(checks)
       if (t.baseline !== null) row.baselineDone++
       if (checks.some((c) => c.hearingLimited)) row.held++
-      const raised = t.results.find((x) => x.status === 'flag' || x.status === 'review' || x.status === 'urgent')
+      const raised = t.results.find((x) => x.status === 'flag' || x.status === 'trend' || x.status === 'review' || x.status === 'urgent')
       if (!raised) continue
       if (raised.status === 'urgent') { row.urgent++; continue }
       row.packets++

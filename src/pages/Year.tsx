@@ -1,15 +1,15 @@
 import { Link, useParams } from 'react-router-dom'
-import { evaluate } from '../engine/change'
+import { PACKET_STATUSES, STATUS_LABEL, evaluate } from '../engine/change'
 import { PERSONAS } from '../engine/histories'
 import TrajectoryChart from './TrajectoryChart'
 
-const LABEL: Record<string, string> = { 'building-baseline': 'Setting the baseline', 'usual-range': 'Within usual range', watch: 'Lower once', review: 'Reported change in everyday tasks', flag: 'Lower twice in a row', urgent: 'Very large fall' }
+const LABEL: Record<string, string> = STATUS_LABEL
 
 export default function Year() {
   const { id } = useParams()
   const person = PERSONAS.find((p) => p.id === id) ?? PERSONAS[2]
   const traj = evaluate(person.checks)
-  const flagged = traj.results.find((r) => r.status === 'flag' || r.status === 'review')
+  const flagged = traj.results.find((r) => PACKET_STATUSES.includes(r.status))
   const urgent = traj.status === 'urgent'
   return (
     <>

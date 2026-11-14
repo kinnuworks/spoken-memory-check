@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { ANIMALS, WORD_LISTS } from './lexicon'
 import { matchClosedSet, tokens } from './match'
 import { scoreTask } from './score'
-import { DEFAULT_PARAMS, evaluate, expectedPractice, type Check } from './change'
+import { DEFAULT_PARAMS, PACKET_STATUSES, STATUS_LABEL, TWO_IN_A_ROW_ONLY, evaluate, expectedPractice, trendLine, type Check } from './change'
 
 const rowsOf = (words: string[]) => words.map((w) => [w])
 
@@ -140,6 +140,48 @@ describe('change rule', () => {
   it('is deterministic', () => {
     const c = flat([31, 29, 33, 27, 25, null, 24])
     expect(JSON.stringify(evaluate(c))).toBe(JSON.stringify(evaluate(c)))
+  })
+})
+
+describe('slow-decline route', () => {
+  const p = { ...DEFAULT_PARAMS, practiceGain: 0 }
+  // One point lost per check: no two single checks in a row fall far enough to be flagged.
+  const slow = [30, 30, 30, 29, 28, 27, 26, 25, 24, 23, 22]
+  it('fits a straight line and gives its error from the known variation', () => {
+    const l = trendLine([0, 1, 2, 3].map((x) => ({ x, y: 10 - 2 * x, v: 4 })))!
+    expect(l.slope).toBeCloseTo(-2, 9)
+    expect(l.sd).toBeCloseTo(Math.sqrt(4 / 5), 9)
+  })
+  it('raises a slow, steady fall that the two-in-a-row flag misses', () => {
+    const s = evaluate(flat(slow), p).results.map((r) => r.status)
+    expect(s[10]).toBe('trend')
+    expect(s).not.toContain('flag')
+    expect(evaluate(flat(slow), { ...p, ...TWO_IN_A_ROW_ONLY, practiceGain: 0 }).results.map((r) => r.status)).not.toContain('trend')
+  })
+  it('waits for enough checks before reading the line', () => {
+    const r = evaluate(flat(slow), p).results
+    expect(r.slice(0, DEFAULT_PARAMS.trendMinChecks - 1).every((x) => x.slopeZ === null)).toBe(true)
+    expect(r[DEFAULT_PARAMS.trendMinChecks - 1].slopeZ).not.toBeNull()
+  })
+  it('needs the falling line on two scored checks in a row', () => {
+    const r = evaluate(flat(slow), p).results
+    expect(r[9].slopeZ as number).toBeLessThanOrEqual(DEFAULT_PARAMS.trendZ)
+    expect(r[8].slopeZ as number).toBeGreaterThan(DEFAULT_PARAMS.trendZ)
+    expect(r[9].status).not.toBe('trend')
+  })
+  it('leaves off days out of the line', () => {
+    const withOff = evaluate(flat([30, 30, 30, 30, 30, 30, 30, 10, 30, 30], [7]), p).results
+    const without = evaluate(flat([30, 30, 30, 30, 30, 30, 30, null, 30, 30]), p).results
+    expect(withOff[9].slope).toBeCloseTo(without[9].slope as number, 9)
+    expect(withOff.map((r) => r.status)).not.toContain('trend')
+  })
+  it('never raises a trend in a stable or improving person', () => {
+    expect(evaluate(flat([30, 31, 29, 30, 31, 29, 30, 31, 29, 30, 31]), p).results.map((r) => r.status)).not.toContain('trend')
+    expect(evaluate(flat([30, 30, 30, 31, 32, 33, 34, 35, 36, 37, 38]), p).results.map((r) => r.status)).not.toContain('trend')
+  })
+  it('has a plain label and sends a packet', () => {
+    expect(STATUS_LABEL.trend).toBe('Slowly falling')
+    expect(PACKET_STATUSES).toContain('trend')
   })
 })
 

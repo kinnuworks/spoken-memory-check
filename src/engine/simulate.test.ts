@@ -15,6 +15,19 @@ describe('flag on simulated people', () => {
     expect(ours).toBeLessThan(0.06)
     expect(single).toBeGreaterThan(ours * 3)
   })
+  it('keeps false alarms with both routes at or under about 5% a year', () => {
+    expect(share(4000, (r) => firstFlag('ours', simulatePerson(BASE_WORLD, r)) >= 0)).toBeLessThan(0.06)
+  })
+  it('catches more slow decline than the two-in-a-row rule alone', () => {
+    const w = { ...BASE_WORLD, slope: 1 }
+    const both = share(4000, (r) => firstFlag('ours', simulatePerson(w, r)) >= w.declineFrom)
+    const before = share(4000, (r) => firstFlag('two-in-a-row', simulatePerson(w, r)) >= w.declineFrom)
+    expect(both).toBeGreaterThan(before + 0.08)
+  })
+  it('would notice if the trend cut-off were loosened', () => {
+    const loose = share(4000, (r) => firstFlag('ours', simulatePerson(BASE_WORLD, r), { ...DEFAULT_PARAMS, trendZ: -1 }) >= 0)
+    expect(loose).toBeGreaterThan(0.1)
+  })
   it('catches most people losing three points a check', () => {
     const w = { ...BASE_WORLD, slope: 3 }
     expect(share(4000, (r) => firstFlag('ours', simulatePerson(w, r)) >= w.declineFrom)).toBeGreaterThan(0.95)

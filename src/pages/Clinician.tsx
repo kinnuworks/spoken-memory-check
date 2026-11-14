@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { DEFAULT_PARAMS, evaluate } from '../engine/change'
+import { DEFAULT_PARAMS, PACKET_STATUSES, TREND_PACKET_NOTE, evaluate } from '../engine/change'
 import { PERSONAS } from '../engine/histories'
 import { REFERRAL_TARGET_WORKING_DAYS, addWorkingDays, riskFactors, treatableContributors, workingDaysBetween } from '../engine/packet'
 import { bundle, checkObservation, referralRequest, SPECIALTY, type Specialty } from '../engine/fhir'
@@ -19,10 +19,10 @@ export default function ClinicianRoute() {
 }
 
 function Clinician({ id }: { id?: string }) {
-  const candidates = PERSONAS.filter((p) => evaluate(p.checks).results.some((r) => r.status === 'flag' || r.status === 'review'))
+  const candidates = PERSONAS.filter((p) => evaluate(p.checks).results.some((r) => PACKET_STATUSES.includes(r.status)))
   const person = candidates.find((p) => p.id === id) ?? candidates[0]
   const traj = evaluate(person.checks)
-  const flag = traj.results.find((r) => r.status === 'flag' || r.status === 'review')!
+  const flag = traj.results.find((r) => PACKET_STATUSES.includes(r.status))!
   const byReport = flag.status === 'review'
   const base = traj.baseline as number
   const factors = riskFactors(person.record)
@@ -70,6 +70,7 @@ function Clinician({ id }: { id?: string }) {
       <p>Scores are totals from a spoken check at home. Each is a range from two speech recognisers.</p>
 
       <h2>2. What was calculated</h2>
+      {flag.status === 'trend' && <p>{TREND_PACKET_NOTE}</p>}
       {byReport
         ? <p>Baseline {base.toFixed(1)} (mean of the first three checks). On {flag.date} the score was {(flag.mid as number).toFixed(1)}, within this person's usual range (z {(flag.z as number).toFixed(2)}). The packet was raised because the person said everyday tasks such as money, medicines or appointments have become harder. A reported change in daily life goes to you whatever the scores say.</p>
         : <p>Baseline {base.toFixed(1)} (mean of the first three checks). On {flag.date} the score was {(flag.mid as number).toFixed(1)}, which is {Math.abs(flag.change as number).toFixed(1)} points below baseline after the expected practice gain, {Math.abs(flag.z as number).toFixed(1)} times the measurement error. The check before it was also low.</p>}

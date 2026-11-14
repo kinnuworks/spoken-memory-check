@@ -9,11 +9,16 @@
 - One check varies within a person by 4.0 points. Built from published retest studies of similar tasks: animal naming 3.2 (Duff et al., 62 older adults, one week; Gavett et al., 4,217 adults, one year) and phone word recall 2.2 (Health and Retirement Study, 17,913 people; Lachman et al., phone retest 0.66). No study has retested this exact check, in Arabic or at home by voice. Our volunteer retest will replace the figure.
 - Practice adds up to 1.0 point: 0.6 published for animal naming at one week, 0.4 assumed for word recall with a different list each time.
 - At these figures a single check must fall about 7.6 points below a three-check baseline before it counts as low.
-- The rule has no term for normal ageing, which the literature puts at roughly half a point a year on a total like ours. Over several years that would need adding.
+- The slow-decline route uses the same 4.0 and 1.0. Its cut-offs (slope over error at or below −1.9, from the eighth scored check, on two checks in a row) were chosen on simulated people from one seed and reported on another. They are tuned to a simulation, not to patients.
+- The rule has no term for normal ageing, which the literature puts at roughly half a point a year on a total like ours. The slow-decline route makes this matter more: over several years, normal ageing alone would push the line down and raise packets in healthy people. Before a second year of use the route needs an ageing term, or a baseline that is renewed.
+- The line uses the check's place in the schedule, not the date. The three baseline checks are days apart and later ones about six weeks apart, so the slope is in points per check, and a long gap between checks is not allowed for.
+- Regression to the mean: someone who enrols on a good run of days has a baseline above their usual level, and both routes then read the return to normal as a fall. Averaging three checks reduces this but does not remove it. The simulation draws baselines without this selection, so it does not show the effect.
+- Practice is modelled as one smooth curve. If the real gain is smaller, the rule reads the missing gain as a small fall, and the line route is more sensitive to this than the flag.
 
 ## What the benchmark says
-- False alarms in stable people: 3.4% a year. At the upper bound for variation (4.5) that rises to 6.2%; at the lower bound (3.5) it falls to 1.5%.
-- Slow decline is mostly missed within a year: a loss of one point per check is caught in 32% of simulated people, two points per check in 85%.
+- False alarms in stable people, both routes together: 4.9% a year (3.4% with the drop route alone). At the upper bound for variation (4.5) that rises to 8.2% (6.2% before); at the lower bound (3.5) it is 2.3% (1.5% before). With no practice gain at all it is 6.8% (4.6% before).
+- Slow decline is still often missed within a year: a loss of one point per check is caught in 45% of simulated people (32% before the slow-decline route), two points per check in 94% (85% before), three in nearly all.
+- The cost in workload: with 2% of members in real decline, packets rise from about 50 to 65 per 1,000 members a year, and real ones from about 17 to 18. Most of the extra packets from the new route are false alarms.
 - Published cohort work (Grober et al., 92 people who went on to an Alzheimer's diagnosis) puts faster fluency decline about three years, and recall decline about seven years, before diagnosis. On those rates a rule like ours would plausibly see the last two to three years, not the earliest change.
 - The benchmark is a simulation under stated settings. It does not show that the check detects disease.
 

@@ -41,7 +41,7 @@ Pause enrolment and review if any of these happens:
 Estimates before measurement. Each is to be confirmed in the pilot.
 - Speech recognition: the on-device listener costs nothing per check. A cloud listener in the UAE region costs a few US cents per check at list prices (about four minutes of audio).
 - Hosting: one small web service and a database in a UAE region.
-- Physician time: about 10 minutes per packet. At about 50 packets per 1,000 members a year (simulated, assuming 2% of members in real decline), about 8 physician-hours per 1,000 members a year.
+- Physician time: about 10 minutes per packet. At about 65 packets per 1,000 members a year (simulated, assuming 2% of members in real decline), about 11 physician-hours per 1,000 members a year.
 - Pilot price to the programme: a fixed per-member fee to be set after the cost lines above are measured. We do not quote a figure before measuring.
 
 ## Who pays, in order

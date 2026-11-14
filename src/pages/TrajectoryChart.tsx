@@ -1,10 +1,10 @@
 import type { Check, Trajectory } from '../engine/change'
 import { DEFAULT_PARAMS } from '../engine/change'
 
-const COLOUR: Record<string, string> = { 'building-baseline': '#857B6E', 'usual-range': '#1F7A3D', watch: '#9A6200', review: '#A1411F', flag: '#A1411F', urgent: '#A1411F' }
+const COLOUR: Record<string, string> = { 'building-baseline': '#857B6E', 'usual-range': '#1F7A3D', watch: '#9A6200', review: '#A1411F', flag: '#A1411F', trend: '#A1411F', urgent: '#A1411F' }
 const CALM = '#6D6459'
 const TEXT = '#6D6459'
-const STATUS_WORDS: Record<string, string> = { 'building-baseline': 'building a baseline', 'usual-range': 'in the usual range', watch: 'watch', review: 'review', flag: 'flagged', urgent: 'urgent' }
+const STATUS_WORDS: Record<string, string> = { 'building-baseline': 'building a baseline', 'usual-range': 'in the usual range', watch: 'watch', review: 'review', flag: 'flagged', trend: 'slowly falling', urgent: 'urgent' }
 
 /** Text summary of the chart for screen readers. The plain view leaves out scores and status, as the picture does. */
 function summary(checks: Check[], traj: Trajectory, plain: boolean) {

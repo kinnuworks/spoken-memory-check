@@ -43,7 +43,7 @@ One screening provider with 10,000 eligible members aged 50 and over, for one ye
 | Audio sent to the cloud per check | 5 minutes | ASSUMPTION, a ceiling. The build sends at most three clips to the cloud listener, capped at 45, 60 and 45 seconds, so 2.5 minutes (`src/pages/Check.tsx`). The on-device listener sends none |
 | Azure speech to text, UAE North | US$1.00 per audio hour (S1, pay as you go) | [Azure Retail Prices API](https://prices.azure.com/api/retail/prices?$filter=armRegionName%20eq%20%27uaenorth%27%20and%20meterName%20eq%20%27S1%20Speech%20To%20Text%27) |
 | Hosting, UAE North | 2 App Service P1v3 Linux at US$0.191 an hour, PostgreSQL Flexible 2 vCore at US$0.217 an hour, plus US$600 storage and backup | Hourly rates from the same API. Storage and backup: ASSUMPTION |
-| Users with a packet for physician review | 8% a year | ASSUMPTION. Our simulation gives about 50 packets per 1,000 members a year at an assumed 2% in real decline (`docs/PILOT.md`) |
+| Users with a packet for physician review | 8% a year | ASSUMPTION. Our simulation gives about 65 packets per 1,000 members a year at an assumed 2% in real decline (`docs/PILOT.md`) |
 | Physician minutes per packet | 10 | ASSUMPTION |
 | Physician cost | AED 450 an hour | ASSUMPTION |
 | Care coordinator | 0.25 FTE at AED 240,000 a year | ASSUMPTION |

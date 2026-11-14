@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import data from '../data/benchmark.json'
 import own from '../data/own-voice-summary.json'
 import { lostSignals } from '../engine/signals'
-import { evaluate } from '../engine/change'
+import { PACKET_STATUSES, STATUS_LABEL, evaluate } from '../engine/change'
 import { PERSONAS } from '../engine/histories'
 import { treatableContributors } from '../engine/packet'
 import { ICON, useReveal } from '../components/brand'
@@ -13,7 +13,7 @@ import { SurveyBars } from './SurveyChart'
 import TrajectoryChart from './TrajectoryChart'
 import '../styles/home.css'
 
-const STATUS: Record<string, string> = { 'building-baseline': 'Setting the baseline', 'usual-range': 'Within the usual range', watch: 'Lower once', review: 'Reported change in everyday tasks', flag: 'Lower twice in a row', urgent: 'Very large fall' }
+const STATUS: Record<string, string> = STATUS_LABEL
 const pct = (x: number) => `${(x * 100).toFixed(1)}%`
 
 const decline = PERSONAS.find((p) => p.id === 'decline')!
@@ -30,7 +30,7 @@ export default function Home() {
   const [pick, setPick] = useState('decline')
   const person = PERSONAS.find((p) => p.id === pick)!
   const traj = evaluate(person.checks)
-  const raised = traj.results.find((r) => r.status === 'flag' || r.status === 'review')
+  const raised = traj.results.find((r) => PACKET_STATUSES.includes(r.status))
   const last = traj.results[traj.results.length - 1]
   const contributors = treatableContributors(decline.record).slice(0, 3)
 
@@ -47,6 +47,7 @@ export default function Home() {
             <Link to="/recorded" className="btn btn-outline btn-lg"><Play />Play a recorded check</Link>
             <Link to="/story" className="btn btn-outline btn-lg"><Stethoscope />See one case, both screens</Link>
           </div>
+          <p className="trust"><Link to="/recorded-check" style={{ textDecoration: 'underline', color: 'inherit' }}>Or play the full four-minute check, recorded</Link></p>
           <p className="trust"><span>No sign-up</span><span>Works in the browser</span><span>People shown are synthetic</span><span>Does not diagnose</span></p>
           <ul className="proof" aria-label="What is measured so far">
             <li><b>{Math.round(own.union.rate * 100)}%</b><span>of {own.whisperAlone.n} real Arabic words heard right, with the speaker's own voice as the answer key</span></li>
@@ -394,7 +395,7 @@ export default function Home() {
               <p className="eyebrow">Cost lines, estimated before measuring</p>
               <ul className="checks">
                 <li>On-device listener: nothing per check</li>
-                <li>Physician: about 10 minutes a packet, about 8 hours per 1,000 members a year (simulated packet rate)</li>
+                <li>Physician: about 10 minutes a packet, about 11 hours per 1,000 members a year (simulated packet rate)</li>
                 <li>Hosting and any cloud listener in a UAE region</li>
                 <li>Paid first by the screening programme; then insurers and employers for residents outside it</li>
               </ul>

@@ -2,6 +2,8 @@
 // Baseline is the mean of the first three scored checks. A later check is compared with
 // that baseline after taking off the expected practice gain, and the difference is set
 // against measurement error. Only a drop that persists across two scored checks is flagged.
+// A second, separate route looks for slow decline: a straight line through every scored
+// check so far, after the practice adjustment, whose slope is reliably below zero.
 
 export interface Check {
   date: string
@@ -27,6 +29,12 @@ export interface RuleParams {
   flagZ: number
   /** A fall from the previous scored check this many errors deep asks for urgent assessment. */
   urgentZ: number
+  /** The slope of the line through all scored checks, over its error, at or below this counts as a falling trend. */
+  trendZ: number
+  /** Scored checks (baseline included, off days left out) needed before the trend is tested. */
+  trendMinChecks: number
+  /** How many scored checks in a row the falling trend must hold before it raises a packet. */
+  trendRuns: number
   basis: Record<string, string>
 }
 
@@ -36,16 +44,42 @@ export const DEFAULT_PARAMS: RuleParams = {
   practiceTau: 1,
   flagZ: -1.645,
   urgentZ: -3.5,
+  trendZ: -1.9,
+  trendMinChecks: 8,
+  trendRuns: 2,
   basis: {
     sem: 'Built from published retest studies, none of them of this exact check. Animal naming 3.2: Duff et al. (62 older adults, one week, https://pmc.ncbi.nlm.nih.gov/articles/PMC3789513) and Gavett et al. (4,217 adults aged 50 and over, one year, r 0.67). Word recall 2.2: Health and Retirement Study SDs for immediate and delayed recall (17,913 people, https://pmc.ncbi.nlm.nih.gov/articles/PMC4542644) with phone retest of the pair at 0.66 (Lachman et al., https://midus.wisc.edu/wp-content/uploads/2024/04/1338.pdf). Combined as independent gives 3.9; a shared bad-day error would give about 4.3. We use 4.0 and show 3.5 and 4.5 as bounds. Our own volunteer retest will replace it.',
     practiceGain: 'Animal naming gains about 0.6 at one week (Duff et al.). No published gain exists for single-hearing word lists that change each time; 0.4 is our ASSUMPTION. Total 1.0.',
     practiceTau: 'ASSUMPTION: most of the gain arrives by the second check.',
     flagZ: 'One-sided 5% per check; asking for two checks in a row lowers the false-alarm rate (measured on the benchmark page).',
-    urgentZ: 'ASSUMPTION, set far from normal variation so that only a very large fall between two neighbouring checks triggers it. Slow decline goes through the routine flag instead.',
+    urgentZ: 'ASSUMPTION, set far from normal variation so that only a very large fall between two neighbouring checks triggers it. Slow decline goes through the routine flag or the trend route instead.',
+    trendZ: 'Fixed before the reported run. Chosen on simulated people from a tuning seed (1), kept apart from the seed behind the reported numbers (20261110): the loosest cut-off, in steps of 0.1, at which the two routes together kept false alarms in stable people under 5% a year in the as-assumed world (4.7% on the tuning seed). About 1 in 35 for a single test, but the trend is tested at every check, so the year-long rate is what was tuned.',
+    trendMinChecks: 'Fixed with trendZ on the tuning seed: eight scored checks, the three baseline checks included. Six or seven caught about as much slow decline but raised more false alarms.',
+    trendRuns: 'Fixed with trendZ on the tuning seed: the trend must hold on two scored checks in a row, the same rule as the flag. One check with a stricter cut-off performed about the same.',
   },
 }
 
-export type Status = 'building-baseline' | 'usual-range' | 'watch' | 'review' | 'flag' | 'urgent'
+/** The rule before the trend route was added: two low checks in a row, urgent and review only. Kept for comparison. */
+export const TWO_IN_A_ROW_ONLY: RuleParams = { ...DEFAULT_PARAMS, trendZ: Number.NEGATIVE_INFINITY }
+
+export type Status = 'building-baseline' | 'usual-range' | 'watch' | 'review' | 'flag' | 'trend' | 'urgent'
+
+/** Plain words for each status, for tester and physician views. */
+export const STATUS_LABEL: Record<Status, string> = {
+  'building-baseline': 'Setting the baseline',
+  'usual-range': 'Within the usual range',
+  watch: 'Lower once',
+  review: 'Reported change in everyday tasks',
+  flag: 'Lower twice in a row',
+  trend: 'Slowly falling',
+  urgent: 'Very large fall',
+}
+
+/** Statuses that send a packet to the ordering physician (urgent goes to urgent assessment instead). */
+export const PACKET_STATUSES: readonly Status[] = ['flag', 'trend', 'review']
+
+/** One sentence for the physician packet when the trend route raised it. */
+export const TREND_PACKET_NOTE = 'Raised by the slow-decline route: across all scored checks the practice-adjusted score has fallen steadily, by more than measurement error can explain, even though no single check fell far enough to be flagged.'
 
 export interface CheckResult {
   index: number
@@ -58,6 +92,10 @@ export interface CheckResult {
   z: number | null
   /** Probability the person's true score is below their baseline, given this check alone. */
   pBelow: number | null
+  /** Practice-adjusted points per check from a straight line through all scored checks so far; null until there are enough. */
+  slope: number | null
+  slopeSd: number | null
+  slopeZ: number | null
   status: Status
   note: string
 }
@@ -81,6 +119,20 @@ export function expectedPractice(n: number, p: RuleParams): number {
   return p.practiceGain * (1 - Math.exp(-(n - 1) / p.practiceTau))
 }
 
+interface Point { x: number; y: number; v: number }
+
+/** Least-squares slope through the points, with its error from the known per-check variances. */
+export function trendLine(pts: Point[]): { slope: number; sd: number; z: number } | null {
+  if (pts.length < 3) return null
+  const xbar = pts.reduce((s, q) => s + q.x, 0) / pts.length
+  const ybar = pts.reduce((s, q) => s + q.y, 0) / pts.length
+  const sxx = pts.reduce((s, q) => s + (q.x - xbar) ** 2, 0)
+  if (sxx === 0) return null
+  const slope = pts.reduce((s, q) => s + (q.x - xbar) * (q.y - ybar), 0) / sxx
+  const sd = Math.sqrt(pts.reduce((s, q) => s + ((q.x - xbar) / sxx) ** 2 * q.v, 0))
+  return { slope, sd, z: slope / sd }
+}
+
 export function evaluate(checks: Check[], p: RuleParams = DEFAULT_PARAMS): Trajectory {
   const isScored = (c: Check) => c.low !== null && c.high !== null
   const scoredIdx = checks.map((c, i) => (isScored(c) ? i : -1)).filter((i) => i >= 0)
@@ -96,6 +148,8 @@ export function evaluate(checks: Check[], p: RuleParams = DEFAULT_PARAMS): Traje
   const results: CheckResult[] = []
   let nScored = 0
   let prevBelow = false
+  let trendRun = 0
+  const pts: Point[] = []
   let prevMid: number | null = null
   let overall: Status = haveBaseline ? 'usual-range' : 'building-baseline'
   checks.forEach((c, i) => {
@@ -106,18 +160,20 @@ export function evaluate(checks: Check[], p: RuleParams = DEFAULT_PARAMS): Traje
           ? 'Held again: the sound check failed twice in a row. Not scored. The person is pointed to a hearing test.'
           : 'Held: the sound check failed, so this check was not scored. A missing score is never treated as a low score. If it happens again the person is pointed to a hearing test.'
         : 'Not scored. Nothing is assumed from a missing check; the next one is compared as usual.'
-      results.push({ index: i, date: c.date, scored: false, mid: null, change: null, sd: null, z: null, pBelow: null, status: overall, note })
+      results.push({ index: i, date: c.date, scored: false, mid: null, change: null, sd: null, z: null, pBelow: null, slope: null, slopeSd: null, slopeZ: null, status: overall, note })
       return
     }
     nScored += 1
     const m = mid(c)
     const last = prevMid
     prevMid = m
+    // Off days are kept and shown but left out of the trend, as they are left out of the flag.
+    if (!c.offDay) pts.push({ x: i, y: m - expectedPractice(nScored, p), v: p.sem ** 2 + rangeVar(c) })
     if (!haveBaseline || baseIdx.includes(i)) {
       // Function overrides the number: a reported change in everyday tasks goes to a physician even before a baseline exists.
       const st: Status = c.functionChange ? 'review' : 'building-baseline'
       if (c.functionChange) overall = 'review'
-      results.push({ index: i, date: c.date, scored: true, mid: m, change: null, sd: null, z: null, pBelow: null, status: st, note: c.functionChange ? 'The person reported that everyday tasks have become harder. That goes to the physician whatever the scores say.' : `Baseline check ${Math.min(nScored, 3)} of 3.` })
+      results.push({ index: i, date: c.date, scored: true, mid: m, change: null, sd: null, z: null, pBelow: null, slope: null, slopeSd: null, slopeZ: null, status: st, note: c.functionChange ? 'The person reported that everyday tasks have become harder. That goes to the physician whatever the scores say.' : `Baseline check ${Math.min(nScored, 3)} of 3.` })
       return
     }
     const change = m - (expectedPractice(nScored, p) - basePractice) - (baseline as number)
@@ -139,13 +195,26 @@ export function evaluate(checks: Check[], p: RuleParams = DEFAULT_PARAMS): Traje
       status = 'watch'
       note = 'Lower than usual once. One check is not enough; the next check decides.'
     }
-    if (c.functionChange && status !== 'flag' && status !== 'urgent') {
-      status = 'review'
-      note = 'The person reported that everyday tasks have become harder. That goes to the physician whatever the scores say.'
+    // Slow-decline route: the line through every scored check so far must fall reliably,
+    // on two scored checks in a row, before it raises anything.
+    const line = !c.offDay && pts.length >= p.trendMinChecks ? trendLine(pts) : null
+    const trendBelow = line !== null && line.z <= p.trendZ
+    const run = c.offDay ? trendRun : trendBelow ? trendRun + 1 : 0
+    if (trendBelow && run >= p.trendRuns && status !== 'flag' && status !== 'urgent') {
+      status = 'trend'
+      note = `Falling slowly: about ${Math.abs(line.slope).toFixed(1)} points per check across all scored checks, more than measurement error explains, on two checks in a row. A packet goes to the ordering physician.`
+    } else if (trendBelow && status === 'usual-range') {
+      note = 'Within the usual range, but the line through all checks is falling. The next check decides whether it holds.'
     }
-    if (!c.offDay) prevBelow = below
+    if (c.functionChange && status !== 'flag' && status !== 'urgent') {
+      note = status === 'trend'
+        ? `${note} The person also reported that everyday tasks have become harder.`
+        : 'The person reported that everyday tasks have become harder. That goes to the physician whatever the scores say.'
+      if (status !== 'trend') status = 'review'
+    }
+    if (!c.offDay) { prevBelow = below; trendRun = run }
     overall = status
-    results.push({ index: i, date: c.date, scored: true, mid: m, change, sd, z, pBelow: phi(-z), status, note })
+    results.push({ index: i, date: c.date, scored: true, mid: m, change, sd, z, pBelow: phi(-z), slope: line?.slope ?? null, slopeSd: line?.sd ?? null, slopeZ: line?.z ?? null, status, note })
   })
   return { baseline, baselineChecks: baseIdx, results, status: overall }
 }

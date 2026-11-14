@@ -1,10 +1,33 @@
 {
- "generated": "2026-11-11",
+ "generated": "2026-11-14",
+ "trend": {
+  "trendZ": -1.9,
+  "trendMinChecks": 8,
+  "trendRuns": 2,
+  "tuningSeed": 1,
+  "reportSeed": 20261110
+ },
  "n": 20000,
+ "seed": 20261110,
  "rows": [
   {
    "world": "As assumed",
    "rule": "ours",
+   "falseAlarmYear": 0.04855,
+   "detected": {
+    "1": 0.45105,
+    "2": 0.9352,
+    "3": 0.99875
+   },
+   "medianChecksToFlag": {
+    "1": 6,
+    "2": 5,
+    "3": 4
+   }
+  },
+  {
+   "world": "As assumed",
+   "rule": "two-in-a-row",
    "falseAlarmYear": 0.03425,
    "detected": {
     "1": 0.31905,
@@ -50,6 +73,21 @@
   {
    "world": "Each recogniser misses 8% of words",
    "rule": "ours",
+   "falseAlarmYear": 0.0277,
+   "detected": {
+    "1": 0.34125,
+    "2": 0.8882,
+    "3": 0.99715
+   },
+   "medianChecksToFlag": {
+    "1": 6,
+    "2": 5,
+    "3": 5
+   }
+  },
+  {
+   "world": "Each recogniser misses 8% of words",
+   "rule": "two-in-a-row",
    "falseAlarmYear": 0.0178,
    "detected": {
     "1": 0.2279,
@@ -95,6 +133,21 @@
   {
    "world": "Each recogniser misses 15% of words",
    "rule": "ours",
+   "falseAlarmYear": 0.01255,
+   "detected": {
+    "1": 0.21935,
+    "2": 0.7894,
+    "3": 0.9912
+   },
+   "medianChecksToFlag": {
+    "1": 6,
+    "2": 6,
+    "3": 5
+   }
+  },
+  {
+   "world": "Each recogniser misses 15% of words",
+   "rule": "two-in-a-row",
    "falseAlarmYear": 0.00875,
    "detected": {
     "1": 0.1344,
@@ -140,6 +193,21 @@
   {
    "world": "True measurement error at the upper bound (4.5, rule assumes 4.0)",
    "rule": "ours",
+   "falseAlarmYear": 0.08185,
+   "detected": {
+    "1": 0.46845,
+    "2": 0.91915,
+    "3": 0.9969
+   },
+   "medianChecksToFlag": {
+    "1": 6,
+    "2": 5,
+    "3": 4
+   }
+  },
+  {
+   "world": "True measurement error at the upper bound (4.5, rule assumes 4.0)",
+   "rule": "two-in-a-row",
    "falseAlarmYear": 0.0618,
    "detected": {
     "1": 0.34845,
@@ -185,6 +253,21 @@
   {
    "world": "True measurement error at the lower bound (3.5, rule assumes 4.0)",
    "rule": "ours",
+   "falseAlarmYear": 0.02335,
+   "detected": {
+    "1": 0.4211,
+    "2": 0.95765,
+    "3": 0.9997
+   },
+   "medianChecksToFlag": {
+    "1": 6,
+    "2": 5,
+    "3": 4
+   }
+  },
+  {
+   "world": "True measurement error at the lower bound (3.5, rule assumes 4.0)",
+   "rule": "two-in-a-row",
    "falseAlarmYear": 0.015,
    "detected": {
     "1": 0.27585,
@@ -230,6 +313,21 @@
   {
    "world": "True practice gain larger (3.0, rule assumes 1.0)",
    "rule": "ours",
+   "falseAlarmYear": 0.02335,
+   "detected": {
+    "1": 0.32045,
+    "2": 0.88375,
+    "3": 0.9978
+   },
+   "medianChecksToFlag": {
+    "1": 6,
+    "2": 5,
+    "3": 5
+   }
+  },
+  {
+   "world": "True practice gain larger (3.0, rule assumes 1.0)",
+   "rule": "two-in-a-row",
    "falseAlarmYear": 0.0177,
    "detected": {
     "1": 0.22045,
@@ -275,6 +373,21 @@
   {
    "world": "No practice gain at all (rule assumes 1.0)",
    "rule": "ours",
+   "falseAlarmYear": 0.0683,
+   "detected": {
+    "1": 0.513,
+    "2": 0.95415,
+    "3": 0.99945
+   },
+   "medianChecksToFlag": {
+    "1": 6,
+    "2": 5,
+    "3": 4
+   }
+  },
+  {
+   "world": "No practice gain at all (rule assumes 1.0)",
+   "rule": "two-in-a-row",
    "falseAlarmYear": 0.04635,
    "detected": {
     "1": 0.36985,
@@ -319,6 +432,68 @@
   }
  ],
  "burden": [
+  {
+   "prevalence": 0.01,
+   "members": 100000,
+   "tp": 892,
+   "fn": 56,
+   "fp": 4795,
+   "tn": 94257,
+   "sensitivity": 0.9409282700421941,
+   "sensitivityCi": [
+    0.9240657623412977,
+    0.9542316350407879
+   ],
+   "specificity": 0.951591083471308,
+   "specificityCi": [
+    0.9502368475706802,
+    0.95291029201205
+   ],
+   "packetsPer1000": 56.87,
+   "realPer1000": 8.920000000000002
+  },
+  {
+   "prevalence": 0.02,
+   "members": 100000,
+   "tp": 1849,
+   "fn": 135,
+   "fp": 4672,
+   "tn": 93344,
+   "sensitivity": 0.9319556451612904,
+   "sensitivityCi": [
+    0.9200191543543973,
+    0.9422225856313241
+   ],
+   "specificity": 0.9523343127652628,
+   "specificityCi": [
+    0.9509826485980437,
+    0.953650521100937
+   ],
+   "packetsPer1000": 65.21000000000001,
+   "realPer1000": 18.49
+  },
+  {
+   "prevalence": 0.04,
+   "members": 100000,
+   "tp": 3701,
+   "fn": 247,
+   "fp": 4693,
+   "tn": 91359,
+   "sensitivity": 0.9374366767983789,
+   "sensitivityCi": [
+    0.9294487790485827,
+    0.9445741068889507
+   ],
+   "specificity": 0.9511410485986758,
+   "specificityCi": [
+    0.9497595950841418,
+    0.952486416781523
+   ],
+   "packetsPer1000": 83.94,
+   "realPer1000": 37.01
+  }
+ ],
+ "burdenBefore": [
   {
    "prevalence": 0.01,
    "members": 100000,

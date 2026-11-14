@@ -2,7 +2,8 @@ import data from '../data/benchmark.json'
 import SurveyChart from './SurveyChart'
 
 const RULE: Record<string, string> = {
-  ours: 'This check: two low checks in a row',
+  ours: 'This check: two low checks in a row, or a slowly falling line',
+  'two-in-a-row': 'Before the slow-decline route: two low checks in a row only',
   'single-low': 'Simpler rule: one low check',
   'fixed-cutoff': 'Simpler rule: one cutoff for everyone',
 }
@@ -11,11 +12,31 @@ const pct = (x: number) => `${(x * 100).toFixed(1)}%`
 export default function Benchmark() {
   const b2 = data.burden.find((b) => b.prevalence === 0.02)!
   const worlds = [...new Set(data.rows.map((r) => r.world))]
+  const row = (world: string, rule: string) => data.rows.find((r) => r.world.includes(world) && r.rule === rule)!
+  const det = (r: (typeof data.rows)[number], s: string) => (r.detected as Record<string, number>)[s]
+  const now = row('As assumed', 'ours'), before = row('As assumed', 'two-in-a-row')
+  const upNow = row('upper bound', 'ours'), upBefore = row('upper bound', 'two-in-a-row')
   return (
     <>
       <h1>How the flag was tested</h1>
       <p><span className="tag syn">Simulated people, not patients</span></p>
       <p>The flag is the step that carries the safety decision, so it is the step we measured. Each cell below is {data.n.toLocaleString()} simulated people followed for eleven checks in a year. Run on {data.generated}; anyone can rerun it with <code>npx tsx scripts/benchmark.ts</code>.</p>
+
+      <h2>Slow decline: before and after the second route</h2>
+      <p>The first version of the rule only raised a packet when two checks in a row fell well below the person's baseline. That misses slow decline: a loss of one point per check was caught within the year in {pct(det(before, '1'))} of simulated people. A second route now draws a straight line through every scored check, after the practice adjustment, and raises a packet when the line falls by more than measurement error explains on two scored checks in a row.</p>
+      <div className="scroll" tabIndex={0} role="region" aria-label="Before and after the slow-decline route"><table>
+        <thead><tr><th>Measure (simulated)</th><th>Before: two in a row only</th><th>Now: both routes</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Caught within the year, losing 1 point per check</th><td>{pct(det(before, '1'))}</td><td>{pct(det(now, '1'))}</td></tr>
+          <tr><th scope="row">Caught within the year, losing 2 points per check</th><td>{pct(det(before, '2'))}</td><td>{pct(det(now, '2'))}</td></tr>
+          <tr><th scope="row">Caught within the year, losing 3 points per check</th><td>{pct(det(before, '3'))}</td><td>{pct(det(now, '3'))}</td></tr>
+          <tr><th scope="row">Median checks from start of decline to packet (1 / 2 / 3 points)</th><td>{['1', '2', '3'].map((s) => (before.medianChecksToFlag as Record<string, number | null>)[s] ?? '–').join(' / ')}</td><td>{['1', '2', '3'].map((s) => (now.medianChecksToFlag as Record<string, number | null>)[s] ?? '–').join(' / ')}</td></tr>
+          <tr><th scope="row">False alarms in a year, stable people</th><td>{pct(before.falseAlarmYear)}</td><td>{pct(now.falseAlarmYear)}</td></tr>
+          <tr><th scope="row">False alarms if each check varies by 4.5 points, not 4.0</th><td>{pct(upBefore.falseAlarmYear)}</td><td>{pct(upNow.falseAlarmYear)}</td></tr>
+          {data.burden.map((b, i) => <tr key={b.prevalence}><th scope="row">Packets per 1,000 a year with {pct(b.prevalence)} in real decline (real ones)</th><td>{data.burdenBefore[i].packetsPer1000.toFixed(0)} ({data.burdenBefore[i].realPer1000.toFixed(0)})</td><td>{b.packetsPer1000.toFixed(0)} ({b.realPer1000.toFixed(0)})</td></tr>)}
+        </tbody>
+      </table></div>
+      <p className="muted">The cut-offs for the new route were fixed before these numbers were run: the line's slope over its error at or below {data.trend.trendZ}, from {data.trend.trendMinChecks} scored checks on (baseline included), on {data.trend.trendRuns} scored checks in a row. They were chosen on a separate set of simulated people (seed {data.trend.tuningSeed}) as the loosest setting that kept false alarms under 5% a year with both routes together; the numbers on this page come from seed {data.trend.reportSeed}. The price is real: about {(b2.packetsPer1000 - data.burdenBefore[1].packetsPer1000).toFixed(0)} more packets per 1,000 members a year, of which about {(b2.realPer1000 - data.burdenBefore[1].realPer1000).toFixed(0)} are real. A slow loss of one point per check is still missed within the year in more than half of simulated people.</p>
 
       <h2>Six measures, as a validation dashboard</h2>
       <div className="tiles">
@@ -45,9 +66,10 @@ export default function Benchmark() {
 
       <h2>What to take from it</h2>
       <ul>
-        <li>Asking for two low checks in a row keeps false alarms in stable people to {pct(data.rows[0].falseAlarmYear)} a year, against {pct(data.rows[1].falseAlarmYear)} for one low check and {pct(data.rows[2].falseAlarmYear)} for one cutoff applied to everyone.</li>
-        <li>The price is speed and sensitivity to slow change. A loss of one point per check is caught within the year in only {pct(data.rows[0].detected['1'])} of people. A loss of two points per check is caught in {pct(data.rows[0].detected['2'])}.</li>
-        <li>If each check really varies by 4.5 points where the rule assumes 4.0, false alarms rise to {pct(data.rows.find((r) => r.world.includes('upper bound') && r.rule === 'ours')!.falseAlarmYear)} a year. The 4.0 comes from published retest studies of similar tasks, not of this check, which is why our own volunteer retest matters.</li>
+        <li>Both routes together keep false alarms in stable people to {pct(now.falseAlarmYear)} a year, against {pct(row('As assumed', 'single-low').falseAlarmYear)} for one low check and {pct(row('As assumed', 'fixed-cutoff').falseAlarmYear)} for one cutoff applied to everyone.</li>
+        <li>Slow change is still the weak spot. A loss of one point per check is caught within the year in {pct(det(now, '1'))} of people ({pct(det(before, '1'))} before the trend route). A loss of two points per check is caught in {pct(det(now, '2'))}.</li>
+        <li>If each check really varies by 4.5 points where the rule assumes 4.0, false alarms rise to {pct(upNow.falseAlarmYear)} a year. The 4.0 comes from published retest studies of similar tasks, not of this check, which is why our own volunteer retest matters.</li>
+        <li>If there is no practice gain at all, false alarms rise to {pct(row('No practice', 'ours').falseAlarmYear)}: the rule then reads the missing gain as a small fall.</li>
         <li>Words missed by the recognisers make the rule more cautious, not more alarming, because the misses also lower the baseline.</li>
       </ul>
 

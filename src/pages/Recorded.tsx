@@ -45,6 +45,7 @@ export default function Recorded() {
       </div>
       <p>No microphone needed. This is a computer voice naming twenty animals, heard by the same on-device listener the spoken check uses. Play it, then let the listener score it.</p>
       <audio controls src={CLIP[lang]} style={{ width: '100%' }} />
+      <p className="muted">Want the whole check? <Link to="/recorded-check">Play the full four-minute check, recorded</Link>: words said back, recall, animals and the last question, scored by two listeners.</p>
 
       {stage === 'intro' && (
         <>

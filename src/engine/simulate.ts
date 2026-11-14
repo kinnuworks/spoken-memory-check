@@ -1,4 +1,4 @@
-import { DEFAULT_PARAMS, evaluate, expectedPractice, type Check, type RuleParams } from './change'
+import { DEFAULT_PARAMS, TWO_IN_A_ROW_ONLY, evaluate, expectedPractice, type Check, type RuleParams } from './change'
 
 // Simulated people for testing the flag. Nothing here is patient data. Every setting is
 // stated so a reader can disagree with it and rerun.
@@ -48,11 +48,16 @@ export function simulatePerson(w: World, r: () => number): Check[] {
   return out
 }
 
-export type RuleName = 'ours' | 'single-low' | 'fixed-cutoff'
+/** 'ours' is the rule of record (both routes); 'two-in-a-row' is the rule before the trend route was added. */
+export type RuleName = 'ours' | 'two-in-a-row' | 'single-low' | 'fixed-cutoff'
+export const RULES: RuleName[] = ['ours', 'two-in-a-row', 'single-low', 'fixed-cutoff']
+
+const RAISED = new Set(['flag', 'trend', 'urgent'])
 
 /** Index of the first check at which the rule raises a flag, or -1. */
 export function firstFlag(rule: RuleName, checks: Check[], p: RuleParams = DEFAULT_PARAMS): number {
-  if (rule === 'ours') return evaluate(checks, p).results.findIndex((x) => x.status === 'flag' || x.status === 'urgent')
+  if (rule === 'ours') return evaluate(checks, p).results.findIndex((x) => RAISED.has(x.status))
+  if (rule === 'two-in-a-row') return evaluate(checks, { ...p, trendZ: TWO_IN_A_ROW_ONLY.trendZ }).results.findIndex((x) => RAISED.has(x.status))
   if (rule === 'single-low') return evaluate(checks, p).results.findIndex((x) => x.z !== null && x.z <= p.flagZ)
   // One cutoff for everyone: the 5th percentile of a first-ever score in this simulated population.
   const cut = POP_MEAN - 1.645 * Math.sqrt(BASE_WORLD.betweenSd ** 2 + p.sem ** 2)
@@ -61,7 +66,11 @@ export function firstFlag(rule: RuleName, checks: Check[], p: RuleParams = DEFAU
 
 export interface Row { world: string; rule: RuleName; falseAlarmYear: number; detected: Record<string, number>; medianChecksToFlag: Record<string, number | null> }
 
-export function runBenchmark(n: number, seed = 20261110): { n: number; rows: Row[] } {
+/** Seed behind every reported number. Thresholds were chosen on TUNING_SEED, never on this one. */
+export const REPORT_SEED = 20261110
+export const TUNING_SEED = 1
+
+export function runBenchmark(n: number, seed = REPORT_SEED, rules: RuleName[] = RULES, p: RuleParams = DEFAULT_PARAMS): { n: number; seed: number; rows: Row[] } {
   const worlds: { name: string; w: Partial<World> }[] = [
     { name: 'As assumed', w: {} },
     { name: 'Each recogniser misses 8% of words', w: { miss: 0.08 } },
@@ -74,17 +83,17 @@ export function runBenchmark(n: number, seed = 20261110): { n: number; rows: Row
   const slopes = [1, 2, 3]
   const rows: Row[] = []
   for (const { name, w } of worlds) {
-    for (const rule of ['ours', 'single-low', 'fixed-cutoff'] as RuleName[]) {
+    for (const rule of rules) {
       const r = rng(seed)
       let fa = 0
-      for (let i = 0; i < n; i++) if (firstFlag(rule, simulatePerson({ ...BASE_WORLD, ...w, slope: 0 }, r)) >= 0) fa++
+      for (let i = 0; i < n; i++) if (firstFlag(rule, simulatePerson({ ...BASE_WORLD, ...w, slope: 0 }, r), p) >= 0) fa++
       const detected: Record<string, number> = {}
       const median: Record<string, number | null> = {}
       for (const s of slopes) {
         const world = { ...BASE_WORLD, ...w, slope: s }
         const delays: number[] = []
         for (let i = 0; i < n; i++) {
-          const f = firstFlag(rule, simulatePerson(world, r))
+          const f = firstFlag(rule, simulatePerson(world, r), p)
           // A flag before decline starts is a false alarm, not a detection.
           if (f >= world.declineFrom) delays.push(f - world.declineFrom + 1)
         }
@@ -95,7 +104,7 @@ export function runBenchmark(n: number, seed = 20261110): { n: number; rows: Row
       rows.push({ world: name, rule, falseAlarmYear: fa / n, detected, medianChecksToFlag: median })
     }
   }
-  return { n, rows }
+  return { n, seed, rows }
 }
 
 /** Wilson score interval for a proportion, 95%. */
@@ -123,13 +132,13 @@ export interface Burden {
  * the rest stable. Counts packets sent and how many of them are real. Everything here is
  * simulated, and the share in decline is an assumption the page states.
  */
-export function programmeYear(members: number, prevalence: number, seed = 20261111, slope = 2): Burden {
+export function programmeYear(members: number, prevalence: number, seed = 20261111, slope = 2, rule: RuleName = 'ours'): Burden {
   const r = rng(seed)
   let tp = 0, fn = 0, fp = 0, tn = 0
   for (let i = 0; i < members; i++) {
     const declining = r() < prevalence
     const w = { ...BASE_WORLD, slope: declining ? slope : 0 }
-    const f = firstFlag('ours', simulatePerson(w, r))
+    const f = firstFlag(rule, simulatePerson(w, r))
     if (declining) { if (f >= w.declineFrom) tp++; else fn++ }
     else { if (f >= 0) fp++; else tn++ }
   }
