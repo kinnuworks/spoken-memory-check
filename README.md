@@ -15,7 +15,7 @@ A prototype for Abu Dhabi's adult screening programme, built for Statement 8 of 
 | Hand-off | FHIR R4 with 0 errors from the official HL7 validator 7.0.5; referral as the HL7 v2 REF message with SNOMED specialty that Malaffi asks for (Circular 2026/144). `docs/FHIR_VALIDATION.md` |
 | Fairness | Real US survey data: a fixed animal cutoff flags 48% of healthy adults with under 9 years of school against 16% of graduates. `analysis/` |
 | Safety rule | Simulated: two routes (two low checks in a row, and a steady slow fall). 4.9% false alarms a year; flagged within the year: 45% of people losing 1 point a check, 94% losing 2. `scripts/benchmark.ts` |
-| Quality | 194 automated tests; they catch 92% of 897 deliberate bugs put into the decision rules (mutation testing); 0 accessibility violations in 48 axe checks. `docs/ACCESSIBILITY.md` |
+| Quality | 195 automated tests; they catch 92% of 897 deliberate bugs put into the decision rules (mutation testing); 0 accessibility violations in 48 axe checks. `docs/ACCESSIBILITY.md` |
 | Rules | Compliance map, intended use, risk register. `docs/COMPLIANCE.md`, `docs/INTENDED_USE.md`, `docs/RISK_REGISTER.md` |
 
 ## Try it in 30 seconds
@@ -47,7 +47,7 @@ To run it yourself: `npm install`, then `npm run dev`. To redeploy: `scripts/dep
 - Real recordings: on 720 real single Arabic words from 30 adults, the first on-device model heard 40%; an Arabic-tuned model with near-miss matching heard 82%; adding each speaker's own voice as the answer key raised it to 93% (speaker interval 91 to 95%), with 0.8% wrong words credited. English: 62% of 387 words. Public adult datasets, read words, not older or Gulf speakers. `docs/HUMAN_SPEECH_BENCH.md`, `docs/TEMPLATE_BENCH.md`
 - Older and Gulf speakers, public data: on Saudi TV speech labelled by age and dialect (SADA), word error for older Gulf speakers against adult Gulf speakers was 31% vs 33% for Jais-ASR and 68% vs 75% for the on-device model. Neither heard older Gulf voices worse; Gulf speech was harder than other dialects for both. TV sentences, not a memory check. `docs/OLDER_SPEAKERS_BENCH.md`
 - Tested code: mutation testing put 897 small deliberate bugs into the decision rules one at a time, and the tests caught 826 (92%); most of the rest change only wording. `npx stryker run`
-- 194 automated tests: `npm test`. Cases listed in `docs/TESTED_CASES.md`.
+- 195 automated tests: `npm test`. Cases listed in `docs/TESTED_CASES.md`.
 
 ## Documents
 

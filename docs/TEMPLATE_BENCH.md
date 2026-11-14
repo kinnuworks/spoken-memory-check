@@ -201,3 +201,7 @@ Before anything ships, record a few real people (ideally older adults, in Arabic
 - Arabic Speech Commands v1.0, CC BY 4.0. Abdulkader Ghandoura, Farouk Hjabo and Oumayma Al Dakkak, "Building and Benchmarking an Arabic Speech Commands Dataset for Small-Footprint Keyword Spotting", Engineering Applications of Artificial Intelligence, 2021. The background noise recordings come from the same dataset.
 - Google Speech Commands v0.02 (test set), CC BY 4.0. Pete Warden, "Speech Commands: A Dataset for Limited-Vocabulary Speech Recognition", arXiv:1804.03209, 2018.
 - Both are used unchanged, extracted under `external/` and not shipped with the app.
+
+## Second recording from the first recall (added 15 Nov)
+
+The person says each list word back once, so each word starts with one template. In the full check and the recorded check, any word that own-voice matching found in the first recall and another listener also heard there is added as a second template for the later recall. Words heard by one listener only never enter the key. The two-template condition above is the measured basis: correct matches 70% to 81%, false matches 3.4% to 5.2% on held-out Arabic speakers. Before this, the recorded English check could come out "not scored" when the two listeners each missed different words in the later recall.

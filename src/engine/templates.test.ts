@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { SR, classify, dtw, features, fft, melFilterbank, mfcc, segment, spot, trimSilence, type Features } from './templates'
+import { SR, addConfirmed, classify, dtw, features, fft, melFilterbank, mfcc, segment, spot, trimSilence, type Features } from './templates'
 
 /** A synthetic "word": a sequence of harmonic tones (Hz, seconds) with a short fade on each. */
 function word(parts: [number, number][], speed = 1, amp = 0.3): Float32Array {
@@ -133,5 +133,16 @@ describe('classify and spot', () => {
     // Thresholds for these synthetic tones: repeats cost about 2-5, the unrelated sound about 17.
     const found = spot(templates, noisy(rec, 0.002), { maxCost: 8, minMargin: 0.3 })
     expect(found.map((d) => d.word)).toEqual(['c', 'a'])
+  })
+
+  it('adds a second recording only for words another listener confirmed, at most two per word', () => {
+    const rec = noisy(concat(silence(0.3), word(C, 0.9), silence(0.6), word(A, 1.1), silence(0.3)), 0.002)
+    const th = { maxCost: 8, minMargin: 0.3 }
+    const out = addConfirmed(templates, rec, new Set(['a']), th)
+    expect(out.a).toHaveLength(2)
+    expect(out.c).toHaveLength(1)
+    expect(templates.a).toHaveLength(1)
+    expect(addConfirmed(out, rec, new Set(['a']), th).a).toHaveLength(2)
+    expect(addConfirmed(templates, rec, new Set(), th).a).toHaveLength(1)
   })
 })

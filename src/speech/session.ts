@@ -13,6 +13,8 @@ export interface Heard {
   first: Record<string, string>
   /** Resolves with both transcripts once the on-device listener has heard the clip, or with the first alone if it could not. */
   both: Promise<Record<string, string>>
+  /** The recording itself, or null if none was made. */
+  clip: Promise<Float32Array | null>
 }
 
 /**
@@ -33,8 +35,9 @@ export async function listenTask(lang: Lang, ms: number, onPartial: (text: strin
     throw e
   }
   const first = { [browserRecogniser.name]: text }
+  const clipP = capture ? capture.stop() : Promise.resolve(null)
   const both = (async () => {
-    const clip = capture ? await capture.stop() : null
+    const clip = await clipP
     if (!clip || level(clip) < 0.002) return first
     // The on-device and cloud listeners work through the same recording at the same time.
     const [second, cloud] = await Promise.all([
@@ -45,5 +48,5 @@ export async function listenTask(lang: Lang, ms: number, onPartial: (text: strin
     const ownText = wantOwn ? spot(own!, clip).map((d) => d.word).join(' ') : null
     return { ...first, ...(second === null ? {} : { [SECOND_NAME]: second }), ...(cloud === null ? {} : { [CLOUD_NAME]: cloud }), ...(ownText === null ? {} : { [OWN_NAME]: ownText }) }
   })()
-  return { first, both }
+  return { first, both, clip: clipP }
 }

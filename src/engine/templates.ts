@@ -346,3 +346,18 @@ export function spot(templates: Templates, audio: Float32Array, th: Thresholds =
   }
   return [...best.values()].sort((a, b) => a.start - b.start)
 }
+
+/**
+ * A second template per word, from the person's own first recall. A segment counts only when own-voice
+ * matching placed a list word there and another listener heard the same word in that recall, so an
+ * unconfirmed or wrong match never enters the answer key. Two templates per word raised correct matches
+ * from 70% to 81% on held-out Arabic speakers, with false matches up from 3.4% to 5.2% (docs/TEMPLATE_BENCH.md).
+ */
+export function addConfirmed(templates: Templates, audio: Float32Array, confirmed: Set<string>, th: Thresholds = DEFAULT_THRESHOLDS, max = 2): Templates {
+  const out: Templates = Object.fromEntries(Object.entries(templates).map(([w, ts]) => [w, [...ts]]))
+  for (const d of spot(templates, audio, th)) {
+    if (!confirmed.has(d.word) || (out[d.word]?.length ?? 0) >= max) continue
+    out[d.word].push(features(audio.subarray(d.start, d.end), { ...DEFAULT_FEATURES, trim: false }))
+  }
+  return out
+}

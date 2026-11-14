@@ -7,9 +7,9 @@ import { readYesNo } from '../engine/yesno'
 import { clearChecks, loadChecks, saveCheck, type StoredCheck } from '../engine/store'
 import { browserSpeechAvailable, type ListenControl } from '../speech/recogniser'
 import { level, startCapture } from '../speech/capture'
-import { features, type Templates } from '../engine/templates'
+import { addConfirmed, features, type Templates } from '../engine/templates'
 import { DOWNLOAD_MB, loadSecond, secondLoading, secondSupported } from '../speech/second'
-import { listenTask, type Heard } from '../speech/session'
+import { OWN_NAME, listenTask, type Heard } from '../speech/session'
 import { cloudAvailable } from '../speech/cloud'
 import { loadConsent, saveConsent } from '../engine/consent'
 import { APP_VERSION } from '../engine/audit'
@@ -119,7 +119,14 @@ export default function Check() {
 
       await speak(T[lang].recallLater, lang)
       setStage('recall-2')
-      const delayedHeard = await listen(45000, rows, false, true, own)
+      // Words both listeners confirmed in the first recall give own-voice matching a second recording of each.
+      // The on-device listener may still be working on that recording, so this waits at most a few seconds.
+      const firstRecall = await Promise.race([immediateHeard.both, pause(4000).then(() => null)])
+      const immClip = await immediateHeard.clip
+      const ownLater = firstRecall && immClip
+        ? addConfirmed(own, immClip, new Set(scoreTask(firstRecall, rows, lang).items.filter((it) => it.heard === 'both' && it.by.includes(OWN_NAME)).map((it) => words[it.row])))
+        : own
+      const delayedHeard = await listen(45000, rows, false, true, ownLater)
       await speak(T[lang].fn, lang)
       setStage('function')
       const fnHeard = await listen(8000, [], false, false)

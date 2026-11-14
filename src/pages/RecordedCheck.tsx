@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { evaluate, type CheckResult } from '../engine/change'
 import { ANIMALS, WORD_LISTS, type Lang } from '../engine/lexicon'
 import { scoreTask, type RangeScore } from '../engine/score'
-import { features, spot, type Templates } from '../engine/templates'
+import { addConfirmed, features, spot, type Templates } from '../engine/templates'
 import { decodeTo16k, level } from '../speech/capture'
 import { DOWNLOAD_MB, SECOND_NAME, loadSecond, transcribeSecond } from '../speech/second'
 import { OWN_NAME } from '../speech/session'
@@ -57,6 +57,7 @@ export default function RecordedCheck() {
   const [own, setOwn] = useState<{ words: string[]; seconds: number } | null>(null)
   const [loadSeconds, setLoadSeconds] = useState<number | null>(null)
   const [secondOk, setSecondOk] = useState(true)
+  const [added, setAdded] = useState<number | null>(null)
   const [tasks, setTasks] = useState<Partial<Record<TaskKey, TaskResult>>>({})
   const [total, setTotal] = useState<{ low: number; high: number; scored: boolean; seconds: number; result: CheckResult } | null>(null)
   const player = useRef<HTMLAudioElement | null>(null)
@@ -73,7 +74,7 @@ export default function RecordedCheck() {
   }
 
   function reset(l: Lang) {
-    setLang(l); setStage('intro'); setOwn(null); setTasks({}); setTotal(null); setLoadSeconds(null); setPercent(null); setSecondOk(true)
+    setLang(l); setStage('intro'); setOwn(null); setTasks({}); setTotal(null); setLoadSeconds(null); setPercent(null); setSecondOk(true); setAdded(null)
   }
 
   async function run() {
@@ -118,6 +119,11 @@ export default function RecordedCheck() {
 
       const tScore = performance.now()
       const immediate = await scoreOne('immediate', imm, rows, true, 'Scoring the words recalled straight away…')
+      // Words confirmed in the first recall give the own-voice key a second recording of each, as in the real check.
+      const confirmed = new Set(immediate.items.filter((it) => it.heard === 'both' && it.by.includes(OWN_NAME)).map((it) => words[it.row]))
+      const before = Object.values(templates).reduce((a, ts) => a + ts.length, 0)
+      Object.assign(templates, addConfirmed(templates, imm, confirmed))
+      setAdded(Object.values(templates).reduce((a, ts) => a + ts.length, 0) - before)
       const animals = await scoreOne('animals', ani, ANIMALS[lang], false, 'Scoring the minute of animals…')
       const delayed = await scoreOne('delayed', del, rows, true, 'Scoring the words recalled later…')
 
@@ -158,6 +164,7 @@ export default function RecordedCheck() {
               <summary className="muted">What each listener wrote down</summary>
               {listeners.map((n) => <p key={n} className="muted">{n}: <span lang={lang} dir={dir}>{r.transcripts[n] || '(nothing)'}</span></p>)}
             </details>
+            {k === 'delayed' && added !== null && added > 0 && <p className="muted">Own voice also used the {added} word{added === 1 ? '' : 's'} both listeners confirmed in the first recall as a second recording of each.</p>}
             <p className="muted">Scored on this device in {r.seconds} s.</p>
           </>
         )}
