@@ -1,0 +1,135 @@
+{
+ "url": "https://spoken-memory-check.vercel.app",
+ "ranAt": "2026-11-14T21:29:17.783Z",
+ "target": 8,
+ "measure": "Flesch-Kincaid grade, English only",
+ "screens": [
+  {
+   "name": "Start of the full check",
+   "route": "/check",
+   "words": 161,
+   "sentences": 16,
+   "grade": 3.3,
+   "hardest": [
+    {
+     "text": "It needs a one-time download of about 77 MB from huggingface.co.",
+     "grade": 9.6
+    },
+    {
+     "text": "The first is your browser's own speech service, which may send your voice to the company that made the browser.",
+     "grade": 7
+    },
+    {
+     "text": "I agree to take memory checks at home and keep my scores on this device.",
+     "grade": 5.2
+    }
+   ]
+  },
+  {
+   "name": "Hearing check",
+   "route": "/hearing",
+   "words": 127,
+   "sentences": 14,
+   "grade": 3.5,
+   "hardest": [
+    {
+     "text": "Hearing loss is one of the two biggest risks for dementia that can be changed, says the 2024 Lancet Commission report.",
+     "grade": 8.7
+    },
+    {
+     "text": "Digits recorded with a computer voice, not yet a native speaker.",
+     "grade": 6.9
+    },
+    {
+     "text": "This three-minute check comes before the memory check.",
+     "grade": 6.7
+    }
+   ]
+  },
+  {
+   "name": "Choices and consent",
+   "route": "/me",
+   "words": 242,
+   "sentences": 21,
+   "grade": 4,
+   "hardest": [
+    {
+     "text": "Your physician sees your scores over time and will invite you to a visit if they want to talk about them.",
+     "grade": 7.8
+    },
+    {
+     "text": "One score on one day says little, and a lower number can worry people for no reason.",
+     "grade": 7
+    },
+    {
+     "text": "Let that physician listen to a recording when the check was unsure what I said.",
+     "grade": 6.8
+    }
+   ]
+  },
+  {
+   "name": "Result after a check (lower twice)",
+   "route": "/me/decline",
+   "words": 316,
+   "sentences": 35,
+   "grade": 3.7,
+   "hardest": [
+    {
+     "text": "Keep your diabetes follow-up appointments.",
+     "grade": 10
+    },
+    {
+     "text": "Mood is treatable and affects memory.",
+     "grade": 8.4
+    },
+    {
+     "text": "Your physician sees your scores over time and will invite you to a visit if they want to talk about them.",
+     "grade": 7.8
+    }
+   ]
+  },
+  {
+   "name": "Result after a very large fall",
+   "route": "/me/urgent",
+   "words": 322,
+   "sentences": 31,
+   "grade": 4,
+   "hardest": [
+    {
+     "text": "Keep your diabetes follow-up appointments.",
+     "grade": 10
+    },
+    {
+     "text": "Your physician sees your scores over time and will invite you to a visit if they want to talk about them.",
+     "grade": 7.8
+    },
+    {
+     "text": "In a pilot, the clinic would be told at the same time; that alert is not built in this prototype.",
+     "grade": 7
+    }
+   ]
+  },
+  {
+   "name": "Spoken prompts",
+   "route": "/recorded-check",
+   "words": 71,
+   "sentences": 10,
+   "grade": 2.5,
+   "hardest": [
+    {
+     "text": "In the past month, have money, medicines or appointments become harder to manage?",
+     "grade": 8.5
+    },
+    {
+     "text": "Say as many as you can remember.",
+     "grade": 4
+    },
+    {
+     "text": "Now name as many animals as you can.",
+     "grade": 3.8
+    }
+   ]
+  }
+ ],
+ "words": 1239
+}

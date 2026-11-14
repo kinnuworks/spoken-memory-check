@@ -47,3 +47,7 @@ JSON
 
 cd "$out/site"
 vercel deploy --prod --yes --name "${VERCEL_PROJECT:-spoken-memory-check}"
+
+# Run the live site end to end in a headless browser, and say loudly if anything broke.
+cd - >/dev/null
+npx tsx scripts/live-check.ts || { echo "LIVE CHECK FAILED: the deployed site did not pass end to end"; exit 1; }

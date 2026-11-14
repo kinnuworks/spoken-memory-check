@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { SR, addConfirmed, classify, dtw, features, fft, melFilterbank, mfcc, segment, spot, trimSilence, type Features } from './templates'
+import { SR, addConfirmed, classify, dtw, features, fft, melFilterbank, melPower, mfcc, noiseProfile, segment, spot, trimSilence, type Features } from './templates'
 
 /** A synthetic "word": a sequence of harmonic tones (Hz, seconds) with a short fade on each. */
 function word(parts: [number, number][], speed = 1, amp = 0.3): Float32Array {
@@ -144,5 +144,31 @@ describe('classify and spot', () => {
     expect(templates.a).toHaveLength(1)
     expect(addConfirmed(out, rec, new Set(['a']), th).a).toHaveLength(2)
     expect(addConfirmed(templates, rec, new Set(), th).a).toHaveLength(1)
+  })
+})
+
+describe('noise and long stretches of speech', () => {
+  it('takes the noise profile from the quietest frames, not the speech', () => {
+    const rec = noisy(concat(silence(0.6), word(A), silence(0.6)), 0.01)
+    const prof = noiseProfile(rec)
+    const { data, n } = melPower(rec)
+    const bands = prof.length
+    const loudest = Math.max(...Array.from({ length: n }, (_, f) => { let e = 0; for (let m = 0; m < bands; m++) e += data[f * bands + m]; return e }))
+    const profTotal = prof.reduce((s, v) => s + v, 0)
+    expect(profTotal).toBeGreaterThan(0)
+    expect(profTotal).toBeLessThan(loudest / 100)
+    expect(noiseProfile(new Float32Array(10)).every((v) => v === 0)).toBe(true)
+  })
+
+  it('splits speech longer than the limit at its quietest point', () => {
+    // Two words joined by a dip too short to count as a pause.
+    const dip = new Float32Array(Math.round(0.08 * SR))
+    const rec = noisy(concat(silence(0.4), word(A), dip, word(B), silence(0.4)), 0.002)
+    expect(segment(rec)).toHaveLength(1)
+    const parts = segment(rec, { maxSpeechMs: 600 })
+    expect(parts.length).toBeGreaterThanOrEqual(2)
+    const cut = (parts[0][1] + parts[1][0]) / 2
+    const dipMid = Math.round((0.4 + 0.5 + 0.04) * SR)
+    expect(Math.abs(cut - dipMid)).toBeLessThan(0.12 * SR)
   })
 })

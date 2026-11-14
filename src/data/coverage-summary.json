@@ -1,0 +1,49 @@
+{
+ "generated": "2026-11-14",
+ "tool": "Vitest v8 coverage",
+ "engine": {
+  "files": 20,
+  "linesCovered": 621,
+  "linesTotal": 621,
+  "lines": 1,
+  "branches": 0.9445506692160612
+ },
+ "rules": [
+  {
+   "file": "change.ts",
+   "role": "Flag, slow-decline and urgent rules",
+   "lines": 1,
+   "branches": 1
+  },
+  {
+   "file": "score.ts",
+   "role": "Scoring and the two-listener range",
+   "lines": 1,
+   "branches": 1
+  },
+  {
+   "file": "match.ts",
+   "role": "Matching what was heard to the list",
+   "lines": 1,
+   "branches": 1
+  },
+  {
+   "file": "din.ts",
+   "role": "Hearing check",
+   "lines": 1,
+   "branches": 1
+  },
+  {
+   "file": "consent.ts",
+   "role": "Consent switches",
+   "lines": 1,
+   "branches": 1
+  },
+  {
+   "file": "packet.ts",
+   "role": "Physician packet and referral clock",
+   "lines": 1,
+   "branches": 1
+  }
+ ]
+}

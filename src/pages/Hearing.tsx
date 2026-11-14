@@ -91,7 +91,7 @@ export default function Hearing() {
     <>
       <h1>Hearing check</h1>
       <p><span className="tag syn">Digits recorded with a computer voice, not yet a native speaker</span></p>
-      <p className="lead-p">In the 2024 Lancet Commission report, hearing loss is one of the two largest risk factors for dementia that can be changed, and most people with it are never fitted with a hearing aid. This three-minute check comes before the memory check: three spoken digits in noise, and you tap what you heard. No speech recognition is involved.</p>
+      <p className="lead-p">Hearing loss is one of the two biggest risks for dementia that can be changed, says the 2024 Lancet Commission report. Most people with hearing loss never get a hearing aid. This three-minute check comes before the memory check. You hear three numbers in noise and tap the ones you heard. Nothing listens to your voice here.</p>
 
       {stage === 'intro' && (
         <>

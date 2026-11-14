@@ -1,6 +1,9 @@
 import sada from '../data/sada-bench.json'
 import mutation from '../data/mutation-summary.json'
 import own from '../data/own-voice-summary.json'
+import coverage from '../data/coverage-summary.json'
+import live from '../data/live-check.json'
+import reading from '../data/reading-grade.json'
 
 type Stat = { clips: number; refWords: number; wer: number | null; werCi: (number | null)[] }
 type Diff = { werDifference: number; ci: number[] } | null
@@ -46,6 +49,40 @@ export function RuleChecks() {
         <tbody>{mutation.files.map((f) => <tr key={f.file}><th scope="row">{f.role} <span className="muted">({f.file})</span></th><td>{f.mutants}</td><td>{Math.round(f.score * 100)}%</td></tr>)}</tbody>
       </table></div>
       <p className="muted">{mutation.note} Some of the rest cannot change any result (for example, adding a constant to a sum that is always zero). Run on {mutation.generated} with {mutation.tool}; rerun with <code>npx stryker run</code>.</p>
+    </>
+  )
+}
+
+const pc = (x: number) => `${Math.round(x * 100)}%`
+
+/** Coverage of the decision code, the end-to-end run on the live site, and reading grade. */
+export function BuiltToBeChecked() {
+  const hardest = reading.screens.flatMap((x) => x.hardest).reduce((a, b) => (b.grade > a.grade ? b : a))
+  return (
+    <>
+      <h2>Checked end to end</h2>
+      <p><strong>Every line of the decision code runs under the tests ({coverage.engine.linesCovered} of {coverage.engine.linesTotal} lines, {pc(coverage.engine.branches)} of branches), and the rules that decide what happens to a person are covered on every branch.</strong></p>
+      <div className="scroll" tabIndex={0} role="region" aria-label="Test coverage of the decision rules"><table>
+        <thead><tr><th>Rule</th><th>Lines</th><th>Branches</th></tr></thead>
+        <tbody>{coverage.rules.map((r) => <tr key={r.file}><th scope="row">{r.role} <span className="muted">({r.file})</span></th><td>{pc(r.lines)}</td><td>{pc(r.branches)}</td></tr>)}</tbody>
+      </table></div>
+      <p className="muted">{coverage.tool}, {coverage.generated}. Rerun with <code>npx tsx scripts/coverage-summary.ts</code>.</p>
+
+      <h3>The live site, in a real browser, after every deploy</h3>
+      <p>A script opens the deployed site in a headless browser and does what a judge would: it opens every screen, checks the full check stays locked until the person agrees, scores the recorded check in both languages on the device, and takes one packet to a closed referral. <strong>{live.passed} of {live.total} steps passed on {live.ranAt.slice(0, 10)}.</strong></p>
+      <div className="scroll" tabIndex={0} role="region" aria-label="Live end-to-end run"><table>
+        <thead><tr><th>Step</th><th>Result</th><th>Time</th></tr></thead>
+        <tbody>{live.steps.map((x) => <tr key={x.name}><th scope="row">{x.name}</th><td>{x.ok ? 'Passed' : 'Failed'}: {x.detail}</td><td>{x.seconds} s</td></tr>)}</tbody>
+      </table></div>
+      <p className="muted">Headless Chromium through Playwright, against {live.url}. There is no microphone in this run, so the spoken check is scored from the recorded voice, not live speech. Rerun with <code>npx tsx scripts/live-check.ts</code>.</p>
+
+      <h3>Can older people read it?</h3>
+      <p>Plain-language guidance for patient material asks for a reading grade of 6 to 8. We measured every screen the person reads and every spoken prompt. <strong>Every one came in at grade {Math.ceil(Math.max(...reading.screens.map((x) => x.grade)))} or under</strong>; the hardest single sentence is grade {hardest.grade.toFixed(0)} ("{hardest.text}").</p>
+      <div className="scroll" tabIndex={0} role="region" aria-label="Reading grade by screen"><table>
+        <thead><tr><th>Screen</th><th>Words</th><th>Reading grade</th></tr></thead>
+        <tbody>{reading.screens.map((x) => <tr key={x.name}><th scope="row">{x.name}</th><td>{x.words}</td><td>{x.grade.toFixed(1)}</td></tr>)}</tbody>
+      </table></div>
+      <p className="muted">{reading.measure}, with a rough syllable count. Arabic has no readability formula we could check, so the Arabic text is not graded; it still needs a native speaker's review. Rerun with <code>npx tsx scripts/reading-grade.ts</code>.</p>
     </>
   )
 }

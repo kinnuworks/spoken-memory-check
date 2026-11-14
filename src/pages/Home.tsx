@@ -5,6 +5,9 @@ import own from '../data/own-voice-summary.json'
 import tests from '../data/tests.json'
 import sada from '../data/sada-bench.json'
 import mutation from '../data/mutation-summary.json'
+import coverage from '../data/coverage-summary.json'
+import live from '../data/live-check.json'
+import reading from '../data/reading-grade.json'
 import { COST_DEFAULTS, yearlyCost } from '../engine/cost'
 import { lostSignals } from '../engine/signals'
 import { PACKET_STATUSES, STATUS_LABEL, evaluate } from '../engine/change'
@@ -371,7 +374,22 @@ export default function Home() {
             <div className="span-3 reveal" style={{ '--i': 1 } as React.CSSProperties}>
               <span className="lbl working">Tested code</span>
               <p className="stat">{Math.round(mutation.score * 100)}% <span>of deliberate bugs caught</span></p>
-              <p className="t-small">{mutation.mutants} small bugs were put into the decision rules one at a time; the {tests.passed} tests caught {mutation.caught}. Most of the rest only change wording.</p>
+              <p className="t-small">{mutation.mutants} small bugs were put into the decision rules one at a time; the tests caught {mutation.caught}. Most of the rest only change wording.</p>
+            </div>
+            <div className="span-2 reveal">
+              <span className="lbl working">Tested code</span>
+              <p className="stat">{Math.round(coverage.engine.lines * 100)}% <span>of lines</span></p>
+              <p className="t-small">of the decision code run under the tests ({coverage.engine.linesCovered} lines). The rules that decide what happens to a person are covered on every branch.</p>
+            </div>
+            <div className="span-2 reveal" style={{ '--i': 1 } as React.CSSProperties}>
+              <span className="lbl working">Live site</span>
+              <p className="stat">{live.passed} <span>of</span> {live.total}</p>
+              <p className="t-small">end-to-end steps passed on the live site in a real browser on {live.ranAt.slice(0, 10)}, both recorded checks scored on the device included.</p>
+            </div>
+            <div className="span-2 reveal" style={{ '--i': 2 } as React.CSSProperties}>
+              <span className="lbl working">Plain language</span>
+              <p className="stat">Grade {Math.ceil(Math.max(...reading.screens.map((x) => x.grade)))}</p>
+              <p className="t-small">reading level or under on every screen the person reads and every spoken prompt (English; guidance asks for 6 to 8). Arabic not yet graded.</p>
             </div>
           </div>
           <p className="center-link reveal"><Link className="btn btn-outline" to="/benchmark">How the flag was tested<Arrow /></Link></p>

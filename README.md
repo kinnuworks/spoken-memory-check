@@ -14,8 +14,10 @@ A prototype for Abu Dhabi's adult screening programme, built for Statement 8 of 
 | Where it fits | The memory step of Thiqa's "Comprehensive hearing and dementia screening" packages 52-45 and 52-46 (IFHAS 3.0, Addendum 06), which name no memory tool. `docs/COMMERCIAL.md` |
 | Hand-off | FHIR R4 with 0 errors from the official HL7 validator 7.0.5; referral as the HL7 v2 REF message with SNOMED specialty that Malaffi asks for (Circular 2026/144). `docs/FHIR_VALIDATION.md` |
 | Fairness | Real US survey data: a fixed animal cutoff flags 48% of healthy adults with under 9 years of school against 16% of graduates. `analysis/` |
-| Safety rule | Simulated: two routes (two low checks in a row, and a steady slow fall). 4.9% false alarms a year; flagged within the year: 45% of people losing 1 point a check, 94% losing 2. `scripts/benchmark.ts` |
-| Quality | 199 automated tests; they catch 92% of 897 deliberate bugs put into the decision rules (mutation testing); 0 accessibility violations in 48 axe checks. `docs/ACCESSIBILITY.md` |
+| Flag rule | Simulated: two routes (two low checks in a row, and a steady slow fall). 4.9% false alarms a year; flagged within the year: 45% of people losing 1 point a check, 94% losing 2. `scripts/benchmark.ts` |
+| Quality | 217 automated tests run every line of the decision code (621 of 621) and catch 92% of 897 deliberate bugs put into the rules (mutation testing). After each deploy a headless browser runs the live site end to end: every screen, the consent lock, both recorded checks scored on the device, and a packet to a closed referral (5 of 5 steps passed). 0 accessibility violations in 48 axe checks. `scripts/live-check.ts`, `docs/ACCESSIBILITY.md` |
+| Safety | The person is never shown a score. A physician approves every routine packet before the person is contacted, and results are given in person; only a very large fall sends the person straight to urgent care. A missed or unheard check is never counted as low. The full check stays locked until the person agrees. Every person-facing screen reads at grade 4 or under (English). No language model makes any decision. `docs/SAFETY_CASE.md`, `docs/COMPLIANCE.md` |
+| Who pays | Thiqa's screening packages 52-45 and 52-46. Modelled running cost: about AED 26 per eligible member a year at 40% uptake. No partner has agreed yet. `docs/COMMERCIAL.md` |
 | Rules | Compliance map, intended use, risk register. `docs/COMPLIANCE.md`, `docs/INTENDED_USE.md`, `docs/RISK_REGISTER.md` |
 
 ## Try it in 30 seconds
@@ -48,7 +50,9 @@ To run it yourself: `npm install`, then `npm run dev`. To redeploy: `scripts/dep
 - Smaller Arabic model: the decoder's word table stored at 4 bits cuts the Arabic download from 299 MB to 165 MB, served from this site, with no loss on the 720 real clips (83% against 82%). `docs/HUMAN_SPEECH_BENCH.md`
 - Older and Gulf speakers, public data: on Saudi TV speech labelled by age and dialect (SADA), word error for older Gulf speakers against adult Gulf speakers was 31% vs 33% for Jais-ASR and 68% vs 75% for the on-device model. Neither heard older Gulf voices worse; Gulf speech was harder than other dialects for both. TV sentences, not a memory check. `docs/OLDER_SPEAKERS_BENCH.md`
 - Tested code: mutation testing put 897 small deliberate bugs into the decision rules one at a time, and the tests caught 826 (92%); most of the rest change only wording. `npx stryker run`
-- 199 automated tests: `npm test`. Cases listed in `docs/TESTED_CASES.md`.
+- 217 automated tests: `npm test`. Cases listed in `docs/TESTED_CASES.md`. They run all 621 lines of the decision code and 94% of its branches; the rules that decide what happens to a person are covered on every branch. `npx tsx scripts/coverage-summary.ts`
+- Live end to end: after each deploy, `scripts/live-check.ts` opens the live site in headless Chromium, opens every screen, checks the full check stays locked until the person agrees, scores the recorded check in English and Arabic on the device, and takes one packet to a closed referral with the HL7 and FHIR files. No microphone in that run, so live speech is not covered.
+- Plain language: every screen the person reads and every spoken prompt measures at Flesch-Kincaid grade 4 or under in English (guidance for patient material asks for 6 to 8). Arabic is not graded. `npx tsx scripts/reading-grade.ts`
 
 ## Documents
 

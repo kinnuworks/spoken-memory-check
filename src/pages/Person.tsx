@@ -41,7 +41,7 @@ export default function Person() {
       {person.checks.filter((c) => c.hearingLimited).length >= 2 && (
         <div className="note">Twice we could not hear you clearly enough to score the check. That is often about hearing, not memory. Please ask your clinic about a hearing test; it also makes these checks fairer.</div>
       )}
-      <p className="muted">Scores are not shown here, because one score on one day says little and a falling number can worry people for no reason. Your physician sees your scores over time and will invite you to a visit if they want to talk about them. Results are discussed in person, never in the app.</p>
+      <p className="muted">Scores are not shown here. One score on one day says little, and a lower number can worry people for no reason. Your physician sees your scores over time and will invite you to a visit if they want to talk about them. Results are discussed in person, never in the app.</p>
 
       <h2>What your screening visit shows you can work on</h2>
       {steps.length === 0 && <p>Nothing stood out at your last screening visit. Keeping active, sleeping well and staying in touch with people all help.</p>}
@@ -51,14 +51,14 @@ export default function Person() {
           <p>{s.found} {s.action}</p>
         </div>
       ))}
-      <p className="muted">These come from your own screening record. There is no risk score here, because figures about whole populations do not say what will happen to one person. Wording is a fixed template offered to the public health centre for approval.</p>
+      <p className="muted">These come from your own screening record. There is no risk score here. Figures about large groups of people cannot tell what will happen to you. Wording is a fixed template offered to the public health centre for approval.</p>
 
       <h2>Your choices</h2>
       <p>Each one is off until you turn it on, and you can turn it off again at any time.</p>
       <label className="choice"><input className="switch" type="checkbox" checked={consent.takeChecks} onChange={(e) => set({ takeChecks: e.target.checked })} /><span>Take memory checks at home and keep my scores on this device</span></label>
       <label className="choice"><input className="switch" type="checkbox" checked={consent.sharePhysician} onChange={(e) => set({ sharePhysician: e.target.checked })} /><span>If my scores stay lower than usual, tell the physician at my screening clinic</span></label>
       <label className="choice"><input className="switch" type="checkbox" disabled={!consent.sharePhysician} checked={consent.keepClips} onChange={(e) => set({ keepClips: e.target.checked })} /><span>Let that physician listen to a recording when the check was unsure what I said</span></label>
-      <label className="choice"><input className="switch" type="checkbox" checked={consent.cloudListener} onChange={(e) => set({ cloudListener: e.target.checked })} /><span>Let a speech service hosted in the UAE also hear my checks, which has a Gulf Arabic model (not yet measured in this check). Recordings leave this device for this and are not kept.</span></label>
+      <label className="choice"><input className="switch" type="checkbox" checked={consent.cloudListener} onChange={(e) => set({ cloudListener: e.target.checked })} /><span>Let a speech service in the UAE also hear my checks. It has a Gulf Arabic model, but how well it hears this check has not been measured yet. Recordings leave this device for this and are not kept.</span></label>
       {consent.updated && (
         <div className="card">
           <strong>Your receipt</strong>

@@ -12,12 +12,8 @@ import { createRequire } from 'node:module'
 
 const BASE = process.env.A11Y_URL ?? 'http://localhost:5183'
 
-export const ROUTES = [
-  '/', '/try', '/recorded', '/check', '/hearing', '/rescore', '/year',
-  ...['stable', 'practice', 'decline', 'hearing', 'function', 'urgent'].map((id) => `/year/${id}`),
-  '/clinician/decline', '/clinician/function', '/me/decline', '/me/urgent',
-  '/benchmark', '/programme', '/how',
-]
+export { ROUTES } from './routes'
+import { ROUTES } from './routes'
 
 /** Runs in the page. Walks the hash routes, so the app loads once. */
 async function auditInPage(routes: string[]) {
