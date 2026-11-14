@@ -33,3 +33,6 @@ dist-ssr
 .playwright-mcp/
 external/
 output/
+coverage/
+reports/
+.stryker-tmp/

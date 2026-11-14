@@ -2,6 +2,7 @@ import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { DIN, classify, isCorrect, loadHearing, nextSnr, saveHearing, srt, triplet, type DinResult, type DinTrial } from '../engine/din'
 import { prepare, play, sample } from '../speech/dinAudio'
+import { DOWNLOAD_MB, loadSecond, secondLoading, secondSupported } from '../speech/second'
 
 type Stage = 'intro' | 'loading' | 'listen' | 'answer' | 'result' | 'failed'
 type Wear = 'most' | 'some' | 'none'
@@ -21,6 +22,13 @@ export default function Hearing() {
   const [past, setPast] = useState(loadHearing())
   const [wear, setWear] = useState(loadWear())
   const current = useRef<{ digits: number[]; snr: number }>({ digits: [], snr: DIN.startSnr })
+  const [fetching, setFetching] = useState<number | null>(secondLoading('ar') ? 0 : null)
+
+  // The memory check's Arabic model is large; fetching it now means the check never waits for it.
+  function getReady() {
+    setFetching(0)
+    loadSecond('ar', (p) => setFetching(Math.min(99, p))).then(() => setFetching(100)).catch(() => setFetching(null))
+  }
 
   async function next(snr: number) {
     const digits = triplet(Math.random)
@@ -96,6 +104,13 @@ export default function Hearing() {
             <li>Play the sample and set the volume so the voice is clear and comfortable. Then leave the volume alone.</li>
             <li>You will hear {DIN.trials} sets of three digits. Tap the three you heard, in order. Guess if you are not sure.</li>
           </ol>
+          {lang === 'ar' && secondSupported() && (
+            <p className="muted">
+              {fetching === null
+                ? <button className="small" onClick={getReady}>Get the Arabic speech model ready during this check (one-time download, about {DOWNLOAD_MB.ar} MB)</button>
+                : fetching < 100 ? `Getting the Arabic speech model ready in the background: ${fetching}%` : 'The Arabic speech model is ready on this device.'}
+            </p>
+          )}
           <div className="stack">
             <button onClick={trySample}>Play a sample to set the volume</button>
             <button className="primary" onClick={start}>Start the hearing check</button>

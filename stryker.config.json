@@ -1,0 +1,28 @@
+{
+  "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
+  "testRunner": "vitest",
+  "plugins": [
+    "@stryker-mutator/vitest-runner"
+  ],
+  "mutate": [
+    "src/engine/change.ts",
+    "src/engine/score.ts",
+    "src/engine/match.ts",
+    "src/engine/din.ts",
+    "src/engine/consent.ts",
+    "src/engine/packet.ts",
+    "src/engine/rescore.ts"
+  ],
+  "coverageAnalysis": "perTest",
+  "reporters": [
+    "clear-text",
+    "json"
+  ],
+  "jsonReporter": {
+    "fileName": "external/mutation/mutation.json"
+  },
+  "tempDirName": "external/.stryker-tmp",
+  "concurrency": 6,
+  "timeoutMS": 20000,
+  "tsconfigFile": "stryker-no-tsconfig.json"
+}
