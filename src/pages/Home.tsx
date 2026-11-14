@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import data from '../data/benchmark.json'
 import own from '../data/own-voice-summary.json'
+import tests from '../data/tests.json'
 import { lostSignals } from '../engine/signals'
 import { PACKET_STATUSES, STATUS_LABEL, evaluate } from '../engine/change'
 import { PERSONAS } from '../engine/histories'
@@ -53,7 +54,7 @@ export default function Home() {
             <li><b>{Math.round(own.union.rate * 100)}%</b><span>of {own.whisperAlone.n} real Arabic words heard right on the device, with the speaker's own voice as the answer key; 99% in a lab test adding MBZUAI and Inception's Jais-ASR</span></li>
             <li><b>52-45 · 52-46</b><span>the Thiqa hearing and dementia screening packages it fills the memory step of</span></li>
             <li><b>0 errors</b><span>from the official HL7 FHIR validator; referrals in the HL7 form Malaffi asks for</span></li>
-            <li><b>0 violations</b><span>in 48 accessibility checks; 115 automated tests</span></li>
+            <li><b>0 violations</b><span>in 48 accessibility checks; {tests.passed} automated tests</span></li>
           </ul>
 
           <div className="hero__visual bleed">

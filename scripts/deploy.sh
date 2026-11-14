@@ -4,6 +4,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
+bash scripts/count-tests.sh
 npm run build
 
 out="${DEPLOY_DIR:-$(mktemp -d)}"
