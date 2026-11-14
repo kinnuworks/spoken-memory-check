@@ -10,7 +10,7 @@ A prototype for Abu Dhabi's adult screening programme, built for Statement 8 of 
 
 | | |
 |---|---|
-| Arabic words heard right | 93% of 720 real single words from 30 adults, with the speaker's own voice as the answer key (82% for the on-device model alone; 40% before tuning). Read words, no older or Gulf speakers yet. `docs/TEMPLATE_BENCH.md` |
+| Arabic words heard right | On the device: 93% of 720 real single words from 30 adults, with the speaker's own voice as the answer key (82% for the on-device model alone; 40% before tuning). Lab test of MBZUAI and Inception's Jais-ASR: 97.1% alone, 99.2% with own voice, as a proposed optional UAE-hosted listener. Read words, no older or Gulf speakers yet. `docs/TEMPLATE_BENCH.md`, `docs/JAIS_ASR_BENCH.md` |
 | Where it fits | The memory step of Thiqa's "Comprehensive hearing and dementia screening" packages 52-45 and 52-46 (IFHAS 3.0, Addendum 06), which name no memory tool. `docs/COMMERCIAL.md` |
 | Hand-off | FHIR R4 with 0 errors from the official HL7 validator 7.0.5; referral as the HL7 v2 REF message with SNOMED specialty that Malaffi asks for (Circular 2026/144). `docs/FHIR_VALIDATION.md` |
 | Fairness | Real US survey data: a fixed animal cutoff flags 48% of healthy adults with under 9 years of school against 16% of graduates. `analysis/` |

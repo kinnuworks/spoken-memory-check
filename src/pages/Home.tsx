@@ -50,7 +50,7 @@ export default function Home() {
           <p className="trust"><Link to="/recorded-check" style={{ textDecoration: 'underline', color: 'inherit' }}>Or play the full four-minute check, recorded</Link></p>
           <p className="trust"><span>No sign-up</span><span>Works in the browser</span><span>People shown are synthetic</span><span>Does not diagnose</span></p>
           <ul className="proof" aria-label="What is measured so far">
-            <li><b>{Math.round(own.union.rate * 100)}%</b><span>of {own.whisperAlone.n} real Arabic words heard right, with the speaker's own voice as the answer key</span></li>
+            <li><b>{Math.round(own.union.rate * 100)}%</b><span>of {own.whisperAlone.n} real Arabic words heard right on the device, with the speaker's own voice as the answer key; 99% in a lab test adding MBZUAI and Inception's Jais-ASR</span></li>
             <li><b>52-45 · 52-46</b><span>the Thiqa hearing and dementia screening packages it fills the memory step of</span></li>
             <li><b>0 errors</b><span>from the official HL7 FHIR validator; referrals in the HL7 form Malaffi asks for</span></li>
             <li><b>0 violations</b><span>in 48 accessibility checks; 105 automated tests</span></li>
