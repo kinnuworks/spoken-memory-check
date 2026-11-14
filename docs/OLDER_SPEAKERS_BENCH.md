@@ -39,6 +39,7 @@ What this shows:
 
 - Neither listener heard older Gulf speakers worse than adult Gulf speakers.
 - Gulf speech was harder than Najdi or Hijazi speech for both listeners, at every age. Gulf speakers are who this check is for, so that gap matters more than the age gap.
+- Without the app's prompt, the on-device model gave the same picture: 68% for older Gulf speakers against 73% for adults.
 - Jais-ASR made less than half as many errors as the on-device model on running speech.
 - Across all dialects, older speakers come out about 6 points worse with both listeners. That is because the older group is mostly Gulf; within each dialect the older speakers were not worse.
 

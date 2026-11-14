@@ -128,116 +128,116 @@
   },
   "noPrompt": {
    "Older, Gulf (Khaliji)": {
-    "clips": 8,
-    "refWords": 72,
-    "wer": 0.736,
+    "clips": 83,
+    "refWords": 652,
+    "wer": 0.681,
     "werCi": [
-     0.574,
-     0.861
+     0.625,
+     0.745
     ],
-    "heard": 0.292,
+    "heard": 0.351,
     "heardCi": [
-     0.162,
-     0.458
+     0.286,
+     0.406
     ]
    },
    "Older, other Saudi dialects": {
-    "clips": 0,
-    "refWords": 0,
-    "wer": null,
+    "clips": 37,
+    "refWords": 323,
+    "wer": 0.817,
     "werCi": [
-     null,
-     null
+     0.712,
+     0.924
     ],
-    "heard": null,
+    "heard": 0.22,
     "heardCi": [
-     null,
-     null
+     0.116,
+     0.319
     ]
    },
    "Older, all": {
-    "clips": 8,
-    "refWords": 72,
-    "wer": 0.736,
+    "clips": 120,
+    "refWords": 975,
+    "wer": 0.726,
     "werCi": [
-     0.571,
-     0.857
+     0.676,
+     0.782
     ],
-    "heard": 0.292,
+    "heard": 0.308,
     "heardCi": [
-     0.167,
-     0.464
+     0.251,
+     0.358
     ]
    },
    "Adult, Gulf (Khaliji)": {
-    "clips": 12,
-    "refWords": 110,
-    "wer": 0.718,
+    "clips": 200,
+    "refWords": 1517,
+    "wer": 0.73,
     "werCi": [
-     0.564,
-     0.952
+     0.689,
+     0.768
     ],
-    "heard": 0.345,
+    "heard": 0.295,
     "heardCi": [
-     0.082,
-     0.51
+     0.258,
+     0.334
     ]
    },
    "Adult, Najdi": {
-    "clips": 0,
-    "refWords": 0,
-    "wer": null,
+    "clips": 100,
+    "refWords": 1075,
+    "wer": 0.621,
     "werCi": [
-     null,
-     null
+     0.55,
+     0.707
     ],
-    "heard": null,
+    "heard": 0.393,
     "heardCi": [
-     null,
-     null
+     0.31,
+     0.464
     ]
    },
    "Adult, Hijazi": {
-    "clips": 0,
-    "refWords": 0,
-    "wer": null,
+    "clips": 100,
+    "refWords": 1234,
+    "wer": 0.605,
     "werCi": [
-     null,
-     null
+     0.541,
+     0.68
     ],
-    "heard": null,
+    "heard": 0.412,
     "heardCi": [
-     null,
-     null
+     0.339,
+     0.474
     ]
    },
    "Adult, all": {
-    "clips": 12,
-    "refWords": 110,
-    "wer": 0.718,
+    "clips": 400,
+    "refWords": 3826,
+    "wer": 0.659,
     "werCi": [
-     0.567,
-     0.951
+     0.624,
+     0.698
     ],
-    "heard": 0.345,
+    "heard": 0.36,
     "heardCi": [
-     0.098,
-     0.503
+     0.322,
+     0.395
     ]
    },
    "olderMinusAdult": {
     "gulf": {
-     "werDifference": 0.018,
+     "werDifference": -0.049,
      "ci": [
-      -0.269,
-      0.223
+      -0.112,
+      0.021
      ]
     },
     "all": {
-     "werDifference": 0.018,
+     "werDifference": 0.067,
      "ci": [
-      -0.286,
-      0.226
+      0.002,
+      0.134
      ]
     }
    }
