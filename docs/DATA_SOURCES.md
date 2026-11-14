@@ -14,3 +14,7 @@ Share of evidence that is synthetic: the histories and the benchmark are entirel
 Speech is heard by two listeners. The browser's own speech service may send audio to the browser's maker under its terms; the app says so before it listens. The second listener runs on the device and sends nothing anywhere.
 
 Not used: any licensed cognitive test (for example MoCA, MMSE, TICS, CERAD); any survey whose terms bar automated tools from its person-level data.
+
+## SADA 2022 (Saudi TV speech)
+
+Saudi Data and AI Authority, test split, from huggingface.co/datasets/MohamedRashad/SADA22. CC BY-NC-SA 4.0. Used only to measure the listeners by speaker age group and dialect (`docs/OLDER_SPEAKERS_BENCH.md`). Not redistributed, not used to train or tune anything, not shipped in the app.
