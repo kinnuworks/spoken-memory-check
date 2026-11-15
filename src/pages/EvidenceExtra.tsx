@@ -69,7 +69,7 @@ export function BuiltToBeChecked() {
       <p className="muted">{coverage.tool}, {coverage.generated}. Rerun with <code>npx tsx scripts/coverage-summary.ts</code>.</p>
 
       <h3>The live site, in a real browser, after every deploy</h3>
-      <p>A script opens the deployed site in a headless browser and does what a judge would: it opens every screen, checks the full check stays locked until the person agrees, scores the recorded check in both languages on the device, and takes one packet to a closed referral. <strong>{live.passed} of {live.total} steps passed on {live.ranAt.slice(0, 10)}.</strong></p>
+      <p>A script opens the deployed site in a headless browser and does what a judge would: it opens every screen, checks the full check stays locked until the person agrees, scores the recorded check in both languages on the device and checks it word by word against what the voice said, and takes one packet to a closed referral. <strong>{live.passed} of {live.total} steps passed on {live.ranAt.slice(0, 10)}.</strong></p>
       <div className="scroll" tabIndex={0} role="region" aria-label="Live end-to-end run"><table>
         <thead><tr><th>Step</th><th>Result</th><th>Time</th></tr></thead>
         <tbody>{live.steps.map((x) => <tr key={x.name}><th scope="row">{x.name}</th><td>{x.ok ? 'Passed' : 'Failed'}: {x.detail}</td><td>{x.seconds} s</td></tr>)}</tbody>

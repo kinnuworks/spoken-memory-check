@@ -2,7 +2,10 @@ import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { evaluate, type CheckResult } from '../engine/change'
 import { ANIMALS, WORD_LISTS, type Lang } from '../engine/lexicon'
+import { matchClosedSet } from '../engine/match'
 import { scoreTask, type RangeScore } from '../engine/score'
+import bench from '../data/benchmark.json'
+import tplBench from '../data/template-bench.json'
 import { addConfirmed, features, spot, type Templates } from '../engine/templates'
 import { decodeTo16k, level } from '../speech/capture'
 import { DOWNLOAD_FROM, DOWNLOAD_MB, SECOND_NAME, loadSecond, transcribeSecond } from '../speech/second'
@@ -36,11 +39,40 @@ const PROMPT: Record<Lang, Record<string, string>> = {
   },
 }
 
-// What the computer voice says in each clip, so the page can say what a perfect listener would get.
-const SAID: Record<Lang, { recall1: number; recall1Extra: string; animals: number; recall2: number }> = {
-  en: { recall1: 7, recall1Extra: 'carpet', animals: 14, recall2: 6 },
-  ar: { recall1: 7, recall1Extra: 'كرسي', animals: 14, recall2: 6 },
+// What the computer voice says in each clip (scripts/make-full-check-audio.sh), so every
+// listener can be scored against it: words heard, words said but missed, words credited wrongly.
+const SAID: Record<Lang, Record<'immediate' | 'animals' | 'delayed', string[]> & { extra: string }> = {
+  en: {
+    immediate: ['river', 'candle', 'window', 'garden', 'bridge', 'mirror', 'jacket'], extra: 'carpet',
+    animals: ['dog', 'cat', 'horse', 'cow', 'lion', 'tiger', 'elephant', 'giraffe', 'camel', 'monkey', 'rabbit', 'eagle', 'shark', 'sheep'],
+    delayed: ['river', 'window', 'garden', 'mirror', 'candle', 'butter'],
+  },
+  ar: {
+    immediate: ['نهر', 'شمعة', 'نافذة', 'حديقة', 'جسر', 'مرآة', 'معطف'], extra: 'كرسي',
+    animals: ['جمل', 'حصان', 'قطة', 'كلب', 'أسد', 'نمر', 'فيل', 'زرافة', 'غزال', 'صقر', 'سمكة', 'بقرة', 'خروف', 'ثعلب'],
+    delayed: ['نهر', 'نافذة', 'حديقة', 'مرآة', 'شمعة', 'زبدة'],
+  },
 }
+
+/** Against the script: which items were said and missed by every listener, and which were credited but never said. */
+function againstScript(score: RangeScore, said: string[], taskRows: string[][], lang: Lang) {
+  const saidRows = matchClosedSet(said.join(' '), taskRows, lang)
+  const heard = new Set(score.items.map((it) => it.row))
+  return {
+    said: saidRows.size,
+    missed: [...saidRows].filter((r) => !heard.has(r)).map((r) => taskRows[r][0]),
+    added: score.items.filter((it) => !saidRows.has(it.row)).map((it) => it.label),
+  }
+}
+
+// The flag test's own worlds where listeners miss words: what it does to false alarms and to catching a slow decline.
+const missWorlds = (bench.rows as { world: string; rule: string; falseAlarmYear: number; detected: Record<string, number> }[]).filter((r) => r.rule === 'ours')
+// The two listeners together on real single-word recordings (scripts/template-bench.ts).
+const REAL = Object.fromEntries((['ar', 'en'] as Lang[]).map((l) => {
+  const o = tplBench.unionWithWhisper[l === 'ar' ? 'arabic' : 'english'].own.overall
+  return [l, { n: o.union.n, union: o.union.rate, falseCredit: o.templateFalseCredit.rate }]
+})) as Record<Lang, { n: number; union: number; falseCredit: number }>
+const pct = (x: number) => `${(x * 100).toFixed(1).replace(/\.0$/, '')}%`
 
 type TaskKey = 'immediate' | 'animals' | 'delayed'
 interface TaskResult { score: RangeScore; transcripts: Record<string, string>; seconds: number }
@@ -141,8 +173,12 @@ export default function RecordedCheck() {
 
   const busy = stage === 'running'
 
+  const taskRows = (k: TaskKey) => (k === 'animals' ? ANIMALS[lang] : rows)
+  const vsScript = (k: TaskKey) => { const r = tasks[k]; return r ? againstScript(r.score, SAID[lang][k], taskRows(k), lang) : null }
+
   function taskCard(k: TaskKey, title: string, prompt: string, src: string, said: string) {
     const r = tasks[k]
+    const vs = vsScript(k)
     const listeners = r ? Object.keys(r.transcripts) : []
     const both = r?.score.items.filter((it) => it.by.length >= 2 && listeners.length > 1) ?? []
     const byOne = (name: string) => r?.score.items.filter((it) => it.by.length === 1 && it.by[0] === name) ?? []
@@ -159,6 +195,8 @@ export default function RecordedCheck() {
             {listeners.length === 0 && <p>No listener could hear this recording on this device.</p>}
             {both.length > 0 && chipRow("both", "Heard by both listeners", "both", both.map((it) => it.label))}
             {listeners.map((n) => byOne(n).length > 0 && chipRow(n, listeners.length > 1 ? `Only ${n}` : `Heard by ${n}`, listeners.length > 1 ? 'one' : 'both', byOne(n).map((it) => it.label)))}
+            {vs && vs.missed.length > 0 && chipRow('missed', 'Said, but no listener heard it', 'miss', vs.missed)}
+            {vs && <p className="muted">Against the recording: {vs.said - vs.missed.length} of {vs.said} heard{vs.added.length ? `; credited but never said: ${vs.added.join(sep)}` : '; nothing credited that was not said'}.</p>}
             {r.score.unmatched.length > 0 && <p className="muted">Heard but not on the list, so not counted: <span lang={lang} dir={dir}>{r.score.unmatched.slice(0, 12).join(sep)}</span></p>}
             <details>
               <summary className="muted">What each listener wrote down</summary>
@@ -182,6 +220,13 @@ export default function RecordedCheck() {
   }
 
   const s = SAID[lang]
+  const all = (['immediate', 'animals', 'delayed'] as TaskKey[]).map(vsScript)
+  const saidAll = all.reduce((n, v) => n + (v?.said ?? 0), 0)
+  const missedAll = all.flatMap((v) => v?.missed ?? [])
+  const addedAll = all.flatMap((v) => v?.added ?? [])
+  const real = REAL[lang]
+  const world = (w: string) => missWorlds.find((r) => r.world.startsWith(w))
+  const [calm, miss8, miss15] = [world('As assumed'), world('Each recogniser misses 8%'), world('Each recogniser misses 15%')]
   return (
     <>
       <h1>Play a full recorded check</h1>
@@ -214,8 +259,8 @@ export default function RecordedCheck() {
         {own && <p className="muted">{own.words.length} of 10 clips became the {OWN_NAME.toLowerCase()} answer key, built on this device in {own.seconds} s. Nothing is scored here; saying a word back only shows it was heard.</p>}
       </div>
 
-      {taskCard("immediate", "3. Words recalled straight away", PROMPT[lang].recallNow, clip(lang, 'recall-1'), `In this recording: ${s.recall1} of the 10 words, plus "${s.recall1Extra}", which is not on the list.`)}
-      {taskCard("animals", "4. A minute of animals", PROMPT[lang].animals, clip(lang, 'animals'), `In this recording: ${s.animals} animals. ${OWN_NAME} matching is for the ten list words only, so one listener scores this task.`)}
+      {taskCard("immediate", "3. Words recalled straight away", PROMPT[lang].recallNow, clip(lang, 'recall-1'), `In this recording: ${s.immediate.length} of the 10 words, plus "${s.extra}", which is not on the list.`)}
+      {taskCard("animals", "4. A minute of animals", PROMPT[lang].animals, clip(lang, 'animals'), `In this recording: ${s.animals.length} animals. ${OWN_NAME} matching is for the ten list words only, so one listener scores this task.`)}
 
       <div className="card">
         <h3>5. Counting backwards</h3>
@@ -223,7 +268,7 @@ export default function RecordedCheck() {
         <p className="muted">This only puts time between the two recalls. The real check does not score it, so the recording skips it.</p>
       </div>
 
-      {taskCard("delayed", "6. Words recalled later", PROMPT[lang].recallLater, clip(lang, 'recall-2'), `In this recording: ${s.recall2} of the 10 words.`)}
+      {taskCard("delayed", "6. Words recalled later", PROMPT[lang].recallLater, clip(lang, 'recall-2'), `In this recording: ${s.delayed.length} of the 10 words.`)}
 
       <div className="card">
         <h3>7. Everyday tasks</h3>
@@ -235,8 +280,15 @@ export default function RecordedCheck() {
       {total && (
         <>
           <h2>The whole check</h2>
-          <p className="big">{total.scored ? range(total) : 'Not scored'}</p>
-          <p>{total.scored ? `Total points: words recalled straight away, plus animals, plus words recalled later. ${total.low === total.high ? 'The listeners agreed on every item.' : 'It is a range because the two listeners did not agree on every word.'}` : 'The listeners disagreed on too much, or could not hear a task, so the real check would not count this one. It would be repeated another day with a different list.'}</p>
+          <p className="big" data-said={saidAll} data-missed={missedAll.length} data-added={addedAll.length}>{total.scored ? range(total) : 'Not scored'}</p>
+          <p>{total.scored ? `Words heard, of ${saidAll} said: words recalled straight away, plus animals, plus words recalled later. ${total.low === total.high ? 'The listeners agreed on every item.' : 'The low end counts words both listeners heard; the high end counts words either one heard.'}` : 'The listeners disagreed on too much, or could not hear a task, so the real check would not count this one. It would be repeated another day with a different list.'}</p>
+          <div className="card">
+            <p><strong>Checked against what the voice said</strong></p>
+            <p>{missedAll.length === 0 ? `Every one of the ${saidAll} words said was heard by at least one listener.` : `${saidAll - missedAll.length} of the ${saidAll} words said were heard. No listener heard ${missedAll.length === 1 ? 'this one' : `these ${missedAll.length}`}:`}</p>
+            {missedAll.length > 0 && <div className="chips" lang={lang} dir={dir}>{missedAll.map((l) => <span key={l} className="chip miss">{l}</span>)}</div>}
+            <p>{addedAll.length === 0 ? 'No word was credited that was not said. ' : `Credited but never said: ${addedAll.join(sep)}. `}Listeners miss words far more often than they add one: on {real.n} real recordings of single {lang === 'ar' ? 'Arabic' : 'English'} words, the two together missed {Math.round((1 - real.union) * 100)} in 100, and own voice credited a wrong word in about {Math.max(1, Math.round(real.falseCredit * 100))} in 100. So a count is more likely to be too low than too high, and the top of the range can sit below what was said.</p>
+            {calm && miss8 && miss15 && <p className="muted">Why a missed word does not set off the flag: each person is compared with their own earlier checks, scored by the same listeners, so their usual misses are in the baseline too. In the flag test, listeners that each miss 8 in 100 words lowered false alarms from {pct(calm.falseAlarmYear)} to {pct(miss8.falseAlarmYear)} a year, and 15 in 100 to {pct(miss15.falseAlarmYear)}. The cost is a slow decline caught later: at 1 point a check, {pct(miss8.detected['1'])} and {pct(miss15.detected['1'])} flagged within the year, against {pct(calm.detected['1'])}.</p>}
+          </div>
           <div className="card">
             <p><strong>What the rule does with it</strong></p>
             <p>{total.result.note} {total.scored ? 'As a first check, it is not compared with anything. Three scored checks within two weeks set the baseline; later checks are compared with it, and a physician hears only after two low checks in a row.' : 'A missing score is never treated as a low one.'}</p>
@@ -249,7 +301,7 @@ export default function RecordedCheck() {
             {tasks.delayed && <tr><td>Words recalled later</td><td>{tasks.delayed.seconds} s</td></tr>}
             <tr><td><strong>Scoring all three tasks</strong></td><td><strong>{total.seconds} s</strong></td></tr>
           </tbody></table>
-          <p className="note">A clear computer voice is the easy case. On public Saudi TV speech these listeners heard older Gulf speakers no worse than younger ones, but Gulf speech was harder than other dialects, and older Emirati volunteers doing this check have not been measured yet. The words a perfect listener would get are stated under each recording, so you can see every miss.</p>
+          <p className="note">A clear computer voice is the easy case. On public Saudi TV speech these listeners heard older Gulf speakers no worse than younger ones, but Gulf speech was harder than other dialects, and older Emirati volunteers doing this check have not been measured yet. Each recording is scored against what the voice said, so every miss is shown.</p>
           <div className="stack"><button onClick={run}>Score it again</button><Link className="btn primary" to="/year">See a year of checks</Link></div>
         </>
       )}

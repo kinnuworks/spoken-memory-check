@@ -64,14 +64,21 @@ function nearRow(tok: string, forms: { key: string; row: number }[], small: bool
   const t = foldArabic(tok)
   const tl = [...t].length
   const rows = new Set<number>()
-  // Two regular word forms, in any closed set: the accusative ending (جسرا for جسر) and a
-  // dropped feminine ending, as Gulf speech often says it (زراف for زرافة).
-  const caseEnding = [...tok].length >= 4 && tok.endsWith('ا') ? foldArabic(tok.slice(0, -1)) : null
-  const noFeminine = [...tok].length >= 3 ? foldArabic(`${tok}ه`) : null
+  // Regular word forms, in any closed set: the accusative ending (جسرا for جسر); a dropped
+  // feminine ending, as Gulf speech often says it (زراف for زرافة); the Gulf feminine ending
+  // said as -i (قطي for قطة); and "my" on the end of a word (نهري for نهر).
+  const n = [...tok].length
+  const caseEnding = n >= 4 && tok.endsWith('ا') ? foldArabic(tok.slice(0, -1)) : null
+  const noFeminine = n >= 3 ? foldArabic(`${tok}ه`) : null
+  // Not after a long vowel: شاي (tea) is not شاة (ewe).
+  const iEnding = n >= 3 && /[^اوي]ي$/.test(tok) ? tok.slice(0, -1) : null
+  const iFeminine = iEnding ? foldArabic(`${iEnding}ه`) : null
+  const mine = iEnding ? foldArabic(iEnding) : null
   for (const f of forms) {
     const k = foldArabic(f.key)
+    const feminine = /[هة]$/.test(f.key)
     if (k === t) { rows.add(f.row); continue }
-    if (k === caseEnding || (f.key.endsWith('ه') && k === noFeminine)) { rows.add(f.row); continue }
+    if (k === caseEnding || k === mine || (feminine && (k === noFeminine || k === iFeminine))) { rows.add(f.row); continue }
     if (!small || [...k].length < NEAR_MIN_LETTERS || tl < NEAR_MIN_LETTERS - 1 || k[0] !== t[0]) continue
     if (withinOne(t, k)) rows.add(f.row)
   }

@@ -34,12 +34,16 @@ async function recordedCheck(page: Page, lang: 'en' | 'ar') {
   await page.getByRole('button', { name: 'Score the whole check on my device' }).click()
   const heading = page.getByRole('heading', { name: 'The whole check' })
   await heading.waitFor({ timeout: 10 * 60_000 })
-  const total = (await page.locator('p.big').first().innerText()).trim()
+  const big = page.locator('p.big').first()
+  const total = (await big.innerText()).trim()
   expect(total !== 'Not scored', `${lang} check came out not scored`)
+  const [said, missed, added] = await Promise.all(['data-said', 'data-missed', 'data-added'].map(async (a) => Number(await big.getAttribute(a))))
+  expect(said === 27, `the page scored against ${said} words said, not 27`)
   const nums = total.match(/\d+/g)?.map(Number) ?? []
-  expect(nums.length >= 1 && nums.every((n) => n >= 0 && n <= 27), `unexpected total "${total}"`)
+  expect(nums.length >= 1 && nums.every((n) => n >= 0 && n <= said), `unexpected total "${total}"`)
+  expect(Math.max(...nums) === said - missed + added, `top of "${total}" does not equal ${said} said - ${missed} missed + ${added} added`)
   const scoring = await page.locator('tr', { hasText: 'Scoring all three tasks' }).locator('td').last().innerText()
-  return `${total} of a true 27, scored in ${scoring.trim()}`
+  return `${total} heard of ${said} said; ${missed} missed by every listener, ${added} credited that were not said; scored in ${scoring.trim()}`
 }
 
 async function main() {

@@ -88,10 +88,20 @@ describe('Arabic word forms', () => {
     expect(matchClosedSet('ناق', animals, 'ar').has(row('ناقة'))).toBe(true)
   })
 
-  it('does not stretch either rule to other changes', () => {
+  it('accepts the Gulf -i feminine ending and "my" on the end of a word', () => {
+    expect(matchClosedSet('قطى', animals, 'ar').has(row('قطة'))).toBe(true)
+    expect(matchClosedSet('بقري', animals, 'ar').has(row('بقرة'))).toBe(true)
+    expect(matchClosedSet('نهري', list, 'ar').has(list.findIndex((r) => r[0] === 'نهر'))).toBe(true)
+  })
+
+  it('does not stretch these rules to other changes', () => {
     // A letter dropped from the middle, or an ending added to a word not on the list, still fails in the animal set.
     expect(matchWithRest('زافة', animals, 'ar').found.size).toBe(0)
     expect(matchWithRest('كرسيا', list, 'ar').found.size).toBe(0)
     expect(matchWithRest('في', animals, 'ar').found.size).toBe(0)
+    // كرسي (chair) is not "my" anything on the list, and a two-letter word never takes the -i rule.
+    expect(matchWithRest('كرسي', list, 'ar').found.size).toBe(0)
+    expect(matchWithRest('هي', animals, 'ar').found.size).toBe(0)
+    expect(matchWithRest('شاي', animals, 'ar').found.size).toBe(0)
   })
 })
