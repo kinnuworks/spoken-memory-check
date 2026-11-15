@@ -1,27 +1,27 @@
 {
- "url": "https://spoken-memory-check.vercel.app",
- "ranAt": "2026-11-14T21:29:17.783Z",
+ "url": "http://localhost:4317",
+ "ranAt": "2026-11-15T09:21:09.191Z",
  "target": 8,
  "measure": "Flesch-Kincaid grade, English only",
  "screens": [
   {
    "name": "Start of the full check",
    "route": "/check",
-   "words": 161,
-   "sentences": 16,
-   "grade": 3.3,
+   "words": 185,
+   "sentences": 17,
+   "grade": 3.8,
    "hardest": [
     {
      "text": "It needs a one-time download of about 77 MB from huggingface.co.",
      "grade": 9.6
     },
     {
-     "text": "The first is your browser's own speech service, which may send your voice to the company that made the browser.",
-     "grade": 7
+     "text": "In this test version that is what makes live listening work; a pilot would use the on-device and UAE listeners only.",
+     "grade": 9.5
     },
     {
-     "text": "I agree to take memory checks at home and keep my scores on this device.",
-     "grade": 5.2
+     "text": "The first is your browser's own speech service, which may send your voice to the company that made the browser, outside the UAE.",
+     "grade": 8.3
     }
    ]
   },
@@ -49,59 +49,59 @@
   {
    "name": "Choices and consent",
    "route": "/me",
-   "words": 242,
-   "sentences": 21,
+   "words": 282,
+   "sentences": 26,
    "grade": 4,
    "hardest": [
     {
-     "text": "Your physician sees your scores over time and will invite you to a visit if they want to talk about them.",
-     "grade": 7.8
+     "text": "Tell that physician if my mother, father, brother or sister had memory loss.",
+     "grade": 8.5
+    },
+    {
+     "text": "Show that physician my gene test from the Emirati Genome Programme, if I had one.",
+     "grade": 7.6
     },
     {
      "text": "One score on one day says little, and a lower number can worry people for no reason.",
      "grade": 7
-    },
-    {
-     "text": "Let that physician listen to a recording when the check was unsure what I said.",
-     "grade": 6.8
     }
    ]
   },
   {
    "name": "Result after a check (lower twice)",
    "route": "/me/decline",
-   "words": 316,
-   "sentences": 35,
+   "words": 360,
+   "sentences": 40,
    "grade": 3.7,
    "hardest": [
     {
-     "text": "Keep your diabetes follow-up appointments.",
-     "grade": 10
+     "text": "Tell that physician if my mother, father, brother or sister had memory loss.",
+     "grade": 8.5
     },
     {
      "text": "Mood is treatable and affects memory.",
      "grade": 8.4
     },
     {
-     "text": "Your physician sees your scores over time and will invite you to a visit if they want to talk about them.",
-     "grade": 7.8
+     "text": "Show that physician my gene test from the Emirati Genome Programme, if I had one.",
+     "grade": 7.6
     }
    ]
   },
   {
    "name": "Result after a very large fall",
    "route": "/me/urgent",
-   "words": 322,
-   "sentences": 31,
-   "grade": 4,
+   "words": 366,
+   "sentences": 36,
+   "grade": 3.9,
    "hardest": [
     {
-     "text": "Keep your diabetes follow-up appointments.",
-     "grade": 10
+     "text": "Tell that physician if my mother, father, brother or sister had memory loss.",
+     "grade": 8.5
     },
     {
-     "text": "Your physician sees your scores over time and will invite you to a visit if they want to talk about them.",
-     "grade": 7.8
+     "text": "Show that physician my gene test from the Emirati Genome Programme, if I had one.",
+     "grade": 7.6
     },
     {
      "text": "In a pilot, the clinic would be told at the same time; that alert is not built in this prototype.",
@@ -131,5 +131,5 @@
    ]
   }
  ],
- "words": 1239
+ "words": 1391
 }

@@ -41,7 +41,7 @@ export default function Person() {
       {person.checks.filter((c) => c.hearingLimited).length >= 2 && (
         <div className="note">Twice we could not hear you clearly enough to score the check. That is often about hearing, not memory. Please ask your clinic about a hearing test; it also makes these checks fairer.</div>
       )}
-      <p className="muted">Scores are not shown here. One score on one day says little, and a lower number can worry people for no reason. Your physician sees your scores over time and will invite you to a visit if they want to talk about them. Results are discussed in person, never in the app.</p>
+      <p className="muted">Scores are not shown here. One score on one day says little, and a lower number can worry people for no reason. Your physician sees your scores over time. If they want to talk about them, they will ask you to come in. Results are discussed in person, never in the app.</p>
 
       <h2>What your screening visit shows you can work on</h2>
       {steps.length === 0 && <p>Nothing stood out at your last screening visit. Keeping active, sleeping well and staying in touch with people all help.</p>}
@@ -58,8 +58,8 @@ export default function Person() {
       <label className="choice"><input className="switch" type="checkbox" checked={consent.takeChecks} onChange={(e) => set({ takeChecks: e.target.checked })} /><span>Take memory checks at home and keep my scores on this device</span></label>
       <label className="choice"><input className="switch" type="checkbox" checked={consent.sharePhysician} onChange={(e) => set({ sharePhysician: e.target.checked })} /><span>If my scores stay lower than usual, tell the physician at my screening clinic</span></label>
       <label className="choice"><input className="switch" type="checkbox" disabled={!consent.sharePhysician} checked={consent.keepClips} onChange={(e) => set({ keepClips: e.target.checked })} /><span>Let that physician listen to a recording when the check was unsure what I said</span></label>
-      <label className="choice"><input className="switch" type="checkbox" disabled={!consent.sharePhysician} checked={consent.shareFamilyHistory} onChange={(e) => set({ shareFamilyHistory: e.target.checked })} /><span>Show that physician whether a parent, brother or sister had dementia, as my screening visit recorded it</span></label>
-      <label className="choice"><input className="switch" type="checkbox" disabled={!consent.sharePhysician} checked={consent.shareGenome} onChange={(e) => set({ shareGenome: e.target.checked })} /><span>Show that physician my Emirati Genome Programme result for dementia risk, if I have one</span></label>
+      <label className="choice"><input className="switch" type="checkbox" disabled={!consent.sharePhysician} checked={consent.shareFamilyHistory} onChange={(e) => set({ shareFamilyHistory: e.target.checked })} /><span>Tell that physician if my mother, father, brother or sister had memory loss. My clinic wrote this down.</span></label>
+      <label className="choice"><input className="switch" type="checkbox" disabled={!consent.sharePhysician} checked={consent.shareGenome} onChange={(e) => set({ shareGenome: e.target.checked })} /><span>Show that physician my gene test from the Emirati Genome Programme, if I had one. It says a little about memory risk.</span></label>
       <label className="choice"><input className="switch" type="checkbox" checked={consent.cloudListener} onChange={(e) => set({ cloudListener: e.target.checked })} /><span>Let a speech service in the UAE also hear my checks. It has a Gulf Arabic model, but how well it hears this check has not been measured yet. Recordings leave this device for this and are not kept.</span></label>
       {consent.updated && (
         <div className="card">

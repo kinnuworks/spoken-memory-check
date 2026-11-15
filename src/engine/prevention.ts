@@ -9,7 +9,7 @@ export function improvable(r: ScreeningRecord): Step[] {
   const out: Step[] = []
   if (r.hearing === 'reduced') out.push({ topic: 'Hearing', found: 'Your hearing test showed reduced hearing.', action: 'Ask your clinic about a hearing assessment. Hearing well also makes this check fairer.' })
   if (r.systolic >= 140) out.push({ topic: 'Blood pressure', found: `Your blood pressure was ${r.systolic}.`, action: 'Talk to your physician about bringing it down.' })
-  if (r.hba1c >= 6.5) out.push({ topic: 'Blood sugar', found: `Your HbA1c was ${r.hba1c}%.`, action: 'Keep your diabetes follow-up appointments.' })
+  if (r.hba1c >= 6.5) out.push({ topic: 'Blood sugar', found: `Your HbA1c was ${r.hba1c}%.`, action: 'Keep going to your diabetes check-ups at the clinic.' })
   if (r.ldl >= 3.4) out.push({ topic: 'Cholesterol', found: `Your LDL cholesterol was ${r.ldl}.`, action: 'Ask your physician whether treatment would help.' })
   if (r.activeMinutesWeek < 150) out.push({ topic: 'Movement', found: `You reported about ${r.activeMinutesWeek} active minutes a week.`, action: 'Build up towards 150 minutes a week, a little at a time.' })
   if (r.smoker) out.push({ topic: 'Smoking', found: 'You reported smoking.', action: 'Your clinic can help you stop.' })
