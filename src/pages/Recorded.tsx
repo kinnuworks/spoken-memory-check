@@ -67,7 +67,7 @@ export default function Recorded() {
           <p className="big">{score.high} of 20 animals</p>
           <div className="chips" lang={lang} dir={dir}>{score.items.map((it) => <span key={it.row} className="chip">{it.label}</span>)}</div>
           {score.unmatched.length > 0 && <p className="muted">Heard but not on the accepted list, so not counted: <span lang={lang} dir={dir}>{score.unmatched.slice(0, 12).join(lang === 'ar' ? '، ' : ', ')}</span>.</p>}
-          <p className="note">Scored on this device in {seconds} seconds. Twenty animals were said, so anything short of twenty is a miss by the listener. A computer voice is the easy case; people, and Gulf Arabic speakers above all, have not been measured yet. In a spoken check the browser's own recogniser listens too, and each animal is marked as heard by both or by one.</p>
+          <p className="note">Scored on this device in {seconds} seconds. Twenty animals were said, so anything short of twenty is a miss by the listener. A computer voice is the easy case. Results on real recordings of people are on the Evidence page; older Emirati volunteers doing this check have not been measured yet. In a spoken check the browser's own recogniser listens too, and each animal is marked as heard by both or by one.</p>
           <SurveyChart />
           <div className="stack"><Link className="btn primary" to="/year">See a year of checks</Link></div>
         </>

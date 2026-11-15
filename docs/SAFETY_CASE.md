@@ -13,6 +13,6 @@ Each hazard, what could cause it, what the product does about it, and what is st
 | Urgent change handled as routine | A stroke or delirium between checks | A very large fall since the last check sends the person to urgent assessment | A scheduled check finds it days late; not a monitoring tool |
 | Wrong person's data | Shared device | Scores stay on the device in this prototype | Real enrolment needs identity at the screening visit |
 | Health data leaves the country | Cloud speech | On-device listener; cloud only in a UAE region and only with approval | Approval not yet sought |
-| Consent lost when capacity is lost | Monitoring designed to detect decline | Consent in four parts, each revocable; the physician decides what happens next | A named family member's role needs policy |
+| Consent lost when capacity is lost | Monitoring designed to detect decline | Consent in six parts, each revocable; the physician decides what happens next | A named family member's role needs policy |
 | Overload of physicians | Too many packets | Packets per 1,000 published; stop rule if more than half are dismissed | Physician minutes per packet not measured |
 | Unfair to people with little schooling | Fixed cutoffs | Each person compared with their own baseline; our survey analysis shows a fixed cutoff would flag 48% of healthy adults with under 9 years of school | Not shown in Gulf data |

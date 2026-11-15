@@ -27,7 +27,7 @@
 
 ## Speech
 - Two listeners: the browser's own recogniser and an open speech model on the device. On phones the two often cannot share the microphone, and on weaker devices the second is skipped; then one listener scores and the screen says so.
-- The on-device listener was measured on a computer voice only: 19 of 20 English animals with the base model; in a separate test the small model heard 17 of 20 Arabic animals.
+- On a computer voice the on-device listener heard 19 of 20 English animals with the base model; in a separate test the small model heard 17 of 20 Arabic animals. On real single-word recordings it heard 62% of 387 English clips and 82% of 720 Arabic clips, and 93% of the Arabic clips with the speaker's own voice as the answer key (`docs/HUMAN_SPEECH_BENCH.md`).
 - Recognition has not been measured on older adults doing the check, or on Emirati speakers. On public Saudi TV speech labelled by age and dialect (SADA), Jais-ASR's word error was about the same for older and adult Gulf speakers; the on-device model makes many errors on running speech at every age (`docs/OLDER_SPEAKERS_BENCH.md`).
 - Arabic word lists and prompts are drafts that no native Gulf Arabic speaker has reviewed. Prompts use the device's synthetic voice.
 - The two word lists per language have not been shown to be equally hard.
