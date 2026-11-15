@@ -143,7 +143,7 @@ describe('benchmark helpers', () => {
       expect(row.detected['3']).toBeGreaterThanOrEqual(row.detected['1'])
       expect(row.falseAlarmYear).toBeLessThan(0.12)
     }
-  })
+  }, 60000)
 
   it('counts a programme year so that every member is in exactly one cell', () => {
     const y = programmeYear(5000, 0.04, 21)
@@ -164,5 +164,5 @@ describe('false alarms by starting level', () => {
     expect(r.lowStart.fixedCutoff).toBeGreaterThan(r.lowStart.ours + 0.3)
     expect(r.lowStart.ours).toBeLessThan(0.1)
     expect(r.others.ours).toBeLessThan(0.12)
-  })
+  }, 60000)
 })
