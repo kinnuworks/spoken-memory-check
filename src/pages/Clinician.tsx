@@ -159,7 +159,7 @@ function Clinician({ id }: { id?: string }) {
       {log.length === 0 ? <p className="muted">No decisions recorded for this case on this device yet.</p> : (
         <ol className="trace">{log.map((a, i) => <li key={i}><strong>{a.action}</strong>{a.detail ? `: ${a.detail}` : ''} <span className="muted">({a.at.slice(0, 16).replace('T', ' ')} UTC, app {a.appVersion})</span></li>)}</ol>
       )}
-      <p className="muted">Kept on this device in the prototype. In a pilot each entry goes to the facility's record system with the physician's identity.</p>
+      <p className="muted">Times are when each button was pressed on this device; the case's own check dates are synthetic. Kept on this device in the prototype. In a pilot each entry goes to the facility's record system with the physician's identity.</p>
 
       <h2>Step trace</h2>
       <ol className="trace">{trace.map((t) => <li key={t.step}><strong className={t.ok ? 'status-usual-range' : 'status-watch'}>{t.ok ? 'Passed' : 'Held'}</strong>: {t.step}{t.detail ? ` (${t.detail})` : ''}</li>)}</ol>

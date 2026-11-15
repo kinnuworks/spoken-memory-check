@@ -44,6 +44,24 @@ const HEAD: Record<Stage, string> = {
   'recall-1': 'Say the words you remember', animals: 'Name animals for one minute', count: 'Count backwards from twenty', 'recall-2': 'Say the ten words again', function: 'One last question', scoring: 'Scoring your check', done: 'Check received', blocked: "The microphone isn't available here",
 }
 
+// What the person reads during the check, in Arabic. A draft like the spoken prompts: not yet reviewed by a native Gulf Arabic speaker.
+const HEAD_AR: Record<Stage, string> = {
+  intro: 'الفحص الكامل', sound: 'قل هذه الكلمات الثلاث', 'sound-failed': 'لا نسمعك بوضوح هنا', 'hear-list': 'كرر كل كلمة',
+  'recall-1': 'قل الكلمات التي تتذكرها', animals: 'اذكر حيوانات لمدة دقيقة', count: 'عد تنازلياً من عشرين', 'recall-2': 'قل الكلمات العشر مرة أخرى', function: 'سؤال أخير', scoring: 'جارٍ تقييم الفحص', done: 'تم استلام الفحص', blocked: 'الميكروفون غير متاح هنا',
+}
+const AR = {
+  intro: 'يستغرق الفحص نحو أربع دقائق، ولا تحتاج إلا إلى صوتك. يبدأ بفحص للصوت. بعدها تكرر عشر كلمات، وتذكر أسماء حيوانات لمدة دقيقة، وتعد تنازلياً. وفي النهاية تقول الكلمات العشر مرة أخرى. اختر مكاناً هادئاً وأجرِ الفحص وحدك.',
+  offDay: 'نمت نوماً سيئاً أو أشعر بتوعك اليوم',
+  cloud: 'اسمح أيضاً لخدمة تعرّف على الكلام مستضافة في الإمارات بسماع هذا الفحص. لديها نموذج للهجة الخليجية، ولم تُقَس بعد دقتها مع المتحدثين الخليجيين في هذا الفحص. يغادر تسجيلك هذا الجهاز لهذا الغرض، ولا يُحفظ، ويمكنك إيقاف ذلك في أي وقت.',
+  listeners: 'يقيّم ما تقوله مستمعان. الأول خدمة الكلام في متصفحك، وقد ترسل صوتك إلى الشركة المصنّعة للمتصفح. الثاني يعمل على هذا الجهاز ولا يرسل صوتك إلى أي مكان. نتائجك تبقى على هذا الجهاز. هذه نسخة تجريبية ولا تشخّص.',
+  agree: 'أوافق على إجراء فحوص الذاكرة في المنزل وحفظ نتائجي على هذا الجهاز. يمكنني إيقاف ذلك وحذف فحوصي في أي وقت.',
+  start: 'ابدأ الفحص',
+  listening: 'نستمع…',
+  finished: 'انتهيت',
+  hearList: 'كرر كل كلمة بعد أن تسمعها. يصبح صوتك مفتاح الإجابة لاحقاً.',
+  thanks: 'شكراً لك. انتهى الفحص.',
+}
+
 export default function Check() {
   const [lang, setLang] = useState<Lang>('en')
   const [stage, setStage] = useState<Stage>(browserSpeechAvailable() ? 'intro' : 'blocked')
@@ -160,25 +178,29 @@ export default function Check() {
   const range = (p: [number, number]) => (p[0] === p[1] ? String(p[1]) : `${p[0]} to ${p[1]}`)
   const listening = stage === 'recall-1' || stage === 'animals' || stage === 'count' || stage === 'recall-2' || stage === 'function'
   const dir = lang === 'ar' ? 'rtl' : 'ltr'
+  // In Arabic the person reads Arabic first, with the English underneath for anyone helping them.
+  const bi = (en: string, ar: string) => (lang === 'ar' ? <><span lang="ar" dir="rtl" style={{ display: 'block' }}>{ar}</span><span className="muted" style={{ display: 'block', fontSize: '0.85em' }}>{en}</span></> : en)
 
   return (
     <>
-      <h1>{HEAD[stage]}</h1>
+      <h1>{lang === 'ar' ? <span lang="ar" dir="rtl">{HEAD_AR[stage]}</span> : HEAD[stage]}</h1>
+      {lang === 'ar' && <p className="muted">{HEAD[stage]}</p>}
 
       {stage === 'intro' && (
         <>
-          <p>It takes about four minutes, and you only need your voice. First comes a sound check. Then you say ten words back, name animals for a minute and count backwards. At the end you say the ten words again. Find a quiet place and do it on your own.</p>
+          <p>{bi('It takes about four minutes, and you only need your voice. First comes a sound check. Then you say ten words back, name animals for a minute and count backwards. At the end you say the ten words again. Find a quiet place and do it on your own.', AR.intro)}</p>
           <div className="segmented" role="group" aria-label="Language">
             <button className="seg" onClick={() => setLang('en')} aria-pressed={lang === 'en'}>English</button>
             <button className="seg" lang="ar" onClick={() => setLang('ar')} aria-pressed={lang === 'ar'}>العربية</button>
           </div>
           {lang === 'ar' && !ARABIC_REVIEWED && <p className="note">The Arabic wording and word lists are a draft, not yet reviewed by a native Gulf Arabic speaker, and the voice is the device's synthetic one.</p>}
-          <label className="choice"><input className="switch" type="checkbox" checked={offDay} onChange={(e) => setOffDay(e.target.checked)} /><span>I slept badly or feel unwell today</span></label>
-          {cloudReady && <label className="choice"><input className="switch" type="checkbox" checked={cloudOn} onChange={(e) => { setCloudOn(e.target.checked); saveConsent({ ...loadConsent(), cloudListener: e.target.checked }) }} /><span>Also let a speech service hosted in the UAE hear this check. It has a Gulf Arabic model; how well it hears Gulf speakers in this check has not been measured yet. Your recording leaves this device for this, is not kept, and you can turn this off at any time.</span></label>}
+          <label className="choice"><input className="switch" type="checkbox" checked={offDay} onChange={(e) => setOffDay(e.target.checked)} /><span>{bi('I slept badly or feel unwell today', AR.offDay)}</span></label>
+          {cloudReady && <label className="choice"><input className="switch" type="checkbox" checked={cloudOn} onChange={(e) => { setCloudOn(e.target.checked); saveConsent({ ...loadConsent(), cloudListener: e.target.checked }) }} /><span>{bi('Also let a speech service hosted in the UAE hear this check. It has a Gulf Arabic model; how well it hears Gulf speakers in this check has not been measured yet. Your recording leaves this device for this, is not kept, and you can turn this off at any time.', AR.cloud)}</span></label>}
+          {lang === 'ar' && <p className="note" lang="ar" dir="rtl">{AR.listeners}</p>}
           <p className="note">Two listeners score what you say. The first is your browser's own speech service, which may send your voice to the company that made the browser. The second runs on this device and sends your voice nowhere.{secondSupported() ? ` It needs a one-time download of about ${DOWNLOAD_MB[lang]} MB from ${DOWNLOAD_FROM[lang]}.` : ' It does not work on this device, so only one listener will score.'} The voice reading the words is your device's own. Your scores stay on this device. This is a test version and does not diagnose.</p>
           {lang === 'ar' && secondSupported() && percent === null && !secondLoading('ar') && <p><button className="small" onClick={startSecond}>Add the second listener for Arabic ({DOWNLOAD_MB.ar} MB)</button></p>}
-          <label className="choice"><input className="switch" type="checkbox" checked={agreed} onChange={(e) => { setAgreed(e.target.checked); saveConsent({ ...loadConsent(), takeChecks: e.target.checked }) }} /><span>I agree to take memory checks at home and keep my scores on this device. I can turn this off and delete my checks at any time.</span></label>
-          <div className="stack"><button className="primary" disabled={!agreed} onClick={run}>Start the check</button>{!agreed && <p className="muted">Turn on the agreement above to start.</p>}</div>
+          <label className="choice"><input className="switch" type="checkbox" checked={agreed} onChange={(e) => { setAgreed(e.target.checked); saveConsent({ ...loadConsent(), takeChecks: e.target.checked }) }} /><span>{bi('I agree to take memory checks at home and keep my scores on this device. I can turn this off and delete my checks at any time.', AR.agree)}</span></label>
+          <div className="stack"><button className="primary" disabled={!agreed} onClick={run}>{lang === 'ar' ? <span lang="ar">{AR.start}</span> : 'Start the check'}</button>{!agreed && <p className="muted">Turn on the agreement above to start.</p>}</div>
           {history.length > 0 && (
             <>
               <h2>Your checks on this device</h2>
@@ -194,12 +216,12 @@ export default function Check() {
       {stage === 'function' && <p lang={lang} dir={dir}>{T[lang].fn}</p>}
       {stage === 'scoring' && <p className="listening"><i />{useCloud ? 'The on-device and UAE listeners are going through your recordings.' : 'The second listener is going through your recordings on this device.'} This can take up to a minute.</p>}
       {stage === 'sound' && <><p className="prompt-words" lang={lang} dir={dir}>{SOUND_CHECK_WORDS[lang].join(lang === 'ar' ? '، ' : ', ')}</p><p className="listening"><i />Listening…</p></>}
-      {stage === 'hear-list' && <p className="listening"><i />Say each word back after you hear it. Your own voice becomes the answer key for later.</p>}
+      {stage === 'hear-list' && <p className="listening"><i />{bi('Say each word back after you hear it. Your own voice becomes the answer key for later.', AR.hearList)}</p>}
       {stage === 'animals' && <div className="chips" lang={lang} dir={dir}>{live?.items.map((it) => <span key={it.row} className="chip">{it.label}</span>)}</div>}
       {listening && (
         <>
-          <p className="listening"><i />Listening…</p>
-          <div className="stack"><button onClick={() => control.current.stop?.()}>I've finished</button></div>
+          <p className="listening"><i />{bi('Listening…', AR.listening)}</p>
+          <div className="stack"><button onClick={() => control.current.stop?.()}>{lang === 'ar' ? <span lang="ar">{AR.finished}</span> : "I've finished"}</button></div>
         </>
       )}
 
@@ -212,6 +234,7 @@ export default function Check() {
 
       {stage === 'done' && last && (
         <>
+          {lang === 'ar' && <p lang="ar" dir="rtl">{AR.thanks}</p>}
           <p>Thank you. {last.low === null ? 'This check could not be scored, so it does not count. In real use it is repeated another day with a different list.' : `That was check ${history.length}.`}</p>
           <p className="note">{loadConsent().sharePhysician ? 'You agreed that your physician is told if your scores stay lower than usual. Nothing is sent after a single check.' : 'You have not agreed to share with your physician, so nothing from this check goes to a physician. You can change this on your choices screen.'}</p>
           <div className="card">
