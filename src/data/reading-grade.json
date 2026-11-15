@@ -1,6 +1,6 @@
 {
- "url": "http://localhost:4317",
- "ranAt": "2026-11-15T09:21:09.191Z",
+ "url": "https://spoken-memory-check.vercel.app",
+ "ranAt": "2026-11-15T09:48:58.271Z",
  "target": 8,
  "measure": "Flesch-Kincaid grade, English only",
  "screens": [
