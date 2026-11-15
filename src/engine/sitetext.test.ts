@@ -16,7 +16,10 @@ describe('plain text in index.html', () => {
   })
 
   it('loads no fonts or scripts from another site', () => {
-    expect(html).not.toMatch(/https?:\/\/(?!www\.w3\.org)/)
+    // The share-preview image must be a full address, and it points at this site's own image.
+    const ownPreview = /<meta property="og:image" content="https:\/\/spoken-memory-check\.vercel\.app\/og\.png" \/>/
+    expect(html).toMatch(ownPreview)
+    expect(html.replace(ownPreview, '')).not.toMatch(/https?:\/\/(?!www\.w3\.org)/)
   })
 })
 

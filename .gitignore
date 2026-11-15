@@ -46,3 +46,10 @@ public/models/
 design/refs/
 design/directions/
 design/shots/
+
+# Design working files (stranger answers and copies made for it, rendered images)
+design/out/
+design/stranger-*.md
+design/tagline.txt
+design/readme-first-screen.md
+design/gallery-thumbnail.png
