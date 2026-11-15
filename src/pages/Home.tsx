@@ -74,8 +74,9 @@ function outcome(t: Trajectory, p: Persona) {
 function ChartKey() {
   return (
     <p className="d-key">
-      <span><i className="d-key__dot d-key__dot--ok" />In the usual range</span>
-      <span><i className="d-key__dot d-key__dot--flag" />Below the baseline</span>
+      <span><i className="d-key__dot d-key__dot--ok" />Within the usual range (shaded)</span>
+      <span><i className="d-key__dot d-key__dot--flag" />Sent on by the rule</span>
+      <span><i className="d-key__dot d-key__dot--grey" />Setting the baseline, or one low check</span>
       <span><i className="d-key__line" />Personal baseline</span>
     </p>
   )
@@ -142,7 +143,7 @@ function CalWidget() {
         <span className="c-av">{p.name.slice(0, 1)}</span>
         <p className="c-widget__name">{p.name}, synthetic</p>
         <p className="c-widget__title">{p.path}</p>
-        <p className="c-widget__desc">{n} checks over a year, at home, by voice.</p>
+        <p className="c-widget__desc">{n} checks over a year. {p.story.split('. ')[0].replace(/\.$/, '')}.</p>
         <p className="c-widget__pick">Pick a synthetic person</p>
         <div className="c-seg" role="group" aria-label="Pick a synthetic person">
           {PERSONAS.map((x) => <button key={x.id} type="button" aria-pressed={x.id === id} className={x.id === id ? 'is-on' : ''} onClick={() => { setId(x.id); setRun((r) => r + 1) }}>{CHIP[x.id]}</button>)}
@@ -156,7 +157,7 @@ function CalWidget() {
         <ChartKey />
       </div>
       <div className="c-widget__steps" key={key} style={{ '--n': n } as React.CSSProperties}>
-        <p className="c-widget__h">What the rule did</p>
+        <p className="c-widget__h">What the rule decided</p>
         {steps.map((s, i) => <p key={s.label} className="c-slot c-sig" style={{ '--i': i } as React.CSSProperties}><i />{s.label}</p>)}
         <p className={`c-slot c-slot--out c-sig c-sig--out ${o.ok ? 'is-ok' : 'is-flag'}`} style={{ '--i': steps.length } as React.CSSProperties}><Check />{o.text}</p>
         <p className="c-widget__side c-sig" style={{ '--i': steps.length + 1 } as React.CSSProperties}>{o.side}</p>
@@ -197,20 +198,20 @@ export default function Home() {
   return (
     <main className="dh dh-c">
       <section className="c-hero">
-        <p className="c-pill"><span>New</span>{arabic}% of {own.whisperAlone.n} real Arabic words heard on the device</p>
+        <p className="c-pill"><span>New</span>Gulf Arabic: {arabic}% of {own.whisperAlone.n} real words heard on the device</p>
         <h1>
-          <span className="c-line">A memory check <img className="c-obj c-obj--photo" src="/images/cal-chip.webp" alt="" width={300} height={205} /> you speak,</span>{' '}
+          <span className="c-line">A memory check <span className="c-obj c-obj--word" aria-hidden="true"><Mic /><b lang="ar">نهر</b><small>river</small></span> you speak,</span>{' '}
           <span className="c-line"><span className="c-obj c-obj--wave" aria-hidden="true"><Waves /><b>4 min</b></span> tracked against yourself <span className="c-obj c-obj--card" aria-hidden="true"><b>Check received</b><small><Check />Thank you</small></span></span>
         </h1>
-        <p className="c-sub">Four minutes at home, by voice. Nothing to read or type.</p>
+        <p className="c-sub">By voice, in Gulf Arabic or English. Nothing to read or type.</p>
         <p className="c-btns"><Link to="/try" className="c-btn c-btn--dark"><Mic />Try it with your voice</Link><Link to="/year" className="c-btn"><Trend />See a year of checks</Link></p>
-        <p className="c-small"><b>No sign-up.</b> The people shown are synthetic.</p>
+        <p className="c-small"><b>No sign-up.</b> Below: the physician’s view, run on six synthetic people.</p>
       </section>
 
       <section className="c-desk">
-        <div className="c-desk__menu"><b>Spoken memory check</b><span>File</span><span>Edit</span><span>View</span><span>Window</span><span>Help</span><span className="c-desk__right">Demo: synthetic people</span></div>
+        <div className="c-desk__menu"><b>Spoken memory check</b><span>File</span><span>Edit</span><span>View</span><span>Window</span><span>Help</span><span className="c-desk__right">Synthetic people</span></div>
         <div className="c-browser">
-          <div className="c-browser__bar"><span className="c-lights" aria-hidden="true"><i /><i /><i /></span><span className="c-url">spoken-memory-check / physician</span></div>
+          <div className="c-browser__bar"><span className="c-lights" aria-hidden="true"><i /><i /><i /></span><span className="c-url">Physician’s view: what the rule decided for each person</span></div>
           <CalWidget />
         </div>
       </section>

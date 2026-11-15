@@ -4,6 +4,14 @@ A four-minute memory check that an adult does at home by voice, in Gulf Arabic o
 
 Why speech: many older adults in the Gulf had little schooling, and a test that needs reading, typing or tapping is unfair to them. Saying words back and naming animals is how memory has been tested by phone for decades.
 
+![The rule running on six synthetic people: a year of checks against each person's own baseline, the steps the rule took, and whether a packet went to the physician](docs/images/rule-demo.gif)
+
+**Live: https://spoken-memory-check.vercel.app** (no sign-up). Try it in 30 seconds:
+
+1. Open the page in Chrome and choose "Try it with your voice": say three words, then name animals for 20 seconds.
+2. No microphone? Choose "Play a recorded check".
+3. Choose "A year of checks", then open the physician's packet and approve it through to a closed referral.
+
 A prototype for Abu Dhabi's adult screening programme, built for Statement 8 of the Future Health challenge, "Protecting Brain Health Earlier". It does not diagnose. The people and histories in the demo are synthetic and labelled.
 
 ## For judges: what is measured
@@ -21,14 +29,6 @@ A prototype for Abu Dhabi's adult screening programme, built for Statement 8 of 
 | Safety | The person is never shown a score. Family history and genome results reach the physician only with their own consent, as context the rule never reads. A physician approves every routine packet before the person is contacted, and results are given in person; only a very large fall sends the person straight to urgent care. A missed or unheard check is never counted as low. The full check stays locked until the person agrees. Every person-facing screen reads at grade 4 or under (English). No language model makes any decision. `docs/SAFETY_CASE.md`, `docs/COMPLIANCE.md` |
 | Who pays | Thiqa's screening packages 52-45 and 52-46. Modelled running cost: about AED 26 per eligible member a year at 40% uptake. No partner has agreed yet. `docs/COMMERCIAL.md` |
 | Rules | Compliance map, intended use, risk register. `docs/COMPLIANCE.md`, `docs/INTENDED_USE.md`, `docs/RISK_REGISTER.md` |
-
-## Try it in 30 seconds
-
-Live: https://spoken-memory-check.vercel.app (no sign-up)
-
-1. Open the page in Chrome and choose "Try it with your voice": say three words, then name animals for 20 seconds.
-2. No microphone? Choose "Play a recorded check".
-3. Choose "A year of checks", then open the physician's packet and approve it through to a closed referral.
 
 To run it yourself: `npm install`, then `npm run dev`. To redeploy: `scripts/deploy.sh` (uploads only the built files).
 
