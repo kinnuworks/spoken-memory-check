@@ -1,4 +1,6 @@
-# Deck content, slide by slide (draft for the official 16-slide template)
+# Deck content, slide by slide (draft for the official 15-slide template)
+
+Export the PDF with real, selectable text (not images of text), under 5 MB. Name the six judging criteria in their own words on the additional slide, so a reader or an automated scorer finds the evidence for each.
 
 Items in [brackets] need the team's details.
 
@@ -24,10 +26,10 @@ Baseline completion; checks per member per year; packets per 1,000 members and t
 - Our analysis of a public US survey (NHANES, 3,110 adults aged 60+): a fixed cutoff of 14 animals flags 48% of healthy adults with under 9 years of school against 16% of graduates. A personal baseline avoids this.
 - Published: within-person variation of animal naming and phone word recall (Duff et al.; Gavett et al.; Health and Retirement Study); spoken word recall and fluency scored by speech recognition agree closely with human scoring in Dutch, German and English studies.
 - Simulation of our flag: 4.9% false alarms a year in stable people against 27.4% for a single-low-check rule; flagged within the year: 45% of people losing one point a check, 94% losing two; about 65 packets per 1,000 members a year at 2% in real decline, 18 of them real.
-- 221 automated tests, listed by case.
+- 232 automated tests, listed by case.
 
 ## 8. Data sources and legal right to use them
-NHANES (US CDC, public domain, de-identified); seeded and simulated people (ours, no personal data); our own word lists and animal names; open speech models (MIT / Apache-2.0); a tester's own scores stay on their device. No licensed cognitive test items. No data from surveys that bar automated tools.
+NHANES (US CDC, public domain, de-identified); seeded and simulated people (ours, no personal data); our own word lists and animal names; Google Speech Commands and Arabic Speech Commands (CC BY 4.0, cited) to measure the listeners; SADA 2022 (SDAIA and the Saudi Broadcasting Authority, CC BY-NC-SA 4.0) used only for a research evaluation of the listeners, not redistributed, not used for training, not shipped; a commercial pilot would repeat that check on licensed or local recordings or ask SDAIA. Open speech models (MIT, Apache-2.0). Demo voices made with Azure neural text to speech, labelled synthetic. A tester's own scores stay on their device. No licensed cognitive test items. No data from surveys that bar automated tools.
 
 ## 9. Risks and safeguards
 False reassurance (clinic test continues; everyday-tasks question overrides scores). False alarm (two low checks; physician reviews first; burden published). Mishearing (two listeners; range; "not scored", never low). Hearing loss (sound check holds). Distress (nothing abnormal shown in the app; results in person). Data leaving the country (on-device listener; cloud only in a UAE region with approval). Bias by schooling (personal baseline). Full hazard log in docs/SAFETY_CASE.md.
@@ -42,11 +44,12 @@ Open [live link]. No sign-up. Three buttons: try it with your voice; play a reco
 Ethics approval, then a 12-month randomised pilot at one screening provider, 250 per arm, powered on baseline completion. Stop rules. Who pays: the screening programme for its members; insurers and employers for expatriates; other Gulf programmes. Regulatory route: research use under ethics approval, registration as medical-device software after the pilot. Stages with exit tests in docs/PILOT.md.
 
 ## 13. Pre-existing IP and third-party materials
-Built during the challenge. Open-source components: React, Vite, TypeScript, Vitest, Hugging Face Transformers.js, ONNX Runtime Web, Whisper model weights (MIT). [Confirm nothing pre-existing.]
+Built during the challenge. Open-source components: React, React Router, Vite, TypeScript (MIT, Apache-2.0); Transformers.js (Apache-2.0); ONNX Runtime Web (MIT); Azure Speech SDK (MIT); OpenAI Whisper base (MIT, browser version Apache-2.0); whisper-small-ar fine-tune (Apache-2.0), served from our site in a modified, smaller copy with its licence and a change notice; fonts under the SIL Open Font License. Demo voices: Microsoft Azure neural text to speech on a paid resource. Generated illustrations: made for this project. [Confirm nothing pre-existing.]
 
 ## 14. Conflict of interest
 [Team to confirm: no relationship with the Department of Health, Future Health, Microsoft, Inception, MBZUAI, Hack2skill or any judge.]
 
-## 15–16. Additional slides
+## 15. Additional slide
+- The six judging criteria, each with the one piece of evidence for it and where to see it: health impact and clinical relevance; technical depth and architecture; working solution and demonstration quality; responsible AI, safety and data governance; scalability and deployment readiness; commercial viability and path to pilot.
 - What is real and what is simulated (from the how-it-works page).
-- Limits stated plainly (from docs/LIMITS.md).
+- Limits stated plainly (from docs/LIMITS.md), including assumptions and dependencies.

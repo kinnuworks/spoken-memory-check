@@ -4,6 +4,8 @@ import own from '../data/own-voice-summary.json'
 import coverage from '../data/coverage-summary.json'
 import live from '../data/live-check.json'
 import reading from '../data/reading-grade.json'
+import bench from '../data/benchmark.json'
+import tpl from '../data/template-bench.json'
 
 type Stat = { clips: number; refWords: number; wer: number | null; werCi: (number | null)[] }
 type Diff = { werDifference: number; ci: number[] } | null
@@ -83,6 +85,68 @@ export function BuiltToBeChecked() {
         <tbody>{reading.screens.map((x) => <tr key={x.name}><th scope="row">{x.name}</th><td>{x.words}</td><td>{x.grade.toFixed(1)}</td></tr>)}</tbody>
       </table></div>
       <p className="muted">{reading.measure}, with a rough syllable count. Arabic has no readability formula we could check, so the Arabic text is not graded; it still needs a native speaker's review. Rerun with <code>npx tsx scripts/reading-grade.ts</code>.</p>
+    </>
+  )
+}
+
+type Kind = 'Measured' | 'Simulated' | 'Not yet'
+type Cell = { text: string; kind: Kind }
+const c = (text: string, kind: Kind): Cell => ({ text, kind })
+const p1 = (x: number) => `${(x * 100).toFixed(1).replace(/\.0$/, '')}%`
+const p0 = (x: number) => `${Math.round(x * 100)}%`
+
+/** Statement 8's own validation measures, overall and by language, age and schooling. */
+export function ValidationTable() {
+  const ours = (world: string) => bench.rows.find((r) => r.world.startsWith(world) && r.rule === 'ours')!
+  const now = ours('As assumed'), miss15 = ours('Each recogniser misses 15%'), upper = ours('True measurement error at the upper')
+  const b2 = bench.burden.find((b) => b.prevalence === 0.02)!
+  const bs = bench.byStart
+  const u = tpl.unionWithWhisper
+  const ar = u.arabic.own.overall, en = u.english.own.overall
+  const r = sada.results as unknown as Record<string, Record<string, { wer: number; heard: number }>>
+  const rows: [string, Cell, Cell, Cell, Cell][] = [
+    ['Completion',
+      c('Not measured: no volunteers yet. The live site completes the whole check end to end in both languages after every deploy, with a recorded voice.', 'Not yet'),
+      c('Arabic and English both run end to end; people not measured.', 'Not yet'),
+      c('Not measured.', 'Not yet'),
+      c('Not measured. Nothing to read or type, so reading level is not needed to take part.', 'Not yet')],
+    ['Test–retest reliability',
+      c('Not measured. The rule assumes each check varies by 4.0 points, from published studies. If the true figure is 4.5, false alarms rise to ' + p1(upper.falseAlarmYear) + ' a year.', 'Not yet'),
+      c('Not measured.', 'Not yet'), c('Not measured.', 'Not yet'), c('Not measured.', 'Not yet')],
+    ['Sensitivity',
+      c(`${p1(b2.sensitivity)} of people in real decline get a packet within the year (2% prevalence); ${p0(now.detected['2'])} at 2 points lost per check, ${p0(now.detected['1'])} at 1 point.`, 'Simulated'),
+      c(`Listeners together heard ${p0(ar.union.rate)} of ${ar.union.n} real Arabic words and ${p0(en.union.rate)} of ${en.union.n} real English words. With each listener missing 15 in 100 words, ${p0(miss15.detected['2'])} are still caught at 2 points per check.`, 'Measured'),
+      c(`On Gulf TV speech, the proposed UAE listener's word error was ${p0(r.jaisAsr['Older, Gulf (Khaliji)'].wer)} for older speakers and ${p0(r.jaisAsr['Adult, Gulf (Khaliji)'].wer)} for other adults. Not measured on the check itself.`, 'Measured'),
+      c('Each person is compared with their own baseline, so where they start does not change what counts as a fall.', 'Simulated')],
+    ['Specificity',
+      c(`${p1(b2.specificity)} over a year: ${p1(now.falseAlarmYear)} of stable people get a false packet.`, 'Simulated'),
+      c(`Own-voice matching credited a wrong word in ${p1(ar.templateFalseCredit.rate)} of Arabic and ${p1(en.templateFalseCredit.rate)} of English recordings.`, 'Measured'),
+      c('Not measured.', 'Not yet'),
+      c(`Stable people who start in the lowest fifth (baseline under ${bs.baselineCut} points): ${p1(bs.lowStart.ours)} falsely flagged in a year, against ${p1(bs.lowStart.fixedCutoff)} with one cut-off for everyone. In a real US survey, one cut-off flagged 48% of healthy adults with under 9 years of school and 16% of graduates.`, 'Simulated')],
+    ['Finding meaningful change',
+      c(`A packet needs two checks in a row below the person's usual range, or a line through every check that falls more than its error explains. Median checks from the start of a 2-point decline to a packet: ${(now.medianChecksToFlag as Record<string, number | null>)['2'] ?? '–'}.`, 'Simulated'),
+      c('Same rule in both languages; each person is compared only with their own checks in the same language.', 'Simulated'),
+      c('Not measured.', 'Not yet'),
+      c('Same rule whatever the schooling; see specificity.', 'Simulated')],
+    ['False-referral burden',
+      c(`${b2.packetsPer1000.toFixed(0)} packets per 1,000 members a year, ${b2.realPer1000.toFixed(0)} of them real, at 2% prevalence. Every packet is read by a physician before anyone is invited.`, 'Simulated'),
+      c('Not split by language yet.', 'Not yet'), c('Not measured.', 'Not yet'),
+      c(`Lowest fifth: ${p1(bs.lowStart.ours)} a year falsely flagged, against ${p1(bs.others.ours)} for everyone else.`, 'Simulated')],
+    ['Time to clinical assessment',
+      c('Target 15 working days from the visit. The physician view counts the working days for each referral until it closes. No pilot data.', 'Not yet'),
+      c('Not measured.', 'Not yet'), c('Not measured.', 'Not yet'), c('Not measured.', 'Not yet')],
+  ]
+  const tag = (k: Kind) => <span className={k === 'Simulated' ? 'tag syn' : 'tag'}>{k}</span>
+  return (
+    <>
+      <h2>The statement's seven validation measures</h2>
+      <p>Statement 8 asks for completion, test–retest reliability, sensitivity, specificity, the ability to find meaningful change, false-referral burden and time to clinical assessment, across language, age and schooling. Each cell says whether it was measured on real recordings, simulated, or not measured yet. Nothing has been measured in patients.</p>
+      <div className="scroll" tabIndex={0} role="region" aria-label="Validation measures by group"><table>
+        <thead><tr><th>Measure</th><th>Overall</th><th>By language</th><th>By age</th><th>By schooling</th></tr></thead>
+        <tbody>{rows.map(([m, ...cells]) => (
+          <tr key={m}><th scope="row">{m}</th>{cells.map((x, i) => <td key={i}>{x.text} {tag(x.kind)}</td>)}</tr>
+        ))}</tbody>
+      </table></div>
     </>
   )
 }

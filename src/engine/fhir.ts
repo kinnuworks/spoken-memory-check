@@ -1,4 +1,5 @@
 import type { Check } from './change'
+import type { ScreeningRecord } from './histories'
 
 // FHIR R4 resources for handing a check and a referral to another system.
 // Local codes are used where no standard code fits; the system URI marks them as ours.
@@ -40,6 +41,44 @@ export function checkObservation(patientRef: string, c: Check, parts?: Record<st
           })),
         }
       : {}),
+  }
+}
+
+const RELATIVE = {
+  mother: { code: 'MTH', display: 'mother' },
+  father: { code: 'FTH', display: 'father' },
+  sibling: { code: 'SIB', display: 'sibling' },
+} as const
+
+/** Dementia in a parent or sibling, only when the person agreed to share family history. Null when there is none to send. */
+export function familyHistory(patientRef: string, r: ScreeningRecord) {
+  const f = r.familyDementia
+  if (f.relative === 'none' || f.relative === 'unknown') return null
+  const rel = RELATIVE[f.relative]
+  return {
+    resourceType: 'FamilyMemberHistory',
+    text: narrative(`${rel.display[0].toUpperCase()}${rel.display.slice(1)} diagnosed with dementia${f.ageAtDiagnosis ? ` at ${f.ageAtDiagnosis}` : ''}.`),
+    status: 'completed',
+    patient: { reference: patientRef },
+    relationship: { coding: [{ system: 'http://terminology.hl7.org/CodeSystem/v3-RoleCode', ...rel }] },
+    condition: [{
+      code: { coding: [{ system: 'http://snomed.info/sct', code: '52448006', display: 'Dementia' }], text: 'Dementia' },
+      ...(f.ageAtDiagnosis ? { onsetAge: { value: f.ageAtDiagnosis, unit: 'years', system: 'http://unitsofmeasure.org', code: 'a' } } : {}),
+    }],
+  }
+}
+
+/** APOE e4 copies from a genome programme result, only when the person agreed to share it. Null when there is no result. */
+export function apoeObservation(patientRef: string, r: ScreeningRecord) {
+  if (r.apoeE4Copies === null) return null
+  return {
+    resourceType: 'Observation',
+    text: narrative(`APOE e4 copies: ${r.apoeE4Copies}, from the Emirati Genome Programme result. Context only; not used by the check's rule.`),
+    status: 'final',
+    category: [{ coding: [{ system: 'http://terminology.hl7.org/CodeSystem/observation-category', code: 'laboratory', display: 'Laboratory' }] }],
+    code: { coding: [{ system: SYSTEM, code: 'apoe-e4-copies', display: 'APOE e4 allele copies' }], text: 'APOE e4 allele copies (genome programme result)' },
+    subject: { reference: patientRef },
+    valueInteger: r.apoeE4Copies,
   }
 }
 

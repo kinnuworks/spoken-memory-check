@@ -3,10 +3,10 @@
  "tool": "Vitest v8 coverage",
  "engine": {
   "files": 20,
-  "linesCovered": 629,
-  "linesTotal": 629,
+  "linesCovered": 650,
+  "linesTotal": 650,
   "lines": 1,
-  "branches": 0.9466911764705882
+  "branches": 0.9440559440559441
  },
  "rules": [
   {
@@ -43,7 +43,7 @@
    "file": "packet.ts",
    "role": "Physician packet and referral clock",
    "lines": 1,
-   "branches": 1
+   "branches": 0.96875
   }
  ]
 }

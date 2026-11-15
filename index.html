@@ -8,13 +8,31 @@
     <meta name="theme-color" content="#FAF6EF" />
     <meta name="description" content="A four-minute memory check done at home by voice, in Gulf Arabic or English, compared with your own earlier checks. A physician hears about it only when a change lasts." />
     <title>Spoken memory check</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400..800&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <script>document.documentElement.classList.add('js')</script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Plain text for readers without JavaScript. The app replaces it as soon as it starts. -->
+      <main style="max-width:720px;margin:40px auto;padding:0 16px;font-family:system-ui,sans-serif;line-height:1.5;color:#2a2622">
+        <h1>Spoken memory check</h1>
+        <p>A four-minute memory check done at home by voice, in Gulf Arabic or English, for adults in Abu Dhabi's adult screening programme between their clinic memory tests. Each check is compared with the person's own earlier checks, not with one cut-off for everyone. A physician hears about it only when a lower score repeats, and approves before anyone is invited to a visit.</p>
+        <h2>How it works</h2>
+        <ol>
+          <li>A hearing check comes first (digits in noise). If the person cannot hear well enough, the memory check is held, not scored.</li>
+          <li>Ten words said back, recalled straight away and again later, and a minute of naming animals.</li>
+          <li>Two listeners score each recall: an open speech model that runs on the device, and matching against the person's own voice saying the ten words. Where they disagree, the score is a range.</li>
+          <li>Three checks set a personal baseline. Two lower checks in a row, or a steady fall, send a packet to the person's own physician.</li>
+          <li>The physician approves or dismisses it. Referrals are tracked to closure and exported as HL7 v2 and FHIR R4.</li>
+        </ol>
+        <h2>Measured, and not yet measured</h2>
+        <ul>
+          <li>Real recordings: the two listeners together heard 93% of 720 single Arabic words from 30 speakers.</li>
+          <li>Simulated: 4.9% false alarms a year in stable people; 94% of people losing 2 points a check flagged within the year, 45% at 1 point.</li>
+          <li>Not yet: no patients, no older Emirati volunteers, and the Arabic word lists have not been reviewed by a native speaker.</li>
+        </ul>
+        <p>Turn on JavaScript to try it. There is no sign-up, and every person shown is synthetic.</p>
+      </main>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

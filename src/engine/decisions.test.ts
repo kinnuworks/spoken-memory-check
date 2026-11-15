@@ -22,6 +22,7 @@ function stubStorage() {
 const record: ScreeningRecord = {
   age: 62, sex: 'F', mocaAtVisit: 27, hba1c: 5.6, onMetformin: false, systolic: 128, ldl: 2.9, bmi: 26,
   smoker: false, hearing: 'normal', vision: 'normal', phq9: 3, activeMinutesWeek: 200, schoolingYears: 12,
+  familyDementia: { relative: 'none' }, apoeE4Copies: null,
 }
 
 describe('consent', () => {

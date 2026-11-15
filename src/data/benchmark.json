@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-14",
+ "generated": "2026-11-15",
  "trend": {
   "trendZ": -1.9,
   "trendMinChecks": 8,
@@ -554,5 +554,20 @@
    "packetsPer1000": 67.21000000000001,
    "realPer1000": 33.89
   }
- ]
+ ],
+ "byStart": {
+  "n": 20000,
+  "seed": 20261110,
+  "baselineCut": 28,
+  "lowStart": {
+   "people": 3744,
+   "ours": 0.01655982905982906,
+   "fixedCutoff": 0.6947115384615384
+  },
+  "others": {
+   "people": 16256,
+   "ours": 0.05591781496062992,
+   "fixedCutoff": 0.06742125984251969
+  }
+ }
 }

@@ -182,6 +182,7 @@ export default function Home() {
               <p className="t-micro">{PERSONAS[0].name}, synthetic: a year of checks with one off day and no flag.</p>
             </div>
           </div>
+          <p className="t-small reveal" style={{ marginTop: 20 }}>The same happens in the Gulf. With the usual MoCA cut-off of 26, 69.3% of 606 older adults in Dubai and Sharjah were classed as impaired (<a href="https://doi.org/10.3389/fragi.2026.1822042">Issa et al. 2026</a>), and 74.3% of 308 healthy adults in Qatar scored below it; those authors proposed 22 instead (<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11807847/">Qatar study</a>).</p>
         </div>
       </section>
 
@@ -312,7 +313,8 @@ function WhoPays() {
         <div className="section-head reveal">
           <span className="eyebrow"><span className="dot" />Where it fits, and who pays</span>
           <h2>About AED {Math.round(yearlyCost().perEligibleAed)} per eligible member a year.</h2>
-          <p className="lead">Since 1 September 2026 the adult screening programme has two Thiqa-funded packages called "Comprehensive hearing and dementia screening": 52-45 every three years at 50 to 64, and 52-46 every year at 65 to 75. They name no memory tool. This check is that memory step, done at home between visits, and the programme pays through the package.</p>
+          <p className="lead">Since 1 September 2026 the adult screening programme has two Thiqa-funded packages called "Comprehensive hearing and dementia screening": 52-45 every three years at 50 to 64, and 52-46 every year at 65 to 75. The billing names no memory tool; in clinic the programme uses the MoCA. This check adds the memory step at home between visits, for people already in the programme, and the programme pays through the package. It watches members for change; it does not screen the whole population.</p>
+          <p className="t-small">Why now: in 825 patients at a government hospital in Al Ain, dementia was diagnosed a median of 24 months after symptoms began (<a href="https://doi.org/10.1192/bji.2025.10077">Javaid et al. 2026</a>), and the anti-amyloid medicines approved in the UAE are only for mild cognitive impairment or mild dementia (<a href="https://doi.org/10.1007/s40120-025-00833-8">UAE expert consensus, 2025</a>). Finding change earlier decides who can still be offered them.</p>
         </div>
         <div className="fit reveal" style={{ marginBottom: 24 }}>
           <div className="fit__step"><span className="fit__n">1</span><p className="t-title">Hearing first</p><p className="t-small">A failed hearing check goes to ENT and holds the memory check, so poor hearing is not read as poor memory.</p></div>

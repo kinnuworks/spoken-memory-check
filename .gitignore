@@ -37,3 +37,7 @@ coverage/
 reports/
 .stryker-tmp/
 public/models/
+
+# Local secrets (Azure Speech key); never committed
+.env
+.env.*

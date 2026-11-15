@@ -7,8 +7,9 @@ cd "$(dirname "$0")/.."
 bash scripts/count-tests.sh
 npm run build
 
-# The Arabic speech model is served from this site (built by scripts/build-arabic-model.sh, not in git).
+# Both speech models are served from this site (scripts/build-arabic-model.sh and build-english-model.sh, not in git).
 test -s dist/models/whisper-small-ar-q4emb/onnx/decoder_model_merged_q4.onnx || { echo "Arabic model missing: run scripts/build-arabic-model.sh"; exit 1; }
+test -s dist/models/whisper-base/onnx/decoder_model_merged_quantized.onnx || { echo "English model missing: run scripts/build-english-model.sh"; exit 1; }
 
 out="${DEPLOY_DIR:-$(mktemp -d)}"
 rm -rf "$out/site"

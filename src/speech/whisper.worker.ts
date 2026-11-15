@@ -8,11 +8,15 @@ type Lang = 'en' | 'ar'
 // recordings of single Arabic words it found the right word far more often than the general small model
 // (scripts/arabic-asr-experiments.ts). Its 4-bit weights scored the same as 8-bit. This site serves its own copy
 // with the token-embedding table, left at 32 bits in that build, also stored as 4-bit (scripts/shrink-arabic-model.py):
-// about 165 MB to download instead of 299, every file under 100 MB. English still comes from huggingface.co.
-const MODEL: Record<Lang, string> = { en: 'onnx-community/whisper-base', ar: 'whisper-small-ar-q4emb' }
-const FROM_THIS_SITE: Record<Lang, boolean> = { en: false, ar: true }
-const ORIGINAL: Record<Lang, string> = { en: 'onnx-community/whisper-base', ar: 'onnx-community/whisper-small-ar-ONNX' }
-env.localModelPath = `${self.location.origin}/models/`
+// about 165 MB to download instead of 299, every file under 100 MB. English is an unchanged copy of
+// onnx-community/whisper-base (scripts/build-english-model.sh). Both models, with their tokenizers and audio
+// settings, come from this site only, so the browser never contacts another server for them.
+const MODEL: Record<Lang, string> = { en: 'whisper-base', ar: 'whisper-small-ar-q4emb' }
+// This site stands in for the model hub: every file is fetched from /models/<model>/ here, never from huggingface.co.
+env.allowLocalModels = false
+env.allowRemoteModels = true
+env.remoteHost = `${self.location.origin}/models/`
+env.remotePathTemplate = '{model}/'
 const DTYPE: Record<Lang, 'q8' | 'q4'> = { en: 'q8', ar: 'q4' }
 // A prompt that shows the wanted format (single nouns, comma separated) and none of the answers.
 // Putting the word list itself in the prompt made the model report words nobody said.
@@ -36,14 +40,11 @@ async function load(lang: Lang) {
       postMessage({ type: 'progress', percent: Math.round(vals.reduce((a, b) => a + b, 0) / vals.length) })
     }
   }
-  // The tokenizer and audio settings are the original model's, unchanged, so they come from its own repository.
-  env.allowLocalModels = false
   const [processor, tokenizer] = await Promise.all([
-    AutoProcessor.from_pretrained(ORIGINAL[lang], { progress_callback }),
-    AutoTokenizer.from_pretrained(ORIGINAL[lang], { progress_callback }),
+    AutoProcessor.from_pretrained(id, { progress_callback }),
+    AutoTokenizer.from_pretrained(id, { progress_callback }),
   ])
-  env.allowLocalModels = FROM_THIS_SITE[lang]
-  const model = await WhisperForConditionalGeneration.from_pretrained(id, { local_files_only: FROM_THIS_SITE[lang], dtype: DTYPE[lang], device: 'wasm', progress_callback })
+  const model = await WhisperForConditionalGeneration.from_pretrained(id, { dtype: DTYPE[lang], device: 'wasm', progress_callback })
   loaded = { lang, processor, tokenizer, model }
 }
 

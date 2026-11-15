@@ -1,4 +1,4 @@
-import type { ScreeningRecord } from './histories'
+import type { ScreeningRecord, SharedContext } from './histories'
 
 // Fourteen modifiable risk factors from the Lancet Commission on dementia (2024). Ten have
 // a matching field in the adult screening record; four do not.
@@ -61,4 +61,29 @@ export function addWorkingDays(iso: string, n: number): string {
     if (wd !== 0 && wd !== 6) left--
   }
   return d.toISOString().slice(0, 10)
+}
+
+export interface ContextRow { name: string; shared: boolean; value: string; note: string }
+
+const COPIES = ['no copy', 'one copy', 'two copies']
+
+/**
+ * Family and genetic context for the physician, each part only if the person agreed to share it.
+ * Context for the conversation only: the rule never reads it, and the flag does not change with it.
+ */
+export function contextRows(r: ScreeningRecord, shared: SharedContext): ContextRow[] {
+  const f = r.familyDementia
+  const family = !shared.familyHistory
+    ? 'Not shared. The person has not agreed to share this.'
+    : f.relative === 'none' ? 'No parent or sibling with dementia recorded.'
+    : f.relative === 'unknown' ? 'Not known.'
+    : `${f.relative[0].toUpperCase()}${f.relative.slice(1)} diagnosed with dementia${f.ageAtDiagnosis ? ` at ${f.ageAtDiagnosis}` : ''}, as recorded at the screening visit.`
+  const genome = !shared.genome
+    ? 'Not shared. The person has not agreed to share this.'
+    : r.apoeE4Copies === null ? 'No genome programme result on file.'
+    : `APOE e4: ${COPIES[r.apoeE4Copies]}, from the Emirati Genome Programme result.`
+  return [
+    { name: 'Family history of dementia', shared: shared.familyHistory, value: family, note: 'A parent or sibling with dementia raises average risk. It does not change what this person\'s own checks show.' },
+    { name: 'Genome programme result', shared: shared.genome, value: genome, note: 'APOE e4 raises the average risk of Alzheimer\'s disease, but many carriers never develop it. If anti-amyloid treatment is ever considered, APOE e4 status also bears on the risk of side effects (ARIA).' },
+  ]
 }

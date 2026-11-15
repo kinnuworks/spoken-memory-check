@@ -2,8 +2,8 @@ import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { DEFAULT_PARAMS, PACKET_STATUSES, TREND_PACKET_NOTE, evaluate } from '../engine/change'
 import { PERSONAS } from '../engine/histories'
-import { REFERRAL_TARGET_WORKING_DAYS, addWorkingDays, riskFactors, treatableContributors, workingDaysBetween } from '../engine/packet'
-import { bundle, checkObservation, referralRequest, SPECIALTY, type Specialty } from '../engine/fhir'
+import { REFERRAL_TARGET_WORKING_DAYS, addWorkingDays, contextRows, riskFactors, treatableContributors, workingDaysBetween } from '../engine/packet'
+import { apoeObservation, bundle, checkObservation, familyHistory, referralRequest, SPECIALTY, type Specialty } from '../engine/fhir'
 import { refMessage } from '../engine/hl7'
 import { appendAudit, loadAudit } from '../engine/audit'
 import TrajectoryChart from './TrajectoryChart'
@@ -27,6 +27,7 @@ function Clinician({ id }: { id?: string }) {
   const base = traj.baseline as number
   const factors = riskFactors(person.record)
   const contributors = treatableContributors(person.record)
+  const context = contextRows(person.record, person.shared)
   const [decision, setDecision] = useState<Decision>('pending')
   const [reason, setReason] = useState('')
   const [note, setNote] = useState('')
@@ -102,7 +103,14 @@ function Clinician({ id }: { id?: string }) {
         </tbody>
       </table></div>
 
-      <h2>5. Your decision</h2>
+      <h2>5. Family and genetic context</h2>
+      <p className="muted">Only what the person agreed to share, each part with its own consent. Context for your conversation: the rule never reads it and the flag does not change with it.</p>
+      <div className="scroll" tabIndex={0} role="region" aria-label="Family and genetic context"><table>
+        <thead><tr><th>Item</th><th>For this person</th><th>How to read it</th></tr></thead>
+        <tbody>{context.map((c) => <tr key={c.name}><td><strong>{c.name}</strong></td><td>{c.shared ? c.value : <span className="muted">{c.value}</span>}</td><td className="muted">{c.shared ? c.note : ''}</td></tr>)}</tbody>
+      </table></div>
+
+      <h2>6. Your decision</h2>
       {decision === 'pending' && (
         <>
           <p>Until you decide, the person sees only "Check received". If you approve, the app sends the invitation below and nothing else. You give the result in person.</p>
@@ -119,7 +127,7 @@ function Clinician({ id }: { id?: string }) {
       {decision === 'approved' && (
         <>
           <div className="note">Approved on {approvedOn}{invite !== INVITE ? ' with edited wording' : ''}. The person received this invitation and nothing else: "{invite}"</div>
-          <h2>6. Follow-up clock</h2>
+          <h2>7. Follow-up clock</h2>
           <p>Target: referral to a neurologist or geriatrician completed within {REFERRAL_TARGET_WORKING_DAYS} working days of the visit. The number is borrowed from the screening programme's own referral indicator.</p>
           <div className="stack">
             {!referredOn && <button className="primary" onClick={() => { setReferredOn(visitOn); record('result given in person', `referral to ${SPECIALTY[specialty].display}`) }}>Record: result given in person on {visitOn}, referral made the same day</button>}
@@ -149,7 +157,10 @@ function Clinician({ id }: { id?: string }) {
       <h2>Hand-off to other systems</h2>
       <p className="muted">The checks and the referral as FHIR R4 resources, for an exchange or a record system to take in.</p>
       <button className="small" onClick={() => {
-        const res = [...person.checks.map((c) => checkObservation(`Patient/synthetic-${person.id}`, c)), ...(referredOn ? [referralRequest(`Patient/synthetic-${person.id}`, 'Practitioner/ordering', referredOn, addDays(visitOn, 21), specialty)] : [])]
+        const ref = `Patient/synthetic-${person.id}`
+        // Family history and genome results go only if the person agreed to share each one.
+        const ctx = [person.shared.familyHistory ? familyHistory(ref, person.record) : null, person.shared.genome ? apoeObservation(ref, person.record) : null].filter((x) => x !== null)
+        const res = [...person.checks.map((c) => checkObservation(ref, c)), ...ctx, ...(referredOn ? [referralRequest(ref, 'Practitioner/ordering', referredOn, addDays(visitOn, 21), specialty)] : [])]
         const url = URL.createObjectURL(new Blob([JSON.stringify(bundle(res), null, 2)], { type: 'application/fhir+json' }))
         Object.assign(document.createElement('a'), { href: url, download: `synthetic-${person.id}.fhir.json` }).click()
         URL.revokeObjectURL(url)

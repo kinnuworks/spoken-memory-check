@@ -94,7 +94,7 @@ export default function Try() {
       {stage === 'intro' && (
         <>
           <p>First a sound check, then 20 seconds of naming animals. This is a short taste of the full four-minute check. Nothing is stored.</p>
-          <p className="note">Two listeners score what you say. The first is your browser's own speech service, which may send audio to the browser's maker. The second is an open speech model that runs on this device and sends your recording nowhere{secondSupported() ? `; it needs a one-time download of about ${DOWNLOAD_MB[lang]} MB from ${DOWNLOAD_FROM[lang]}` : '; it is not available on this device, so one listener will score'}. Nothing is stored.</p>
+          <p className="note">Two listeners score what you say. The first is your browser's own speech service, which may send audio to the browser's maker, outside the UAE. That is fine for trying it out, but not for patients: a pilot would score with the on-device listener and a UAE-hosted one only. The second is an open speech model that runs on this device and sends your recording nowhere{secondSupported() ? `; it needs a one-time download of about ${DOWNLOAD_MB[lang]} MB from ${DOWNLOAD_FROM[lang]}` : '; it is not available on this device, so one listener will score'}. Nothing is stored.</p>
           {lang === 'ar' && secondSupported() && second === 'off' && <p><button className="small" onClick={() => startSecond('ar')}>Add the second listener for Arabic ({DOWNLOAD_MB.ar} MB)</button></p>}
           <div className="stack"><button className="primary" onClick={soundCheck}>Start the sound check</button></div>
         </>

@@ -3,7 +3,7 @@ import { cell, simulateProgramme, SMALL_CELL } from './programme'
 import { HEARING_SETTINGS, hearingPathway, lostSignals, SIGNALS } from './signals'
 import { appendAudit, APP_VERSION, loadAudit } from './audit'
 import { clearChecks, loadChecks, saveCheck, type StoredCheck } from './store'
-import { firstFlag, programmeYear, runBenchmark, wilson, BASE_WORLD, rng, simulatePerson } from './simulate'
+import { falseAlarmsByStart, firstFlag, programmeYear, runBenchmark, wilson, BASE_WORLD, rng, simulatePerson } from './simulate'
 
 describe('programme view (simulated year)', () => {
   const rows = simulateProgramme()
@@ -153,5 +153,16 @@ describe('benchmark helpers', () => {
     expect(y.specificity).toBeGreaterThan(0.93)
     const before = programmeYear(5000, 0.04, 21, 2, 'two-in-a-row')
     expect(before.tp + before.fn + before.fp + before.tn).toBe(5000)
+  })
+})
+
+describe('false alarms by starting level', () => {
+  it('splits stable people at the lowest fifth of baselines, and one cut-off flags the low starters far more', () => {
+    const r = falseAlarmsByStart(2000, 7)
+    expect(r.lowStart.people + r.others.people).toBe(2000)
+    expect(r.lowStart.people).toBeGreaterThan(300)
+    expect(r.lowStart.fixedCutoff).toBeGreaterThan(r.lowStart.ours + 0.3)
+    expect(r.lowStart.ours).toBeLessThan(0.1)
+    expect(r.others.ours).toBeLessThan(0.12)
   })
 })

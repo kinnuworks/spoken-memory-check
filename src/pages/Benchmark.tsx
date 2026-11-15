@@ -5,7 +5,7 @@ import coverage from '../data/coverage-summary.json'
 import mutation from '../data/mutation-summary.json'
 import live from '../data/live-check.json'
 import SurveyChart from './SurveyChart'
-import { BuiltToBeChecked, OlderSpeakers, RuleChecks } from './EvidenceExtra'
+import { BuiltToBeChecked, OlderSpeakers, RuleChecks, ValidationTable } from './EvidenceExtra'
 
 const RULE: Record<string, string> = {
   ours: 'This check: two low checks in a row, or a slowly falling line',
@@ -38,6 +38,8 @@ export default function Benchmark() {
         </tbody>
       </table></div>
 
+      <ValidationTable />
+
       <h2>How the flag was tested</h2>
       <p><span className="tag syn">Simulated people, not patients</span></p>
       <p>The flag is the step that carries the safety decision, so it is the step we measured. Each cell below is {data.n.toLocaleString()} simulated people followed for eleven checks in a year. Run on {data.generated}; anyone can rerun it with <code>npx tsx scripts/benchmark.ts</code>.</p>
@@ -58,16 +60,6 @@ export default function Benchmark() {
       </table></div>
       <p className="muted">The cut-offs for the new route were fixed before these numbers were run: the line's slope over its error at or below {data.trend.trendZ}, from {data.trend.trendMinChecks} scored checks on (baseline included), on {data.trend.trendRuns} scored checks in a row. They were chosen on a separate set of simulated people (seed {data.trend.tuningSeed}) as the loosest setting that kept false alarms under 5% a year with both routes together; the numbers on this page come from seed {data.trend.reportSeed}. The price is real: about {(b2.packetsPer1000 - data.burdenBefore[1].packetsPer1000).toFixed(0)} more packets per 1,000 members a year, of which about {(b2.realPer1000 - data.burdenBefore[1].realPer1000).toFixed(0)} are real. A slow loss of one point per check is still missed within the year in more than half of simulated people.</p>
       <p><strong>Why one point a check is still often missed.</strong> We tried two other ways to catch it on the tuning seed. A rule that looks for the point where a stable line starts to fall caught the same share as the straight line at the same false-alarm rate. Adding one extra check a month later for anyone whose line starts to fall lifted it only to about half, for nearly one extra check per person. The limit is the check's own noise, about 4 points either way on a single day, measured four times a year; a second short task or more frequent checks would help more than a cleverer rule.</p>
-
-      <h2>Six measures, as a validation dashboard</h2>
-      <div className="tiles">
-        <div className="card"><p className="muted">Completion</p><p className="big small-big">Pending</p><p className="muted">Needs real volunteers. Not measured yet.</p></div>
-        <div className="card"><p className="muted">Retest reliability</p><p className="big small-big">Pending</p><p className="muted">Needs volunteers taking the check twice. The rule uses 4.0 points from published studies until then.</p></div>
-        <div className="card"><p className="muted">Sensitivity (decline of 2 points a check)</p><p className="big small-big">{pct(b2.sensitivity)}</p><p className="muted">95% interval {pct(b2.sensitivityCi[0])} to {pct(b2.sensitivityCi[1])}. Simulated.</p></div>
-        <div className="card"><p className="muted">Specificity over a year (1 minus false alarms)</p><p className="big small-big">{pct(b2.specificity)}</p><p className="muted">95% interval {pct(b2.specificityCi[0])} to {pct(b2.specificityCi[1])}. Simulated.</p></div>
-        <div className="card"><p className="muted">Packets per 1,000 members a year</p><p className="big small-big">{b2.packetsPer1000.toFixed(0)}</p><p className="muted">Of which real: {b2.realPer1000.toFixed(0)}. Assumes {pct(b2.prevalence)} of members in real decline. Simulated.</p></div>
-        <div className="card"><p className="muted">Time to assessment</p><p className="big small-big">Target 15</p><p className="muted">Working days from the visit, tracked per referral in the physician's view. No pilot data yet.</p></div>
-      </div>
 
       <h3>Confusion matrix, simulated year, {b2.members.toLocaleString()} members</h3>
       <div className="scroll" tabIndex={0} role="region" aria-label="Confusion matrix"><table>

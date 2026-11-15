@@ -2,7 +2,7 @@
 
 /* App palette on top of the cream mood and terracotta accent. */
 :root {
-  --font-arabic: "IBM Plex Sans Arabic", "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-arabic: "IBM Plex Sans Arabic", "Plus Jakarta Sans Variable", "Plus Jakarta Sans", system-ui, sans-serif;
   --both: #1F7A3D; --both-wash: #E6F2E9;
   --one: #9A6200; --one-wash: #FBF0DA;
   --raise: #A1411F;

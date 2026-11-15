@@ -36,11 +36,13 @@ Pass `--no-tx` to add `-tx n/a` when offline; SNOMED codes are then not checked.
 | servicerequest-neurology.json | `referralRequest`, Neurology 394591006 | 0 | 0 |
 | servicerequest-geriatrics.json | `referralRequest`, Geriatric medicine 394811001 | 0 | 0 |
 | servicerequest-ent.json | `referralRequest`, Otolaryngology 418960008, urgent | 0 | 0 |
-| bundle-decline.json | `bundle` of persona C's 8 checks and a neurology referral, built as the clinician screen builds its download | 0 | 16 |
+| familymemberhistory-mother.json | `familyHistory`, persona C's mother with dementia (SNOMED CT 52448006) at 74; sent only if the person agreed to share family history | 0 | 0 |
+| observation-apoe.json | `apoeObservation`, persona C's APOE e4 copies from a genome programme result; sent only if the person agreed to share it | 0 | 3 |
+| bundle-decline.json | `bundle` of persona C's 8 checks, family history, APOE result and a neurology referral, built as the clinician screen builds its download | 0 | 19 |
 | bundle-hearing.json | `bundle` of persona D's 9 checks and an ENT referral | 0 | 18 |
-| Total | 10 files | 0 | 47 |
+| Total | 12 files (15 Nov 2026) | 0 | 53 |
 
-The three SNOMED CT specialty codes are valid; tx.fhir.org raised nothing on them.
+The three SNOMED CT specialty codes and the dementia code are valid; tx.fhir.org raised nothing on them.
 
 ## Before and after
 
@@ -60,7 +62,7 @@ The `referralRequest(patientRef, practitionerRef, authoredOn, dueBy, specialty, 
 
 ## Warnings left, and why
 
-There are 47 warnings of two kinds:
+There are 53 warnings, nearly all of two kinds:
 
 1. "A definition for CodeSystem 'urn:spoken-memory-check:codes' could not be found" (25: one per Observation code, plus 3 components). No LOINC or SNOMED CT code exists for this spoken check's total or part scores, so they use a local code system, as FHIR allows. The validator cannot look up a local system it has never seen. Publishing a CodeSystem resource for it, or getting a LOINC code, would clear this.
 2. "In general, all observations should have a performer" (22: one per Observation). This is a best-practice note. The person takes the check alone at home and software scores it; no clinician vouches for the value. Naming the person or a practitioner as performer would claim something that did not happen, so the field is left empty. A deployment that registers the scoring software as a Device could reference it here.

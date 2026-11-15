@@ -107,6 +107,26 @@ export function runBenchmark(n: number, seed = REPORT_SEED, rules: RuleName[] = 
   return { n, seed, rows }
 }
 
+/**
+ * False alarms in stable people, split by where they start: the bottom fifth of baseline scores
+ * (as people with less schooling tend to be) against everyone else. Our rule compares each
+ * person with their own baseline; a single cut-off compares everyone with the same number.
+ */
+export function falseAlarmsByStart(n: number, seed = REPORT_SEED, p: RuleParams = DEFAULT_PARAMS) {
+  const r = rng(seed)
+  const people = Array.from({ length: n }, () => simulatePerson({ ...BASE_WORLD, slope: 0 }, r))
+  const base = (c: Check[]) => c.slice(0, 3).reduce((s, x) => s + ((x.low as number) + (x.high as number)) / 2, 0) / 3
+  const cut = [...people.map(base)].sort((a, b) => a - b)[Math.floor(n / 5)]
+  const group = (low: boolean) => people.filter((c) => (base(c) < cut) === low)
+  const rate = (g: Check[][], rule: RuleName) => g.filter((c) => firstFlag(rule, c, p) >= 0).length / g.length
+  const lowStart = group(true), others = group(false)
+  return {
+    n, seed, baselineCut: Math.round(cut * 10) / 10,
+    lowStart: { people: lowStart.length, ours: rate(lowStart, 'ours'), fixedCutoff: rate(lowStart, 'fixed-cutoff') },
+    others: { people: others.length, ours: rate(others, 'ours'), fixedCutoff: rate(others, 'fixed-cutoff') },
+  }
+}
+
 /** Wilson score interval for a proportion, 95%. */
 export function wilson(k: number, n: number): [number, number] {
   if (n === 0) return [0, 1]
