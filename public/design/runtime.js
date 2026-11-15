@@ -10,8 +10,6 @@
     data-record             ?record=1: slower key transitions, no grain
     data-webgl="yes|no"     WebGL available; ?webgl=0 forces the fallback
     data-lite               slow device, data saver, or ?lite=1: heavy effects off
-    data-direction="a"      ?direction=a while three directions are being compared;
-                            remembered for the tab, so links inside the app keep it
 
   Helpers on window.design:
     afterFirstScreen(fn)    run fn once the first screen has painted and the
@@ -29,12 +27,7 @@
 
   root.setAttribute("data-js", "");
 
-  var dir = q.get("direction");
-  try {
-    if (dir) sessionStorage.setItem("design-direction", dir);
-    else dir = sessionStorage.getItem("design-direction");
-  } catch (e) {}
-  if (dir) root.setAttribute("data-direction", dir);
+  try { sessionStorage.removeItem("design-direction"); } catch (e) {}
 
   function setMotion() {
     var reduce = q.get("motion") === "reduce" || mq.matches;

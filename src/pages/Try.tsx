@@ -10,14 +10,25 @@ import SurveyChart from './SurveyChart'
 type Stage = 'intro' | 'sound' | 'sound-failed' | 'ready' | 'animals' | 'result' | 'blocked' | 'typed'
 const ANIMAL_SECONDS = 20
 
+// ?state=empty|loading|error|result opens one screen of the loop directly, so each can be checked
+// and recorded. The result is a labelled sample scored from typed animals, not a recording.
+const SAMPLE = 'camel, horse, falcon, goat, cat, dog, lion, fish, eagle'
+function forcedState(): Stage | null {
+  const q = new URLSearchParams(window.location.search || window.location.hash.split('?')[1] || '')
+  const s = q.get('state')
+  return s === 'empty' ? 'intro' : s === 'loading' ? 'sound' : s === 'error' ? 'blocked' : s === 'result' ? 'result' : null
+}
+
 export default function Try() {
   const [lang, setLang] = useState<Lang>('en')
-  const [stage, setStage] = useState<Stage>(browserSpeechAvailable() ? 'intro' : 'blocked')
-  const [live, setLive] = useState<RangeScore | null>(null)
+  const forced = forcedState()
+  const [stage, setStage] = useState<Stage>(forced ?? (browserSpeechAvailable() ? 'intro' : 'blocked'))
+  const [live, setLive] = useState<RangeScore | null>(forced === 'result' ? scoreTask({ Typed: SAMPLE }, ANIMALS.en, 'en') : null)
+  const sample = forced === 'result'
   const [left, setLeft] = useState(ANIMAL_SECONDS)
   const timer = useRef<number | undefined>(undefined)
   const [typed, setTyped] = useState('')
-  const [viaTyping, setViaTyping] = useState(false)
+  const [viaTyping, setViaTyping] = useState(forced === 'result')
   const [second, setSecond] = useState<'off' | 'loading' | 'ready' | 'checking'>('off')
   const [percent, setPercent] = useState(0)
   const [listeners, setListeners] = useState(1)
@@ -90,6 +101,7 @@ export default function Try() {
         <button className="seg" lang="ar" disabled={!['intro', 'blocked', 'typed'].includes(stage)} onClick={() => setLang('ar')} aria-pressed={lang === 'ar'}>العربية</button>
       </div>
       {lang === 'ar' && !ARABIC_REVIEWED && <p className="note">The Arabic word lists are a draft and have not yet been reviewed by a native Gulf Arabic speaker.</p>}
+      <div className="try-panel">
 
       {stage === 'intro' && (
         <>
@@ -144,6 +156,7 @@ export default function Try() {
       {stage === 'result' && live && (
         <>
           <h2>What we heard</h2>
+          {sample && <p className="tag syn">Sample result from typed animals</p>}
           <p className="big">{live.low === live.high ? live.high : `${live.low} to ${live.high}`} animals</p>
           <div className="chips" lang={lang} dir={lang === 'ar' ? 'rtl' : 'ltr'}>{chips}</div>
           {viaTyping
@@ -181,8 +194,9 @@ export default function Try() {
             <button onClick={() => setStage('typed')}>Type the animals to see the scoring work</button>
             <Link className="btn primary" to="/year">See a year of checks (no microphone)</Link>
           </div>
-        </>
+                </>
       )}
+      </div>
     </>
   )
 }

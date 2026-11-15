@@ -1,306 +1,273 @@
+// The home page. Every figure is read from the data files the evidence pages use; the people are
+// the synthetic personas the rule runs on.
+import { useEffect, useId, useState } from 'react'
 import { Link } from 'react-router-dom'
 import data from '../data/benchmark.json'
 import own from '../data/own-voice-summary.json'
 import tests from '../data/tests.json'
 import sada from '../data/sada-bench.json'
-import mutation from '../data/mutation-summary.json'
 import coverage from '../data/coverage-summary.json'
-import live from '../data/live-check.json'
-import reading from '../data/reading-grade.json'
-import { WhoPays } from './WhoPays'
-import HomeDirection from './HomeDirections'
-import { direction } from '../components/direction'
-import { evaluate } from '../engine/change'
-import { PERSONAS } from '../engine/histories'
-import { treatableContributors } from '../engine/packet'
-import { ICON, useReveal } from '../components/brand'
-import { Alert, Arrow, Code, Ear, EyeOff, List, Mic, Moon, Play, Stethoscope } from '../components/Icons'
-import dunes from '../assets/dunes.jpg'
-import { SurveyBars } from './SurveyChart'
+import { COST_DEFAULTS, yearlyCost } from '../engine/cost'
+import { evaluate, PACKET_STATUSES, STATUS_LABEL, type Trajectory } from '../engine/change'
+import { PERSONAS, type Persona } from '../engine/histories'
+import { Alert, Check, Clock, Code, Ear, EyeOff, List, Mic, Moon, Trend, Waves } from '../components/Icons'
 import TrajectoryChart from './TrajectoryChart'
-import '../styles/home.css'
 
-const pct = (x: number) => `${(x * 100).toFixed(1)}%`
-
-const decline = PERSONAS.find((p) => p.id === 'decline')!
-const declineTraj = evaluate(decline.checks)
-const declineFlag = declineTraj.results.find((r) => r.status === 'flag')!
 const rows = data.rows.filter((r) => r.world === 'As assumed')
 const ours = rows.find((r) => r.rule === 'ours')!
-const single = rows.find((r) => r.rule === 'single-low')!
-const burden = data.burden.find((b) => b.prevalence === 0.02)!
+const pct1 = (x: number) => `${(x * 100).toFixed(1)}%`
+const arabic = Math.round(own.union.rate * 100)
+const older = Math.round(sada.results.jaisAsr['Older, Gulf (Khaliji)'].wer * 100)
+const adult = Math.round(sada.results.jaisAsr['Adult, Gulf (Khaliji)'].wer * 100)
+const perMember = Math.round(yearlyCost().perEligibleAed)
+const decline = PERSONAS.find((p) => p.id === 'decline')!
+const declineTraj = evaluate(decline.checks)
+const aed = (x: number) => `AED ${Math.round(x).toLocaleString('en')}`
 
-export default function Home() {
-  const dir = direction()
-  return dir ? <HomeDirection dir={dir} /> : <HomeMain />
+
+const FACTS = [
+  { n: `${arabic}%`, t: `of ${own.whisperAlone.n} real Arabic words heard on the device` },
+  { n: `${older}% vs ${adult}%`, t: 'word error, older against adult Gulf speakers' },
+  { n: '52-45 and 52-46', t: 'the Thiqa packages it fills the memory step of' },
+  { n: '0 errors', t: 'from the official HL7 FHIR validator' },
+]
+
+const ROUTES = [
+  { icon: <Ear />, t: 'Hearing comes first', d: 'A failed sound check holds a check instead of scoring it low.', tags: ['Digits in noise', 'Held, not low'] },
+  { icon: <Moon />, t: 'Off days do not count', d: 'A low score on a day the person says was off is left out.', tags: ['Said by the person', 'Left out'] },
+  { icon: <List />, t: 'Everyday tasks override scores', d: 'A yes to the everyday-tasks question goes to the physician whatever the scores say.', tags: ['One spoken question', 'Physician'] },
+  { icon: <Alert />, t: 'Very large falls go urgent', d: 'A fall far outside normal variation tells the person to see a doctor the same day.', tags: ['Same day', 'Urgent'] },
+  { icon: <EyeOff />, t: 'No scores at home', d: 'The person sees dated ticks and a thank-you. Results are given in person.', tags: ['Dated ticks', 'In person'] },
+  { icon: <Code />, t: 'Fixed rules anyone can read', d: 'A short rule in code makes every decision. No language model anywhere.', tags: ['Rule in code', 'No language model'] },
+]
+
+/* ------------------------------------------------------------------ */
+/* Shared product pieces                                               */
+/* ------------------------------------------------------------------ */
+
+/** What the rule did for one synthetic person, step by step, from its own output. */
+function ruleSteps(p: Persona, t: Trajectory) {
+  const s: { label: string; tag: string }[] = []
+  if (t.baseline !== null) s.push({ label: `Baseline from the first three checks: ${t.baseline.toFixed(1)}`, tag: 'Personal baseline' })
+  const held = p.checks.filter((c) => c.hearingLimited).length
+  const off = p.checks.filter((c) => c.offDay).length
+  const missed = p.checks.filter((c) => c.low === null && !c.hearingLimited).length
+  if (off) s.push({ label: `${off === 1 ? 'One off day' : `${off} off days`} left out of the comparison`, tag: 'Off days' })
+  if (missed) s.push({ label: `${missed === 1 ? 'One missed check' : `${missed} missed checks`}, not counted as low`, tag: 'Missed' })
+  if (held) s.push({ label: `${held === 1 ? 'One check' : `${held} checks`} held after a failed sound check`, tag: 'Hearing first' })
+  const st = t.status
+  if (st === 'flag') s.push({ label: 'Lower than the baseline twice in a row', tag: 'Two-in-a-row route' })
+  if (st === 'trend') s.push({ label: 'Falling steadily across all checks', tag: 'Slow-fall route' })
+  if (st === 'review') s.push({ label: 'Everyday tasks reported harder', tag: 'Everyday tasks' })
+  if (st === 'urgent') s.push({ label: 'A very large fall between two checks', tag: 'Urgent route' })
+  if (st === 'usual-range' || st === 'watch' || st === 'building-baseline') s.push({ label: held >= 2 ? 'Pointed to a hearing assessment' : 'Latest check within the usual range', tag: STATUS_LABEL[st] })
+  return s.slice(-4)
 }
 
-function HomeMain() {
-  useReveal()
-  const contributors = treatableContributors(decline.record).slice(0, 3)
+function outcome(t: Trajectory, p: Persona) {
+  if (PACKET_STATUSES.includes(t.status)) return { ok: false, text: 'Packet sent to the ordering physician', side: 'The physician approves before anyone is told.' }
+  if (t.status === 'urgent') return { ok: false, text: 'Told to seek urgent assessment', side: 'The routine flow is bypassed.' }
+  if (p.checks.filter((c) => c.hearingLimited).length >= 2) return { ok: true, text: 'Held for hearing, nothing sent', side: 'The person sees: Check received. Thank you.' }
+  return { ok: true, text: 'Nothing sent', side: 'The person sees: Check received. Thank you.' }
+}
 
+function ChartKey() {
   return (
-    <main>
-      {/* Hero: the three ways in, then the product doing its thing. */}
-      <section className="hero">
-        <div className="container">
-          <span className="badge badge--dot">A prototype for Abu Dhabi's adult screening programme</span>
-          <h1>A memory check you <em className="t-serif">speak,</em> tracked against yourself.</h1>
-          <p className="lead">Four minutes at home, by voice, in Gulf Arabic or English. Nothing to read or type. A physician hears about it only after two low checks in a row.</p>
-          <div className="cta-row">
-            <Link to="/try" className="btn btn-ink btn-lg"><Mic />Try it with your voice<span className="tag">30 s</span></Link>
-            <Link to="/recorded" className="btn btn-outline btn-lg"><Play />Play a recorded check</Link>
-            <Link to="/story" className="btn btn-outline btn-lg"><Stethoscope />See one case, both screens</Link>
-          </div>
-          <p className="trust"><Link to="/recorded-check" style={{ textDecoration: 'underline', color: 'inherit' }}>Or play the full four-minute check, recorded</Link></p>
-          <p className="trust"><span>No sign-up</span><span>Works in the browser</span><span>People shown are synthetic</span><span>Does not diagnose</span></p>
-          <ul className="proof" aria-label="What is measured so far">
-            <li><b>{Math.round(own.union.rate * 100)}%</b><span>of {own.whisperAlone.n} real Arabic words heard right on the device, with the speaker's own voice as the answer key; 99% in a lab test adding MBZUAI and Inception's Jais-ASR</span></li>
-            <li><b>{Math.round(sada.results.jaisAsr['Older, Gulf (Khaliji)'].wer * 100)}% vs {Math.round(sada.results.jaisAsr['Adult, Gulf (Khaliji)'].wer * 100)}%</b><span>word error for older against adult Gulf speakers on public Saudi TV speech: older voices heard no worse</span></li>
-            <li><b>52-45 · 52-46</b><span>the Thiqa hearing and dementia screening packages it fills the memory step of</span></li>
-            <li><b>0 errors</b><span>from the official HL7 FHIR validator; referrals in the HL7 form Malaffi asks for</span></li>
-          </ul>
+    <p className="d-key">
+      <span><i className="d-key__dot d-key__dot--ok" />In the usual range</span>
+      <span><i className="d-key__dot d-key__dot--flag" />Below the baseline</span>
+      <span><i className="d-key__line" />Personal baseline</span>
+    </p>
+  )
+}
 
-          <div className="hero__visual bleed">
-            <div className="stage hero-stage" style={{ backgroundImage: `url(${dunes})` }}>
-              <div className="hero-grid" aria-hidden="true">
-                <div className="phone">
-                  <div className="phone__screen">
-                    <div className="phone__status"><span>9:41</span><span className="t-mono">EN · ع</span></div>
-                    <div className="phone__body">
-                      <p className="mock-eyebrow">Sound check passed</p>
-                      <p className="mock-h">Name animals</p>
-                      <p className="mock-count">14<span>s</span></p>
-                      <div className="mock-chips">
-                        <span className="chip both">camel</span><span className="chip both">falcon</span><span className="chip both">horse</span>
-                        <span className="chip both">goat</span><span className="chip one">gazelle</span><span className="chip both">cat</span>
-                      </div>
-                      <p className="mock-listen"><i />Listening</p>
-                      <ol className="mock-steps">
-                        <li className="done"><i />Sound check</li>
-                        <li className="done"><i />Ten words, said back</li>
-                        <li className="now"><i />A minute of animals</li>
-                        <li><i />Counting backwards</li>
-                        <li><i />The ten words again</li>
-                        <li><i />One question about everyday tasks</li>
-                      </ol>
-                    </div>
-                  </div>
-                </div>
-                <div className="window hero-window">
-                  <div className="window__bar"><span className="lights"><i /><i /><i /></span><span className="window__title">Physician's packet · {decline.name}</span></div>
-                  <div className="hero-window__body">
-                    <div className="hero-window__head">
-                      <div>
-                        <p className="mock-eyebrow">Lower twice in a row</p>
-                        <p className="mock-title">Baseline {(declineTraj.baseline as number).toFixed(1)}, latest {(declineFlag.mid as number).toFixed(1)}</p>
-                      </div>
-                      <span className="tag syn">Synthetic</span>
-                    </div>
-                    <TrajectoryChart checks={decline.checks} traj={declineTraj} compact />
-                    <div className="mock-actions"><span className="btn btn-ink btn-sm">Approve and invite to a visit</span><span className="btn btn-outline btn-sm">Dismiss with a reason</span></div>
-                  </div>
-                </div>
-              </div>
-              <div className="float float--a"><b>Two speech listeners, same words</b><span className="dotline"><i className="ok" />camel · falcon · horse, by both</span><span className="dotline"><i className="one" />gazelle, by one</span></div>
-              <div className="float float--b"><b>What the person sees</b><span>"Check received. Thank you."</span></div>
-            </div>
-            <p className="stage-caption">The phone is an illustration of the check screen. The chart is the real rule run on a synthetic person.</p>
+const CHIP: Record<string, string> = { stable: 'Steady', practice: 'Practice gain', decline: 'Steady fall', hearing: 'Hearing hold', function: 'Everyday tasks', urgent: 'Very large fall' }
+
+/** Modelled yearly cost for one provider, with the uptake slider. */
+function CostPanel() {
+  const [uptake, setUptake] = useState(COST_DEFAULTS.uptake)
+  const c = yearlyCost({ ...COST_DEFAULTS, uptake })
+  const id = useId()
+  return (
+    <div className="d-cost">
+      <div className="d-cost__stats">
+        <div><small>Per eligible member a year</small><b>{aed(c.perEligibleAed)}</b></div>
+        <div><small>Physician packets a year</small><b>{c.packets.toLocaleString('en')}</b></div>
+      </div>
+      <label className="d-cost__slider" htmlFor={id}>Members who take part: <strong>{Math.round(uptake * 100)}%</strong>
+        <input id={id} type="range" min={0.1} max={0.8} step={0.05} value={uptake} onChange={(e) => setUptake(Number(e.target.value))} />
+      </label>
+      <table className="d-cost__table">
+        <tbody>
+          {c.lines.map((l) => <tr key={l.name}><th scope="row">{l.name}</th><td>{aed(l.aed)}</td></tr>)}
+          <tr><th scope="row"><b>Total a year, {COST_DEFAULTS.eligible.toLocaleString('en')} members</b></th><td><b>{aed(c.totalAed)}</b></td></tr>
+        </tbody>
+      </table>
+      <p className="d-note">Modelled, not measured: most inputs are our assumptions until a pilot measures them. No partner has agreed yet.</p>
+    </div>
+  )
+}
+
+
+const packetPeople = PERSONAS.map((p) => ({ p, t: evaluate(p.checks) })).filter(({ p, t }) => !outcome(t, p).ok)
+const MEASURED = [
+  `${pct1(ours.falseAlarmYear)} false alarms a year in stable people, simulated`,
+  `${Math.round(ours.detected['2'] * 100)}% of people losing two points a check flagged within a year, simulated`,
+  `${tests.passed} tests run ${Math.round(coverage.engine.lines * 100)}% of the decision code`,
+]
+const NOT_YET = ['No older Emirati volunteers doing the check', 'Arabic lists not yet reviewed by a native speaker', 'Retest variation taken from published studies']
+
+/* ------------------------------------------------------------------ */
+/* Home                                                                */
+/* ------------------------------------------------------------------ */
+
+type Design = { onReplay?: (fn: () => void) => void }
+
+/** The real rule on six synthetic people, laid out like a booking widget. Choosing a person, or
+ *  pressing R in a demo, replays the signature moment: the year of checks lands one check at a
+ *  time, then each step of the rule, then the outcome. */
+function CalWidget() {
+  const [id, setId] = useState('decline')
+  const [run, setRun] = useState(0)
+  useEffect(() => { (window as unknown as { design?: Design }).design?.onReplay?.(() => setRun((r) => r + 1)) }, [])
+  const p = PERSONAS.find((x) => x.id === id)!
+  const t = evaluate(p.checks)
+  const o = outcome(t, p)
+  const steps = ruleSteps(p, t)
+  const n = p.checks.length
+  const key = `${id}-${run}`
+  return (
+    <div className="c-widget">
+      <div className="c-widget__who">
+        <span className="c-av">{p.name.slice(0, 1)}</span>
+        <p className="c-widget__name">{p.name}, synthetic</p>
+        <p className="c-widget__title">{p.path}</p>
+        <p className="c-widget__desc">{n} checks over a year, at home, by voice.</p>
+        <p className="c-widget__pick">Pick a synthetic person</p>
+        <div className="c-seg" role="group" aria-label="Pick a synthetic person">
+          {PERSONAS.map((x) => <button key={x.id} type="button" aria-pressed={x.id === id} className={x.id === id ? 'is-on' : ''} onClick={() => { setId(x.id); setRun((r) => r + 1) }}>{CHIP[x.id]}</button>)}
+        </div>
+        <p className="c-widget__row"><Clock />Four minutes a check</p>
+        <p className="c-widget__row"><Mic />Gulf Arabic or English</p>
+      </div>
+      <div className="c-widget__chart">
+        <p className="c-widget__h">A year of checks, against {p.name.split(',')[0]}’s own baseline</p>
+        <TrajectoryChart key={key} checks={p.checks} traj={t} compact textSize={17} animate />
+        <ChartKey />
+      </div>
+      <div className="c-widget__steps" key={key} style={{ '--n': n } as React.CSSProperties}>
+        <p className="c-widget__h">What the rule did</p>
+        {steps.map((s, i) => <p key={s.label} className="c-slot c-sig" style={{ '--i': i } as React.CSSProperties}><i />{s.label}</p>)}
+        <p className={`c-slot c-slot--out c-sig c-sig--out ${o.ok ? 'is-ok' : 'is-flag'}`} style={{ '--i': steps.length } as React.CSSProperties}><Check />{o.text}</p>
+        <p className="c-widget__side c-sig" style={{ '--i': steps.length + 1 } as React.CSSProperties}>{o.side}</p>
+      </div>
+    </div>
+  )
+}
+
+function Accordion() {
+  const items = [
+    ['Check at home every few months', 'Four minutes by voice, compared with the person’s own first three checks, not with a population cut-off.'],
+    ['Flag only a change that lasts', 'Two low checks in a row, a steady fall or harder everyday tasks. One low day means nothing on its own.'],
+    ['A physician decides', 'The packet waits for the ordering physician, who approves, edits or dismisses it with a reason.'],
+  ]
+  const [open, setOpen] = useState(0)
+  return (
+    <div className="c-acc">
+      {items.map(([t, d], i) => (
+        <button key={t} type="button" className={`c-acc__item${i === open ? ' is-open' : ''}`} aria-expanded={i === open} onClick={() => setOpen(i)}>
+          <span className="c-acc__t">{t}</span>
+          {i === open && <span className="c-acc__d">{d}</span>}
+        </button>
+      ))}
+    </div>
+  )
+}
+
+const HUB = [
+  ['HL7 v2 REF^I12', 'The referral message Malaffi asks for'],
+  ['FHIR R4 bundle', '0 errors from the official validator'],
+  ['SNOMED CT', 'Coded specialty on every referral'],
+  ['Thiqa 52-45, 52-46', 'Fund dementia screening; this fills the memory step'],
+  ['Follow-up clock', 'Against the 15-working-day target'],
+  ['Consent in parts', 'Each part off by default'],
+]
+
+export default function Home() {
+  return (
+    <main className="dh dh-c">
+      <section className="c-hero">
+        <p className="c-pill"><span>New</span>{arabic}% of {own.whisperAlone.n} real Arabic words heard on the device</p>
+        <h1>
+          <span className="c-line">A memory check <img className="c-obj c-obj--photo" src="/images/cal-chip.webp" alt="" width={300} height={205} /> you speak,</span>{' '}
+          <span className="c-line"><span className="c-obj c-obj--wave" aria-hidden="true"><Waves /><b>4 min</b></span> tracked against yourself <span className="c-obj c-obj--card" aria-hidden="true"><b>Check received</b><small><Check />Thank you</small></span></span>
+        </h1>
+        <p className="c-sub">Four minutes at home, by voice. Nothing to read or type.</p>
+        <p className="c-btns"><Link to="/try" className="c-btn c-btn--dark"><Mic />Try it with your voice</Link><Link to="/year" className="c-btn"><Trend />See a year of checks</Link></p>
+        <p className="c-small"><b>No sign-up.</b> The people shown are synthetic.</p>
+      </section>
+
+      <section className="c-desk">
+        <div className="c-desk__menu"><b>Spoken memory check</b><span>File</span><span>Edit</span><span>View</span><span>Window</span><span>Help</span><span className="c-desk__right">Demo: synthetic people</span></div>
+        <div className="c-browser">
+          <div className="c-browser__bar"><span className="c-lights" aria-hidden="true"><i /><i /><i /></span><span className="c-url">spoken-memory-check / physician</span></div>
+          <CalWidget />
+        </div>
+      </section>
+
+      <section className="c-facts">
+        <p>Measured so far, each with its method</p>
+        <div>{FACTS.map((f) => <p key={f.n}><b>{f.n}</b><span>{f.t}</span></p>)}</div>
+      </section>
+
+      <section className="c-split">
+        <div className="c-split__text">
+          <h2>Diagnosis came 24 months after symptoms. Home checks look in between.</h2>
+          <Accordion />
+          <p className="c-note"><b>Javaid et al. 2026</b> found a median of 24 months from first symptoms to a dementia diagnosis in 825 patients in Al Ain.</p>
+        </div>
+        <div className="c-photo" style={{ backgroundImage: 'url(/images/cal-room.webp)' }}>
+          <div className="c-inbox">
+            <p className="c-inbox__h"><b>Packets waiting</b><span>{packetPeople.length} synthetic</span></p>
+            {packetPeople.map(({ p, t }) => <p key={p.id} className="c-inbox__row"><span className="c-av c-av--sm">{p.name.slice(0, 1)}</span><span><b>{p.name}</b><small>{STATUS_LABEL[t.status]}</small></span><i /></p>)}
           </div>
         </div>
       </section>
 
-      {/* Evidence, labelled by kind */}
-      <section className="section section--alt">
-        <div className="container">
-          <div className="section-head reveal">
-            <span className="eyebrow"><span className="dot" />Evidence so far</span>
-            <h2>What we measured, and what we have not.</h2>
-            <p className="lead">Each figure says whether it comes from real recordings, a simulation or the code. No patients yet.</p>
-          </div>
-          <div className="bento">
-            <div className="span-3 reveal">
-              <span className="lbl working">Real recordings</span>
-              <p className="stat">{Math.round(own.union.rate * 100)}% <span>of Arabic words heard right</span></p>
-              <p className="t-small">{own.whisperAlone.n} real single words from {own.speakers} adult volunteers, scored on the device with the speaker's own voice as the answer key ({Math.round(own.whisperAlone.rate * 100)}% by the speech model alone; {(own.templateFalseCredit.rate * 100).toFixed(1)}% wrong words credited). Read words, not recall.</p>
-            </div>
-            <div className="span-3 reveal" style={{ '--i': 1 } as React.CSSProperties}>
-              <span className="lbl working">Older speakers, public data</span>
-              <p className="stat">{Math.round(sada.results.jaisAsr['Older, Gulf (Khaliji)'].wer * 100)}% <span>vs</span> {Math.round(sada.results.jaisAsr['Adult, Gulf (Khaliji)'].wer * 100)}%</p>
-              <p className="t-small">Word error for older against adult Gulf speakers on Saudi TV speech ({sada.results.jaisAsr['Older, Gulf (Khaliji)'].clips} and {sada.results.jaisAsr['Adult, Gulf (Khaliji)'].clips} clips). Both listeners heard older Gulf voices no worse. Not yet older Emirati volunteers doing the check.</p>
-            </div>
-            <div className="span-2 reveal">
-              <span className="lbl simulated">Simulated</span>
-              <p className="stat">{pct(ours.falseAlarmYear)} <span>false alarms a year</span></p>
-              <p className="t-small">in stable people, against {pct(single.falseAlarmYear)} for a rule that flags on one low check.</p>
-            </div>
-            <div className="span-2 reveal" style={{ '--i': 1 } as React.CSSProperties}>
-              <span className="lbl simulated">Simulated</span>
-              <p className="stat">{Math.round(ours.detected['2'] * 100)}% <span>/</span> {Math.round(ours.detected['1'] * 100)}%</p>
-              <p className="t-small">of people losing two points a check, and one point a check, flagged within the year.</p>
-            </div>
-            <div className="span-2 reveal" style={{ '--i': 2 } as React.CSSProperties}>
-              <span className="lbl simulated">Simulated</span>
-              <p className="stat">{Math.round(burden.packetsPer1000)} <span>per 1,000</span></p>
-              <p className="t-small">physician packets a year, {Math.round(burden.realPer1000)} of them real, if 2% of members are in real decline.</p>
-            </div>
-            <div className="span-2 reveal">
-              <span className="lbl working">Tested code</span>
-              <p className="stat">{Math.round(coverage.engine.lines * 100)}% <span>of lines</span></p>
-              <p className="t-small">of the decision code run by {tests.passed} tests, which catch {Math.round(mutation.score * 100)}% of {mutation.mutants} deliberate bugs put into the rules.</p>
-            </div>
-            <div className="span-2 reveal" style={{ '--i': 1 } as React.CSSProperties}>
-              <span className="lbl working">Live site</span>
-              <p className="stat">{live.passed} <span>of</span> {live.total}</p>
-              <p className="t-small">steps passed end to end on the live site in a real browser ({live.ranAt.slice(0, 10)}), both recorded checks included.</p>
-            </div>
-            <div className="span-2 reveal" style={{ '--i': 2 } as React.CSSProperties}>
-              <span className="lbl working">Plain language</span>
-              <p className="stat">Grade {Math.ceil(Math.max(...reading.screens.map((x) => x.grade)))}</p>
-              <p className="t-small">reading level or under on every screen and prompt the person meets, in English. Arabic not graded.</p>
-            </div>
-          </div>
-          <p className="center-link reveal"><Link className="btn btn-outline" to="/benchmark">How the flag was tested<Arrow /></Link></p>
+      <section className="c-sec">
+        <h2>Low scores have<br />more than one cause.</h2>
+        <div className="c-bento">
+          <div className="c-bcard c-bcard--wide"><div className="c-bcard__ui"><div className="c-ui"><p className="c-ui__row"><span>Sound check</span><b>Not passed</b></p><p className="c-ui__row"><span>Memory check</span><span className="c-badge">Held, not scored</span></p></div></div><h3>{ROUTES[0].t}</h3><p>{ROUTES[0].d}</p></div>
+          <div className="c-bcard"><div className="c-bcard__ui"><div className="c-ui"><p>Was today an off day?</p><p className="c-ui__sel">Yes <span>Left out</span></p></div></div><h3>{ROUTES[1].t}</h3><p>{ROUTES[1].d}</p></div>
+          <div className="c-bcard"><div className="c-bcard__ui"><div className="c-ui"><p className="c-ui__row"><span>Everyday tasks harder?</span><b>Yes</b></p></div><span className="c-ui__line" /><div className="c-ui"><p className="c-ui__row"><span>Sent to the physician</span><span className="c-badge"><Check />Sent</span></p></div></div><h3>{ROUTES[2].t}</h3><p>{ROUTES[2].d}</p></div>
+          <div className="c-bcard c-bcard--wide"><div className="c-bcard__ui"><div className="c-ui"><p className="c-ui__row"><span>Very large fall between two checks</span><b>Same day</b></p><p>See a doctor today. The routine flow is bypassed.</p></div></div><h3>{ROUTES[3].t}</h3><p>{ROUTES[3].d}</p></div>
+          <div className="c-bcard c-bcard--wide"><div className="c-bcard__ui"><pre className="c-code">{`evaluate(checks)\n  → { status: '${declineTraj.status}', baseline: ${(declineTraj.baseline as number).toFixed(1)} }`}</pre></div><h3>{ROUTES[5].t}</h3><p>{ROUTES[5].d}</p></div>
+          <div className="c-bcard"><div className="c-bcard__ui"><div className="c-ui c-ui--center"><p><b>Check received. Thank you.</b></p><p>Results are given in person.</p></div></div><h3>{ROUTES[4].t}</h3><p>{ROUTES[4].d}</p></div>
         </div>
       </section>
 
-      {/* Why a personal baseline */}
-      <section className="section section--alt after-bleed">
-        <div className="container">
-          <div className="section-head reveal">
-            <span className="eyebrow"><span className="dot" />Why compare people with themselves</span>
-            <h2>One cutoff for everyone flags the wrong people.</h2>
-            <p className="lead">Older adults who had little schooling often fall below the usual cutoffs when nothing is wrong. Comparing each person with their own earlier checks avoids that.</p>
-          </div>
-          <div className="grid grid-2">
-            <div className="card card--flat reveal" style={{ '--i': 1 } as React.CSSProperties}>
-              <p className="eyebrow">The usual way</p>
-              <h3 className="card-h">A fixed cutoff of 14 animals</h3>
-              <p className="t-small">Share of adults over 60 with no memory complaint who fall below it:</p>
-              <div className="card-viz"><SurveyBars /></div>
-              <p className="t-micro">Our analysis of NHANES 2011 to 2014, a public US health survey: 265 adults with under 9 years of school and 569 graduates. US data, not Gulf.</p>
-            </div>
-            <div className="card card--chosen reveal" style={{ '--i': 2 } as React.CSSProperties}>
-              <p className="eyebrow"><span className="dot" />This check</p>
-              <h3 className="card-h">Your first three checks set your baseline</h3>
-              <p className="t-small">Later checks are compared with that baseline, after allowing for practice and ordinary day-to-day variation. Someone who has always named eleven animals is not flagged for naming eleven.</p>
-              <div className="card-viz"><TrajectoryChart checks={PERSONAS[0].checks} traj={evaluate(PERSONAS[0].checks)} compact /></div>
-              <p className="t-micro">{PERSONAS[0].name}, synthetic: a year of checks with one off day and no flag.</p>
-            </div>
-          </div>
-          <p className="t-small reveal" style={{ marginTop: 20 }}>The same happens in the Gulf. With the usual MoCA cut-off of 26, 69.3% of 606 older adults in Dubai and Sharjah were classed as impaired (<a href="https://doi.org/10.3389/fragi.2026.1822042">Issa et al. 2026</a>), and 74.3% of 308 healthy adults in Qatar scored below it; those authors proposed 22 instead (<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11807847/">Qatar study</a>).</p>
+      <section className="c-sec">
+        <h2>Handed on in the formats<br />Abu Dhabi already uses.</h2>
+        <div className="c-hub">
+          <div className="c-hub__col">{HUB.slice(0, 3).map(([t, d]) => <div key={t} className="c-hub__item"><b>{t}</b><span>{d}</span></div>)}</div>
+          <div className="c-hub__mid"><span className="c-hub__logo"><Waves /></span></div>
+          <div className="c-hub__col">{HUB.slice(3).map(([t, d]) => <div key={t} className="c-hub__item"><b>{t}</b><span>{d}</span></div>)}</div>
         </div>
       </section>
 
-      {/* How it works, in three blocks */}
-      <section className="section">
-        <div className="container vstack">
-          <div className="split reveal">
-            <div>
-              <span className="eyebrow"><Mic />Three listeners</span>
-              <h3>Every score shows how sure it is.</h3>
-              <p className="lead">The browser's recogniser and a speech model on the device hear the same words, and recalled words are also matched against the person's own voice from when they said each word back. A word heard by two counts; a word heard by one widens the range. A range too wide is "not scored", never low.</p>
-              <div className="chips"><span className="chip">Speech model runs on the device</span><span className="chip">Gulf Arabic and English</span><span className="chip">No language model</span></div>
-            </div>
-            <div className="stage stage--soft">
-              <div className="window" aria-hidden="true">
-                <div className="window__bar"><span className="lights"><i /><i /><i /></span><span className="window__title">What we heard</span></div>
-                <div className="mock-pad">
-                  <p className="mock-big">12 to 14 <span>animals</span></p>
-                  <div className="mock-chips">
-                    {['camel', 'falcon', 'horse', 'goat', 'cat', 'dog', 'lion', 'sheep', 'cow', 'fox', 'bear', 'wolf'].map((a) => <span key={a} className="chip both">{a}</span>)}
-                    <span className="chip one">gazelle</span><span className="chip one">oryx</span>
-                  </div>
-                  <p className="legend"><span><i className="ok" />Heard by both</span><span><i className="one" />Heard by one</span></p>
-                </div>
-              </div>
-              <p className="stage-note">Illustration</p>
-            </div>
-          </div>
-
-          <div className="split split--flip reveal">
-            <div>
-              <span className="eyebrow"><Stethoscope />The physician decides</span>
-              <h3>A physician reads the packet before anyone is told.</h3>
-              <p className="lead">After two low checks in a row, the ordering physician gets the trajectory, the treatable causes to rule out first and the risk factors already on record. If they approve, the person is invited to a visit and hears the result in person.</p>
-              <div className="chips"><span className="chip">Approve, edit or dismiss</span><span className="chip">Treatable causes first</span><span className="chip">FHIR R4 export</span></div>
-            </div>
-            <div className="stage stage--soft">
-              <div className="window" aria-hidden="true">
-                <div className="window__bar"><span className="lights"><i /><i /><i /></span><span className="window__title">Treatable contributors · {decline.name}</span></div>
-                <div className="mock-pad">
-                  {contributors.map((c) => (
-                    <div className="mock-row" key={c.name}><b>{c.name}</b><span>{c.action}</span></div>
-                  ))}
-                  <div className="mock-actions"><span className="btn btn-ink btn-sm">Approve and invite</span><span className="btn btn-outline btn-sm">Dismiss</span></div>
-                </div>
-              </div>
-              <p className="stage-note">Synthetic patient</p>
-            </div>
-          </div>
-
-          <div className="split reveal">
-            <div>
-              <span className="eyebrow"><List />Closing the loop</span>
-              <h3>Each referral is tracked until the appointment.</h3>
-              <p className="lead">The clock runs against the screening programme's own 15-working-day target. A <Link to="/programme">programme view</Link> counts every member by facility, including people lost to follow-up.</p>
-              <div className="chips"><span className="chip">Owner: the ordering physician</span><span className="chip">Small groups suppressed</span></div>
-            </div>
-            <div className="stage stage--soft">
-              <div className="window" aria-hidden="true">
-                <div className="window__bar"><span className="lights"><i /><i /><i /></span><span className="window__title">Follow-up clock</span></div>
-                <div className="mock-pad">
-                  <p className="mock-eyebrow">Open</p>
-                  <p className="mock-big">6 <span>of 15 working days</span></p>
-                  <div className="meter"><i style={{ width: '40%' }} /></div>
-                  <div className="mock-row"><b>Visit</b><span>Result given in person, referral made</span></div>
-                  <div className="mock-row"><b>Specialist</b><span>Neurologist or geriatrician, appointment booked</span></div>
-                </div>
-              </div>
-              <p className="stage-note">Illustration</p>
-            </div>
-          </div>
+      <section className="c-split c-split--cost">
+        <div className="c-split__text">
+          <h2>About AED {perMember} per eligible member a year.</h2>
+          <p className="c-sub c-sub--left">Thiqa's packages 52-45 and 52-46 already fund hearing and dementia screening and name no memory tool. This check adds the memory step at home.</p>
         </div>
+        <div className="c-card"><CostPanel /></div>
       </section>
 
-      {/* Safety routes */}
-      <section className="section section--alt">
-        <div className="container">
-          <div className="section-head reveal">
-            <span className="eyebrow"><span className="dot" />Built into the rule</span>
-            <h2>Low scores have more than one cause.</h2>
-            
-          </div>
-          <div className="grid grid-3">
-            {[
-              { icon: <Ear />, t: 'Hearing comes first', d: 'A three-minute digits-in-noise hearing check runs before the memory check, and a failed sound check holds a check instead of scoring it low.' },
-              { icon: <Moon />, t: 'Off days do not count', d: 'People can say a day was off. A low score on that day is left out of the comparison.' },
-              { icon: <List />, t: 'Everyday tasks override scores', d: 'One spoken question about money, medicines and appointments. A yes goes to the physician whatever the scores say.' },
-              { icon: <Alert />, t: 'Very large falls go urgent', d: 'A fall far outside normal variation tells the person to see a doctor the same day.' },
-              { icon: <EyeOff />, t: 'No scores at home', d: 'The person sees dated ticks and a thank-you. Scores stay with the physician, who gives results in person.' },
-              { icon: <Code />, t: 'Fixed rules anyone can read', d: 'Every decision comes from a short rule in code, with its formula shown to the physician. No language model anywhere.' },
-            ].map((x, i) => (
-              <div className="tile reveal" key={x.t} style={{ '--i': i % 3 } as React.CSSProperties}>
-                <span className="icon-tile">{x.icon}</span>
-                <div><p className="t-title">{x.t}</p><p>{x.d}</p></div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Who pays */}
-      <WhoPays />
-
-      {/* Final call */}
-      <section className="section section--alt final">
-        <div className="container">
-          <img className="final-icon" src={ICON} alt="" />
-          <h2>Four minutes, by voice. <span className="t-muted">Try it now.</span></h2>
-          <div className="cta-row">
-            <Link to="/try" className="btn btn-ink btn-lg"><Mic />Try it with your voice</Link>
-            <Link to="/year" className="btn btn-outline btn-lg">See a year of checks</Link>
-          </div>
+      <section className="c-sec">
+        <h2>What is measured,<br />and what is not yet.</h2>
+        <div className="c-two">
+          <div className="c-card"><p className="c-big">{arabic}%</p><p>of {own.whisperAlone.n} real Arabic words heard right on the device, from {own.speakers} adult volunteers.</p><ul>{MEASURED.map((m) => <li key={m}><Check />{m}</li>)}</ul></div>
+          <div className="c-card"><p className="c-big">0</p><p>patients so far. A pilot measures the rest.</p><ul>{NOT_YET.map((m) => <li key={m}><Alert />{m}</li>)}</ul></div>
         </div>
       </section>
     </main>

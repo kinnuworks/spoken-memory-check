@@ -25,7 +25,7 @@ function summary(checks: Check[], traj: Trajectory, plain: boolean) {
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 const shortDate = (iso: string) => `${Number(iso.slice(8, 10))} ${MONTHS[Number(iso.slice(5, 7)) - 1]}`
 
-export default function TrajectoryChart({ checks, traj, plain = false, compact = false, textSize }: { checks: Check[]; traj: Trajectory; plain?: boolean; compact?: boolean; textSize?: number }) {
+export default function TrajectoryChart({ checks, traj, plain = false, compact = false, textSize, animate = false }: { checks: Check[]; traj: Trajectory; plain?: boolean; compact?: boolean; textSize?: number; animate?: boolean }) {
   // Compact charts are drawn smaller, so their labels are larger in chart units to stay readable.
   const fs = textSize ?? (compact ? 19 : 13)
   const colour = (status: string) => (plain ? CALM : COLOUR[status])
@@ -48,7 +48,7 @@ export default function TrajectoryChart({ checks, traj, plain = false, compact =
         const r = traj.results[i]
         if (c.low === null) return <text key={i} x={x(i)} y={H - B + 2} fontSize={fs} textAnchor="middle" style={{ fill: TEXT }}>–</text>
         return (
-          <g key={i}>
+          <g key={i} className={animate ? 'tc-pt' : undefined} style={animate ? ({ '--i': i } as React.CSSProperties) : undefined}>
             <line x1={x(i)} x2={x(i)} y1={y(c.low)} y2={y(c.high as number)} style={{ stroke: colour(r.status) }} strokeWidth="8" strokeLinecap="round" opacity="0.22" />
             <circle cx={x(i)} cy={y(r.mid as number)} r={c.offDay ? 4.5 : 6.5} style={{ fill: c.offDay ? 'var(--chart-hole)' : colour(r.status), stroke: colour(r.status) }} strokeWidth="2" />
           </g>
