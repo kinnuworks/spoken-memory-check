@@ -527,8 +527,171 @@ function HomeC() {
   )
 }
 
+
+/* ------------------------------------------------------------------ */
+/* d: on Craft's system                                                 */
+/* ------------------------------------------------------------------ */
+
+/** The rule run live on any of the six synthetic people, in a window with the people in the sidebar. */
+function CraftWindow() {
+  const [id, setId] = useState('decline')
+  const p = PERSONAS.find((x) => x.id === id)!
+  const t = evaluate(p.checks)
+  const o = outcome(t, p)
+  return (
+    <div className="d-win">
+      <aside className="d-win__side">
+        <p className="d-win__dots" aria-hidden="true"><i /><i /><i /></p>
+        <p className="d-win__space"><span className="d-win__ic">S</span>Screening clinic, demo</p>
+        <p className="d-win__label">Synthetic people</p>
+        {PERSONAS.map((x) => (
+          <button key={x.id} type="button" className={`d-win__person${x.id === id ? ' is-on' : ''}`} aria-pressed={x.id === id} onClick={() => setId(x.id)}>
+            <span className="d-win__init">{x.name.slice(0, 1)}</span>{x.name}<small>{CHIP[x.id]}</small>
+          </button>
+        ))}
+      </aside>
+      <div className="d-win__main">
+        <p className="d-win__bar"><span aria-hidden="true">‹ ›</span><span className="d-win__tab">{p.name}, synthetic</span><span className={`d-win__status ${o.ok ? 'is-ok' : 'is-flag'}`}>{STATUS_LABEL[t.status]}</span></p>
+        <div className="d-win__body">
+          <p className="d-win__h">What the rule did</p>
+          <div className="d-win__cards">
+            <div className="d-cardw d-cardw--chart"><p className="d-cardw__t">{p.name}, a year of checks</p><TrajectoryChart checks={p.checks} traj={t} compact textSize={17} /><ChartKey /></div>
+            {ruleSteps(p, t).map((s, i) => <div key={s.label} className={`d-cardw d-cardw--${i % 3}`}><p className="d-cardw__t">{s.tag}</p><p>{s.label}</p></div>)}
+            <div className={`d-cardw d-cardw--out ${o.ok ? 'is-ok' : 'is-flag'}`}><p className="d-cardw__t">{o.text}</p><p>{o.side}</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const CHECK_PARTS: [React.ReactNode, string][] = [[<Ear key="e" />, 'Hearing check'], [<Mic key="m" />, 'Ten words, said back'], [<Waves key="w" />, 'A minute of animals'], [<List key="l" />, 'The words again'], [<Stethoscope key="s" />, 'Everyday tasks']]
+const TILE = ['#b8caf5', '#fde99b', '#9bd8a9', '#fdd9c6', '#d1eef9', '#e4e4e7']
+
+function HomeD() {
+  return (
+    <main className="dh dh-d">
+      <section className="d-hero">
+        <img className="d-hero__cloud d-hero__cloud--l" src="/images/cloud.webp" alt="" width={800} height={533} />
+        <img className="d-hero__cloud d-hero__cloud--r" src="/images/cloud.webp" alt="" width={800} height={533} />
+        <img className="d-hero__collage" src="/images/collage.webp" alt="" width={2688} height={1152} fetchPriority="high" />
+        <div className="d-hero__copy">
+          <h1>{H1_LONG}</h1>
+          <Link to="/try" className="d-glass">Try it with your voice</Link>
+        </div>
+        <div className="d-hero__stage"><CraftWindow /></div>
+      </section>
+
+      <section className="d-sec d-center">
+        <h2>Four minutes at home,<br />with <em>nothing</em> to read or type.</h2>
+        <ul className="d-icons">{CHECK_PARTS.map(([ic, l]) => <li key={l}>{ic}<span>{l}</span></li>)}</ul>
+      </section>
+
+      <section className="d-sec d-center">
+        <h2>Six synthetic people, six routes through the rule</h2>
+        <div className="d-people">
+          {PERSONAS.map((p, i) => (
+            <Link key={p.id} to={`/clinician/${p.id}`} className="d-person">
+              <span className="d-person__tile" style={{ background: TILE[i % TILE.length] }}><b>{p.name.slice(0, 1)}</b></span>
+              <span className="d-person__name">{p.name}, synthetic</span>
+              <span className="d-person__route">{CHIP[p.id]}</span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="d-sec">
+        <div className="d-panel d-panel--lilac">
+          <div className="d-panel__art"><div className="d-stack"><div className="d-stack__back"><p className="d-stack__bar"><span className="d-win__dots" aria-hidden="true"><i /><i /><i /></span><span className="d-stack__tab">Packets waiting</span></p><p className="d-stack__line">C, 61<small>Lower twice in a row</small></p><p className="d-stack__line">E, 64<small>Everyday tasks</small></p></div><div className="d-stack__front"><p className="d-stack__bar"><span className="d-win__dots" aria-hidden="true"><i /><i /><i /></span><span className="d-stack__tab">Physician's packet</span></p><div className="d-stack__body"><PacketCard chartText={22} /></div></div></div></div>
+          <div className="d-panel__text">
+            <p className="d-label">Physician's view</p>
+            <h2>A physician reads the packet before anyone is told</h2>
+            <p>The trajectory, the treatable causes to rule out first and the risk factors already on record. If the physician approves, the person is invited to a visit and hears the result in person.</p>
+            <Link to="/clinician" className="d-glass d-glass--sm">Open the physician's view</Link>
+            <ul className="d-feats"><li><Stethoscope />Treatable causes first</li><li><Check />Approve, edit or dismiss</li><li><Clock />15-working-day clock</li><li><Code />HL7 v2 and FHIR R4</li></ul>
+          </div>
+        </div>
+      </section>
+
+      <section className="d-quote">
+        <p className="d-quote__by">Javaid et al. 2026<small>825 patients, Al Ain</small></p>
+        <p className="d-quote__q">In Al Ain, dementia was diagnosed a median of 24 months after symptoms began. Finding change earlier decides who can still be offered the newer medicines, which are only for early disease.</p>
+      </section>
+
+      <section className="d-sec">
+        <div className="d-panel d-panel--green d-panel--flip">
+          <div className="d-panel__text">
+            <p className="d-label">Hand-off</p>
+            <h2>Referrals the way Malaffi asks for them</h2>
+            <p>An approved packet becomes an HL7 v2 referral with a SNOMED-coded specialty and a FHIR R4 bundle. Each referral is tracked until the appointment.</p>
+            <Link to="/programme" className="d-glass d-glass--sm">See the programme view</Link>
+          </div>
+          <div className="d-grid">
+            <div className="d-tile"><p className="d-tile__t">HL7 v2 referral</p><p>REF^I12, the message Malaffi asks for</p></div>
+            <div className="d-tile"><p className="d-tile__t">FHIR R4</p><p>0 errors from the official validator</p></div>
+            <div className="d-tile"><p className="d-tile__t">Follow-up clock</p><p>Against the 15-working-day target</p></div>
+            <div className="d-tile"><p className="d-tile__t">Consent</p><p>In parts, each off by default</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section className="d-awards">
+        {FACTS.map((f) => <div key={f.n}><p className="d-awards__n">{f.n}</p><p>{f.t}</p></div>)}
+      </section>
+
+      <section className="d-sec">
+        <div className="d-panel d-panel--yellow d-panel--flip">
+          <div className="d-panel__text">
+            <p className="d-label">Who pays</p>
+            <h2>About AED {perMember} per eligible member a year</h2>
+            <p>Thiqa's packages 52-45 and 52-46 already fund hearing and dementia screening and name no memory tool. This check adds the memory step at home, for people already in the programme.</p>
+            <Link to="/how" className="d-glass d-glass--sm">Pilot design</Link>
+          </div>
+          <div className="d-tile d-tile--wide"><CostPanel /></div>
+        </div>
+      </section>
+
+      <section className="d-sec d-center">
+        <h2>Low scores have more than one cause</h2>
+        <p className="d-sub">The rule holds, leaves out or hands on a low score before it ever counts as decline.</p>
+        <div className="d-three">
+          <div className="d-three__card"><p className="d-three__top" style={{ background: '#d1eef9' }}><Ear /></p><p className="d-three__t">Held, not scored</p><p>A failed sound check holds the check. A missed check is never counted as low.</p></div>
+          <div className="d-three__card"><p className="d-three__top" style={{ background: '#fdd9c6' }}><Moon /></p><p className="d-three__t">Left out</p><p>A low score on a day the person says was off is kept but not compared.</p></div>
+          <div className="d-three__card"><p className="d-three__top" style={{ background: '#9bd8a9' }}><Stethoscope /></p><p className="d-three__t">Sent to a person</p><p>Two low checks, harder everyday tasks or a very large fall go to the physician or urgent care.</p></div>
+        </div>
+      </section>
+
+      <section className="d-sec d-center">
+        <h2>What is measured, and what is not yet</h2>
+        <div className="d-plans">
+          <div className="d-plan">
+            <p className="d-plan__h">Measured</p>
+            <p className="d-plan__n">{arabic}%</p>
+            <p>of {own.whisperAlone.n} real Arabic words heard right on the device, from {own.speakers} adult volunteers.</p>
+            <ul><li><Check />{pct1(ours.falseAlarmYear)} false alarms a year in stable people, simulated</li><li><Check />{Math.round(ours.detected['2'] * 100)}% of people losing two points a check flagged within a year, simulated</li><li><Check />{tests.passed} tests run {Math.round(coverage.engine.lines * 100)}% of the decision code</li></ul>
+            <Link to="/benchmark" className="d-btn d-btn--sm">How the flag was tested</Link>
+          </div>
+          <div className="d-plan d-plan--dark">
+            <p className="d-plan__h">Not yet</p>
+            <p className="d-plan__n">0</p>
+            <p>patients so far. A pilot measures the rest.</p>
+            <ul><li><Alert />No older Emirati volunteers doing the check</li><li><Alert />Arabic lists not yet reviewed by a native speaker</li><li><Alert />Retest variation taken from published studies</li></ul>
+            <Link to="/how" className="d-btn d-btn--sm d-btn--light">What is real</Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="d-start">
+        <div><h2><em>Four minutes,</em> by voice</h2><p>Try it now in Gulf Arabic or English. No sign-up.</p></div>
+        <p className="d-start__btns"><Link to="/try" className="d-btn">Try it with your voice</Link><Link to="/recorded" className="d-btn d-btn--light">Play a recorded check</Link></p>
+      </section>
+    </main>
+  )
+}
+
 export default function HomeDirection({ dir }: { dir: Dir }) {
   if (dir === 'a') return <HomeA />
   if (dir === 'b') return <HomeB />
+  if (dir === 'd') return <HomeD />
   return <HomeC />
 }

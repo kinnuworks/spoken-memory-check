@@ -31,7 +31,8 @@ function DirNav({ dir }: { dir: Dir }) {
   const links: [string, string][] =
     dir === 'a' ? [['/story', 'One case'], ['/year', 'A year of checks'], ['/clinician', "Physician's view"], ['/benchmark', 'Evidence'], ['/how', 'How it works']]
     : dir === 'b' ? [['/story', 'One case'], ['/year', 'A year of checks'], ['/benchmark', 'Evidence'], ['/how', 'How it works']]
-    : [['/story', 'One case'], ['/year', 'A year of checks'], ['/benchmark', 'Evidence'], ['/how', 'How it works'], ['/programme', 'Programme']]
+    : dir === 'c' ? [['/story', 'One case'], ['/year', 'A year of checks'], ['/benchmark', 'Evidence'], ['/how', 'How it works'], ['/programme', 'Programme']]
+    : [['/story', 'One case'], ['/year', 'A year'], ['/benchmark', 'Evidence'], ['/how', 'How it works'], ['/programme', 'Programme'], ['/hearing', 'Hearing']]
   return (
     <header className={`dnav dnav--${dir}${pathname === '/' ? ' dnav--home' : ''}`}>
       <div className="dnav__in">
