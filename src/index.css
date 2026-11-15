@@ -2,6 +2,7 @@
 
 /* App palette on top of the cream mood and terracotta accent. */
 :root {
+  --chart-ok: #1F7A3D; --chart-flag: #A1411F; --chart-watch: #9A6200; --chart-calm: #6D6459; --chart-grid: #EBE3D7; --chart-text: #6D6459; --chart-base-plain: #C9BEAE; --chart-hole: #FFFEFC; --chart-muted: #857B6E;
   --font-arabic: "IBM Plex Sans Arabic", "Plus Jakarta Sans Variable", "Plus Jakarta Sans", system-ui, sans-serif;
   --both: #1F7A3D; --both-wash: #E6F2E9;
   --one: #9A6200; --one-wash: #FBF0DA;

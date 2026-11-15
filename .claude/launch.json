@@ -1,6 +1,7 @@
 {
   "version": "0.0.1",
   "configurations": [
-    { "name": "app", "runtimeExecutable": "npm", "runtimeArgs": ["run", "dev", "--", "--port", "5183"], "port": 5183 }
+    { "name": "app", "runtimeExecutable": "npm", "runtimeArgs": ["run", "dev", "--", "--port", "5183"], "port": 5183 },
+    { "name": "prod", "runtimeExecutable": "sh", "runtimeArgs": ["-c", "npx vite build && npx vite preview --port 4317 --strictPort"], "port": 4317, "autoPort": false }
   ]
 }

@@ -41,3 +41,8 @@ public/models/
 # Local secrets (Azure Speech key); never committed
 .env
 .env.*
+
+# Design work: reference screenshots are other sites, kept local
+design/refs/
+design/directions/
+design/shots/
