@@ -29,17 +29,15 @@ export function Nav() {
 function DirNav({ dir }: { dir: Dir }) {
   const { pathname } = useLocation()
   const links: [string, string][] =
-    dir === 'a' ? [['/story', 'One case'], ['/year', 'A year of checks'], ['/clinician', "Physician's view"], ['/benchmark', 'Evidence'], ['/how', 'How it works']]
-    : dir === 'b' ? [['/story', 'One case'], ['/year', 'A year of checks'], ['/benchmark', 'Evidence'], ['/how', 'How it works']]
-    : dir === 'c' ? [['/story', 'One case'], ['/year', 'A year of checks'], ['/benchmark', 'Evidence'], ['/how', 'How it works'], ['/programme', 'Programme']]
-    : [['/story', 'One case'], ['/year', 'A year'], ['/benchmark', 'Evidence'], ['/how', 'How it works'], ['/programme', 'Programme'], ['/hearing', 'Hearing']]
+    dir === 'b' ? [['/story', 'One case'], ['/benchmark', 'Evidence'], ['/how', 'How it works']]
+    : [['/story', 'One case'], ['/year', 'A year of checks'], ['/benchmark', 'Evidence'], ['/how', 'How it works']]
   return (
     <header className={`dnav dnav--${dir}${pathname === '/' ? ' dnav--home' : ''}`}>
       <div className="dnav__in">
         <Link to="/" className="dnav__brand"><span className="d-mark" aria-hidden="true"><Waves /></span>Spoken memory check</Link>
         <nav className="dnav__links" aria-label="Main">{links.map(([to, l]) => <NavLink key={to} to={to}>{l}</NavLink>)}</nav>
         <div className="dnav__end">
-          {dir !== 'a' && <Link to="/clinician" className="dnav__signin">Physician's view</Link>}
+          <Link to="/clinician" className="dnav__signin">Physician's view</Link>
           <Link to="/recorded" className="dnav__btn"><span className="dnav__wide">Play a recorded check</span><span className="dnav__narrow">Recorded check</span></Link>
         </div>
       </div>

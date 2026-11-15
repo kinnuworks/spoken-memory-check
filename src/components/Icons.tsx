@@ -16,3 +16,7 @@ export const Check = (p: P) => <S {...p}><path d="M5 12.5l4.5 4.5L19 7.5" /></S>
 export const Arrow = (p: P) => <S {...p}><path d="M5 12h14M13 6l6 6-6 6" /></S>
 export const Clock = (p: P) => <S {...p}><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></S>
 export const Waves = (p: P) => <S {...p}><path d="M3 12h2M7 8v8M11 5v14M15 8v8M19 11v2" /></S>
+export const Lock = (p: P) => <S {...p}><rect x="5" y="11" width="14" height="10" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></S>
+export const Trend = (p: P) => <S {...p}><path d="M3 17l6-6 4 4 8-8" /><path d="M15 7h6v6" /></S>
+export const Pause = (p: P) => <S {...p}><path d="M9 5v14M15 5v14" /></S>
+export const Send = (p: P) => <S {...p}><path d="M21 3L10 14M21 3l-7 18-4-7-7-4z" /></S>

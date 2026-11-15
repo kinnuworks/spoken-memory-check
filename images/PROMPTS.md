@@ -2,26 +2,30 @@
 
 Kept so the set can be made again.
 
-### hero-painting.webp (and hero-painting-1024.webp)
-Where it goes: direction a, behind the header and headline on the home page; again in the band "Low scores have more than one cause", the evidence cards and the footer
-Size: 2048x1152, 16:9 (served at 2048 and 1024 wide)
-Style guide: a crop of the reference's painted hero
-Prompt: Create a new, original painted landscape, matching only the style of the painting in the attached screenshot: soft painterly brushwork with visible strokes, a pastel peach, apricot, rose and pale lilac palette, warm low sun, fluffy painted clouds, gentle and calm. Do not copy anything else: no text, no logo, no buttons, no window, no UI, and not the same mountains, lake or flowers. Subject: the Abu Dhabi desert near Al Ain in the late afternoon. Low rolling sand dunes in apricot and rose, a small still oasis pool in the middle distance reflecting the sky, a few date palms beside it, one wide ghaf tree on the left, the long soft lilac ridge of Jebel Hafeet on the horizon, two tiny birds far off in the sky. Composition: wide 16:9. The scenery fills the top half and the left and right edges; the lower centre third fades smoothly into plain white (#ffffff) so a headline can sit there, with no objects in that area. Style line: hand-painted gouache illustration, soft edges, colours #f6c49a #f3a988 #e9b9c9 #c9b6e4 #a9c7d8 #f7e1b5, warm golden light, matte paper texture. No people, no animals except the two tiny birds, no buildings, no roads, no text, no letters, no logos, no watermark, no UI elements.
+### vn-sky.webp
+Where it goes: direction b, the painted card in the hero, and behind two of the step cards
+Size: 2048x2048 made, served at 1000 wide
+Style guide: a crop of the reference's painted hero card, without its product panel
+Prompt: Thick impasto oil painting made with a palette knife: looking up into a bright saturated cobalt-to-cerulean blue sky with heavy creamy white clouds in raised, ridged paint along the lower left and right edges. Branches of a ghaf tree with tiny feathery green leaves, painted in thick dabs, reach in from the top-left corner and the lower-right corner. Two small dark birds glide in the middle left. A few small floating diamond-shaped flecks of paint in yellow and soft lilac scattered in the sky. Match the reference crop's paint texture exactly: dense brush ridges, visible knife strokes, white highlights on the cloud edges. No people, no text, no buildings, no frame, fill the whole canvas.
 Transparent background: no
 
-### contours.svg
-Where it goes: direction b, behind the hero
-Not generated: drawn as contour lines of a smooth height field (22 levels, two pale strokes, #e2dff0 and #ebebe3), because a generated version came back with grey fills instead of clean lines.
+### vn-dunes.webp
+Where it goes: direction b, behind a step card and a feature card
+Size: 2048x1536 made, served at 1000 wide
+Style guide: the same crop
+Prompt: Thick impasto oil painting made with a palette knife, in the same paint texture as the reference crop: low desert dunes near Al Ain in warm sand and apricot tones under a bright cerulean sky with a few heavy white clouds, and the dark green fronds of a date palm reaching in from the top-right corner in thick dabs of paint. Dense brush ridges, visible knife strokes, saturated colour. No people, no text, no buildings, no frame, fill the whole canvas.
+Transparent background: no
 
-### collage.webp
-Where it goes: direction d, along the bottom of the hero sky panel, behind the product window
-Size: 2688x1152, 21:9, transparent
-Style guide: two crops of the reference's torn-paper hero
-Prompt: Create a new, original torn-paper collage band, matching only the style of the torn paper in the attached screenshots: real torn paper with rough white fibrous edges, flat matte paper colours, subtle paper grain, crisp cut-out look, no shading beyond a faint paper shadow. Do not copy anything else: no text, no letters, no logo, no window, no UI, no sky, and not the same shapes. Subject: a low desert landscape built from torn paper. From left to right: a wide periwinkle blue paper dune (#b8caf5) with grain on the far left, a strip of white paper with a row of small torn tabs like a perforated notebook edge, a light grey paper hill (#dcdce0) behind white torn edges in the middle, a black torn paper ridge (#1f1f1f) like a distant mountain, and on the far right a large dune made of pale yellow lined notebook paper (#fde99b) with thin green ruled lines. The pieces overlap and sit along the bottom of the frame, highest at the left and right edges and lower in the centre, rising to about the middle of the image height. Wide 21:9. The top half is completely empty. Transparent background, no sky, no text, no letters, no logos, no watermark, no UI elements, no people.
-Transparent background: yes
+### cal-window.webp (and the cal-chip.webp crop)
+Where it goes: direction c, the desktop backdrop behind the product window; a crop sits inside the headline
+Size: 16:9, served at 1800 wide; the chip is a 300 wide crop of the facade
+Style guide: two strips of the reference's faded desktop photo, without its window
+Prompt: A faded, low-contrast 35mm film snapshot taken through an apartment window in Abu Dhabi: the pale facade of the residential building across the street with rows of windows, air-conditioning units and one carved mashrabiya screen, on an overcast day. Soft focus, slight blur, light grain, washed-out grey-beige and dusty green tones, like an old home photo, matching the faded look of the reference crops. No people, no text, no signs, no logos.
+Transparent background: no
 
-### cloud.webp
-Where it goes: direction d, two clouds in the hero sky (one mirrored)
-Size: 1536x1024 made, served at 800 wide, transparent
-Prompt: Create a new, original single cloud, matching only the style of the cloud in the attached screenshot: a soft, fluffy white cumulus cloud with a fine printed halftone dot texture in its shadows, pale blue-grey shading, slightly grainy like a risograph print. Do not copy anything else and not the same cloud shape. One cloud, wide and low, centred, with a soft edge. Aspect 3:2. Transparent background, no sky, no text, no letters, no logos, no watermark, no UI elements.
-Transparent background: yes
+### cal-room.webp
+Where it goes: direction c, the photo card beside "Diagnosis came 24 months after symptoms"
+Size: 3:4, served at 900 wide
+Style guide: a strip of the same faded photo
+Prompt: A faded, low-contrast 35mm film snapshot of a quiet sitting room in an Abu Dhabi home in the afternoon: a low cushioned majlis sofa against a pale wall, a small side table with a mobile phone lying face up and a glass of water, light coming through a window with half-open blinds. Soft focus, light grain, washed-out beige and grey tones like an old home photo, matching the faded look of the reference crops. No people, no text, no logos.
+Transparent background: no

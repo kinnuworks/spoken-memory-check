@@ -1,31 +1,28 @@
-// The home page in each of the three design directions being compared. Every figure is read from the
-// same data files as the main home page; the people are the synthetic personas the rule runs on.
+// The home page in each of the three design directions being compared (a: Letters, b: Voicenotes,
+// c: Cal.com). Every figure is read from the same data files as the main home page; the people are
+// the synthetic personas the rule runs on.
 import { useId, useState } from 'react'
 import { Link } from 'react-router-dom'
 import data from '../data/benchmark.json'
 import own from '../data/own-voice-summary.json'
 import tests from '../data/tests.json'
 import sada from '../data/sada-bench.json'
-import mutation from '../data/mutation-summary.json'
 import coverage from '../data/coverage-summary.json'
-import live from '../data/live-check.json'
 import { COST_DEFAULTS, yearlyCost } from '../engine/cost'
 import { evaluate, PACKET_STATUSES, STATUS_LABEL, type Trajectory } from '../engine/change'
 import { PERSONAS, type Persona } from '../engine/histories'
 import { treatableContributors } from '../engine/packet'
-import { Alert, Arrow, Check, Clock, Code, Ear, EyeOff, List, Mic, Moon, Stethoscope, Waves } from '../components/Icons'
+import { Alert, Arrow, Check, Clock, Code, Ear, EyeOff, List, Lock, Mic, Moon, Pause, Send, Stethoscope, Trend, Waves } from '../components/Icons'
+import { WORD_LISTS } from '../engine/lexicon'
 import type { Dir } from '../components/direction'
-import { SurveyBars } from './SurveyChart'
 import TrajectoryChart from './TrajectoryChart'
 
 const rows = data.rows.filter((r) => r.world === 'As assumed')
 const ours = rows.find((r) => r.rule === 'ours')!
-const single = rows.find((r) => r.rule === 'single-low')!
 const pct1 = (x: number) => `${(x * 100).toFixed(1)}%`
 const arabic = Math.round(own.union.rate * 100)
 const older = Math.round(sada.results.jaisAsr['Older, Gulf (Khaliji)'].wer * 100)
 const adult = Math.round(sada.results.jaisAsr['Adult, Gulf (Khaliji)'].wer * 100)
-const lowStart = data.byStart.lowStart
 const perMember = Math.round(yearlyCost().perEligibleAed)
 const decline = PERSONAS.find((p) => p.id === 'decline')!
 const declineTraj = evaluate(decline.checks)
@@ -33,7 +30,6 @@ const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', '
 const shortDate = (iso: string) => `${Number(iso.slice(8, 10))} ${MONTHS[Number(iso.slice(5, 7)) - 1]}`
 const aed = (x: number) => `AED ${Math.round(x).toLocaleString('en')}`
 
-const H1_SHORT = 'A memory check you speak'
 const H1_LONG = 'A memory check you speak, tracked against yourself.'
 
 const FACTS = [
@@ -94,49 +90,6 @@ function ChartKey() {
 
 const CHIP: Record<string, string> = { stable: 'Steady', practice: 'Practice gain', decline: 'Steady fall', hearing: 'Hearing hold', function: 'Everyday tasks', urgent: 'Very large fall' }
 
-/** The rule run live on any of the six synthetic people, with "try another" chips. */
-function RuleWindow({ brand }: { brand: string }) {
-  const [id, setId] = useState('decline')
-  const p = PERSONAS.find((x) => x.id === id)!
-  const t = evaluate(p.checks)
-  const o = outcome(t, p)
-  const icons = [<List key="l" />, <Waves key="w" />, <Stethoscope key="s" />, <Clock key="c" />, <Ear key="e" />]
-  return (
-    <div className="b-stage">
-      <div className="b-window">
-        <div className="b-window__rail" aria-hidden="true">{icons.map((ic, i) => <span key={i} className={i === 1 ? 'is-on' : ''}>{ic}</span>)}</div>
-        <div className="b-window__main">
-          <div className="b-window__bar">
-            <span className="b-window__brand"><Waves />{brand}</span>
-            <span className="b-window__crumbs"><span>Checks</span><span aria-hidden="true">›</span><b>{p.name}, synthetic</b></span>
-            <span className={`b-status ${o.ok ? 'is-ok' : 'is-flag'}`}><i />{STATUS_LABEL[t.status]}</span>
-          </div>
-          <div className="b-window__body">
-            <div className="b-pane">
-              <p className="b-pane__who"><span className="b-avatar">{p.name.slice(0, 1)}</span><span><b>{p.name}</b><small>{p.path}</small></span></p>
-              <div className="b-chart"><TrajectoryChart checks={p.checks} traj={t} compact /></div>
-              <ChartKey />
-            </div>
-            <div className="b-pane b-pane--steps">
-              <p className="b-steps__head"><List />What the rule did <span className="b-ver">rule of record</span></p>
-              <ol className="b-steps">
-                {ruleSteps(p, t).map((s) => <li key={s.label}><span className="b-tick"><Check /></span><span>{s.label}</span><small>{s.tag}</small></li>)}
-              </ol>
-              <p className="b-steps__foot"><span className={`b-dot ${o.ok ? 'is-ok' : 'is-flag'}`} /><b>{o.text}</b><small>{o.side}</small></p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="b-try">
-        <span>Try another person</span>
-        {PERSONAS.map((x) => (
-          <button key={x.id} type="button" className={`b-chip${x.id === id ? ' is-on' : ''}`} aria-pressed={x.id === id} onClick={() => setId(x.id)}>{CHIP[x.id] ?? x.path}</button>
-        ))}
-      </div>
-    </div>
-  )
-}
-
 /** Modelled yearly cost for one provider, with the uptake slider. */
 function CostPanel() {
   const [uptake, setUptake] = useState(COST_DEFAULTS.uptake)
@@ -177,134 +130,222 @@ function PacketCard({ chartText }: { chartText?: number }) {
   )
 }
 
+const words = WORD_LISTS.en[0]
+const packetPeople = PERSONAS.map((p) => ({ p, t: evaluate(p.checks) })).filter(({ p, t }) => !outcome(t, p).ok)
+const MEASURED = [
+  `${pct1(ours.falseAlarmYear)} false alarms a year in stable people, simulated`,
+  `${Math.round(ours.detected['2'] * 100)}% of people losing two points a check flagged within a year, simulated`,
+  `${tests.passed} tests run ${Math.round(coverage.engine.lines * 100)}% of the decision code`,
+]
+const NOT_YET = ['No older Emirati volunteers doing the check', 'Arabic lists not yet reviewed by a native speaker', 'Retest variation taken from published studies']
+
 /* ------------------------------------------------------------------ */
-/* Direction a: on Duna's system                                        */
+/* Direction a: on Letters' system                                     */
 /* ------------------------------------------------------------------ */
+
+/** An inline icon tile set into a heading, the way Letters does. */
+function Tile({ children }: { children: React.ReactNode }) {
+  return <span className="a-tile" aria-hidden="true">{children}</span>
+}
+
+/** The envelope: what the person says aloud, and the packet the physician gets. */
+function Envelope() {
+  const contributors = treatableContributors(decline.record).slice(0, 2)
+  return (
+    <div className="a-env a-mock">
+      <div className="a-env__fan a-env__fan--l" aria-hidden="true"><i /><i /><i /></div>
+      <div className="a-env__fan a-env__fan--r" aria-hidden="true"><i /><i /><i /></div>
+      <div className="a-env__back" aria-hidden="true" />
+      <div className="a-letter a-letter--said">
+        <span className="a-tab"><Mic />Said aloud</span>
+        <p className="a-letter__h">Say these ten words back</p>
+        <p className="a-letter__words">{words.map((w) => <span key={w}>{w}</span>)}</p>
+      </div>
+      <div className="a-letter a-letter--packet">
+        <span className="a-tab"><Stethoscope />Physician's packet</span>
+        <p>Dear doctor,</p>
+        <p>{decline.name}, a synthetic person, scored below their own baseline of {(declineTraj.baseline as number).toFixed(1)} on two checks in a row.</p>
+        <p>Treatable causes to rule out first: {contributors.map((c) => c.name.toLowerCase()).join(' and ')}.</p>
+      </div>
+      <div className="a-env__front" aria-hidden="true" />
+    </div>
+  )
+}
+
+function HowSwitch() {
+  const [who, setWho] = useState<'person' | 'physician'>('person')
+  const steps = who === 'person'
+    ? [[<Ear key="e" />, 'A sound check first', 'Digits in noise. If it fails, the check is held, not scored.'], [<Mic key="m" />, 'Four minutes by voice', 'Ten words said back, a minute of animals, the words again.'], [<Check key="c" />, 'Check received. Thank you.', 'No score at home. Results are given in person.']]
+    : [[<Trend key="t" />, 'A year of checks', 'Each check is compared with the person’s own first three.'], [<Stethoscope key="s" />, 'A packet after a lasting change', 'Two low checks in a row, a steady fall or harder everyday tasks.'], [<Clock key="c" />, 'Approve and follow up', 'A referral in HL7 v2 and FHIR, tracked against the 15-working-day target.']]
+  return (
+    <>
+      <div className="a-seg" role="group" aria-label="Show the steps for">
+        <button type="button" aria-pressed={who === 'person'} className={who === 'person' ? 'is-on' : ''} onClick={() => setWho('person')}><Mic />The person</button>
+        <button type="button" aria-pressed={who === 'physician'} className={who === 'physician' ? 'is-on' : ''} onClick={() => setWho('physician')}><Stethoscope />The physician</button>
+      </div>
+      <div className="a-small3">
+        {steps.map(([ic, t, d]) => <div key={t as string} className="a-scard"><span className="a-scard__ic">{ic}</span><h3>{t}</h3><p>{d}</p></div>)}
+      </div>
+    </>
+  )
+}
 
 function HomeA() {
   return (
     <main className="dh dh-a">
       <section className="a-hero">
-        <img className="a-hero__art" src="/images/hero-painting.webp" srcSet="/images/hero-painting-1024.webp 1024w, /images/hero-painting.webp 2048w" sizes="100vw" width={2048} height={1152} alt="" fetchPriority="high" />
         <div className="a-hero__copy">
-          <Link to="/benchmark" className="a-pill">{arabic}% of real Arabic words heard on the device <span aria-hidden="true">›</span></Link>
-          <h1>{H1_SHORT}</h1>
-          <p className="a-lead">Four minutes at home in Gulf Arabic or English. Nothing to read or type. Compared with your own past checks.</p>
-          <Link to="/try" className="a-btn a-btn--lg">Try it with your voice</Link>
+          <h1>A memory check you speak</h1>
+          <p className="a-lead">Four minutes <b>by voice</b>, in Gulf Arabic or English. <b>Nothing to read or type.</b> Compared with <b>your own</b> earlier checks.</p>
+          <Link to="/try" className="a-btn">Try it with your voice</Link>
+          <p className="a-small">No sign-up. The people shown are synthetic.</p>
         </div>
-      </section>
-
-      <section className="a-facts">
-        <p className="a-facts__cap">Measured so far, before any patients</p>
-        <ul>{FACTS.map((f) => <li key={f.n}><b>{f.n}</b><span>{f.t}</span></li>)}</ul>
+        <Envelope />
       </section>
 
       <section className="a-sec">
-        <div className="a-wrap">
-          <h2>The person speaks.<br />A physician decides.</h2>
-          <div className="a-cols">
-            <div><Mic /><p className="a-col__t">Three listeners</p><p>The browser's recogniser and a speech model on the device hear the same words.</p></div>
-            <div><Waves /><p className="a-col__t">Compared with yourself</p><p>The first three checks set a baseline. Later checks are compared with it.</p></div>
-            <div><Stethoscope /><p className="a-col__t">A physician decides</p><p>After two low checks in a row, a physician approves first.</p></div>
+        <h2>Four <Tile><Mic /></Tile> minutes<br />at home, by voice</h2>
+        <div className="a-two">
+          <div className="a-card">
+            <span className="a-tag"><Mic />The check</span>
+            <h3>Ten words, a minute of animals, then the words again</h3>
+            <div className="a-card__ui">
+              <div className="a-ui">
+                <p className="a-ui__h">Say these ten words back</p>
+                <p className="a-ui__chips">{words.slice(0, 6).map((w) => <span key={w}>{w}</span>)}</p>
+                <p className="a-ui__bar"><Waves />Listening on this device</p>
+              </div>
+            </div>
+            <Link to="/try" className="a-plink">Try it with your voice<Arrow /></Link>
           </div>
-        </div>
-      </section>
-
-      <section className="a-sec">
-        <div className="a-wrap a-quote">
-          <div className="a-quote__text">
-            <p className="a-quote__big">One cutoff for everyone flags the wrong people.</p>
-            <p className="a-quote__by">In the Gulf, the usual MoCA cut-off classed 69.3% of 606 older adults in Dubai and Sharjah as impaired (<a href="https://doi.org/10.3389/fragi.2026.1822042">Issa et al. 2026</a>).</p>
+          <div className="a-card">
+            <span className="a-tag"><Stethoscope />The physician</span>
+            <h3>A packet only after a change that lasts</h3>
+            <div className="a-card__ui">
+              <div className="a-ui a-ui--chart">
+                <p className="a-ui__h">{decline.name}, synthetic: {STATUS_LABEL[declineTraj.status]}</p>
+                <TrajectoryChart checks={decline.checks} traj={declineTraj} compact textSize={20} />
+                <ChartKey />
+              </div>
+            </div>
+            <Link to="/clinician" className="a-plink">Open the physician's view<Arrow /></Link>
           </div>
-          <div className="a-panel a-quote__panel">
-            <p className="a-panel__t">Adults over 60 with no memory complaint below a fixed cutoff of 14 animals</p>
-            <SurveyBars />
-            <p className="d-note">Our analysis of NHANES 2011 to 2014, a public US survey: 265 adults with under 9 years of school, 569 graduates.</p>
-          </div>
-        </div>
-      </section>
-
-      <section className="a-band">
-        <img className="a-band__art" src="/images/hero-painting.webp" alt="" loading="lazy" decoding="async" width={2048} height={1152} />
-        <ul className="a-band__pills" aria-label="Routes built into the rule">
-          {ROUTES.map((r, i) => <li key={r.t} className={`a-float a-float--${i + 1}`}>{r.t}</li>)}
-        </ul>
-        <div className="a-band__copy">
-          <h2>Low scores have more than one cause.</h2>
-          <p>Six routes in the rule keep a low score from being read as decline, and send the hard cases to a person.</p>
-          <Link to="/how" className="a-btn">How it works</Link>
         </div>
       </section>
 
       <section className="a-sec">
-        <div className="a-wrap a-split">
-          <div className="a-split__text">
-            <span className="a-tag">On the device</span>
-            <h2 className="a-h3">Every score shows how sure it is</h2>
-            <p className="a-sub">A word heard by two listeners counts. A word heard by one widens the range.</p>
-            <ul className="a-rows">
-              <li><Check />A word heard by both listeners counts</li>
-              <li><Waves />A word heard by one widens the range</li>
-              <li><EyeOff />A range too wide is not scored, never low</li>
-            </ul>
+        <h2>How <Tile><Waves /></Tile> the check works</h2>
+        <HowSwitch />
+      </section>
+
+      <section className="a-sec">
+        <h2>Low scores have <Tile><Ear /></Tile><br />more than one cause</h2>
+        <div className="a-two">
+          <div className="a-card a-card--light">
+            <span className="a-tag"><Ear />Hearing comes first</span>
+            <h3>A failed sound check holds the check instead of scoring it low</h3>
+            <div className="a-card__ui">
+              <div className="a-ui">
+                <p className="a-ui__row"><span>Sound check</span><b>Not passed</b></p>
+                <p className="a-ui__row"><span>Memory check</span><b>Held, not scored</b></p>
+                <p className="a-ui__row"><span>After two holds</span><b>Hearing assessment</b></p>
+              </div>
+            </div>
           </div>
-          <div className="a-panel a-panel--cards">
-            <div className="a-card"><p className="a-card__t">A, 58, synthetic: a year of checks</p><TrajectoryChart checks={PERSONAS[0].checks} traj={evaluate(PERSONAS[0].checks)} compact textSize={22} /><ChartKey /><p className="d-note">Each bar is the range the listeners heard at one check.</p></div>
+          <div className="a-card a-card--light">
+            <span className="a-tag"><Moon />Off days do not count</span>
+            <h3>A low score on a day the person says was off is left out</h3>
+            <div className="a-card__ui">
+              <div className="a-ui">
+                <p className="a-ui__row"><span>Was today an off day?</span><b>Yes</b></p>
+                <p className="a-ui__row"><span>This check</span><b>Kept, not compared</b></p>
+                <p className="a-ui__row"><span>A missed check</span><b>Never counted as low</b></p>
+              </div>
+            </div>
           </div>
-          <Link to="/recorded" className="a-explore">Play a recorded check <span aria-hidden="true">›</span></Link>
+        </div>
+        <div className="a-small3">
+          {ROUTES.slice(2, 5).map((r) => <div key={r.t} className="a-scard"><span className="a-scard__ic">{r.icon}</span><h3>{r.t}</h3><p>{r.d}</p></div>)}
+        </div>
+      </section>
+
+      <section className="a-sec a-gold">
+        <h2>Tested on real speech</h2>
+        <p className="a-sub">Real recordings, a simulated year of checks and the official HL7 validator. Every figure links to how it was made.</p>
+        <div className="a-facts">{FACTS.map((f) => <div key={f.n}><b>{f.n}</b><span>{f.t}</span></div>)}</div>
+        <Link to="/benchmark" className="a-btn a-btn--light">How the flag was tested</Link>
+      </section>
+
+      <section className="a-sec">
+        <h2>From a check <Tile><Send /></Tile><br />to a visit</h2>
+        <div className="a-steps">
+          <div className="a-step is-on">
+            <p className="a-step__n">1</p>
+            <div><h3>The person checks at home</h3><p>Four minutes by voice, every few months, compared with their own first three checks.</p></div>
+            <div className="a-step__ui"><p className="a-ui__h">Check received. Thank you.</p><p className="a-ticks">{decline.checks.slice(0, 5).map((c) => <span key={c.date}><Check />{shortDate(c.date)}</span>)}</p></div>
+          </div>
+          <div className="a-step">
+            <p className="a-step__n">2</p>
+            <div><h3>The rule looks for a change that lasts</h3><p>Two low checks in a row, a steady fall, or harder everyday tasks. One low day means nothing on its own.</p></div>
+          </div>
+          <div className="a-step">
+            <p className="a-step__n">3</p>
+            <div><h3>A physician decides</h3><p>The packet waits for the ordering physician, who approves, edits or dismisses it with a reason.</p></div>
+          </div>
         </div>
       </section>
 
       <section className="a-sec">
-        <div className="a-wrap a-split a-split--flip">
-          <div className="a-split__text">
-            <span className="a-tag">Physician's view</span>
-            <h2 className="a-h3">A physician reads the packet before anyone is told</h2>
-            <p className="a-sub">The trajectory, the treatable causes to rule out first and the risk factors already on record.</p>
-            <ul className="a-rows">
-              <li><Check />Approve, edit or dismiss</li>
-              <li><Stethoscope />Treatable causes first</li>
-              <li><Clock />Tracked to the 15-working-day target</li>
-              <li><Code />HL7 v2 for Malaffi and FHIR R4</li>
-            </ul>
-          </div>
-          <div className="a-panel a-panel--cards"><PacketCard chartText={22} /></div>
-          <Link to="/clinician" className="a-explore">Open the physician's view <span aria-hidden="true">›</span></Link>
+        <h2>What is measured, <Tile><List /></Tile><br />and what is not yet</h2>
+        <div className="a-two">
+          <div className="a-safe"><span className="a-tag"><Check />Measured</span><p className="a-safe__n">{arabic}%</p><p>of {own.whisperAlone.n} real Arabic words heard right on the device, from {own.speakers} adult volunteers.</p><ul>{MEASURED.map((m) => <li key={m}><Check />{m}</li>)}</ul></div>
+          <div className="a-safe"><span className="a-tag"><Alert />Not yet</span><p className="a-safe__n">0</p><p>patients so far. A pilot measures the rest.</p><ul>{NOT_YET.map((m) => <li key={m}><Alert />{m}</li>)}</ul></div>
         </div>
       </section>
 
-      <section className="a-grey">
-        <div className="a-wrap a-split">
-          <div className="a-split__text">
-            <h2 className="a-h3">About AED {perMember} per eligible member a year</h2>
-            <p className="a-sub">Thiqa's packages 52-45 and 52-46 already fund hearing and dementia screening and name no memory tool. This check adds the memory step at home, for people already in the programme.</p>
-            <ul className="a-badges"><li>FHIR R4<small>0 errors</small></li><li>HL7 v2<small>for Malaffi</small></li><li>Consent<small>off by default</small></li></ul>
-          </div>
-          <div className="a-panel a-panel--white"><CostPanel /></div>
-        </div>
-      </section>
-
-      <section className="a-sec">
-        <div className="a-wrap">
-          <h2 className="a-h3">What we measured, and what we have not</h2>
-          <div className="a-stories">
-            <Link to="/benchmark" className="a-story"><span className="a-story__art" style={{ backgroundPosition: '30% 40%' }}><b>{arabic}%</b></span><p className="a-story__t">of real Arabic words heard right</p><p>{own.whisperAlone.n} single words from {own.speakers} adult volunteers, scored on the device with the speaker's own voice as the answer key. Read words, not recall.</p></Link>
-            <Link to="/benchmark" className="a-story"><span className="a-story__art" style={{ backgroundPosition: '70% 30%' }}><b>{pct1(ours.falseAlarmYear)}</b></span><p className="a-story__t">false alarms a year, simulated</p><p>In stable people, against {pct1(single.falseAlarmYear)} for a rule that flags on one low check. {Math.round(ours.detected['2'] * 100)}% of people losing two points a check are flagged within the year.</p></Link>
-            <Link to="/how" className="a-story"><span className="a-story__art" style={{ backgroundPosition: '50% 60%' }}><b>{tests.passed}</b></span><p className="a-story__t">tests on the decision code</p><p>They run {Math.round(coverage.engine.lines * 100)}% of its lines and catch {Math.round(mutation.score * 100)}% of {mutation.mutants} deliberate bugs. The live site passes {live.passed} of {live.total} end-to-end steps after each deploy.</p></Link>
-          </div>
-        </div>
+      <section className="a-sky2">
+        <h2>About AED {perMember} per eligible member a year</h2>
+        <p className="a-lead a-lead--sm">Thiqa's packages 52-45 and 52-46 already fund hearing and dementia screening. This check adds the memory step at home.</p>
+        <div className="a-price"><CostPanel /></div>
       </section>
     </main>
   )
 }
 
 /* ------------------------------------------------------------------ */
-/* Direction b: on Brainfish's system                                   */
+/* Direction b: on Voicenotes' system                                  */
 /* ------------------------------------------------------------------ */
 
-function DotGrid({ share, tone }: { share: number; tone: 'flag' | 'ok' }) {
-  const on = Math.round(share * 100)
-  return <div className={`b-dots b-dots--${tone}`} aria-hidden="true">{Array.from({ length: 100 }, (_, i) => <i key={i} className={i < on ? 'is-on' : ''} />)}</div>
+function Listener({ label }: { label: string }) {
+  return <div className="b-listener"><span className="b-listener__bars" aria-hidden="true"><i /><i /><i /><i /></span><span>{label}</span></div>
+}
+
+function CheckPanel() {
+  const [tab, setTab] = useState<'check' | 'rule'>('check')
+  return (
+    <div className="b-panel">
+      <div className="b-panel__bar">
+        <span className="b-tabs" role="group" aria-label="Show">
+          <button type="button" aria-pressed={tab === 'check'} className={tab === 'check' ? 'is-on' : ''} onClick={() => setTab('check')}>The check</button>
+          <button type="button" aria-pressed={tab === 'rule'} className={tab === 'rule' ? 'is-on' : ''} onClick={() => setTab('rule')}>The rule</button>
+        </span>
+        <span className="b-wave" aria-hidden="true">{Array.from({ length: 12 }, (_, i) => <i key={i} />)}</span>
+        <span className="b-round" aria-hidden="true"><Pause /></span>
+        <span className="b-round b-round--stop" aria-hidden="true"><i /></span>
+      </div>
+      {tab === 'check' ? (
+        <ul className="b-panel__list">
+          <li>I will read ten words, one at a time. Say each word back after me.</li>
+          <li><span className="b-words">{words.join(', ')}</span></li>
+        </ul>
+      ) : (
+        <ul className="b-panel__list">
+          <li>{decline.name}, synthetic: {STATUS_LABEL[declineTraj.status].toLowerCase()} against a baseline of {(declineTraj.baseline as number).toFixed(1)}.</li>
+          <li>Packet sent to the ordering physician, who decides before anyone is told.</li>
+        </ul>
+      )}
+    </div>
+  )
 }
 
 function HomeB() {
@@ -312,378 +353,246 @@ function HomeB() {
     <main className="dh dh-b">
       <section className="b-hero">
         <div className="b-hero__copy">
-          <Link to="/benchmark" className="b-pill"><span className="b-pill__tag">Measured</span>{arabic}% of {own.whisperAlone.n} real Arabic words heard on the device <Arrow /></Link>
           <h1>{H1_LONG}</h1>
-          <p className="b-lead">Four minutes at home in Gulf Arabic or English, with nothing to read or type. A physician hears about it only after two low checks in a row.</p>
-          <Link to="/try" className="b-btn">Try it with your voice <Arrow /></Link>
-          <p className="b-fine"><span><Check />No sign-up</span><span><EyeOff />People shown are synthetic</span></p>
+          <p className="b-lead">Four minutes at home, by voice, in Gulf Arabic or English. Nothing to read or type, and a physician hears only of a change that lasts.</p>
+          <p className="b-btns"><Link to="/try" className="b-btn">Try it with your voice</Link><Link to="/year" className="b-btn b-btn--line"><Trend />See a year of checks</Link></p>
+          <ul className="b-small">
+            <li><Lock />No sign-up. The people shown are synthetic and labelled</li>
+            <li><Mic />Gulf Arabic and English, heard in the browser</li>
+            <li><EyeOff />No scores at home. It does not diagnose</li>
+          </ul>
         </div>
-        <RuleWindow brand="Spoken memory check" />
+        <div className="b-art">
+          <img src="/images/vn-sky.webp" alt="" width={1000} height={1000} fetchPriority="high" />
+          <div className="b-listeners"><Listener label="On this device" /><Listener label="The browser's" /></div>
+          <CheckPanel />
+        </div>
       </section>
 
-      <section className="b-stats">
-        {[
-          { l: 'Real recordings', n: `${arabic}%`, t: `of ${own.whisperAlone.n} Arabic words heard right on the device` },
-          { l: 'Simulated', n: pct1(ours.falseAlarmYear), t: 'false alarms a year in stable people' },
-          { l: 'Simulated', n: `${Math.round(ours.detected['2'] * 100)}%`, t: 'of people losing two points a check flagged within a year' },
-          { l: 'Official validator', n: '0', t: 'errors in the FHIR R4 export' },
-        ].map((s, i) => <div key={i}><p className="b-stats__l">{s.l}</p><p className="b-stats__n">{s.n}</p><p className="b-stats__t">{s.t}</p></div>)}
+      <section className="b-strip">
+        <p className="b-strip__label">Measured so far, with the method behind each</p>
+        <div className="b-strip__row">{FACTS.map((f) => <p key={f.n}><b>{f.n}</b><span>{f.t}</span></p>)}</div>
       </section>
 
       <section className="b-sec">
-        <h2>One cutoff for everyone flags the wrong people.</h2>
-        <div className="b-split">
-          <div>
-            <p className="b-big">48%</p>
-            <p className="b-body">of adults over 60 with under 9 years of school and no memory complaint fall below a fixed cutoff of 14 animals, against 16% of graduates. Our analysis of NHANES 2011 to 2014, US data.</p>
-          </div>
-          <div className="b-qs">
-            <p className="b-q"><i />Dubai and Sharjah: 69.3% of 606 older adults below the usual MoCA cut-off</p>
-            <p className="b-q"><i />Qatar: 74.3% of 308 healthy adults below it</p>
-            <p className="b-q"><i />Comparing each person with their own earlier checks avoids this</p>
-          </div>
-        </div>
-        <Link to="/how" className="b-link"><Arrow />How the personal baseline works</Link>
-      </section>
-
-      <section className="b-dark">
-        <div className="b-dark__in">
-          <div className="b-dark__lead">
-            <p className="b-big b-big--light">{pct1(lowStart.ours)}</p>
-            <p className="b-body b-body--light">of stable people who start in the lowest fifth get a false packet in a year with a personal baseline, against <span className="b-hl">{pct1(lowStart.fixedCutoff)}</span> with one cutoff for everyone. Simulated, {lowStart.people.toLocaleString('en')} people.</p>
-            <Link to="/benchmark" className="b-link b-link--light">How the flag was tested</Link>
-          </div>
-          <div className="b-cards">
-            {ROUTES.map((r) => (
-              <div className="b-card" key={r.t}>
-                <p className="b-card__t">{r.t}</p>
-                <p className="b-card__tags">{r.tags.map((t) => <span key={t}>{t}</span>)}</p>
-                <p className="b-card__foot"><i />Built into the rule</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="b-dark b-dark--2">
-        <div className="b-dark__in b-dark__in--col">
-          <h2 className="b-h2--light">Compared with yourself, not with everyone.</h2>
-          <p className="b-body b-body--light b-narrow">Stable people who start in the lowest fifth, followed for a simulated year. Each dot is one in a hundred of the {lowStart.people.toLocaleString('en')} people.</p>
-          <div className="b-panels">
-            <div className="b-panel"><p className="b-panel__h">One cutoff for everyone <span className="b-tag b-tag--flag">fixed cutoff</span></p><DotGrid share={lowStart.fixedCutoff} tone="flag" /><p className="b-panel__f"><span><i className="b-sw b-sw--flag" />Falsely flagged</span><b>{pct1(lowStart.fixedCutoff)}</b></p></div>
-            <div className="b-panel"><p className="b-panel__h">Compared with their own baseline <span className="b-tag b-tag--ok">this rule</span></p><DotGrid share={lowStart.ours} tone="ok" /><p className="b-panel__f"><span><i className="b-sw b-sw--ok" />Falsely flagged</span><b>{pct1(lowStart.ours)}</b></p></div>
-          </div>
-        </div>
-      </section>
-
-      <section className="b-sec">
-        <h2>What we measured, and what we have not.</h2>
-        <div className="b-evid">
-          <div><p className="b-evid__q">"{arabic}% of real Arabic words heard right."</p><p>{own.whisperAlone.n} single words from {own.speakers} adult volunteers, scored on the device with the speaker's own voice as the answer key. Read words, not recall.</p><p className="b-evid__by"><i />Real recordings</p></div>
-          <div><p className="b-evid__q">"Older Gulf voices heard no worse."</p><p>Word error {older}% for older against {adult}% for adult Gulf speakers on public Saudi TV speech. Not yet older Emirati volunteers doing the check.</p><p className="b-evid__by"><i />Public data</p></div>
-          <div><p className="b-evid__q">"Every line of the decision code tested."</p><p>{tests.passed} tests run {Math.round(coverage.engine.lines * 100)}% of its lines and catch {Math.round(mutation.score * 100)}% of {mutation.mutants} deliberate bugs. {live.passed} of {live.total} live steps pass after each deploy.</p><p className="b-evid__by"><i />Tested code</p></div>
-        </div>
-      </section>
-
-      <section className="b-dark b-dark--3">
-        <div className="b-dark__in">
-          <div className="b-dark__lead">
-            <h2 className="b-h2--light">About AED {perMember} per eligible member a year.</h2>
-            <p className="b-body b-body--light">Thiqa's packages 52-45 and 52-46 already fund hearing and dementia screening. Referrals leave as HL7 v2 for Malaffi and FHIR R4. Consent comes in parts, each off by default, and scores stay on the device.</p>
-          </div>
-          <div className="b-cost"><CostPanel /></div>
-        </div>
-      </section>
-    </main>
-  )
-}
-
-/* ------------------------------------------------------------------ */
-/* Direction c: on Loops' system                                        */
-/* ------------------------------------------------------------------ */
-
-function ProgrammeWindow() {
-  const people = PERSONAS.map((p) => ({ p, t: evaluate(p.checks) }))
-  const groups = [
-    { h: 'Packets waiting', items: people.filter((x) => PACKET_STATUSES.includes(x.t.status)) },
-    { h: 'Urgent', items: people.filter((x) => x.t.status === 'urgent') },
-    { h: 'Held for hearing', items: people.filter((x) => x.p.checks.filter((c) => c.hearingLimited).length >= 2 && !PACKET_STATUSES.includes(x.t.status) && x.t.status !== 'urgent') },
-  ]
-  const shown = new Set(groups.flatMap((g) => g.items.map((x) => x.p.id)))
-  groups.push({ h: 'Nothing sent', items: people.filter((x) => !shown.has(x.p.id)) })
-  const last = (p: Persona) => p.checks[p.checks.length - 1].date
-  return (
-    <div className="c-stage">
-      <div className="c-window">
-        <div className="c-window__bar"><span className="c-dots" aria-hidden="true"><i /><i /><i /></span><span>‹ ›</span><b>Home</b><span>/</span><span>Physician's view</span></div>
-        <div className="c-window__body">
-          <aside className="c-side">
-            <p className="c-side__org"><span className="c-org">S</span>Screening clinic, demo</p>
-            {[['Home', <List key="i" />], ['Checks', <Mic key="i" />], ['Packets', <Stethoscope key="i" />], ['Referrals', <Clock key="i" />], ['Hearing', <Ear key="i" />], ['Re-scoring', <Waves key="i" />]].map(([l, ic], i) => (
-              <p key={l as string} className={`c-side__item${i === 0 ? ' is-on' : ''}`}>{ic}{l}</p>
-            ))}
-          </aside>
-          <div className="c-main">
-            <p className="c-main__h">Home <span className="c-syn">Synthetic people, not real data</span></p>
-            {groups.map((g) => (
-              <div className="c-group" key={g.h}>
-                <p className="c-group__h"><span aria-hidden="true">⌄</span>{g.h} <span className="c-count">{g.items.length}</span></p>
-                {g.items.map(({ p, t }) => (
-                  <Link key={p.id} to={`/clinician/${p.id}`} className="c-row"><b>{p.name}</b><span>{STATUS_LABEL[t.status]}</span><small>last check {shortDate(last(p))}</small></Link>
-                ))}
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-      <div className="c-float c-float--person">
-        <p className="c-float__bar"><span className="c-dots" aria-hidden="true"><i /><i /><i /></span>What the person sees <small>Ready</small></p>
-        <div className="c-float__body">
-          <p className="c-float__big">Check received. Thank you.</p>
-          <p>One low day does not mean anything on its own. Results are discussed in person, never in the app.</p>
-          <p className="c-ticks">{decline.checks.slice(-4).map((c) => <span key={c.date}><Check />{shortDate(c.date)}</span>)}</p>
-        </div>
-      </div>
-      <div className="c-float c-float--note"><Stethoscope /><p>A physician approves every packet</p></div>
-    </div>
-  )
-}
-
-function Learn({ items }: { items: [string, string][] }) {
-  return <p className="c-learn"><span>Learn</span>{items.map(([l, to]) => <Link key={l} to={to}>{l}</Link>)}</p>
-}
-
-function HomeC() {
-  return (
-    <main className="dh dh-c">
-      <div className="c-top">
-      <div className="c-stripes" aria-hidden="true"><i /><i /><i /><i /></div>
-      <section className="c-hero">
-        <h1>{H1_SHORT}</h1>
-        <p className="c-lead">Four minutes at home in Gulf Arabic or English, compared with your own earlier checks. A physician hears only after two low checks in a row.</p>
-        <p className="c-actions"><Link to="/try" className="c-btn">Try it with your voice</Link><Link to="/story" className="c-btn c-btn--ghost">See one case, both screens</Link></p>
-      </section>
-      <ProgrammeWindow />
-      </div>
-      <ul className="c-facts">{FACTS.map((f) => <li key={f.n}><b>{f.n}</b>{f.t}</li>)}</ul>
-
-      <section className="c-sec">
-        <h2>Every score shows how sure it is</h2>
-        <p>The browser's recogniser and a speech model on the device hear the same words, and recalled words are matched against the person's <Link to="/recorded-check">own voice</Link>. Three checks set a <Link to="/how">personal baseline</Link>, so low schooling is not read as decline.</p>
-        <div className="c-win">
-          <p className="c-win__bar"><span className="c-seg"><b>Person</b><span>Physician</span></span><span className="c-select">{PERSONAS[0].name}, synthetic ⌄</span></p>
-          <div className="c-win__body"><TrajectoryChart checks={PERSONAS[0].checks} traj={evaluate(PERSONAS[0].checks)} compact textSize={13} /><ChartKey /><p className="d-note">Each bar is the range the listeners heard at one check.</p></div>
-        </div>
-        <Learn items={[['Recorded check', '/recorded'], ['Hearing check', '/hearing'], ['Blind re-scoring', '/rescore']]} />
-      </section>
-
-      <section className="c-sec">
-        <h2>A physician reads the packet before anyone is told</h2>
-        <p>After two low checks in a row, the ordering physician gets the trajectory, the <Link to="/clinician">treatable causes</Link> to rule out first and the risk factors already on record. If they approve, the person is invited to a visit.</p>
-        <div className="c-win"><div className="c-win__body"><PacketCard chartText={13} /></div></div>
-        <Learn items={[["Physician's view", '/clinician'], ['A year of checks', '/year'], ['Programme view', '/programme']]} />
-      </section>
-
-      <section className="c-sec">
-        <h2>About AED {perMember} per eligible member a year</h2>
-        <p>Thiqa's packages <Link to="/how">52-45 and 52-46</Link> fund hearing and dementia screening and name no memory tool. This check adds the memory step at home for people already in the programme.</p>
-        <div className="c-win"><div className="c-win__body"><CostPanel /></div></div>
-        <Learn items={[['Pilot design', '/how'], ['Evidence', '/benchmark']]} />
-      </section>
-
-      <section className="c-sec">
-        <h2>Low scores have more than one cause</h2>
-        <p>The rule <Link to="/how">holds, leaves out or hands on</Link> a low score before it ever counts as decline.</p>
-        <div className="c-win">
-          <div className="c-win__body c-health">
-            <p className="c-health__big">Held, not low</p>
-            <div className="c-health__cols">
-              <div><p className="c-health__h">Handled by the rule</p>
-                <p className="c-health__r"><Ear />Failed sound check<small>Held</small></p>
-                <p className="c-health__r"><Moon />Off day<small>Left out</small></p>
-                <p className="c-health__r"><Clock />Missed check<small>Not counted</small></p>
-              </div>
-              <div><p className="c-health__h">Sent to a person</p>
-                <p className="c-health__r"><Stethoscope />Two low checks in a row<small>Physician</small></p>
-                <p className="c-health__r"><List />Everyday tasks harder<small>Physician</small></p>
-                <p className="c-health__r"><Alert />Very large fall<small>Urgent</small></p>
-              </div>
+        <h2>Four minutes, nothing to read.</h2>
+        <div className="b-three">
+          <div className="b-step">
+            <div className="b-step__art" style={{ backgroundImage: 'url(/images/vn-sky.webp)', backgroundPosition: '20% 80%' }}>
+              <div className="b-mini"><p className="b-mini__h">Say these words back</p><p className="b-chips">{words.slice(0, 5).map((w) => <span key={w}>{w}</span>)}</p></div>
             </div>
+            <h3><span>1</span>Say the words back</h3>
+            <p>Ten words, one at a time, in Gulf Arabic or English. Two listeners hear them.</p>
+          </div>
+          <div className="b-step">
+            <div className="b-step__art" style={{ backgroundImage: 'url(/images/vn-dunes.webp)', backgroundPosition: '50% 90%' }}>
+              <div className="b-mini"><p className="b-mini__h">Name as many animals as you can</p><p className="b-mini__row"><span className="b-pill"><Pause />Pause</span><span className="b-mini__t">One minute</span><span className="b-pill b-pill--stop">Stop</span></p></div>
+            </div>
+            <h3><span>2</span>Name animals for a minute</h3>
+            <p>Each animal heard counts once. Then the ten words again, from memory.</p>
+          </div>
+          <div className="b-step">
+            <div className="b-step__art" style={{ backgroundImage: 'url(/images/vn-sky.webp)', backgroundPosition: '90% 10%' }}>
+              <div className="b-mini"><p className="b-mini__h">Check received. Thank you.</p><p className="b-mini__ticks">{decline.checks.slice(0, 4).map((c) => <span key={c.date}><Check />{shortDate(c.date)}</span>)}</p></div>
+            </div>
+            <h3><span>3</span>Done for today</h3>
+            <p>No score at home. One low day means nothing on its own; results are given in person.</p>
           </div>
         </div>
-        <Learn items={[['Safety case', '/how'], ['What is real', '/how']]} />
       </section>
 
-      <section className="c-sec">
-        <h2>What we measured so far</h2>
-        <p>Each figure says whether it comes from real recordings, a simulation or the code. No patients yet.</p>
-        <div className="c-stats">
-          <div><p className="c-stats__l"><Mic />Real recordings</p><p className="c-stats__n">{arabic}%</p><p>of {own.whisperAlone.n} Arabic words heard right on the device</p><Link to="/benchmark">Read the method</Link></div>
-          <div><p className="c-stats__l"><Waves />Simulated</p><p className="c-stats__n">{pct1(ours.falseAlarmYear)}</p><p>false alarms a year in stable people</p><Link to="/benchmark">Read the method</Link></div>
-          <div><p className="c-stats__l"><Code />Tested code</p><p className="c-stats__n">{Math.round(coverage.engine.lines * 100)}%</p><p>of the decision code's lines run by {tests.passed} tests</p><Link to="/how">Read the method</Link></div>
+      <section className="b-sec">
+        <h2>From a spoken check to a physician’s packet.</h2>
+        <div className="b-feats">
+          <div className="b-feat">
+            <div className="b-feat__art" style={{ backgroundImage: 'url(/images/vn-dunes.webp)' }}>
+              <div className="b-feat__win"><p className="b-feat__bar"><span className="b-dots" aria-hidden="true"><i /><i /><i /></span>{decline.name}, synthetic</p><TrajectoryChart checks={decline.checks} traj={declineTraj} compact textSize={18} /><ChartKey /></div>
+            </div>
+            <h3>The rule, run on a year of checks.</h3>
+            <p>Each check is compared with the person’s own first three. Two low checks in a row, a steady fall or harder everyday tasks send a packet.</p>
+          </div>
+          <div className="b-feat">
+            <div className="b-feat__art" style={{ backgroundImage: 'url(/images/vn-sky.webp)', backgroundPosition: '30% 40%' }}>
+              <div className="b-feat__win"><p className="b-feat__bar"><span className="b-dots" aria-hidden="true"><i /><i /><i /></span>Packets waiting</p><PacketCard chartText={18} /></div>
+            </div>
+            <h3>Ready before the visit.</h3>
+            <p>The trajectory, the treatable causes to rule out first and the risk factors already on record. The physician approves before the person is told.</p>
+          </div>
         </div>
+      </section>
+
+      <section className="b-sec">
+        <h2>Low scores have more than one cause.</h2>
+        <div className="b-grid6">{ROUTES.map((r) => <div key={r.t} className="b-card"><span className="b-card__ic">{r.icon}</span><h3>{r.t}</h3><p>{r.d}</p></div>)}</div>
+      </section>
+
+      <section className="b-sec">
+        <h2>Built to hand on, not to diagnose.</h2>
+        <div className="b-grid4">
+          <div className="b-card"><span className="b-card__ic"><Send /></span><h3>HL7 v2 referral</h3><p>REF^I12, the message Malaffi asks for, with a SNOMED-coded specialty.</p></div>
+          <div className="b-card"><span className="b-card__ic"><Code /></span><h3>FHIR R4</h3><p>0 errors from the official HL7 validator.</p></div>
+          <div className="b-card"><span className="b-card__ic"><Lock /></span><h3>Consent in parts</h3><p>Each part off by default, and the check stays locked until the first is on.</p></div>
+          <div className="b-card"><span className="b-card__ic"><Clock /></span><h3>About AED {perMember} a member</h3><p>Modelled yearly cost per eligible member, inside Thiqa’s 52-45 and 52-46.</p></div>
+        </div>
+      </section>
+
+      <section className="b-sec">
+        <h2>Measured, and not yet.</h2>
+        <div className="b-two">
+          <div className="b-card b-card--big"><p className="b-big">{arabic}%</p><p>of {own.whisperAlone.n} real Arabic words heard right on the device, from {own.speakers} adult volunteers.</p><ul>{MEASURED.map((m) => <li key={m}><Check />{m}</li>)}</ul></div>
+          <div className="b-card b-card--big"><p className="b-big">0</p><p>patients so far. A pilot measures the rest.</p><ul>{NOT_YET.map((m) => <li key={m}><Alert />{m}</li>)}</ul></div>
+        </div>
+      </section>
+
+      <section className="b-end">
+        <h2>Four minutes, by voice.<br />Try it now.</h2>
+        <Link to="/try" className="b-btn">Try it with your voice</Link>
       </section>
     </main>
   )
 }
 
-
 /* ------------------------------------------------------------------ */
-/* d: on Craft's system                                                 */
+/* Direction c: on Cal.com's system                                    */
 /* ------------------------------------------------------------------ */
 
-/** The rule run live on any of the six synthetic people, in a window with the people in the sidebar. */
-function CraftWindow() {
+/** The real rule on six synthetic people, laid out like a booking widget. */
+function CalWidget() {
   const [id, setId] = useState('decline')
   const p = PERSONAS.find((x) => x.id === id)!
   const t = evaluate(p.checks)
   const o = outcome(t, p)
   return (
-    <div className="d-win">
-      <aside className="d-win__side">
-        <p className="d-win__dots" aria-hidden="true"><i /><i /><i /></p>
-        <p className="d-win__space"><span className="d-win__ic">S</span>Screening clinic, demo</p>
-        <p className="d-win__label">Synthetic people</p>
-        {PERSONAS.map((x) => (
-          <button key={x.id} type="button" className={`d-win__person${x.id === id ? ' is-on' : ''}`} aria-pressed={x.id === id} onClick={() => setId(x.id)}>
-            <span className="d-win__init">{x.name.slice(0, 1)}</span>{x.name}<small>{CHIP[x.id]}</small>
-          </button>
-        ))}
-      </aside>
-      <div className="d-win__main">
-        <p className="d-win__bar"><span aria-hidden="true">‹ ›</span><span className="d-win__tab">{p.name}, synthetic</span><span className={`d-win__status ${o.ok ? 'is-ok' : 'is-flag'}`}>{STATUS_LABEL[t.status]}</span></p>
-        <div className="d-win__body">
-          <p className="d-win__h">What the rule did</p>
-          <div className="d-win__cards">
-            <div className="d-cardw d-cardw--chart"><p className="d-cardw__t">{p.name}, a year of checks</p><TrajectoryChart checks={p.checks} traj={t} compact textSize={17} /><ChartKey /></div>
-            {ruleSteps(p, t).map((s, i) => <div key={s.label} className={`d-cardw d-cardw--${i % 3}`}><p className="d-cardw__t">{s.tag}</p><p>{s.label}</p></div>)}
-            <div className={`d-cardw d-cardw--out ${o.ok ? 'is-ok' : 'is-flag'}`}><p className="d-cardw__t">{o.text}</p><p>{o.side}</p></div>
-          </div>
+    <div className="c-widget">
+      <div className="c-widget__who">
+        <span className="c-av">{p.name.slice(0, 1)}</span>
+        <p className="c-widget__name">{p.name}, synthetic</p>
+        <p className="c-widget__title">{p.path}</p>
+        <p className="c-widget__desc">{p.checks.length} checks over a year, at home, by voice.</p>
+        <div className="c-seg" role="group" aria-label="Choose a synthetic person">
+          {PERSONAS.map((x) => <button key={x.id} type="button" aria-pressed={x.id === id} className={x.id === id ? 'is-on' : ''} onClick={() => setId(x.id)}>{CHIP[x.id]}</button>)}
         </div>
+        <p className="c-widget__row"><Clock />Four minutes a check</p>
+        <p className="c-widget__row"><Mic />Gulf Arabic or English</p>
+      </div>
+      <div className="c-widget__chart">
+        <p className="c-widget__h">A year of checks</p>
+        <TrajectoryChart checks={p.checks} traj={t} compact textSize={17} />
+        <ChartKey />
+      </div>
+      <div className="c-widget__steps">
+        <p className="c-widget__h">What the rule did</p>
+        {ruleSteps(p, t).map((s) => <p key={s.label} className="c-slot"><i />{s.label}</p>)}
+        <p className={`c-slot c-slot--out ${o.ok ? 'is-ok' : 'is-flag'}`}>{o.text}</p>
       </div>
     </div>
   )
 }
 
-const CHECK_PARTS: [React.ReactNode, string][] = [[<Ear key="e" />, 'Hearing check'], [<Mic key="m" />, 'Ten words, said back'], [<Waves key="w" />, 'A minute of animals'], [<List key="l" />, 'The words again'], [<Stethoscope key="s" />, 'Everyday tasks']]
-const TILE = ['#b8caf5', '#fde99b', '#9bd8a9', '#fdd9c6', '#d1eef9', '#e4e4e7']
-
-function HomeD() {
+function Accordion() {
+  const items = [
+    ['Check at home every few months', 'Four minutes by voice, compared with the person’s own first three checks, not with a population cut-off.'],
+    ['Flag only a change that lasts', 'Two low checks in a row, a steady fall or harder everyday tasks. One low day means nothing on its own.'],
+    ['A physician decides', 'The packet waits for the ordering physician, who approves, edits or dismisses it with a reason.'],
+  ]
+  const [open, setOpen] = useState(0)
   return (
-    <main className="dh dh-d">
-      <section className="d-hero">
-        <img className="d-hero__cloud d-hero__cloud--l" src="/images/cloud.webp" alt="" width={800} height={533} />
-        <img className="d-hero__cloud d-hero__cloud--r" src="/images/cloud.webp" alt="" width={800} height={533} />
-        <img className="d-hero__collage" src="/images/collage.webp" alt="" width={2688} height={1152} fetchPriority="high" />
-        <div className="d-hero__copy">
-          <h1>{H1_LONG}</h1>
-          <Link to="/try" className="d-glass">Try it with your voice</Link>
+    <div className="c-acc">
+      {items.map(([t, d], i) => (
+        <button key={t} type="button" className={`c-acc__item${i === open ? ' is-open' : ''}`} aria-expanded={i === open} onClick={() => setOpen(i)}>
+          <span className="c-acc__t">{t}</span>
+          {i === open && <span className="c-acc__d">{d}</span>}
+        </button>
+      ))}
+    </div>
+  )
+}
+
+const HUB = [
+  ['HL7 v2 REF^I12', 'The referral message Malaffi asks for'],
+  ['FHIR R4 bundle', '0 errors from the official validator'],
+  ['SNOMED CT', 'Coded specialty on every referral'],
+  ['Thiqa 52-45, 52-46', 'Fills the memory step they name no tool for'],
+  ['Follow-up clock', 'Against the 15-working-day target'],
+  ['Consent in parts', 'Each part off by default'],
+]
+
+function HomeC() {
+  return (
+    <main className="dh dh-c">
+      <section className="c-hero">
+        <p className="c-pill"><span>New</span>{arabic}% of {own.whisperAlone.n} real Arabic words heard on the device</p>
+        <h1>
+          <span className="c-line">A memory check <img className="c-obj c-obj--photo" src="/images/cal-chip.webp" alt="" width={300} height={205} /> you speak,</span>{' '}
+          <span className="c-line"><span className="c-obj c-obj--wave" aria-hidden="true"><Waves /><b>4 min</b></span> tracked against yourself <span className="c-obj c-obj--card" aria-hidden="true"><b>Check received</b><small><Check />Thank you</small></span></span>
+        </h1>
+        <p className="c-sub">Four minutes at home, by voice. Nothing to read or type.</p>
+        <p className="c-btns"><Link to="/try" className="c-btn c-btn--dark"><Mic />Try it with your voice</Link><Link to="/year" className="c-btn"><Trend />See a year of checks</Link></p>
+        <p className="c-small"><b>No sign-up.</b> The people shown are synthetic.</p>
+      </section>
+
+      <section className="c-desk">
+        <div className="c-desk__menu"><b>Spoken memory check</b><span>File</span><span>Edit</span><span>View</span><span>Window</span><span>Help</span><span className="c-desk__right">Demo: synthetic people</span></div>
+        <div className="c-browser">
+          <div className="c-browser__bar"><span className="c-lights" aria-hidden="true"><i /><i /><i /></span><span className="c-url">spoken-memory-check / physician</span></div>
+          <CalWidget />
         </div>
-        <div className="d-hero__stage"><CraftWindow /></div>
       </section>
 
-      <section className="d-sec d-center">
-        <h2>Four minutes at home,<br />with <em>nothing</em> to read or type.</h2>
-        <ul className="d-icons">{CHECK_PARTS.map(([ic, l]) => <li key={l}>{ic}<span>{l}</span></li>)}</ul>
+      <section className="c-facts">
+        <p>Measured so far, each with its method</p>
+        <div>{FACTS.map((f) => <p key={f.n}><b>{f.n}</b><span>{f.t}</span></p>)}</div>
       </section>
 
-      <section className="d-sec d-center">
-        <h2>Six synthetic people, six routes through the rule</h2>
-        <div className="d-people">
-          {PERSONAS.map((p, i) => (
-            <Link key={p.id} to={`/clinician/${p.id}`} className="d-person">
-              <span className="d-person__tile" style={{ background: TILE[i % TILE.length] }}><b>{p.name.slice(0, 1)}</b></span>
-              <span className="d-person__name">{p.name}, synthetic</span>
-              <span className="d-person__route">{CHIP[p.id]}</span>
-            </Link>
-          ))}
+      <section className="c-split">
+        <div className="c-split__text">
+          <h2>Diagnosis came 24 months after symptoms. Home checks look in between.</h2>
+          <Accordion />
+          <p className="c-note"><b>Javaid et al. 2026</b> found a median of 24 months from first symptoms to a dementia diagnosis in 825 patients in Al Ain.</p>
         </div>
-      </section>
-
-      <section className="d-sec">
-        <div className="d-panel d-panel--lilac">
-          <div className="d-panel__art"><div className="d-stack"><div className="d-stack__back"><p className="d-stack__bar"><span className="d-win__dots" aria-hidden="true"><i /><i /><i /></span><span className="d-stack__tab">Packets waiting</span></p><p className="d-stack__line">C, 61<small>Lower twice in a row</small></p><p className="d-stack__line">E, 64<small>Everyday tasks</small></p></div><div className="d-stack__front"><p className="d-stack__bar"><span className="d-win__dots" aria-hidden="true"><i /><i /><i /></span><span className="d-stack__tab">Physician's packet</span></p><div className="d-stack__body"><PacketCard chartText={22} /></div></div></div></div>
-          <div className="d-panel__text">
-            <p className="d-label">Physician's view</p>
-            <h2>A physician reads the packet before anyone is told</h2>
-            <p>The trajectory, the treatable causes to rule out first and the risk factors already on record. If the physician approves, the person is invited to a visit and hears the result in person.</p>
-            <Link to="/clinician" className="d-glass d-glass--sm">Open the physician's view</Link>
-            <ul className="d-feats"><li><Stethoscope />Treatable causes first</li><li><Check />Approve, edit or dismiss</li><li><Clock />15-working-day clock</li><li><Code />HL7 v2 and FHIR R4</li></ul>
+        <div className="c-photo" style={{ backgroundImage: 'url(/images/cal-room.webp)' }}>
+          <div className="c-inbox">
+            <p className="c-inbox__h"><b>Packets waiting</b><span>{packetPeople.length} synthetic</span></p>
+            {packetPeople.map(({ p, t }) => <p key={p.id} className="c-inbox__row"><span className="c-av c-av--sm">{p.name.slice(0, 1)}</span><span><b>{p.name}</b><small>{STATUS_LABEL[t.status]}</small></span><i /></p>)}
           </div>
         </div>
       </section>
 
-      <section className="d-quote">
-        <p className="d-quote__by">Javaid et al. 2026<small>825 patients, Al Ain</small></p>
-        <p className="d-quote__q">In Al Ain, dementia was diagnosed a median of 24 months after symptoms began. Finding change earlier decides who can still be offered the newer medicines, which are only for early disease.</p>
-      </section>
-
-      <section className="d-sec">
-        <div className="d-panel d-panel--green d-panel--flip">
-          <div className="d-panel__text">
-            <p className="d-label">Hand-off</p>
-            <h2>Referrals the way Malaffi asks for them</h2>
-            <p>An approved packet becomes an HL7 v2 referral with a SNOMED-coded specialty and a FHIR R4 bundle. Each referral is tracked until the appointment.</p>
-            <Link to="/programme" className="d-glass d-glass--sm">See the programme view</Link>
-          </div>
-          <div className="d-grid">
-            <div className="d-tile"><p className="d-tile__t">HL7 v2 referral</p><p>REF^I12, the message Malaffi asks for</p></div>
-            <div className="d-tile"><p className="d-tile__t">FHIR R4</p><p>0 errors from the official validator</p></div>
-            <div className="d-tile"><p className="d-tile__t">Follow-up clock</p><p>Against the 15-working-day target</p></div>
-            <div className="d-tile"><p className="d-tile__t">Consent</p><p>In parts, each off by default</p></div>
-          </div>
+      <section className="c-sec">
+        <h2>Low scores have<br />more than one cause.</h2>
+        <div className="c-bento">
+          <div className="c-bcard c-bcard--wide"><div className="c-bcard__ui"><div className="c-ui"><p className="c-ui__row"><span>Sound check</span><b>Not passed</b></p><p className="c-ui__row"><span>Memory check</span><span className="c-badge">Held, not scored</span></p></div></div><h3>{ROUTES[0].t}</h3><p>{ROUTES[0].d}</p></div>
+          <div className="c-bcard"><div className="c-bcard__ui"><div className="c-ui"><p>Was today an off day?</p><p className="c-ui__sel">Yes <span>Left out</span></p></div></div><h3>{ROUTES[1].t}</h3><p>{ROUTES[1].d}</p></div>
+          <div className="c-bcard"><div className="c-bcard__ui"><div className="c-ui"><p className="c-ui__row"><span>Everyday tasks harder?</span><b>Yes</b></p></div><span className="c-ui__line" /><div className="c-ui"><p className="c-ui__row"><span>Sent to the physician</span><span className="c-badge"><Check />Sent</span></p></div></div><h3>{ROUTES[2].t}</h3><p>{ROUTES[2].d}</p></div>
+          <div className="c-bcard c-bcard--wide"><div className="c-bcard__ui"><div className="c-ui"><p className="c-ui__row"><span>Very large fall between two checks</span><b>Same day</b></p><p>See a doctor today. The routine flow is bypassed.</p></div></div><h3>{ROUTES[3].t}</h3><p>{ROUTES[3].d}</p></div>
+          <div className="c-bcard c-bcard--wide"><div className="c-bcard__ui"><pre className="c-code">{`evaluate(checks)\n  → { status: '${declineTraj.status}', baseline: ${(declineTraj.baseline as number).toFixed(1)} }`}</pre></div><h3>{ROUTES[5].t}</h3><p>{ROUTES[5].d}</p></div>
+          <div className="c-bcard"><div className="c-bcard__ui"><div className="c-ui c-ui--center"><p><b>Check received. Thank you.</b></p><p>Results are given in person.</p></div></div><h3>{ROUTES[4].t}</h3><p>{ROUTES[4].d}</p></div>
         </div>
       </section>
 
-      <section className="d-awards">
-        {FACTS.map((f) => <div key={f.n}><p className="d-awards__n">{f.n}</p><p>{f.t}</p></div>)}
-      </section>
-
-      <section className="d-sec">
-        <div className="d-panel d-panel--yellow d-panel--flip">
-          <div className="d-panel__text">
-            <p className="d-label">Who pays</p>
-            <h2>About AED {perMember} per eligible member a year</h2>
-            <p>Thiqa's packages 52-45 and 52-46 already fund hearing and dementia screening and name no memory tool. This check adds the memory step at home, for people already in the programme.</p>
-            <Link to="/how" className="d-glass d-glass--sm">Pilot design</Link>
-          </div>
-          <div className="d-tile d-tile--wide"><CostPanel /></div>
+      <section className="c-sec">
+        <h2>Handed on in the formats<br />Abu Dhabi already uses.</h2>
+        <div className="c-hub">
+          <div className="c-hub__col">{HUB.slice(0, 3).map(([t, d]) => <div key={t} className="c-hub__item"><b>{t}</b><span>{d}</span></div>)}</div>
+          <div className="c-hub__mid"><span className="c-hub__logo"><Waves /></span></div>
+          <div className="c-hub__col">{HUB.slice(3).map(([t, d]) => <div key={t} className="c-hub__item"><b>{t}</b><span>{d}</span></div>)}</div>
         </div>
       </section>
 
-      <section className="d-sec d-center">
-        <h2>Low scores have more than one cause</h2>
-        <p className="d-sub">The rule holds, leaves out or hands on a low score before it ever counts as decline.</p>
-        <div className="d-three">
-          <div className="d-three__card"><p className="d-three__top" style={{ background: '#d1eef9' }}><Ear /></p><p className="d-three__t">Held, not scored</p><p>A failed sound check holds the check. A missed check is never counted as low.</p></div>
-          <div className="d-three__card"><p className="d-three__top" style={{ background: '#fdd9c6' }}><Moon /></p><p className="d-three__t">Left out</p><p>A low score on a day the person says was off is kept but not compared.</p></div>
-          <div className="d-three__card"><p className="d-three__top" style={{ background: '#9bd8a9' }}><Stethoscope /></p><p className="d-three__t">Sent to a person</p><p>Two low checks, harder everyday tasks or a very large fall go to the physician or urgent care.</p></div>
+      <section className="c-split c-split--cost">
+        <div className="c-split__text">
+          <h2>About AED {perMember} per eligible member a year.</h2>
+          <p className="c-sub c-sub--left">Thiqa's packages 52-45 and 52-46 already fund hearing and dementia screening and name no memory tool. This check adds the memory step at home.</p>
         </div>
+        <div className="c-card"><CostPanel /></div>
       </section>
 
-      <section className="d-sec d-center">
-        <h2>What is measured, and what is not yet</h2>
-        <div className="d-plans">
-          <div className="d-plan">
-            <p className="d-plan__h">Measured</p>
-            <p className="d-plan__n">{arabic}%</p>
-            <p>of {own.whisperAlone.n} real Arabic words heard right on the device, from {own.speakers} adult volunteers.</p>
-            <ul><li><Check />{pct1(ours.falseAlarmYear)} false alarms a year in stable people, simulated</li><li><Check />{Math.round(ours.detected['2'] * 100)}% of people losing two points a check flagged within a year, simulated</li><li><Check />{tests.passed} tests run {Math.round(coverage.engine.lines * 100)}% of the decision code</li></ul>
-            <Link to="/benchmark" className="d-btn d-btn--sm">How the flag was tested</Link>
-          </div>
-          <div className="d-plan d-plan--dark">
-            <p className="d-plan__h">Not yet</p>
-            <p className="d-plan__n">0</p>
-            <p>patients so far. A pilot measures the rest.</p>
-            <ul><li><Alert />No older Emirati volunteers doing the check</li><li><Alert />Arabic lists not yet reviewed by a native speaker</li><li><Alert />Retest variation taken from published studies</li></ul>
-            <Link to="/how" className="d-btn d-btn--sm d-btn--light">What is real</Link>
-          </div>
+      <section className="c-sec">
+        <h2>What is measured,<br />and what is not yet.</h2>
+        <div className="c-two">
+          <div className="c-card"><p className="c-big">{arabic}%</p><p>of {own.whisperAlone.n} real Arabic words heard right on the device, from {own.speakers} adult volunteers.</p><ul>{MEASURED.map((m) => <li key={m}><Check />{m}</li>)}</ul></div>
+          <div className="c-card"><p className="c-big">0</p><p>patients so far. A pilot measures the rest.</p><ul>{NOT_YET.map((m) => <li key={m}><Alert />{m}</li>)}</ul></div>
         </div>
-      </section>
-
-      <section className="d-start">
-        <div><h2><em>Four minutes,</em> by voice</h2><p>Try it now in Gulf Arabic or English. No sign-up.</p></div>
-        <p className="d-start__btns"><Link to="/try" className="d-btn">Try it with your voice</Link><Link to="/recorded" className="d-btn d-btn--light">Play a recorded check</Link></p>
       </section>
     </main>
   )
@@ -692,6 +601,5 @@ function HomeD() {
 export default function HomeDirection({ dir }: { dir: Dir }) {
   if (dir === 'a') return <HomeA />
   if (dir === 'b') return <HomeB />
-  if (dir === 'd') return <HomeD />
   return <HomeC />
 }
