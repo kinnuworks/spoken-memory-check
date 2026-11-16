@@ -5,6 +5,8 @@
 //
 // Usage: npx tsx scripts/live-check.ts [url]      (default: the live site)
 // Exit code 1 when any step fails.
+// LIVE_CHECK_VIDEO=<folder> also records a screen video of the whole run (the demo path).
+// LIVE_CHECK_NO_WRITE=1 leaves src/data/live-check.json as it is (for routine checks).
 import { writeFileSync } from 'node:fs'
 import { chromium, type Page } from 'playwright'
 import { ROUTES } from './routes'
@@ -48,7 +50,8 @@ async function recordedCheck(page: Page, lang: 'en' | 'ar') {
 
 async function main() {
   const browser = await chromium.launch()
-  const context = await browser.newContext({ acceptDownloads: true })
+  const video = process.env.LIVE_CHECK_VIDEO
+  const context = await browser.newContext({ acceptDownloads: true, ...(video ? { viewport: { width: 1280, height: 800 }, recordVideo: { dir: video, size: { width: 1280, height: 800 } } } : {}) })
   const page = await context.newPage()
   const errors: string[] = []
   page.on('pageerror', (e) => errors.push(e.message))
@@ -100,9 +103,12 @@ async function main() {
     return `${clock.split('.')[0]}; HL7 REF^I12; FHIR bundle with ${b.entry.length} resources; ${log} logged decisions`
   })
 
+  const clip = page.video()
+  await context.close()
+  if (clip) console.log(`screen video: ${await clip.path()}`)
   await browser.close()
   const out = { url: BASE, ranAt: new Date().toISOString(), passed: steps.filter((s) => s.ok).length, total: steps.length, steps }
-  writeFileSync(new URL('../src/data/live-check.json', import.meta.url), JSON.stringify(out, null, 1) + '\n')
+  if (process.env.LIVE_CHECK_NO_WRITE !== '1') writeFileSync(new URL('../src/data/live-check.json', import.meta.url), JSON.stringify(out, null, 1) + '\n')
   console.log(`${out.passed} of ${out.total} steps passed`)
   if (out.passed !== out.total) process.exit(1)
 }

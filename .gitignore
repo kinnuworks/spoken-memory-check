@@ -53,3 +53,7 @@ design/stranger-*.md
 design/tagline.txt
 design/readme-first-screen.md
 design/gallery-thumbnail.png
+probe.sh
+tally.py
+lint_briefs.py
+.kit/
