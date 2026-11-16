@@ -23,7 +23,7 @@ Adults aged 50 to 64 in the adult screening programme, who have a clinic memory 
 Baseline completion; checks per member per year; packets per 1,000 members and the share dismissed; share of approved packets assessed within 15 working days; agreement between listeners and with a human listener by language, age and schooling; retest reliability; physician minutes per packet; complaints of distress.
 
 ## 7. Evidence supporting the approach
-- Our analysis of a public US survey (NHANES, 3,110 adults aged 60+): a fixed cutoff of 14 animals flags 48% of healthy adults with under 9 years of school against 16% of graduates. A personal baseline avoids this.
+- Our analysis of a public US survey (NHANES 2011 to 2014, adults aged 60+): among 2,619 who reported no worsening memory and no trouble managing money, a fixed cutoff of 14 animals flags 48% of those with under 9 years of school (265 people) against 16% of graduates (569). A personal baseline avoids this.
 - Published: within-person variation of animal naming and phone word recall (Duff et al.; Gavett et al.; Health and Retirement Study); spoken word recall and fluency scored by speech recognition agree closely with human scoring in Dutch, German and English studies.
 - Simulation of our flag: 5.2% false alarms a year in stable people against 27.4% for a single-low-check rule; flagged within the year: 52% of people losing one point a check, 97% losing two; about 70 packets per 1,000 members a year at 2% in real decline, 19 of them real.
 - 240 automated tests, listed by case.
