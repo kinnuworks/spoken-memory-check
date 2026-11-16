@@ -10,8 +10,9 @@ type Lang = 'en' | 'ar'
 // with the token-embedding table, left at 32 bits in that build, also stored as 4-bit (scripts/shrink-arabic-model.py):
 // about 165 MB to download instead of 299, every file under 100 MB. Arabic, with its tokenizer and audio settings,
 // comes from this site only. English is the unchanged onnx-community/whisper-base from huggingface.co, whose CDN
-// was many times faster than this site in testing; scripts/build-english-model.sh makes a copy for a host that
-// a pilot controls.
+// was many times faster than this site in testing. This site also serves an unchanged copy
+// (scripts/build-english-model.sh), and any English file huggingface.co doesn't start sending within 15 seconds,
+// or refuses, comes from that copy instead: some networks can't reach huggingface.co at all.
 const MODEL: Record<Lang, string> = { en: 'onnx-community/whisper-base', ar: 'whisper-small-ar-q4emb' }
 const HOST: Record<Lang, { host: string; path: string }> = {
   en: { host: 'https://huggingface.co/', path: '{model}/resolve/{revision}/' },
@@ -19,6 +20,29 @@ const HOST: Record<Lang, { host: string; path: string }> = {
 }
 env.allowLocalModels = false
 env.allowRemoteModels = true
+const HF_EN = 'https://huggingface.co/onnx-community/whisper-base/resolve/main/'
+const OWN_EN = `${self.location.origin}/models/whisper-base/`
+const HF_WAIT_MS = 15000
+const plainFetch = env.fetch
+// After one English file fails to come from huggingface.co, the rest come straight from this site.
+let hfFailed = false
+env.fetch = async (url: string | URL, init?: RequestInit) => {
+  const u = String(url)
+  if (!u.startsWith(HF_EN)) return plainFetch(url, init)
+  if (hfFailed) return plainFetch(OWN_EN + u.slice(HF_EN.length), init)
+  const stop = new AbortController()
+  const timer = setTimeout(() => stop.abort(), HF_WAIT_MS)
+  try {
+    const res = await plainFetch(url, { ...init, signal: stop.signal })
+    if (res.ok) return res
+  } catch {
+    // No answer in time, or the connection failed: use this site's copy of the same file.
+  } finally {
+    clearTimeout(timer)
+  }
+  hfFailed = true
+  return plainFetch(OWN_EN + u.slice(HF_EN.length), init)
+}
 const DTYPE: Record<Lang, 'q8' | 'q4'> = { en: 'q8', ar: 'q4' }
 // A prompt that shows the wanted format (single nouns, comma separated) and none of the answers.
 // Putting the word list itself in the prompt made the model report words nobody said.

@@ -9,6 +9,8 @@ npm run build
 
 # The Arabic speech model is served from this site (built by scripts/build-arabic-model.sh, not in git).
 test -s dist/models/whisper-small-ar-q4emb/onnx/decoder_model_merged_q4.onnx || { echo "Arabic model missing: run scripts/build-arabic-model.sh"; exit 1; }
+# English loads from huggingface.co, with this site's unchanged copy as the fallback (scripts/build-english-model.sh).
+test -s dist/models/whisper-base/onnx/decoder_model_merged_quantized.onnx || { echo "English model copy missing: run scripts/build-english-model.sh"; exit 1; }
 
 out="${DEPLOY_DIR:-$(mktemp -d)}"
 rm -rf "$out/site"
