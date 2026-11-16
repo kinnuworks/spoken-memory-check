@@ -1,19 +1,19 @@
 {
  "url": "https://spoken-memory-check.vercel.app",
- "ranAt": "2026-11-16T19:14:51.486Z",
+ "ranAt": "2026-11-16T22:03:05.786Z",
  "target": 8,
  "measure": "Flesch-Kincaid grade, English only",
  "screens": [
   {
    "name": "Start of the full check",
    "route": "/check",
-   "words": 179,
+   "words": 192,
    "sentences": 17,
-   "grade": 3.3,
+   "grade": 3.6,
    "hardest": [
     {
-     "text": "It needs a one-time download of about 77 MB from huggingface.co.",
-     "grade": 9.6
+     "text": "It needs a one-time download of about 77 MB from huggingface.co (or this site, if that doesn't answer), so use Wi-Fi on a phone.",
+     "grade": 10.3
     },
     {
      "text": "An open speech model on this device scores what you say, and your voice is sent nowhere.",
@@ -131,5 +131,5 @@
    ]
   }
  ],
- "words": 1385
+ "words": 1398
 }
