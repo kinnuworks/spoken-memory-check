@@ -194,6 +194,16 @@ function Accordion() {
   )
 }
 
+/** Statement 8's six "Your solution should" items, by their official names, and where each one is in the product. */
+const ITEMS: { t: string; d: string; gap?: string; to: string; see: string }[] = [
+  { t: 'Culturally valid and accessible assessment', d: 'Spoken in Gulf Arabic or English, with nothing to read or type, so schooling and eyesight matter less. A hearing check comes first. The speech model runs on the device, phones included.', gap: 'The Arabic word lists have no native Gulf reviewer yet.', to: '/try', see: 'Try it with your voice' },
+  { t: 'Longitudinal change detection', d: 'Three checks set a personal baseline. Each later check is compared with it after practice and measurement error. Lower once means check again. Two checks well below, or a steady fall, go to a physician. A very large fall goes the same day.', to: '/year', see: 'A year of checks' },
+  { t: 'Integrated risk context', d: "With consent, the physician's packet shows ten of the fourteen Lancet risk factors from the screening record, such as blood pressure, HbA1c, mood and hearing, plus family history and APOE from the Emirati Genome Programme.", gap: 'The record has no sleep data. Each check asks about a bad night, and the packet raises sleep apnoea.', to: '/clinician', see: "The physician's packet" },
+  { t: 'Personalized prevention and timely care', d: "The person's own page lists, in plain words, what their screening visit shows they can work on. The packet puts treatable causes first, then refers to neurology, geriatric medicine or audiology on a 15-working-day clock.", to: '/me', see: 'What the person sees' },
+  { t: 'Safety and human oversight', d: 'It flags risk and never diagnoses. Scores are ranges with stated limits, no score is shown at home, and a physician approves every routine packet before anyone is told.', to: '/story', see: 'One case, both screens' },
+  { t: 'Validation and local population performance', d: 'The Evidence page covers all seven measures the statement names, split by language, age and schooling, each marked measured, simulated or not yet.', gap: 'No patients or older Emirati volunteers yet. A pilot measures the rest.', to: '/benchmark', see: 'Evidence' },
+]
+
 const HUB = [
   ['HL7 v2 REF^I12', 'The referral message Malaffi asks for'],
   ['FHIR R4 bundle', '0 errors from the official validator'],
@@ -228,6 +238,21 @@ export default function Home() {
       <section className="c-facts">
         <p>Measured so far, each with its method</p>
         <div>{FACTS.map((f) => <p key={f.n}><b>{f.n}</b><span>{f.t}</span></p>)}</div>
+      </section>
+
+      <section className="c-sec" aria-labelledby="statement-items">
+        <h2 id="statement-items">What Statement 8 asks for,<br />and where to see each part.</h2>
+        <p className="c-sub c-sub--left">Protecting Brain Health Earlier lists six things a solution should do. Each card names one, says what this check does, and links to the screen that shows it.</p>
+        <div className="c-items">
+          {ITEMS.map((it) => (
+            <div key={it.t} className="c-item">
+              <h3>{it.t}</h3>
+              <p>{it.d}</p>
+              {it.gap && <p className="c-item__gap"><Alert /><span><b>Not yet:</b> {it.gap}</span></p>}
+              <Link to={it.to} className="c-item__see">{it.see}</Link>
+            </div>
+          ))}
+        </div>
       </section>
 
       <section className="c-split">

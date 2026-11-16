@@ -14,6 +14,19 @@ Why speech: many older adults in the Gulf had little schooling, and a test that 
 
 A prototype for Abu Dhabi's adult screening programme, built for Statement 8 of the Future Health challenge, "Protecting Brain Health Earlier". It does not diagnose. The people and histories in the demo are synthetic and labelled.
 
+## Statement 8, item by item
+
+The statement lists six things a solution should do. This is where each one is in the live demo.
+
+| Statement 8 asks for | What this check does | See it | Not yet |
+|---|---|---|---|
+| Culturally valid and accessible assessment | Spoken in Gulf Arabic or English, with nothing to read or type, so schooling and eyesight matter less. A hearing check (digits in noise) comes first. The speech model runs on the device, phones included. | [Try it with your voice](https://spoken-memory-check.vercel.app/#/try), [Hearing check](https://spoken-memory-check.vercel.app/#/hearing) | The Arabic word lists have no native Gulf reviewer yet. |
+| Longitudinal change detection | Three checks set a personal baseline. Each later check is compared with it after practice and measurement error. Lower once means check again; two checks well below, or a steady fall, go to a physician; a very large fall goes the same day. | [A year of checks](https://spoken-memory-check.vercel.app/#/year) | The measurement error comes from published studies, not our own retest. |
+| Integrated risk context | With consent, the physician's packet shows ten of the fourteen Lancet risk factors from the screening record (blood pressure, HbA1c, LDL, mood, hearing, vision, activity, smoking, BMI, schooling), plus family history and APOE from the Emirati Genome Programme, each behind its own consent. | [The physician's packet](https://spoken-memory-check.vercel.app/#/clinician) | The record has no sleep data. Each check asks "I slept badly or feel unwell today", and the packet raises sleep apnoea. |
+| Personalized prevention and timely care | The person's own page lists, in plain words, what their screening visit shows they can work on. The packet puts treatable causes first (B12, thyroid, mood, hearing, sleep apnoea, medicines), then refers to neurology, geriatric medicine or audiology on a 15-working-day clock. | [What the person sees](https://spoken-memory-check.vercel.app/#/me) | The prevention wording awaits the public health centre's approval. |
+| Safety and human oversight | It flags risk and never diagnoses. Scores are ranges with stated limits, no score is shown at home, and a physician approves every routine packet before anyone is told. | [One case, both screens](https://spoken-memory-check.vercel.app/#/story) | No physician has reviewed the packet yet. |
+| Validation and local population performance | The Evidence page covers all seven measures the statement names (completion, retest reliability, sensitivity, specificity, meaningful change, false-referral burden, time to assessment), split by language, age and schooling, each marked measured, simulated or not yet. | [Evidence](https://spoken-memory-check.vercel.app/#/benchmark) | No patients or older Emirati volunteers yet. A pilot measures the rest. |
+
 ## For judges: what is measured
 
 | | |

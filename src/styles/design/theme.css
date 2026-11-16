@@ -195,6 +195,14 @@ body { background: var(--bg); color: var(--ink-2); font-family: var(--font-body)
 .c-hub__logo { display: grid; place-items: center; width: 96px; height: 96px; border-radius: 24px; background: #242424; color: #fff; box-shadow: var(--shadow-3); }
 .c-hub__logo svg { width: 44px; height: 44px; }
 .c-sub--left { margin-top: 20px; max-width: 520px; font-size: 18px; }
+.c-items { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 56px; }
+.c-item { display: flex; flex-direction: column; gap: 10px; padding: 28px; border-radius: 22px; background: #fff; box-shadow: inset 0 0 0 1px #e5e7eb; }
+.c-item h3 { font-size: 18px; color: #242424; }
+.c-item > p { font-size: 17px; line-height: 1.45; color: #374151; }
+.c-item .c-item__gap { display: flex; gap: 8px; font-size: 16px; line-height: 1.45; color: #5f6570; }
+.c-item__gap svg { flex: none; width: 18px; height: 18px; margin-top: 2px; }
+.c-item__gap b { font-weight: 600; color: #374151; }
+.c-item__see { margin-top: auto; padding-top: 6px; font-size: 16px; font-weight: 500; color: #242424; text-decoration: underline; text-underline-offset: 3px; }
 .c-card { padding: 32px; border-radius: 22px; background: #fff; box-shadow: inset 0 0 0 1px #e5e7eb, 0 14px 22px -12px rgba(0, 0, 0, .12); }
 .c-two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 56px; }
 .c-big { margin-bottom: 12px; font: 400 64px/1 var(--font-display); letter-spacing: -.03em; color: #242424; }
@@ -217,7 +225,7 @@ body { background: var(--bg); color: var(--ink-2); font-family: var(--font-body)
   .c-bcard, .c-bcard--wide { grid-column: span 12; }
   .c-hub { grid-template-columns: 1fr; padding: 24px; gap: 24px; }
   .c-hub__col .c-hub__item::before, .c-hub__col .c-hub__item::after { display: none; }
-  .c-facts > div, .c-two { grid-template-columns: 1fr 1fr; }
+  .c-facts > div, .c-two, .c-items { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 640px) {
   .c-hero { padding-top: 88px; }
@@ -229,7 +237,7 @@ body { background: var(--bg); color: var(--ink-2); font-family: var(--font-body)
   .c-desk__menu span:not(.c-desk__right) { display: none; }
   .c-browser { width: calc(100% - 16px); margin: 24px auto; }
   .c-url { display: none; }
-  .c-facts > div, .c-two { grid-template-columns: 1fr; }
+  .c-facts > div, .c-two, .c-items { grid-template-columns: 1fr; }
   .c-sec, .c-split { width: calc(100% - 32px); padding-top: 88px; }
   .dfoot .dfoot__cta { padding: 32px 24px; }
 }
