@@ -17,7 +17,7 @@
 
 Share of evidence that is synthetic: the histories and the benchmark are entirely synthetic. The schooling analysis is real survey data. No patient data is used anywhere.
 
-Speech is heard by two listeners. The browser's own speech service may send audio to the browser's maker under its terms; the app says so before it listens. The second listener runs on the device and sends nothing anywhere.
+By default speech is heard by a listener that runs on the device and sends nothing anywhere. The browser's own speech service is an opt-in second listener; it may send audio to the browser's maker under its terms, and the switch says so.
 
 Not used: any licensed cognitive test (for example MoCA, MMSE, TICS, CERAD); any survey whose terms bar automated tools from its person-level data.
 

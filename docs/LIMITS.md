@@ -26,7 +26,7 @@
 - In open online registries about half of people do a second cognitive session and a third do a third. With a loaned tablet and reminder calls, three quarters of 114 older adults completed every monthly session in one study. So the three baseline checks are asked for in the first two weeks, and reminders are part of the design, not an extra.
 
 ## Speech
-- Two listeners: the browser's own recogniser and an open speech model on the device. On phones the two often cannot share the microphone, and on weaker devices the second is skipped; then one listener scores and the screen says so.
+- By default one listener scores: an open speech model on the device, plus own-voice matching for recall. The browser's own recogniser is an opt-in second listener. Phones (including every iPhone) and low-memory devices cannot run the on-device model, so there the person must turn on the browser's recogniser or type; the screen says so.
 - On a computer voice the on-device listener heard 19 of 20 English animals with the base model; in a separate test the small model heard 17 of 20 Arabic animals. On real single-word recordings it heard 62% of 387 English clips and 82% of 720 Arabic clips, and 93% of the Arabic clips with the speaker's own voice as the answer key (`docs/HUMAN_SPEECH_BENCH.md`).
 - Recognition has not been measured on older adults doing the check, or on Emirati speakers. On public Saudi TV speech labelled by age and dialect (SADA), Jais-ASR's word error was about the same for older and adult Gulf speakers; the on-device model makes many errors on running speech at every age (`docs/OLDER_SPEAKERS_BENCH.md`).
 - Arabic word lists and prompts are drafts that no native Gulf Arabic speaker has reviewed. Prompts use the device's synthetic voice.

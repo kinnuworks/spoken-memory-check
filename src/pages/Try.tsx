@@ -4,7 +4,7 @@ import { ANIMALS, ARABIC_REVIEWED, SOUND_CHECK_WORDS, type Lang } from '../engin
 import { scoreTask, type RangeScore } from '../engine/score'
 import { browserSpeechAvailable } from '../speech/recogniser'
 import { DOWNLOAD_FROM, DOWNLOAD_MB, loadSecond, secondLoading, secondSupported } from '../speech/second'
-import { listenTask } from '../speech/session'
+import { deviceOnlyPossible, listenTask } from '../speech/session'
 import SurveyChart from './SurveyChart'
 
 type Stage = 'intro' | 'sound' | 'sound-failed' | 'ready' | 'animals' | 'result' | 'blocked' | 'typed'
@@ -22,7 +22,7 @@ function forcedState(): Stage | null {
 export default function Try() {
   const [lang, setLang] = useState<Lang>('en')
   const forced = forcedState()
-  const [stage, setStage] = useState<Stage>(forced ?? (browserSpeechAvailable() ? 'intro' : 'blocked'))
+  const [stage, setStage] = useState<Stage>(forced ?? (deviceOnlyPossible() || browserSpeechAvailable() ? 'intro' : 'blocked'))
   const [live, setLive] = useState<RangeScore | null>(forced === 'result' ? scoreTask({ Typed: SAMPLE }, ANIMALS.en, 'en') : null)
   const sample = forced === 'result'
   const [left, setLeft] = useState(ANIMAL_SECONDS)
@@ -32,6 +32,9 @@ export default function Try() {
   const [second, setSecond] = useState<'off' | 'loading' | 'ready' | 'checking'>('off')
   const [percent, setPercent] = useState(0)
   const [listeners, setListeners] = useState(1)
+  // Scoring stays on this device unless the person turns on the browser's recogniser.
+  const [browserOn, setBrowserOn] = useState(false)
+  const [scoring, setScoring] = useState(false)
 
   function startSecond(l: Lang) {
     if (!secondSupported() || secondLoading(l)) return
@@ -40,6 +43,16 @@ export default function Try() {
   }
 
   async function listenAll(ms: number, rows: string[][], waitForSecond: boolean): Promise<RangeScore> {
+    if (!browserOn) {
+      setScoring(false)
+      const heard = await listenTask(lang, ms, () => {}, undefined, true, false, undefined, { browser: false, onRecorded: () => setScoring(true) })
+      const all = await heard.both
+      setScoring(false)
+      setListeners(Math.max(1, Object.keys(all).length))
+      const res = scoreTask(all, rows, lang)
+      setLive(res)
+      return res
+    }
     const heard = await listenTask(lang, ms, (t) => setLive(scoreTask({ Browser: t }, rows, lang)), undefined, waitForSecond)
     const first = scoreTask(heard.first, rows, lang)
     setLive(first)
@@ -55,9 +68,19 @@ export default function Try() {
 
   async function soundCheck() {
     setLive(null)
+    if (!browserOn) {
+      // The on-device listener has to be ready before anything is recorded.
+      if (!deviceOnlyPossible()) return setStage('blocked')
+      setSecond('loading')
+      try {
+        await loadSecond(lang, setPercent)
+        setSecond('ready')
+      } catch {
+        setSecond('off')
+        return setStage('blocked')
+      }
+    } else if (lang === 'en') startSecond('en') // English fetches the second listener by itself; Arabic is a large download, so the person chooses.
     setStage('sound')
-    // English fetches the second listener by itself; Arabic is a large download, so the person chooses.
-    if (lang === 'en') startSecond('en')
     try {
       const res = await listenAll(7000, SOUND_CHECK_WORDS[lang].map((w) => [w]), false)
       setStage(res.high >= 2 ? 'ready' : 'sound-failed')
@@ -106,20 +129,21 @@ export default function Try() {
       {stage === 'intro' && (
         <>
           <p>First a sound check, then 20 seconds of naming animals. This is a short taste of the full four-minute check. Nothing is stored.</p>
-          <p className="note">Two listeners score what you say. The first is your browser's own speech service, which may send audio to the browser's maker, outside the UAE. That is fine for trying it out, but not for patients: a pilot would score with the on-device listener and a UAE-hosted one only. The second is an open speech model that runs on this device and sends your recording nowhere{secondSupported() ? `; it needs a one-time download of about ${DOWNLOAD_MB[lang]} MB from ${DOWNLOAD_FROM[lang]}` : '; it is not available on this device, so one listener will score'}. Nothing is stored.</p>
-          {lang === 'ar' && secondSupported() && second === 'off' && <p><button className="small" onClick={() => startSecond('ar')}>Add the second listener for Arabic ({DOWNLOAD_MB.ar} MB)</button></p>}
-          <div className="stack"><button className="primary" onClick={soundCheck}>Start the sound check</button></div>
+          <p className="note">{deviceOnlyPossible() ? `An open speech model on this device scores what you say, and your voice is sent nowhere. It needs a one-time download of about ${DOWNLOAD_MB[lang]} MB from ${DOWNLOAD_FROM[lang]}.` : "This device can't run the on-device speech model (phones and low-memory devices do not). Turn on the browser's speech service below, or type the animals instead."}</p>
+          <label className="choice"><input className="switch" type="checkbox" checked={browserOn} onChange={(e) => setBrowserOn(e.target.checked)} /><span>Also use my browser's speech service. It shows words as you speak, but may send your voice to the browser's maker, outside the UAE.</span></label>
+          {browserOn && lang === 'ar' && secondSupported() && second === 'off' && <p><button className="small" onClick={() => startSecond('ar')}>Add the on-device listener for Arabic ({DOWNLOAD_MB.ar} MB)</button></p>}
+          <div className="stack"><button className="primary" disabled={!browserOn && !deviceOnlyPossible()} onClick={soundCheck}>Start the sound check</button><button onClick={() => setStage('typed')}>Type the animals instead</button></div>
         </>
       )}
 
-      {second === 'loading' && <div><p className="muted">Getting the second listener ready on this device: {percent}%</p><div className="meter"><i style={{ width: `${percent}%` }} /></div></div>}
+      {second === 'loading' && <div><p className="muted">Getting the speech model ready on this device: {percent}%</p><div className="meter"><i style={{ width: `${percent}%` }} /></div></div>}
 
       {stage === 'sound' && (
         <>
           <h2>Say these three words</h2>
           <p className="prompt-words" lang={lang} dir={lang === 'ar' ? 'rtl' : 'ltr'}>{SOUND_CHECK_WORDS[lang].join(lang === 'ar' ? '، ' : ', ')}</p>
           <div className="chips" lang={lang} dir={lang === 'ar' ? 'rtl' : 'ltr'}>{chips}</div>
-          <p className="listening"><i />Listening…</p>
+          <p className="listening"><i />{scoring ? 'Scoring on this device…' : 'Listening…'}</p>
         </>
       )}
 
@@ -148,7 +172,7 @@ export default function Try() {
         <>
           <h2>Name animals</h2>
           <p className="big">{left}s</p>
-          <p className="listening"><i />Listening</p>
+          <p className="listening"><i />{scoring ? 'Scoring on this device…' : 'Listening'}</p>
           <div className="chips" lang={lang} dir={lang === 'ar' ? 'rtl' : 'ltr'}>{chips}</div>
         </>
       )}
@@ -161,6 +185,8 @@ export default function Try() {
           <div className="chips" lang={lang} dir={lang === 'ar' ? 'rtl' : 'ltr'}>{chips}</div>
           {viaTyping
             ? <p className="note">You typed these, so no speech was recognised. The matching and counting are the same ones the spoken check uses: each animal counts once, whatever form you give it.</p>
+            : !browserOn
+            ? <p className="note">Scored on this device by the open speech model, and your voice was sent nowhere. To add a second listener and see words as you speak, turn on the browser's speech service before you start.</p>
             : second === 'checking'
             ? <p className="note">Your browser's recogniser heard the animals above. The second listener, on this device, is now going through the same recording…</p>
             : one

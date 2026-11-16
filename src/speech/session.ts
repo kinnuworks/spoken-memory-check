@@ -18,14 +18,49 @@ export interface Heard {
 }
 
 /**
- * Listens to one task. The browser's recogniser hears it live; the same speech is recorded
- * and given to the on-device listener afterwards. On phones the two often cannot share the
- * microphone, so a silent recording simply means one listener, which the screen states.
+ * Listens to one task. By default the speech is recorded and scored on this device only.
+ * If the person turns on the browser's recogniser, it hears the task live and the same speech
+ * is recorded and given to the on-device listener afterwards. On phones the two often cannot
+ * share the microphone, so a silent recording simply means one listener, which the screen states.
  */
-export async function listenTask(lang: Lang, ms: number, onPartial: (text: string) => void, control?: ListenControl, useSecond = true, useCloud = false, own?: Templates): Promise<Heard> {
+export interface ListenOptions {
+  /** Let the browser's own recogniser listen too. It shows words live, but the browser's maker may receive the audio. Off by default. */
+  browser?: boolean
+  /** Called when the recording stops and scoring on the device begins (on-device only). */
+  onRecorded?: () => void
+  /** Score the recording (on-device only). Off for tasks that are recorded but not scored. */
+  score?: boolean
+}
+
+/** Whether this device can score speech on its own, with nothing sent anywhere. */
+export function deviceOnlyPossible(): boolean {
+  return secondSupported() && !!navigator.mediaDevices?.getUserMedia && typeof MediaRecorder !== 'undefined'
+}
+
+export async function listenTask(lang: Lang, ms: number, onPartial: (text: string) => void, control?: ListenControl, useSecond = true, useCloud = false, own?: Templates, opts: ListenOptions = { browser: true }): Promise<Heard> {
+  const wantOwn = !!own && Object.keys(own).length > 0
+  if (!opts.browser) {
+    // On-device only: record for the task's time, then score the recording on this device.
+    // Nothing is sent anywhere unless the person turned on the UAE-hosted listener.
+    const capture = await startCapture()
+    if (!capture) throw new Error('blocked')
+    await new Promise<void>((resolve) => {
+      const t = setTimeout(resolve, ms)
+      if (control) control.stop = () => { clearTimeout(t); resolve() }
+    })
+    const clip = await capture.stop()
+    opts.onRecorded?.()
+    const both = (async (): Promise<Record<string, string>> => {
+      if (!clip || level(clip) < 0.002 || opts.score === false) return {}
+      const [second, cloud] = await Promise.all([transcribeSecond(clip, lang), useCloud ? transcribeCloud(clip, lang) : Promise.resolve(null)])
+      const ownText = wantOwn ? spot(own!, clip).map((d) => d.word).join(' ') : null
+      return { ...(second === null ? {} : { [SECOND_NAME]: second }), ...(cloud === null ? {} : { [CLOUD_NAME]: cloud }), ...(ownText === null ? {} : { [OWN_NAME]: ownText }) }
+    })()
+    // Nothing is heard live, so `first` is empty; callers that need the words wait for `both`.
+    return { first: {}, both, clip: Promise.resolve(clip) }
+  }
   const wantSecond = useSecond && secondSupported() && secondLoading(lang)
   const wantCloud = useSecond && useCloud
-  const wantOwn = !!own && Object.keys(own).length > 0
   const capture = wantSecond || wantCloud || wantOwn ? await startCapture() : null
   let text: string
   try {

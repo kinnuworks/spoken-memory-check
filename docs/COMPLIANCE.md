@@ -34,7 +34,7 @@ What stays on the device:
 - The physician's packet and FHIR file in the demo. They use synthetic people, and the FHIR bundle is a download to the same computer.
 
 What leaves the device, and where it goes:
-- To the browser's maker: audio heard by the browser's own speech recogniser. The app tells the person before listening. Where that audio is processed is set by the browser, not by us (ASSUMPTION: outside the UAE for Chrome). This is the main gap a pilot must close.
+- To the browser's maker: audio heard by the browser's own speech recogniser, only if the person turns it on (off by default). The switch says where the audio may go. Where that audio is processed is set by the browser, not by us (ASSUMPTION: outside the UAE for Chrome). This is the main gap a pilot must close.
 - To Azure UAE North, only if the person switched on the UAE speech service and a service key is configured: up to three recordings per check (recall, animals, later recall, at most 45, 60 and 45 seconds, from `src/pages/Check.tsx`), streamed straight from the browser. No key is configured today, so this path is off: the live endpoint returns `{"available":false}`.
 - To this site's function `api/speech-token.js`: a request with no audio. With a key set, it returns a short-lived token for the UAE North region. Without a key, it only answers that the service is off.
 - To the device, one time: the on-device model weights. Arabic (165 MB, with its tokenizer and audio settings) comes from this site; English (77 MB, unchanged public weights) comes from huggingface.co, whose CDN was many times faster. No personal data goes with either request. `scripts/build-english-model.sh` makes the English copy a pilot would host in a UAE region. Nothing goes the other way.

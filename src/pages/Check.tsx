@@ -8,8 +8,8 @@ import { clearChecks, loadChecks, saveCheck, type StoredCheck } from '../engine/
 import { browserSpeechAvailable, type ListenControl } from '../speech/recogniser'
 import { level, startCapture } from '../speech/capture'
 import { addConfirmed, features, type Templates } from '../engine/templates'
-import { DOWNLOAD_FROM, DOWNLOAD_MB, loadSecond, secondLoading, secondSupported } from '../speech/second'
-import { OWN_NAME, listenTask, type Heard } from '../speech/session'
+import { DOWNLOAD_FROM, DOWNLOAD_MB, SECOND_NAME, loadSecond, secondLoading, secondSupported } from '../speech/second'
+import { OWN_NAME, deviceOnlyPossible, listenTask, type Heard } from '../speech/session'
 import { cloudAvailable } from '../speech/cloud'
 import { loadConsent, saveConsent } from '../engine/consent'
 import { APP_VERSION } from '../engine/audit'
@@ -53,7 +53,8 @@ const AR = {
   intro: 'يستغرق الفحص نحو أربع دقائق، ولا تحتاج إلا إلى صوتك. يبدأ بفحص للصوت. بعدها تكرر عشر كلمات، وتذكر أسماء حيوانات لمدة دقيقة، وتعد تنازلياً. وفي النهاية تقول الكلمات العشر مرة أخرى. اختر مكاناً هادئاً وأجرِ الفحص وحدك.',
   offDay: 'نمت نوماً سيئاً أو أشعر بتوعك اليوم',
   cloud: 'اسمح أيضاً لخدمة تعرّف على الكلام مستضافة في الإمارات بسماع هذا الفحص. لديها نموذج للهجة الخليجية، ولم تُقَس بعد دقتها مع المتحدثين الخليجيين في هذا الفحص. يغادر تسجيلك هذا الجهاز لهذا الغرض، ولا يُحفظ، ويمكنك إيقاف ذلك في أي وقت.',
-  listeners: 'يقيّم ما تقوله مستمعان. الأول خدمة الكلام في متصفحك، وقد ترسل صوتك إلى الشركة المصنّعة للمتصفح خارج الإمارات. الثاني يعمل على هذا الجهاز ولا يرسل صوتك إلى أي مكان. نتائجك تبقى على هذا الجهاز. هذه نسخة تجريبية ولا تشخّص.',
+  listeners: 'يقيّم ما تقوله نموذج كلام يعمل على هذا الجهاز، ولا يُرسل صوتك إلى أي مكان. نتائجك تبقى على هذا الجهاز. هذه نسخة تجريبية ولا تشخّص.',
+  browser: 'استخدم أيضاً خدمة الكلام في متصفحي. تعرض الكلمات أثناء حديثي، لكنها قد ترسل صوتي إلى الشركة المصنّعة للمتصفح خارج الإمارات.',
   agree: 'أوافق على إجراء فحوص الذاكرة في المنزل وحفظ نتائجي على هذا الجهاز. يمكنني إيقاف ذلك وحذف فحوصي في أي وقت.',
   start: 'ابدأ الفحص',
   listening: 'نستمع…',
@@ -64,7 +65,7 @@ const AR = {
 
 export default function Check() {
   const [lang, setLang] = useState<Lang>('en')
-  const [stage, setStage] = useState<Stage>(browserSpeechAvailable() ? 'intro' : 'blocked')
+  const [stage, setStage] = useState<Stage>(deviceOnlyPossible() || browserSpeechAvailable() ? 'intro' : 'blocked')
   const [live, setLive] = useState<RangeScore | null>(null)
   const [offDay, setOffDay] = useState(false)
   const [history, setHistory] = useState<StoredCheck[]>(loadChecks())
@@ -74,6 +75,8 @@ export default function Check() {
   const [cloudReady, setCloudReady] = useState(false)
   const [cloudOn, setCloudOn] = useState(loadConsent().cloudListener)
   const [agreed, setAgreed] = useState(loadConsent().takeChecks)
+  // Scoring stays on this device unless the person turns on the browser's recogniser.
+  const [browserOn, setBrowserOn] = useState(false)
   useEffect(() => { void cloudAvailable().then(setCloudReady) }, [])
   const useCloud = cloudReady && cloudOn
   const listIndex = history.length % WORD_LISTS[lang].length
@@ -85,10 +88,10 @@ export default function Check() {
     loadSecond(lang, setPercent).then(() => setPercent(null)).catch(() => setPercent(null))
   }
 
-  async function listen(ms: number, rows: string[][], show = true, useSecond = true, own?: Templates): Promise<Heard> {
+  async function listen(ms: number, rows: string[][], show = true, useSecond = true, own?: Templates, score = true): Promise<Heard> {
     control.current = {}
     setLive(null)
-    const heard = await listenTask(lang, ms, (t) => { if (show) setLive(scoreTask({ Browser: t }, rows, lang)) }, control.current, useSecond, useCloud, own)
+    const heard = await listenTask(lang, ms, (t) => { if (show) setLive(scoreTask({ Browser: t }, rows, lang)) }, control.current, useSecond, useCloud, own, { browser: browserOn, score })
     if (show) setLive(scoreTask(heard.first, rows, lang))
     return heard
   }
@@ -96,9 +99,16 @@ export default function Check() {
   async function run() {
     try {
       setStage('sound')
-      if (lang === 'en') startSecond()
+      if (!browserOn) {
+        // The on-device listener has to be ready before anything is recorded.
+        if (!deviceOnlyPossible()) throw new Error('no-device-listener')
+        setPercent(0)
+        await loadSecond(lang, setPercent)
+        setPercent(null)
+      } else if (lang === 'en') startSecond()
       const soundRows = SOUND_CHECK_WORDS[lang].map((w) => [w])
-      const sound = scoreTask((await listen(7000, soundRows, true, false)).first, soundRows, lang)
+      const soundHeard = await listen(7000, soundRows, true, false)
+      const sound = scoreTask(browserOn ? soundHeard.first : await soundHeard.both, soundRows, lang)
       if (sound.high < 2) {
         // A second failed sound check in a row is saved as a held check: not scored, never read as low.
         if (stage === 'sound-failed') {
@@ -133,7 +143,7 @@ export default function Check() {
 
       await speak(T[lang].count, lang)
       setStage('count'); setLive(null)
-      await listen(30000, [], false, false)
+      await listen(30000, [], false, false, undefined, false)
 
       await speak(T[lang].recallLater, lang)
       setStage('recall-2')
@@ -148,7 +158,7 @@ export default function Check() {
       await speak(T[lang].fn, lang)
       setStage('function')
       const fnHeard = await listen(8000, [], false, false)
-      const functionChange = readYesNo(fnHeard.first.Browser ?? '', lang)
+      const functionChange = readYesNo(browserOn ? (fnHeard.first.Browser ?? '') : ((await fnHeard.both)[SECOND_NAME] ?? ''), lang)
       await speak(T[lang].thanks, lang)
 
       // The second listener works through each recording after the task; wait for all three.
@@ -197,7 +207,8 @@ export default function Check() {
           <label className="choice"><input className="switch" type="checkbox" checked={offDay} onChange={(e) => setOffDay(e.target.checked)} /><span>{bi('I slept badly or feel unwell today', AR.offDay)}</span></label>
           {cloudReady && <label className="choice"><input className="switch" type="checkbox" checked={cloudOn} onChange={(e) => { setCloudOn(e.target.checked); saveConsent({ ...loadConsent(), cloudListener: e.target.checked }) }} /><span>{bi('Also let a speech service hosted in the UAE hear this check. It has a Gulf Arabic model; how well it hears Gulf speakers in this check has not been measured yet. Your recording leaves this device for this, is not kept, and you can turn this off at any time.', AR.cloud)}</span></label>}
           {lang === 'ar' && <p className="note" lang="ar" dir="rtl">{AR.listeners}</p>}
-          <p className="note">Two listeners score what you say. The first is your browser's own speech service, which may send your voice to the company that made the browser, outside the UAE. In this test version that is what makes live listening work; a pilot would use the on-device and UAE listeners only. The second runs on this device and sends your voice nowhere.{secondSupported() ? ` It needs a one-time download of about ${DOWNLOAD_MB[lang]} MB from ${DOWNLOAD_FROM[lang]}.` : ' It does not work on this device, so only one listener will score.'} The voice reading the words is your device's own. Your scores stay on this device. This is a test version and does not diagnose.</p>
+          <p className="note">An open speech model on this device scores what you say, and your voice is sent nowhere.{secondSupported() ? ` It needs a one-time download of about ${DOWNLOAD_MB[lang]} MB from ${DOWNLOAD_FROM[lang]}.` : " This device can't run it, so to take the check here, turn on the browser's speech service below."} What you say back is also matched against your own voice saying the words. The voice reading the words is your device's own. Your scores stay on this device. This is a test version and does not diagnose.</p>
+          <label className="choice"><input className="switch" type="checkbox" checked={browserOn} onChange={(e) => setBrowserOn(e.target.checked)} /><span>{bi("Also use my browser's speech service. It shows words as I speak, but may send my voice to the browser's maker, outside the UAE.", AR.browser)}</span></label>
           {lang === 'ar' && secondSupported() && percent === null && !secondLoading('ar') && <p><button className="small" onClick={startSecond}>Add the second listener for Arabic ({DOWNLOAD_MB.ar} MB)</button></p>}
           <label className="choice"><input className="switch" type="checkbox" checked={agreed} onChange={(e) => { setAgreed(e.target.checked); saveConsent({ ...loadConsent(), takeChecks: e.target.checked }) }} /><span>{bi('I agree to take memory checks at home and keep my scores on this device. I can turn this off and delete my checks at any time.', AR.agree)}</span></label>
           <div className="stack"><button className="primary" disabled={!agreed} onClick={run}>{lang === 'ar' ? <span lang="ar">{AR.start}</span> : 'Start the check'}</button>{!agreed && <p className="muted">Turn on the agreement above to start.</p>}</div>
@@ -212,7 +223,7 @@ export default function Check() {
         </>
       )}
 
-      {percent !== null && <p className="muted">Second listener: {percent}%</p>}
+      {percent !== null && <p className="muted">Speech model on this device: {percent}%</p>}
       {stage === 'function' && <p lang={lang} dir={dir}>{T[lang].fn}</p>}
       {stage === 'scoring' && <p className="listening"><i />{useCloud ? 'The on-device and UAE listeners are going through your recordings.' : 'The second listener is going through your recordings on this device.'} This can take up to a minute.</p>}
       {stage === 'sound' && <><p className="prompt-words" lang={lang} dir={dir}>{SOUND_CHECK_WORDS[lang].join(lang === 'ar' ? '، ' : ', ')}</p><p className="listening"><i />Listening…</p></>}
