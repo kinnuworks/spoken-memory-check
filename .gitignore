@@ -57,3 +57,4 @@ probe.sh
 tally.py
 lint_briefs.py
 .kit/
+__pycache__/
