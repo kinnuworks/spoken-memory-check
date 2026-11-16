@@ -10,7 +10,8 @@ import coverage from '../data/coverage-summary.json'
 import { COST_DEFAULTS, yearlyCost } from '../engine/cost'
 import { evaluate, PACKET_STATUSES, STATUS_LABEL, type Trajectory } from '../engine/change'
 import { PERSONAS, type Persona } from '../engine/histories'
-import { Alert, Check, Clock, Code, Ear, EyeOff, List, Mic, Moon, Trend, Waves } from '../components/Icons'
+import { WORD_LISTS } from '../engine/lexicon'
+import { Alert, Check, Code, Ear, EyeOff, List, Mic, Moon, Trend, Waves } from '../components/Icons'
 import TrajectoryChart from './TrajectoryChart'
 
 const rows = data.rows.filter((r) => r.world === 'As assumed')
@@ -82,7 +83,7 @@ function ChartKey() {
   )
 }
 
-const CHIP: Record<string, string> = { stable: 'Steady', practice: 'Practice gain', decline: 'Steady fall', hearing: 'Hearing hold', function: 'Everyday tasks', urgent: 'Very large fall' }
+const CHIP: Record<string, string> = { stable: 'Steady', practice: 'Rises with practice', decline: 'Slow decline', hearing: 'Hearing problem', function: 'Daily tasks harder', urgent: 'Sudden large drop' }
 
 /** Modelled yearly cost for one provider, with the uptake slider. */
 function CostPanel() {
@@ -110,6 +111,7 @@ function CostPanel() {
 }
 
 
+const WORDS = WORD_LISTS.en[0]
 const packetPeople = PERSONAS.map((p) => ({ p, t: evaluate(p.checks) })).filter(({ p, t }) => !outcome(t, p).ok)
 const MEASURED = [
   `${pct1(ours.falseAlarmYear)} false alarms a year in stable people, simulated`,
@@ -124,9 +126,10 @@ const NOT_YET = ['No older Emirati volunteers doing the check', 'Arabic lists no
 
 type Design = { onReplay?: (fn: () => void) => void }
 
-/** The real rule on six synthetic people, laid out like a booking widget. Choosing a person, or
- *  pressing R in a demo, replays the signature moment: the year of checks lands one check at a
- *  time, then each step of the rule, then the outcome. */
+/** One synthetic person's year, end to end, in three numbered steps: the check at home, the
+ *  comparison with their own baseline, and what the doctor gets. Choosing a person, or pressing R
+ *  in a demo, replays the signature moment: the checks land one at a time, then each step of the
+ *  rule, then the outcome. */
 function CalWidget() {
   const [id, setId] = useState('decline')
   const [run, setRun] = useState(0)
@@ -137,32 +140,38 @@ function CalWidget() {
   const steps = ruleSteps(p, t)
   const n = p.checks.length
   const key = `${id}-${run}`
+  const first = p.name.split(',')[0]
   return (
-    <div className="c-widget">
-      <div className="c-widget__who">
-        <span className="c-av">{p.name.slice(0, 1)}</span>
-        <p className="c-widget__name">{p.name}, synthetic</p>
-        <p className="c-widget__title">{p.path}</p>
-        <p className="c-widget__desc">{n} checks over a year. {p.story.split('. ')[0].replace(/\.$/, '')}.</p>
-        <p className="c-widget__pick">Pick a synthetic person</p>
-        <div className="c-seg" role="group" aria-label="Pick a synthetic person">
-          {PERSONAS.map((x) => <button key={x.id} type="button" aria-pressed={x.id === id} className={x.id === id ? 'is-on' : ''} onClick={() => { setId(x.id); setRun((r) => r + 1) }}>{CHIP[x.id]}</button>)}
+    <>
+      <div className="c-people" role="group" aria-label="Pick a synthetic person">
+        <span className="c-people__label">Pick a person</span>
+        {PERSONAS.map((x) => <button key={x.id} type="button" aria-pressed={x.id === id} className={x.id === id ? 'is-on' : ''} onClick={() => { setId(x.id); setRun((r) => r + 1) }}>{x.name.split(',')[0]}: {CHIP[x.id]}</button>)}
+      </div>
+      <div className="c-widget">
+        <div className="c-col">
+          <p className="c-col__n"><b>1</b>At home, by voice</p>
+          <div className="c-phone">
+            <p className="c-phone__h">Say these ten words back</p>
+            <p className="c-phone__chips">{WORDS.slice(0, 6).map((w) => <span key={w}>{w}</span>)}</p>
+            <p className="c-phone__step"><Waves />Then a minute of animals, and the words again</p>
+            <p className="c-phone__done"><Check />Check received. Thank you.</p>
+          </div>
+          <p className="c-col__note">Four minutes, every few months. Nothing to read or type, and no score on screen.</p>
         </div>
-        <p className="c-widget__row"><Clock />Four minutes a check</p>
-        <p className="c-widget__row"><Mic />Gulf Arabic or English</p>
+        <div className="c-col">
+          <p className="c-col__n"><b>2</b>Compared with {first}’s own baseline</p>
+          <p className="c-col__who">{p.name}, synthetic. {n} checks over a year. {p.story.split('. ')[0].replace(/\.$/, '')}.</p>
+          <TrajectoryChart key={key} checks={p.checks} traj={t} compact textSize={17} animate />
+          <ChartKey />
+        </div>
+        <div className="c-col" key={key} style={{ '--n': n } as React.CSSProperties}>
+          <p className="c-col__n"><b>3</b>What the doctor gets</p>
+          {steps.map((s, i) => <p key={s.label} className="c-slot c-sig" style={{ '--i': i } as React.CSSProperties}><i />{s.label}</p>)}
+          <p className={`c-slot c-slot--out c-sig c-sig--out ${o.ok ? 'is-ok' : 'is-flag'}`} style={{ '--i': steps.length } as React.CSSProperties}><Check />{o.text}</p>
+          <p className="c-widget__side c-sig" style={{ '--i': steps.length + 1 } as React.CSSProperties}>{o.side}</p>
+        </div>
       </div>
-      <div className="c-widget__chart">
-        <p className="c-widget__h">A year of checks, against {p.name.split(',')[0]}’s own baseline</p>
-        <TrajectoryChart key={key} checks={p.checks} traj={t} compact textSize={17} animate />
-        <ChartKey />
-      </div>
-      <div className="c-widget__steps" key={key} style={{ '--n': n } as React.CSSProperties}>
-        <p className="c-widget__h">What the rule decided</p>
-        {steps.map((s, i) => <p key={s.label} className="c-slot c-sig" style={{ '--i': i } as React.CSSProperties}><i />{s.label}</p>)}
-        <p className={`c-slot c-slot--out c-sig c-sig--out ${o.ok ? 'is-ok' : 'is-flag'}`} style={{ '--i': steps.length } as React.CSSProperties}><Check />{o.text}</p>
-        <p className="c-widget__side c-sig" style={{ '--i': steps.length + 1 } as React.CSSProperties}>{o.side}</p>
-      </div>
-    </div>
+    </>
   )
 }
 
@@ -198,20 +207,20 @@ export default function Home() {
   return (
     <main className="dh dh-c">
       <section className="c-hero">
-        <p className="c-pill"><span>New</span>Gulf Arabic: {arabic}% of {own.whisperAlone.n} real words heard on the device</p>
+        <p className="c-pill"><span>New</span>Speech recognition on the device heard {arabic}% of {own.whisperAlone.n} real Arabic words</p>
         <h1>
-          <span className="c-line">A memory check <span className="c-obj c-obj--word" aria-hidden="true"><Mic /><b lang="ar">نهر</b><small>river</small></span> you speak,</span>{' '}
-          <span className="c-line"><span className="c-obj c-obj--wave" aria-hidden="true"><Waves /><b>4 min</b></span> tracked against yourself <span className="c-obj c-obj--card" aria-hidden="true"><b>Check received</b><small><Check />Thank you</small></span></span>
+          <span className="c-line">A four-minute memory check <span className="c-obj c-obj--word" aria-hidden="true"><Mic /><b lang="ar">نهر</b><small>river</small></span></span>{' '}
+          <span className="c-line">by voice, at home <span className="c-obj c-obj--card" aria-hidden="true"><b>Check received</b><small><Check />Thank you</small></span></span>
         </h1>
-        <p className="c-sub">By voice, in Gulf Arabic or English. Nothing to read or type.</p>
+        <p className="c-sub">Compared with your own past checks. Your doctor hears only lasting changes.</p>
         <p className="c-btns"><Link to="/try" className="c-btn c-btn--dark"><Mic />Try it with your voice</Link><Link to="/year" className="c-btn"><Trend />See a year of checks</Link></p>
-        <p className="c-small"><b>No sign-up.</b> Below: the physician’s view, run on six synthetic people.</p>
+        <p className="c-small"><b>No sign-up.</b> Gulf Arabic or English, nothing to read or type.</p>
       </section>
 
       <section className="c-desk">
-        <div className="c-desk__menu"><b>Spoken memory check</b><span>File</span><span>Edit</span><span>View</span><span>Window</span><span>Help</span><span className="c-desk__right">Synthetic people</span></div>
+        <div className="c-desk__menu"><b>Spoken memory check</b><span className="c-desk__right">Synthetic people</span></div>
         <div className="c-browser">
-          <div className="c-browser__bar"><span className="c-lights" aria-hidden="true"><i /><i /><i /></span><span className="c-url">Physician’s view: what the rule decided for each person</span></div>
+          <div className="c-browser__bar"><span className="c-lights" aria-hidden="true"><i /><i /><i /></span><span className="c-url">How it works: one synthetic person’s year, from home check to doctor</span></div>
           <CalWidget />
         </div>
       </section>
