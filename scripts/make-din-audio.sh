@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# SUPERSEDED for English: scripts/make-open-voice-audio.ts makes the English files with an open voice.
+# Apple's licence allows the macOS system voices only for personal, non-commercial use, so the Arabic
+# files these make are replaced before submission. Do not use this script for anything published.
 # Makes the digit recordings for the hearing test with the computer's own voices
 # (macOS "say"): Samantha for English, Majed for Arabic. These are synthetic stand-ins
 # until a native speaker records them; the app labels them so.

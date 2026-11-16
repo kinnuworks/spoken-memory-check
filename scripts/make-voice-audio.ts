@@ -10,8 +10,8 @@
 // Needs AZURE_SPEECH_KEY (and optionally AZURE_SPEECH_REGION, default uaenorth) in .env.
 // Usage: npx tsx scripts/make-voice-audio.ts [--dry-run]
 import { mkdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs'
-import { ANIMALS, WORD_LISTS, type Lang } from '../src/engine/lexicon'
-import { matchClosedSet } from '../src/engine/match'
+import type { Lang } from '../src/engine/lexicon'
+import { GAPS, checkScripts, jobs as scriptJobs } from './voice-script'
 
 const DRY = process.argv.includes('--dry-run')
 
@@ -33,30 +33,6 @@ const VOICE: Record<Lang, { name: string; locale: string }> = {
   ar: { name: E.AZURE_TTS_VOICE_AR || 'ar-AE-HamdanNeural', locale: 'ar-AE' },
   en: { name: E.AZURE_TTS_VOICE_EN || 'en-US-AvaNeural', locale: 'en-US' },
 }
-
-// What the voice says. The recorded check page scores the listeners against these same lists.
-const SCRIPT: Record<Lang, { recall1: string[]; animals: string[]; recall2: string[]; answer: string; twenty: string[]; digits: string[] }> = {
-  en: {
-    recall1: ['river', 'candle', 'window', 'garden', 'carpet', 'bridge', 'mirror', 'jacket'],
-    animals: ['dog', 'cat', 'horse', 'cow', 'lion', 'tiger', 'elephant', 'giraffe', 'camel', 'monkey', 'rabbit', 'eagle', 'shark', 'sheep'],
-    recall2: ['river', 'window', 'garden', 'mirror', 'candle', 'butter'],
-    answer: 'No.',
-    twenty: ['dog', 'cat', 'horse', 'cow', 'sheep', 'goat', 'camel', 'lion', 'tiger', 'elephant', 'giraffe', 'zebra', 'monkey', 'bear', 'wolf', 'fox', 'rabbit', 'eagle', 'shark', 'snake'],
-    digits: ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'],
-  },
-  ar: {
-    recall1: ['نهر', 'شمعة', 'نافذة', 'حديقة', 'كرسي', 'جسر', 'مرآة', 'معطف'],
-    animals: ['جمل', 'حصان', 'قطة', 'كلب', 'أسد', 'نمر', 'فيل', 'زرافة', 'غزال', 'صقر', 'سمكة', 'بقرة', 'خروف', 'ثعلب'],
-    recall2: ['نهر', 'نافذة', 'حديقة', 'مرآة', 'شمعة', 'زبدة'],
-    answer: 'لا.',
-    twenty: ['جمل', 'حصان', 'كلب', 'قطة', 'بقرة', 'خروف', 'ماعز', 'حمار', 'أسد', 'نمر', 'فيل', 'زرافة', 'قرد', 'دب', 'ذئب', 'ثعلب', 'غزال', 'أرنب', 'صقر', 'سمكة'],
-    digits: ['صفر', 'واحد', 'اثنان', 'ثلاثة', 'أربعة', 'خمسة', 'ستة', 'سبعة', 'ثمانية', 'تسعة'],
-  },
-}
-const DIN_DIGITS = [1, 2, 3, 4, 5, 6, 8, 9]
-const GAPS = [900, 1300, 700, 1600, 1000, 800, 1400, 1100, 1200, 900, 1500, 800, 1000, 1300]
-/** Speaking-rate changes for the ten words said back, so the answer key is not ten identical takes. */
-const RATES = ['-5%', '+4%', '-10%', '+8%', '0%', '-7%', '+6%', '+2%', '-3%', '+10%']
 
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 function ssml(lang: Lang, body: string, rate = '0%'): string {
@@ -105,32 +81,15 @@ function trimWav(wav: Buffer, padMs = 30): Buffer {
   return Buffer.concat([head, pcm])
 }
 
-function checkScripts() {
-  // Every word the voice says for the animal tasks must be an accepted animal, each a different one.
-  for (const lang of ['en', 'ar'] as Lang[]) {
-    for (const [name, words] of [['animals', SCRIPT[lang].animals], ['twenty', SCRIPT[lang].twenty]] as const) {
-      const rows = matchClosedSet(words.join(' '), ANIMALS[lang], lang)
-      if (rows.size !== words.length) throw new Error(`${lang} ${name}: ${words.length} animals said but ${rows.size} distinct accepted animals`)
-    }
-    const list = WORD_LISTS[lang][0]
-    for (const w of [...SCRIPT[lang].recall1, ...SCRIPT[lang].recall2]) if (!list.includes(w) && w !== SCRIPT[lang].recall1[4]) throw new Error(`${lang}: ${w} is not on list 1`)
-  }
-}
-
 async function main() {
   checkScripts()
-  const jobs: { out: string; xml: string; format: string; trim: boolean }[] = []
-  const F16 = 'riff-16khz-16bit-mono-pcm', F22 = 'riff-22050hz-16bit-mono-pcm'
-  for (const lang of ['en', 'ar'] as Lang[]) {
-    const s = SCRIPT[lang], dir = `public/samples/full/${lang}`
-    WORD_LISTS[lang][0].forEach((w, i) => jobs.push({ out: `${dir}/reg-${String(i + 1).padStart(2, '0')}.wav`, xml: ssml(lang, esc(w), RATES[i]), format: F16, trim: true }))
-    jobs.push({ out: `${dir}/recall-1.wav`, xml: ssml(lang, spaced(s.recall1), '-3%'), format: F16, trim: false })
-    jobs.push({ out: `${dir}/animals.wav`, xml: ssml(lang, spaced(s.animals)), format: F16, trim: false })
-    jobs.push({ out: `${dir}/recall-2.wav`, xml: ssml(lang, spaced(s.recall2), '-6%'), format: F16, trim: false })
-    jobs.push({ out: `${dir}/answer.wav`, xml: ssml(lang, esc(s.answer)), format: F16, trim: false })
-    jobs.push({ out: `public/samples/synthetic-voice-animals-${lang}.wav`, xml: ssml(lang, spaced(s.twenty)), format: F16, trim: false })
-    for (const d of DIN_DIGITS) jobs.push({ out: `public/din/${lang}/${d}.wav`, xml: ssml(lang, esc(s.digits[d])), format: F22, trim: true })
-  }
+  const rate = (n: number) => (n === 0 ? '0%' : `${n > 0 ? '+' : ''}${n}%`)
+  const jobs = scriptJobs().map((j) => ({
+    out: j.out,
+    xml: ssml(j.lang, j.words.length > 1 ? spaced(j.words) : esc(j.words[0]), rate(j.ratePct)),
+    format: j.sampleRate === 22050 ? 'riff-22050hz-16bit-mono-pcm' : 'riff-16khz-16bit-mono-pcm',
+    trim: j.trim,
+  }))
   const chars = jobs.reduce((n, j) => n + j.xml.length, 0)
   console.log(`${jobs.length} recordings, ${chars} characters of SSML, voices ${VOICE.ar.name} and ${VOICE.en.name}, region ${REGION}`)
   if (DRY) return
