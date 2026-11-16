@@ -27,6 +27,8 @@ const STYLE: Record<Lang, string> = {
   ar: 'بيت، كتاب، سيارة، شجرة، مدرسة، باب، كرسي، شارع، كوب، حذاء',
 }
 const SR = 16000
+// Memory settings for the inference engine, so the model fits in a phone browser's memory.
+const LEAN = { enableCpuMemArena: false, enableMemPattern: false, extra: { session: { disable_prepacking: '1' } } }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let loaded: { lang: Lang; processor: any; tokenizer: any; model: any } | null = null
@@ -48,7 +50,7 @@ async function load(lang: Lang) {
     AutoProcessor.from_pretrained(id, { progress_callback }),
     AutoTokenizer.from_pretrained(id, { progress_callback }),
   ])
-  const model = await WhisperForConditionalGeneration.from_pretrained(id, { dtype: DTYPE[lang], device: 'wasm', progress_callback })
+  const model = await WhisperForConditionalGeneration.from_pretrained(id, { dtype: DTYPE[lang], device: 'wasm', progress_callback, session_options: LEAN })
   loaded = { lang, processor, tokenizer, model }
 }
 

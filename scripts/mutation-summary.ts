@@ -8,7 +8,7 @@ import { join } from 'node:path'
 const ROOT = new URL('..', import.meta.url).pathname
 const report = JSON.parse(readFileSync(join(ROOT, 'external/mutation/mutation.json'), 'utf8'))
 const ROLE: Record<string, string> = {
-  'change.ts': 'Flag rule: baseline, two low checks, slow decline, urgent, held and off-day checks',
+  'change.ts': 'Flag rule: baseline, two checks together, slow decline, urgent, held and off-day checks',
   'score.ts': 'Scoring ranges from the listeners',
   'match.ts': 'Word matching, Arabic folding and near misses',
   'din.ts': 'Hearing check threshold and referral',

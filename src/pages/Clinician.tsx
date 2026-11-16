@@ -49,8 +49,10 @@ function Clinician({ id }: { id?: string }) {
     { step: 'Three scored checks set the baseline', ok: true, detail: `baseline ${base.toFixed(1)}` },
     byReport
       ? { step: 'Person reported that everyday tasks have become harder (this overrides the scores)', ok: true, detail: flag.date }
-      : { step: 'Lower than usual on two scored checks in a row', ok: true, detail: `${flag.date}, z ${(flag.z as number).toFixed(2)}` },
-    { step: byReport ? 'Scores themselves are within the usual range' : 'Neither low check was reported as an off day', ok: true },
+      : flag.status === 'trend'
+        ? { step: 'Falling steadily across every scored check (slow-decline route)', ok: true, detail: `${flag.date}, ${Math.abs(flag.slope as number).toFixed(1)} points a check, slope z ${(flag.slopeZ as number).toFixed(2)}` }
+        : { step: 'The last two scored checks, taken together, lower than usual', ok: true, detail: `${flag.date}, z of the two ${(flag.pairZ as number).toFixed(2)}` },
+    { step: byReport ? 'Scores themselves are within the usual range' : flag.status === 'trend' ? 'Off days left out of the line' : 'Neither low check was reported as an off day', ok: true },
     { step: 'Not a very large single drop (that goes to urgent assessment)', ok: true },
     { step: 'Physician decision', ok: decision !== 'pending', detail: decision === 'pending' ? 'held: waiting for you' : decision },
     { step: 'Result given in person at a visit', ok: decision === 'approved' && !!referredOn, detail: decision === 'approved' ? (referredOn ? `visit ${visitOn}` : 'held: visit not yet recorded') : 'held' },
@@ -79,7 +81,7 @@ function Clinician({ id }: { id?: string }) {
         <p className="muted">The rule, in full. Fixed in code; no language model takes part.</p>
         <p><code>change = score − baseline − expected practice gain</code><br />
         <code>error = √( {DEFAULT_PARAMS.sem.toFixed(1)}² × (1 + 1/3) + range² / 12 )</code><br />
-        <code>z = change ÷ error</code>; lower than usual when <code>z ≤ {DEFAULT_PARAMS.flagZ}</code>; flagged only on two scored checks in a row.</p>
+        <code>z = change ÷ error</code>; one check is lower than usual when <code>z ≤ {DEFAULT_PARAMS.flagZ}</code>, and is never sent on alone. A packet needs the average of the last two scored checks at <code>z ≤ {DEFAULT_PARAMS.pairZ}</code>, or a line through every scored check, from the eighth, falling at <code>slope ÷ its error ≤ {DEFAULT_PARAMS.trendZ}</code>.</p>
         <p className="muted">{DEFAULT_PARAMS.sem.toFixed(1)} points is how much one check varies within a person, taken from published retest studies of similar tasks and not yet from this check. "Range" is the gap between what both listeners heard and what either heard. A score in the usual range does not rule out impairment, and this is a change from the person's own baseline, not a diagnosis.</p>
       </div>
 

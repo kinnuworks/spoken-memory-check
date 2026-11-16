@@ -291,7 +291,7 @@ export default function RecordedCheck() {
           </div>
           <div className="card">
             <p><strong>What the rule does with it</strong></p>
-            <p>{total.result.note} {total.scored ? 'As a first check, it is not compared with anything. Three scored checks within two weeks set the baseline; later checks are compared with it, and a physician hears only after two low checks in a row.' : 'A missing score is never treated as a low one.'}</p>
+            <p>{total.result.note} {total.scored ? 'As a first check, it is not compared with anything. Three scored checks within two weeks set the baseline; later checks are compared with it, and a physician hears only when two checks in a row sit well below it, or the scores fall steadily.' : 'A missing score is never treated as a low one.'}</p>
           </div>
           <table><tbody>
             <tr><td>Answer key from the ten words said back</td><td>{own?.seconds} s</td></tr>

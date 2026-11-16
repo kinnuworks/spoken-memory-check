@@ -104,7 +104,7 @@ export default function Hearing() {
             <li>Play the sample and set the volume so the voice is clear and comfortable. Then leave the volume alone.</li>
             <li>You will hear {DIN.trials} sets of three digits. Tap the three you heard, in order. Guess if you are not sure.</li>
           </ol>
-          {lang === 'ar' && secondSupported() && (
+          {lang === 'ar' && secondSupported('ar') && (
             <p className="muted">
               {fetching === null
                 ? <button className="small" onClick={getReady}>Get the Arabic speech model ready during this check (one-time download, about {DOWNLOAD_MB.ar} MB)</button>

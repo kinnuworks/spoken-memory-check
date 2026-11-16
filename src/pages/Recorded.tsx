@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { ANIMALS, type Lang } from '../engine/lexicon'
 import { scoreTask, type RangeScore } from '../engine/score'
 import { decodeTo16k } from '../speech/capture'
-import { DOWNLOAD_FROM, DOWNLOAD_MB, SECOND_NAME, loadSecond, transcribeSecond } from '../speech/second'
+import { DOWNLOAD_FROM, DOWNLOAD_MB, SECOND_NAME, loadSecond, secondCrashedBefore, transcribeSecond } from '../speech/second'
 import SurveyChart from './SurveyChart'
 
 const CLIP: Record<Lang, string> = { en: 'samples/synthetic-voice-animals-en.wav', ar: 'samples/synthetic-voice-animals-ar.wav' }
@@ -17,6 +17,8 @@ export default function Recorded() {
   const [seconds, setSeconds] = useState(0)
 
   async function run() {
+    // Running it again where it closed the page last time would only close the page again.
+    if (secondCrashedBefore(lang)) return setStage('failed')
     try {
       setStage('loading')
       const bytes = await (await fetch(CLIP[lang])).arrayBuffer()
@@ -57,7 +59,7 @@ export default function Recorded() {
       {stage === 'listening' && <p className="listening"><i />Listening to the recording on this device…</p>}
       {stage === 'failed' && (
         <>
-          <p>The on-device listener could not run here. Older or low-memory devices score with one listener only.</p>
+          <p>The on-device listener could not run here.{secondCrashedBefore(lang) ? ' Last time, this device closed the page while running it, which usually means it ran out of memory.' : ''} Older and low-memory devices can't run it.</p>
           <div className="stack"><Link className="btn primary" to="/year">See a year of checks</Link></div>
         </>
       )}

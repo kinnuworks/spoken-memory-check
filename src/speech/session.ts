@@ -33,8 +33,8 @@ export interface ListenOptions {
 }
 
 /** Whether this device can score speech on its own, with nothing sent anywhere. */
-export function deviceOnlyPossible(): boolean {
-  return secondSupported() && !!navigator.mediaDevices?.getUserMedia && typeof MediaRecorder !== 'undefined'
+export function deviceOnlyPossible(lang?: Lang): boolean {
+  return secondSupported(lang) && !!navigator.mediaDevices?.getUserMedia && typeof MediaRecorder !== 'undefined'
 }
 
 export async function listenTask(lang: Lang, ms: number, onPartial: (text: string) => void, control?: ListenControl, useSecond = true, useCloud = false, own?: Templates, opts: ListenOptions = { browser: true }): Promise<Heard> {
@@ -59,7 +59,7 @@ export async function listenTask(lang: Lang, ms: number, onPartial: (text: strin
     // Nothing is heard live, so `first` is empty; callers that need the words wait for `both`.
     return { first: {}, both, clip: Promise.resolve(clip) }
   }
-  const wantSecond = useSecond && secondSupported() && secondLoading(lang)
+  const wantSecond = useSecond && secondSupported(lang) && secondLoading(lang)
   const wantCloud = useSecond && useCloud
   const capture = wantSecond || wantCloud || wantOwn ? await startCapture() : null
   let text: string

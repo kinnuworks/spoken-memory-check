@@ -8,7 +8,7 @@ import { clearChecks, loadChecks, saveCheck, type StoredCheck } from '../engine/
 import { browserSpeechAvailable, type ListenControl } from '../speech/recogniser'
 import { level, startCapture } from '../speech/capture'
 import { addConfirmed, features, type Templates } from '../engine/templates'
-import { DOWNLOAD_FROM, DOWNLOAD_MB, SECOND_NAME, loadSecond, secondLoading, secondSupported } from '../speech/second'
+import { DOWNLOAD_FROM, DOWNLOAD_MB, SECOND_NAME, loadSecond, secondCrashedBefore, secondLoading, secondSupported } from '../speech/second'
 import { OWN_NAME, deviceOnlyPossible, listenTask, type Heard } from '../speech/session'
 import { cloudAvailable } from '../speech/cloud'
 import { loadConsent, saveConsent } from '../engine/consent'
@@ -65,7 +65,7 @@ const AR = {
 
 export default function Check() {
   const [lang, setLang] = useState<Lang>('en')
-  const [stage, setStage] = useState<Stage>(deviceOnlyPossible() || browserSpeechAvailable() ? 'intro' : 'blocked')
+  const [stage, setStage] = useState<Stage>(deviceOnlyPossible('en') || browserSpeechAvailable() ? 'intro' : 'blocked')
   const [live, setLive] = useState<RangeScore | null>(null)
   const [offDay, setOffDay] = useState(false)
   const [history, setHistory] = useState<StoredCheck[]>(loadChecks())
@@ -83,7 +83,7 @@ export default function Check() {
   const words = WORD_LISTS[lang][listIndex]
 
   function startSecond() {
-    if (!secondSupported() || secondLoading(lang)) return
+    if (!secondSupported(lang) || secondLoading(lang)) return
     setPercent(0)
     loadSecond(lang, setPercent).then(() => setPercent(null)).catch(() => setPercent(null))
   }
@@ -101,7 +101,7 @@ export default function Check() {
       setStage('sound')
       if (!browserOn) {
         // The on-device listener has to be ready before anything is recorded.
-        if (!deviceOnlyPossible()) throw new Error('no-device-listener')
+        if (!deviceOnlyPossible(lang)) throw new Error('no-device-listener')
         setPercent(0)
         await loadSecond(lang, setPercent)
         setPercent(null)
@@ -207,9 +207,9 @@ export default function Check() {
           <label className="choice"><input className="switch" type="checkbox" checked={offDay} onChange={(e) => setOffDay(e.target.checked)} /><span>{bi('I slept badly or feel unwell today', AR.offDay)}</span></label>
           {cloudReady && <label className="choice"><input className="switch" type="checkbox" checked={cloudOn} onChange={(e) => { setCloudOn(e.target.checked); saveConsent({ ...loadConsent(), cloudListener: e.target.checked }) }} /><span>{bi('Also let a speech service hosted in the UAE hear this check. It has a Gulf Arabic model; how well it hears Gulf speakers in this check has not been measured yet. Your recording leaves this device for this, is not kept, and you can turn this off at any time.', AR.cloud)}</span></label>}
           {lang === 'ar' && <p className="note" lang="ar" dir="rtl">{AR.listeners}</p>}
-          <p className="note">An open speech model on this device scores what you say, and your voice is sent nowhere.{secondSupported() ? ` It needs a one-time download of about ${DOWNLOAD_MB[lang]} MB from ${DOWNLOAD_FROM[lang]}.` : " This device can't run it, so to take the check here, turn on the browser's speech service below."} What you say back is also matched against your own voice saying the words. The voice reading the words is your device's own. Your scores stay on this device. This is a test version and does not diagnose.</p>
+          <p className="note">An open speech model on this device scores what you say, and your voice is sent nowhere.{secondSupported(lang) ? ` It needs a one-time download of about ${DOWNLOAD_MB[lang]} MB from ${DOWNLOAD_FROM[lang]}, so use Wi-Fi on a phone.` : secondCrashedBefore(lang) ? " Last time, this device closed the page while running it, which usually means it ran out of memory. To take the check here, turn on the browser's speech service below." : " This device can't run it, so to take the check here, turn on the browser's speech service below."} What you say back is also matched against your own voice saying the words. The voice reading the words is your device's own. Your scores stay on this device. This is a test version and does not diagnose.</p>
           <label className="choice"><input className="switch" type="checkbox" checked={browserOn} onChange={(e) => setBrowserOn(e.target.checked)} /><span>{bi("Also use my browser's speech service. It shows words as I speak, but may send my voice to the browser's maker, outside the UAE.", AR.browser)}</span></label>
-          {lang === 'ar' && secondSupported() && percent === null && !secondLoading('ar') && <p><button className="small" onClick={startSecond}>Add the second listener for Arabic ({DOWNLOAD_MB.ar} MB)</button></p>}
+          {lang === 'ar' && secondSupported('ar') && percent === null && !secondLoading('ar') && <p><button className="small" onClick={startSecond}>Add the second listener for Arabic ({DOWNLOAD_MB.ar} MB)</button></p>}
           <label className="choice"><input className="switch" type="checkbox" checked={agreed} onChange={(e) => { setAgreed(e.target.checked); saveConsent({ ...loadConsent(), takeChecks: e.target.checked }) }} /><span>{bi('I agree to take memory checks at home and keep my scores on this device. I can turn this off and delete my checks at any time.', AR.agree)}</span></label>
           <div className="stack"><button className="primary" disabled={!agreed} onClick={run}>{lang === 'ar' ? <span lang="ar">{AR.start}</span> : 'Start the check'}</button>{!agreed && <p className="muted">Turn on the agreement above to start.</p>}</div>
           {history.length > 0 && (

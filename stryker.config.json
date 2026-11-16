@@ -24,5 +24,11 @@
   "tempDirName": "external/.stryker-tmp",
   "concurrency": 6,
   "timeoutMS": 20000,
-  "tsconfigFile": "stryker-no-tsconfig.json"
+  "tsconfigFile": "stryker-no-tsconfig.json",
+  "ignorePatterns": [
+    "public/models",
+    "external",
+    "dist",
+    "design"
+  ]
 }

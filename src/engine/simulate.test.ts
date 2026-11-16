@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { DEFAULT_PARAMS } from './change'
-import { BASE_WORLD, firstFlag, rng, simulatePerson } from './simulate'
+import { BASE_WORLD, firstFlag, rng, simulatePerson, suddenDrops } from './simulate'
 import { bundle, checkObservation, referralRequest } from './fhir'
 
 const share = (n: number, f: (r: () => number) => boolean) => { const r = rng(7); let k = 0; for (let i = 0; i < n; i++) if (f(r)) k++; return k / n }
@@ -24,6 +24,22 @@ describe('flag on simulated people', () => {
     const before = share(4000, (r) => firstFlag('two-in-a-row', simulatePerson(w, r)) >= w.declineFrom)
     expect(both).toBeGreaterThan(before + 0.08)
   })
+  it('catches more slow decline than the previous rule, at a similar false-alarm rate', () => {
+    const w = { ...BASE_WORLD, slope: 1 }
+    const now = share(4000, (r) => firstFlag('ours', simulatePerson(w, r)) >= w.declineFrom)
+    const prev = share(4000, (r) => firstFlag('previous', simulatePerson(w, r)) >= w.declineFrom)
+    expect(now).toBeGreaterThan(prev + 0.03)
+    const faNow = share(4000, (r) => firstFlag('ours', simulatePerson(BASE_WORLD, r)) >= 0)
+    const faPrev = share(4000, (r) => firstFlag('previous', simulatePerson(BASE_WORLD, r)) >= 0)
+    expect(faNow).toBeLessThan(faPrev + 0.01)
+  })
+  it('does not catch a sudden lasting drop later than the previous rule', () => {
+    const [now, prev] = suddenDrops(3000, 11, ['ours', 'previous'])
+    for (const step of ['6', '8', '10']) {
+      expect(now.detected[step]).toBeGreaterThanOrEqual(prev.detected[step] - 0.01)
+      expect(now.medianChecksToFlag[step] as number).toBeLessThanOrEqual(prev.medianChecksToFlag[step] as number)
+    }
+  }, 60000)
   it('would notice if the trend cut-off were loosened', () => {
     const loose = share(4000, (r) => firstFlag('ours', simulatePerson(BASE_WORLD, r), { ...DEFAULT_PARAMS, trendZ: -1 }) >= 0)
     expect(loose).toBeGreaterThan(0.1)
@@ -43,7 +59,7 @@ describe('flag on simulated people', () => {
     expect(broken).toBeGreaterThan(0.15)
   })
   it('would notice if the threshold were loosened', () => {
-    const loose = share(4000, (r) => firstFlag('ours', simulatePerson(BASE_WORLD, r), { ...DEFAULT_PARAMS, flagZ: -1 }) >= 0)
+    const loose = share(4000, (r) => firstFlag('ours', simulatePerson(BASE_WORLD, r), { ...DEFAULT_PARAMS, pairZ: -1.5 }) >= 0)
     expect(loose).toBeGreaterThan(0.1)
   })
   it('would notice if the practice adjustment were far too large', () => {

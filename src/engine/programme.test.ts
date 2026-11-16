@@ -138,7 +138,7 @@ describe('benchmark helpers', () => {
 
   it('reports every world and rule, with detection rising with the size of the decline', () => {
     const b = runBenchmark(300, 5)
-    expect(b.rows).toHaveLength(7 * 4)
+    expect(b.rows).toHaveLength(7 * 5)
     for (const row of b.rows.filter((x) => x.rule === 'ours')) {
       expect(row.detected['3']).toBeGreaterThanOrEqual(row.detected['1'])
       expect(row.falseAlarmYear).toBeLessThan(0.12)

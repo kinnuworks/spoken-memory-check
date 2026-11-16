@@ -1,4 +1,4 @@
-import { DEFAULT_PARAMS, TWO_IN_A_ROW_ONLY, evaluate, expectedPractice, type Check, type RuleParams } from './change'
+import { DEFAULT_PARAMS, PREVIOUS_PARAMS, evaluate, expectedPractice, type Check, type RuleParams } from './change'
 
 // Simulated people for testing the flag. Nothing here is patient data. Every setting is
 // stated so a reader can disagree with it and rerun.
@@ -12,6 +12,8 @@ export interface World {
   miss: number
   /** Points lost per check once decline starts (0 for a stable person). */
   slope: number
+  /** Points lost at once when decline starts, and kept lost (a sudden, lasting drop). */
+  step?: number
   /** SD of true scores between people, used only by the fixed-cutoff rule. */
   betweenSd: number
   checks: number
@@ -38,7 +40,7 @@ export function simulatePerson(w: World, r: () => number): Check[] {
   const out: Check[] = []
   for (let i = 0; i < w.checks; i++) {
     const gain = w.practiceGain * (1 - Math.exp(-i / DEFAULT_PARAMS.practiceTau))
-    const drop = i >= w.declineFrom ? w.slope * (i - w.declineFrom + 1) : 0
+    const drop = i >= w.declineFrom ? w.slope * (i - w.declineFrom + 1) + (w.step ?? 0) : 0
     const said = Math.max(0, Math.round(mu + gain - drop + normal(r) * w.sem))
     // Each recogniser misses words independently: both heard, then heard by at least one.
     const both = binomial(said, (1 - w.miss) ** 2, r)
@@ -48,16 +50,18 @@ export function simulatePerson(w: World, r: () => number): Check[] {
   return out
 }
 
-/** 'ours' is the rule of record (both routes); 'two-in-a-row' is the rule before the trend route was added. */
-export type RuleName = 'ours' | 'two-in-a-row' | 'single-low' | 'fixed-cutoff'
-export const RULES: RuleName[] = ['ours', 'two-in-a-row', 'single-low', 'fixed-cutoff']
+/** 'ours' is the rule of record; 'previous' is the rule before this version; 'two-in-a-row' is the first rule, before the trend route. */
+export type RuleName = 'ours' | 'previous' | 'two-in-a-row' | 'single-low' | 'fixed-cutoff'
+export const RULES: RuleName[] = ['ours', 'previous', 'two-in-a-row', 'single-low', 'fixed-cutoff']
+const PREVIOUS = { pairMode: PREVIOUS_PARAMS.pairMode, trendZ: PREVIOUS_PARAMS.trendZ, trendMinChecks: PREVIOUS_PARAMS.trendMinChecks, trendRuns: PREVIOUS_PARAMS.trendRuns }
 
 const RAISED = new Set(['flag', 'trend', 'urgent'])
 
 /** Index of the first check at which the rule raises a flag, or -1. */
 export function firstFlag(rule: RuleName, checks: Check[], p: RuleParams = DEFAULT_PARAMS): number {
   if (rule === 'ours') return evaluate(checks, p).results.findIndex((x) => RAISED.has(x.status))
-  if (rule === 'two-in-a-row') return evaluate(checks, { ...p, trendZ: TWO_IN_A_ROW_ONLY.trendZ }).results.findIndex((x) => RAISED.has(x.status))
+  if (rule === 'previous') return evaluate(checks, { ...p, ...PREVIOUS }).results.findIndex((x) => RAISED.has(x.status))
+  if (rule === 'two-in-a-row') return evaluate(checks, { ...p, ...PREVIOUS, trendZ: Number.NEGATIVE_INFINITY }).results.findIndex((x) => RAISED.has(x.status))
   if (rule === 'single-low') return evaluate(checks, p).results.findIndex((x) => x.z !== null && x.z <= p.flagZ)
   // One cutoff for everyone: the 5th percentile of a first-ever score in this simulated population.
   const cut = POP_MEAN - 1.645 * Math.sqrt(BASE_WORLD.betweenSd ** 2 + p.sem ** 2)
@@ -105,6 +109,31 @@ export function runBenchmark(n: number, seed = REPORT_SEED, rules: RuleName[] = 
     }
   }
   return { n, seed, rows }
+}
+
+/**
+ * Sudden, lasting drops of 6, 8 and 10 points from the fifth check, in the as-assumed world.
+ * A rule tuned for slow decline must not catch these later; this is how that is checked.
+ */
+export function suddenDrops(n: number, seed = REPORT_SEED, rules: RuleName[] = ['ours', 'previous', 'two-in-a-row'], p: RuleParams = DEFAULT_PARAMS) {
+  const steps = [6, 8, 10]
+  return rules.map((rule) => {
+    const r = rng(seed)
+    const detected: Record<string, number> = {}
+    const median: Record<string, number | null> = {}
+    for (const step of steps) {
+      const world = { ...BASE_WORLD, step }
+      const delays: number[] = []
+      for (let i = 0; i < n; i++) {
+        const f = firstFlag(rule, simulatePerson(world, r), p)
+        if (f >= world.declineFrom) delays.push(f - world.declineFrom + 1)
+      }
+      delays.sort((a, b) => a - b)
+      detected[String(step)] = delays.length / n
+      median[String(step)] = delays.length ? delays[Math.floor(delays.length / 2)] : null
+    }
+    return { rule, detected, medianChecksToFlag: median }
+  })
 }
 
 /**

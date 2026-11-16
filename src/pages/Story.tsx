@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { evaluate } from '../engine/change'
+import { PACKET_STATUSES, STATUS_LABEL, evaluate } from '../engine/change'
 import { PERSONAS } from '../engine/histories'
 import { addWorkingDays, treatableContributors } from '../engine/packet'
 import { SPECIALTY } from '../engine/fhir'
@@ -11,7 +11,8 @@ import TrajectoryChart from './TrajectoryChart'
 // clinic sees, side by side. Every number comes from the same rule the rest of the app uses.
 const person = PERSONAS.find((p) => p.id === 'decline')!
 const traj = evaluate(person.checks)
-const flag = traj.results.find((r) => r.status === 'flag')!
+const flag = traj.results.find((r) => PACKET_STATUSES.includes(r.status))!
+const scoredSoFar = traj.results.filter((r) => r.scored && r.index <= flag.index).length
 const approvedOn = addWorkingDays(flag.date, 2)
 const visitOn = addWorkingDays(approvedOn, 5)
 const seenOn = addWorkingDays(visitOn, 12)
@@ -53,7 +54,9 @@ const STEPS: Step[] = [
     title: 'Low again: a packet for the physician',
     upTo: 8,
     phone: { head: 'Check received. Thank you.', body: 'Still nothing alarming at home. The physician decides first.', ticks: true },
-    clinic: { head: 'Lower twice in a row', body: `On ${flag.date}: ${Math.abs(flag.change as number).toFixed(1)} points below baseline after practice, ${Math.abs(flag.z as number).toFixed(1)} times the measurement error. A packet goes to the ordering physician.`, extra: 'packet' },
+    clinic: flag.status === 'trend'
+      ? { head: STATUS_LABEL.trend, body: `On ${flag.date}: ${Math.abs(flag.change as number).toFixed(1)} points below baseline after practice. Across all ${scoredSoFar} checks the score has fallen about ${Math.abs(flag.slope as number).toFixed(1)} points a check, more than measurement error explains. A packet goes to the ordering physician.`, extra: 'packet' }
+      : { head: STATUS_LABEL.flag, body: `On ${flag.date}: ${Math.abs(flag.change as number).toFixed(1)} points below baseline after practice. This check and the one before, taken together, are ${Math.abs(flag.pairZ as number).toFixed(1)} times the measurement error below baseline. A packet goes to the ordering physician.`, extra: 'packet' },
   },
   {
     title: 'The physician approves',

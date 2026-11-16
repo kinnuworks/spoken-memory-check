@@ -2,7 +2,7 @@
 
 ## Statement
 
-The spoken memory check is software that an adult uses at home, by voice, to take a short memory check between clinic visits. It compares each result with that person's own earlier results. When scores stay below the person's usual range on two checks in a row, or when the person reports that everyday tasks have become harder, it prepares a packet for the ordering physician. The physician decides what happens next. The software does not diagnose any condition.
+The spoken memory check is software that an adult uses at home, by voice, to take a short memory check between clinic visits. It compares each result with that person's own earlier results. When two checks in a row sit well below the person's usual range, when scores fall steadily across all checks, or when the person reports that everyday tasks have become harder, it prepares a packet for the ordering physician. The physician decides what happens next. The software does not diagnose any condition.
 
 ## Users
 

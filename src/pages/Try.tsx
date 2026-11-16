@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { ANIMALS, ARABIC_REVIEWED, SOUND_CHECK_WORDS, type Lang } from '../engine/lexicon'
 import { scoreTask, type RangeScore } from '../engine/score'
 import { browserSpeechAvailable } from '../speech/recogniser'
-import { DOWNLOAD_FROM, DOWNLOAD_MB, loadSecond, secondLoading, secondSupported } from '../speech/second'
+import { DOWNLOAD_FROM, DOWNLOAD_MB, loadSecond, secondCrashedBefore, secondLoading, secondSupported } from '../speech/second'
 import { deviceOnlyPossible, listenTask } from '../speech/session'
 import SurveyChart from './SurveyChart'
 
@@ -22,7 +22,7 @@ function forcedState(): Stage | null {
 export default function Try() {
   const [lang, setLang] = useState<Lang>('en')
   const forced = forcedState()
-  const [stage, setStage] = useState<Stage>(forced ?? (deviceOnlyPossible() || browserSpeechAvailable() ? 'intro' : 'blocked'))
+  const [stage, setStage] = useState<Stage>(forced ?? (deviceOnlyPossible('en') || browserSpeechAvailable() ? 'intro' : 'blocked'))
   const [live, setLive] = useState<RangeScore | null>(forced === 'result' ? scoreTask({ Typed: SAMPLE }, ANIMALS.en, 'en') : null)
   const sample = forced === 'result'
   const [left, setLeft] = useState(ANIMAL_SECONDS)
@@ -37,7 +37,7 @@ export default function Try() {
   const [scoring, setScoring] = useState(false)
 
   function startSecond(l: Lang) {
-    if (!secondSupported() || secondLoading(l)) return
+    if (!secondSupported(l) || secondLoading(l)) return
     setSecond('loading')
     loadSecond(l, setPercent).then(() => setSecond('ready')).catch(() => setSecond('off'))
   }
@@ -70,7 +70,7 @@ export default function Try() {
     setLive(null)
     if (!browserOn) {
       // The on-device listener has to be ready before anything is recorded.
-      if (!deviceOnlyPossible()) return setStage('blocked')
+      if (!deviceOnlyPossible(lang)) return setStage('blocked')
       setSecond('loading')
       try {
         await loadSecond(lang, setPercent)
@@ -129,10 +129,10 @@ export default function Try() {
       {stage === 'intro' && (
         <>
           <p>First a sound check, then 20 seconds of naming animals. This is a short taste of the full four-minute check. Nothing is stored.</p>
-          <p className="note">{deviceOnlyPossible() ? `An open speech model on this device scores what you say, and your voice is sent nowhere. It needs a one-time download of about ${DOWNLOAD_MB[lang]} MB from ${DOWNLOAD_FROM[lang]}.` : "This device can't run the on-device speech model (phones and low-memory devices do not). Turn on the browser's speech service below, or type the animals instead."}</p>
+          <p className="note">{deviceOnlyPossible(lang) ? `An open speech model on this device scores what you say, and your voice is sent nowhere. It needs a one-time download of about ${DOWNLOAD_MB[lang]} MB from ${DOWNLOAD_FROM[lang]}, so use Wi-Fi on a phone.` : secondCrashedBefore(lang) ? "Last time, this device closed the page while running the speech model, which usually means it ran out of memory. Turn on the browser's speech service below, or type the animals instead." : "This device can't run the on-device speech model (older and low-memory devices can't). Turn on the browser's speech service below, or type the animals instead."}</p>
           <label className="choice"><input className="switch" type="checkbox" checked={browserOn} onChange={(e) => setBrowserOn(e.target.checked)} /><span>Also use my browser's speech service. It shows words as you speak, but may send your voice to the browser's maker, outside the UAE.</span></label>
-          {browserOn && lang === 'ar' && secondSupported() && second === 'off' && <p><button className="small" onClick={() => startSecond('ar')}>Add the on-device listener for Arabic ({DOWNLOAD_MB.ar} MB)</button></p>}
-          <div className="stack"><button className="primary" disabled={!browserOn && !deviceOnlyPossible()} onClick={soundCheck}>Start the sound check</button><button onClick={() => setStage('typed')}>Type the animals instead</button></div>
+          {browserOn && lang === 'ar' && secondSupported('ar') && second === 'off' && <p><button className="small" onClick={() => startSecond('ar')}>Add the on-device listener for Arabic ({DOWNLOAD_MB.ar} MB)</button></p>}
+          <div className="stack"><button className="primary" disabled={!browserOn && !deviceOnlyPossible(lang)} onClick={soundCheck}>Start the sound check</button><button onClick={() => setStage('typed')}>Type the animals instead</button></div>
         </>
       )}
 

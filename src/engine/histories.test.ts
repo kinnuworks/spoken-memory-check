@@ -7,10 +7,10 @@ describe('seeded histories', () => {
   const statuses = (id: string) => evaluate(PERSONAS.find((p) => p.id === id)!.checks).results.map((r) => r.status)
   it('never flags the stable person', () => { expect(statuses('stable')).not.toContain('flag'); expect(statuses('stable')).not.toContain('trend') })
   it('never flags the person who only gains from practice', () => { expect(statuses('practice')).not.toContain('flag'); expect(statuses('practice')).not.toContain('trend') })
-  it('flags the declining person, and not on the first low check', () => {
+  it('sends the slowly declining person on through the slow-decline route, and not on the first low check', () => {
     const s = statuses('decline')
-    expect(s).toContain('flag')
-    expect(s.indexOf('watch')).toBeLessThan(s.indexOf('flag'))
+    expect(s).toContain('trend')
+    expect(s.indexOf('watch')).toBeLessThan(s.indexOf('trend'))
   })
 })
 

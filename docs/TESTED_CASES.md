@@ -25,11 +25,17 @@ Run them with `npm test`. Each line is one automated test.
 - The baseline is the mean of the first three scored checks, skipping missed ones.
 - A stable person stays in the usual range.
 - One low check does not raise a flag.
-- Two low checks in a row raise a flag.
+- Two checks in a row well below baseline raise a flag; the first of them alone is only "lower once".
+- The two checks are judged by their average: two checks 8 points down stay at "lower once" (the previous rule flagged them), while one check 15 points down and one 5 points down raise a flag.
 - A missed check neither breaks nor fakes "two in a row".
+- Two checks whose average sits exactly on the two-check line raise a flag; a hair above does not.
+- The two-check test counts both checks, the width of each range and the baseline error they share, checked against the formula.
+- With the previous rule, the first check after the baseline can never count as the second low check.
 - A day reported as an off day does not count towards a flag.
 - A very large fall since the last check asks for urgent assessment.
 - A slow decline goes through the routine flag, never the urgent route.
+- The slow-decline route raises a packet the first time the line falls far enough; the previous rule waited for a second check.
+- Against the previous rule, on simulated people: more slow decline caught at a similar false-alarm rate, and sudden lasting drops of 6, 8 and 10 points caught no later.
 - An improvement never raises a flag.
 - A wider range from the recognisers makes the rule less sure.
 - The expected practice gain is taken off later checks.
@@ -38,7 +44,7 @@ Run them with `npm test`. Each line is one automated test.
 
 ## Wrong settings the benchmark must notice
 - The rule no longer asking for two checks in a row.
-- A loosened threshold.
+- A loosened threshold (the two-check cut-off, or the trend cut-off).
 - A practice adjustment that is far too large.
 
 ## Hand-off

@@ -1,11 +1,18 @@
 {
- "generated": "2026-11-14",
+ "generated": "2026-11-16",
  "tool": "StrykerJS 10.1 with the Vitest runner",
- "mutants": 897,
- "caught": 826,
- "score": 0.921,
+ "mutants": 1026,
+ "caught": 940,
+ "score": 0.916,
  "note": "Most bugs the tests miss are changes to wording shown to people, not to the decision itself.",
  "files": [
+  {
+   "file": "packet.ts",
+   "role": "Physician packet: risk factors, treatable causes, referral clock",
+   "mutants": 210,
+   "caught": 177,
+   "score": 0.843
+  },
   {
    "file": "rescore.ts",
    "role": "Blind re-scoring",
@@ -15,17 +22,17 @@
   },
   {
    "file": "change.ts",
-   "role": "Flag rule: baseline, two low checks, slow decline, urgent, held and off-day checks",
-   "mutants": 299,
-   "caught": 286,
-   "score": 0.957
+   "role": "Flag rule: baseline, two checks together, slow decline, urgent, held and off-day checks",
+   "mutants": 336,
+   "caught": 320,
+   "score": 0.952
   },
   {
    "file": "consent.ts",
    "role": "Consent parts",
-   "mutants": 19,
-   "caught": 16,
-   "score": 0.842
+   "mutants": 27,
+   "caught": 25,
+   "score": 0.926
   },
   {
    "file": "din.ts",
@@ -37,16 +44,9 @@
   {
    "file": "match.ts",
    "role": "Word matching, Arabic folding and near misses",
-   "mutants": 260,
-   "caught": 237,
-   "score": 0.912
-  },
-  {
-   "file": "packet.ts",
-   "role": "Physician packet: risk factors, treatable causes, referral clock",
-   "mutants": 174,
-   "caught": 147,
-   "score": 0.845
+   "mutants": 308,
+   "caught": 278,
+   "score": 0.903
   },
   {
    "file": "score.ts",

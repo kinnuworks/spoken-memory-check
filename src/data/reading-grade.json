@@ -1,27 +1,27 @@
 {
  "url": "https://spoken-memory-check.vercel.app",
- "ranAt": "2026-11-16T15:51:07.013Z",
+ "ranAt": "2026-11-16T19:14:51.486Z",
  "target": 8,
  "measure": "Flesch-Kincaid grade, English only",
  "screens": [
   {
    "name": "Start of the full check",
    "route": "/check",
-   "words": 185,
+   "words": 179,
    "sentences": 17,
-   "grade": 3.8,
+   "grade": 3.3,
    "hardest": [
     {
      "text": "It needs a one-time download of about 77 MB from huggingface.co.",
      "grade": 9.6
     },
     {
-     "text": "In this test version that is what makes live listening work; a pilot would use the on-device and UAE listeners only.",
-     "grade": 9.5
+     "text": "An open speech model on this device scores what you say, and your voice is sent nowhere.",
+     "grade": 5.6
     },
     {
-     "text": "The first is your browser's own speech service, which may send your voice to the company that made the browser, outside the UAE.",
-     "grade": 8.3
+     "text": "It shows words as I speak, but may send my voice to the browser's maker, outside the UAE.",
+     "grade": 5.2
     }
    ]
   },
@@ -131,5 +131,5 @@
    ]
   }
  ],
- "words": 1391
+ "words": 1385
 }

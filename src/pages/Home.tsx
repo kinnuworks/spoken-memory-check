@@ -57,7 +57,7 @@ function ruleSteps(p: Persona, t: Trajectory) {
   if (missed) s.push({ label: `${missed === 1 ? 'One missed check' : `${missed} missed checks`}, not counted as low`, tag: 'Missed' })
   if (held) s.push({ label: `${held === 1 ? 'One check' : `${held} checks`} held after a failed sound check`, tag: 'Hearing first' })
   const st = t.status
-  if (st === 'flag') s.push({ label: 'Lower than the baseline twice in a row', tag: 'Two-in-a-row route' })
+  if (st === 'flag') s.push({ label: 'Last two checks together well below the baseline', tag: 'Two-check route' })
   if (st === 'trend') s.push({ label: 'Falling steadily across all checks', tag: 'Slow-fall route' })
   if (st === 'review') s.push({ label: 'Everyday tasks reported harder', tag: 'Everyday tasks' })
   if (st === 'urgent') s.push({ label: 'A very large fall between two checks', tag: 'Urgent route' })
@@ -178,7 +178,7 @@ function CalWidget() {
 function Accordion() {
   const items = [
     ['Check at home every few months', 'Four minutes by voice, compared with the person’s own first three checks, not with a population cut-off.'],
-    ['Flag only a change that lasts', 'Two low checks in a row, a steady fall or harder everyday tasks. One low day means nothing on its own.'],
+    ['Flag only a change that lasts', 'Two checks in a row well below the baseline, a steady fall or harder everyday tasks. One low day means nothing on its own.'],
     ['A physician decides', 'The packet waits for the ordering physician, who approves, edits or dismisses it with a reason.'],
   ]
   const [open, setOpen] = useState(0)

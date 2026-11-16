@@ -124,7 +124,7 @@ export function ValidationTable() {
       c('Not measured.', 'Not yet'),
       c(`Stable people who start in the lowest fifth (baseline under ${bs.baselineCut} points): ${p1(bs.lowStart.ours)} falsely flagged in a year, against ${p1(bs.lowStart.fixedCutoff)} with one cut-off for everyone. In a real US survey, one cut-off flagged 48% of healthy adults with under 9 years of school and 16% of graduates.`, 'Simulated')],
     ['Finding meaningful change',
-      c(`A packet needs two checks in a row below the person's usual range, or a line through every check that falls more than its error explains. Median checks from the start of a 2-point decline to a packet: ${(now.medianChecksToFlag as Record<string, number | null>)['2'] ?? '–'}.`, 'Simulated'),
+      c(`A packet needs the last two checks, taken together, well below the person's usual range, or a line through every check that falls more than its error explains. Median checks from the start of a 2-point decline to a packet: ${(now.medianChecksToFlag as Record<string, number | null>)['2'] ?? '–'}.`, 'Simulated'),
       c('Same rule in both languages; each person is compared only with their own checks in the same language.', 'Simulated'),
       c('Not measured.', 'Not yet'),
       c('Same rule whatever the schooling; see specificity.', 'Simulated')],

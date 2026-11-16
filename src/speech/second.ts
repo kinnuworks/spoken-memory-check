@@ -12,14 +12,41 @@ const waiting = new Map<number, { resolve: (t: string) => void; reject: (e: Erro
 let onProgress: ((percent: number) => void) | null = null
 let ready: Partial<Record<Lang, Promise<void>>> = {}
 
-/** Whether to offer the second listener on this device. Weak devices and iPhones score with one listener and say so. */
-export function secondSupported(): boolean {
+// A phone that runs out of memory loading or running the model is closed by the browser without
+// warning, and the page reloads. So the attempt is written down first, and cleared when it ends
+// or when the person leaves the page normally. If the page finds an attempt still open, the
+// last one died with the page, and this device is not offered the model for that language again.
+const KEY = (lang: Lang) => `device-listener-${lang}`
+function store(): Storage | null {
+  try { return window.localStorage } catch { return null }
+}
+let open: Lang | null = null
+function begin(lang: Lang) {
+  open = lang
+  store()?.setItem(KEY(lang), 'running')
+}
+function end(lang: Lang, ok: boolean) {
+  if (open === lang) open = null
+  store()?.setItem(KEY(lang), ok ? 'ok' : 'failed')
+}
+if (typeof window !== 'undefined') {
+  for (const l of ['en', 'ar'] as Lang[]) if (store()?.getItem(KEY(l)) === 'running') store()?.setItem(KEY(l), 'crashed')
+  window.addEventListener('pagehide', () => { if (open) store()?.removeItem(KEY(open)) })
+}
+
+/** True when an earlier attempt to run the model in this language ended with the page itself closing, as happens when a phone runs out of memory. */
+export function secondCrashedBefore(lang: Lang): boolean {
+  return store()?.getItem(KEY(lang)) === 'crashed'
+}
+
+/** Whether to offer the on-device listener here. Weak devices, and any device where it closed the page before, say so and offer another way. */
+export function secondSupported(lang?: Lang): boolean {
   const nav = navigator as Navigator & { deviceMemory?: number; connection?: { saveData?: boolean } }
   if (typeof Worker === 'undefined' || typeof WebAssembly === 'undefined') return false
-  if (/iPhone|iPad|iPod/.test(nav.userAgent)) return false
+  if (lang && secondCrashedBefore(lang)) return false
   if (nav.connection?.saveData) return false
   if (nav.deviceMemory !== undefined && nav.deviceMemory < 4) return false
-  return (nav.hardwareConcurrency ?? 2) >= 4
+  return (nav.hardwareConcurrency ?? 4) >= 2
 }
 
 function call(type: 'load' | 'transcribe', lang: Lang, audio?: Float32Array): Promise<string> {
@@ -45,7 +72,8 @@ function call(type: 'load' | 'transcribe', lang: Lang, audio?: Float32Array): Pr
 /** Starts the one-time model download for a language. Safe to call more than once. */
 export function loadSecond(lang: Lang, progress?: (percent: number) => void): Promise<void> {
   if (progress) onProgress = progress
-  ready[lang] ??= call('load', lang).then(() => undefined).catch((e) => { ready = { ...ready, [lang]: undefined }; throw e })
+  if (ready[lang] === undefined) begin(lang)
+  ready[lang] ??= call('load', lang).then(() => { end(lang, true) }).catch((e) => { end(lang, false); ready = { ...ready, [lang]: undefined }; throw e })
   return ready[lang] as Promise<void>
 }
 
@@ -57,11 +85,15 @@ export function secondLoading(lang: Lang): boolean {
 export async function transcribeSecond(audio: Float32Array, lang: Lang, timeoutMs = 90000): Promise<string | null> {
   try {
     await loadSecond(lang)
-    return await Promise.race([
+    begin(lang)
+    const text = await Promise.race([
       call('transcribe', lang, audio.slice()),
       new Promise<null>((r) => setTimeout(() => r(null), timeoutMs)),
     ])
+    end(lang, text !== null)
+    return text
   } catch {
+    end(lang, false)
     return null
   }
 }

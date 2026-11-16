@@ -1,12 +1,12 @@
 {
- "generated": "2026-11-15",
+ "generated": "2026-11-16",
  "tool": "Vitest v8 coverage",
  "engine": {
   "files": 20,
-  "linesCovered": 650,
-  "linesTotal": 650,
+  "linesCovered": 672,
+  "linesTotal": 672,
   "lines": 1,
-  "branches": 0.9440559440559441
+  "branches": 0.9458544839255499
  },
  "rules": [
   {

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { ANIMALS, WORD_LISTS } from './lexicon'
 import { matchClosedSet, tokens } from './match'
 import { scoreTask } from './score'
-import { DEFAULT_PARAMS, PACKET_STATUSES, STATUS_LABEL, TWO_IN_A_ROW_ONLY, evaluate, expectedPractice, trendLine, type Check } from './change'
+import { DEFAULT_PARAMS, PACKET_STATUSES, PREVIOUS_PARAMS, STATUS_LABEL, TWO_IN_A_ROW_ONLY, evaluate, expectedPractice, trendLine, type Check } from './change'
 
 const rowsOf = (words: string[]) => words.map((w) => [w])
 
@@ -98,16 +98,31 @@ describe('change rule', () => {
     expect(t.status).toBe('usual-range')
   })
   it('flags a drop that persists across two checks', () => {
-    const t = evaluate(flat([30, 30, 30, 22, 22]), p)
+    const t = evaluate(flat([30, 30, 30, 20, 20]), p)
+    expect(t.results[3].status).toBe('watch')
     expect(t.results[4].status).toBe('flag')
   })
+  it('tests the average of the two checks, not each one alone', () => {
+    // Two checks 8 points down: each is lower than usual, but together they are within what error explains.
+    const mild = evaluate(flat([30, 30, 30, 22, 22]), p).results[4]
+    expect(mild.z as number).toBeLessThanOrEqual(DEFAULT_PARAMS.flagZ)
+    expect(mild.pairZ as number).toBeGreaterThan(DEFAULT_PARAMS.pairZ)
+    expect(mild.status).toBe('watch')
+    // The previous rule flagged them, because each was below the single-check cut-off.
+    expect(evaluate(flat([30, 30, 30, 22, 22]), { ...PREVIOUS_PARAMS, practiceGain: 0 }).results[4].status).toBe('flag')
+    // One very low check and one a little low: neither rule needs both to be low on their own.
+    const deep = evaluate(flat([30, 30, 30, 15, 25]), p).results[4]
+    expect(deep.z as number).toBeGreaterThan(DEFAULT_PARAMS.flagZ)
+    expect(deep.status).toBe('flag')
+  })
   it('does not let a missed check break or fake persistence', () => {
-    const t = evaluate(flat([30, 30, 30, 22, null, 22]), p)
+    const t = evaluate(flat([30, 30, 30, 20, null, 20]), p)
     expect(t.results[4].scored).toBe(false)
     expect(t.results[5].status).toBe('flag')
   })
   it('does not count an off day towards a flag', () => {
-    const t = evaluate(flat([30, 30, 30, 22, 22], [3]), p)
+    const t = evaluate(flat([30, 30, 30, 20, 20], [3]), p)
+    expect(t.results[4].pairZ).toBeNull()
     expect(t.results[4].status).toBe('watch')
   })
   it('asks for urgent assessment on a very large fall since the last check', () => {
@@ -163,11 +178,19 @@ describe('slow-decline route', () => {
     expect(r.slice(0, DEFAULT_PARAMS.trendMinChecks - 1).every((x) => x.slopeZ === null)).toBe(true)
     expect(r[DEFAULT_PARAMS.trendMinChecks - 1].slopeZ).not.toBeNull()
   })
-  it('needs the falling line on two scored checks in a row', () => {
+  it('raises the trend at the first check where the line falls far enough', () => {
     const r = evaluate(flat(slow), p).results
-    expect(r[9].slopeZ as number).toBeLessThanOrEqual(DEFAULT_PARAMS.trendZ)
-    expect(r[8].slopeZ as number).toBeGreaterThan(DEFAULT_PARAMS.trendZ)
-    expect(r[9].status).not.toBe('trend')
+    const k = r.findIndex((x) => x.slopeZ !== null && x.slopeZ <= DEFAULT_PARAMS.trendZ)
+    expect(k).toBeGreaterThan(DEFAULT_PARAMS.trendMinChecks - 1)
+    expect(r[k].status).toBe('trend')
+    expect(r.slice(0, k).map((x) => x.status)).not.toContain('trend')
+  })
+  it('with the previous rule, waited for the line to hold on a second check', () => {
+    const q = { ...PREVIOUS_PARAMS, practiceGain: 0 }
+    const r = evaluate(flat(slow), q).results
+    const k = r.findIndex((x) => x.slopeZ !== null && x.slopeZ <= q.trendZ)
+    expect(r[k].status).not.toBe('trend')
+    expect(r[k + 1].status).toBe('trend')
   })
   it('leaves off days out of the line', () => {
     const withOff = evaluate(flat([30, 30, 30, 30, 30, 30, 30, 10, 30, 30], [7]), p).results

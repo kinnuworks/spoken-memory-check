@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest'
-import { DEFAULT_PARAMS, TWO_IN_A_ROW_ONLY, evaluate, trendLine, type Check } from './change'
+import { DEFAULT_PARAMS, PREVIOUS_PARAMS, TWO_IN_A_ROW_ONLY, evaluate, trendLine, type Check } from './change'
 import { scoreTask } from './score'
 import { treatableContributors, riskFactors } from './packet'
 import type { ScreeningRecord } from './histories'
@@ -22,6 +22,32 @@ describe('cut-offs are inclusive', () => {
     const fall = (25 - 33) / (P.sem * Math.SQRT2)
     expect(evaluate([...base, at(3, 33), at(4, 25)], { ...P, urgentZ: fall, flagZ: -1 }).results[4].status).toBe('urgent')
     expect(evaluate([...base, at(3, 33), at(4, 25)], { ...P, urgentZ: fall - 1e-9, flagZ: -1 }).results[4].status).toBe('watch')
+  })
+
+  it('two checks whose average sits exactly on the two-check line raise a flag', () => {
+    const two = [...base, at(3, 27), at(4, 26)]
+    const pz = evaluate(two, { ...P, pairZ: -Infinity }).results[4].pairZ as number
+    expect(evaluate(two, { ...P, pairZ: pz }).results[4].status).toBe('flag')
+    expect(evaluate(two, { ...P, pairZ: pz - 1e-9 }).results[4].status).not.toBe('flag')
+  })
+
+  it('the two-check test counts each check, the ranges and the shared baseline error', () => {
+    const exact = evaluate([...base, at(3, 27), at(4, 26)], P).results[4]
+    const sem = P.sem
+    expect(exact.pairZ as number).toBeCloseTo(((-6 + -7) / 2) / Math.sqrt(sem ** 2 / 2 + sem ** 2 / 3), 9)
+    // Ranges of 6 and 8 points add 6² / 12 and 8² / 12, each weighted by a quarter in the average.
+    const ranged = evaluate([...base, { date: 'd03', low: 24, high: 30 }, { date: 'd04', low: 22, high: 30 }], P).results[4]
+    expect(ranged.pairZ as number).toBeCloseTo(((-6 + -7) / 2) / Math.sqrt(sem ** 2 / 2 + (36 / 12 + 64 / 12) / 4 + sem ** 2 / 3), 9)
+  })
+
+  it('names the two-check route in plain words, and the older rule its own way', () => {
+    const two = [...base, at(3, 22), at(4, 22)]
+    expect(evaluate(two, P).results[4].note).toMatch(/^Lower than usual across the last two checks together/)
+    expect(evaluate(two, { ...PREVIOUS_PARAMS, practiceGain: 0 }).results[4].note).toMatch(/^Lower than usual on two checks in a row/)
+  })
+
+  it('with the older rule, the first check after the baseline cannot be the second low check', () => {
+    expect(evaluate([...base, at(3, 22)], { ...PREVIOUS_PARAMS, practiceGain: 0 }).results[3].status).toBe('watch')
   })
 
   it('a large fall to a score that is not low is not urgent', () => {
@@ -50,9 +76,9 @@ describe('the two routes together', () => {
     for (const i of both) expect(ours[i].status).toBe(older[i].status)
   })
 
-  it('says when the line is falling but has not held for long enough', () => {
+  it('says when the line is falling but has not held for long enough (when a run of two is asked for)', () => {
     const slow = Array.from({ length: 14 }, (_, i) => at(i, i < 3 ? 33 : 33 - 1.4 * (i - 2)))
-    const r = evaluate(slow).results
+    const r = evaluate(slow, PREVIOUS_PARAMS).results
     expect(r.some((x) => x.status === 'usual-range' && /line through all checks is falling/.test(x.note))).toBe(true)
   })
 
