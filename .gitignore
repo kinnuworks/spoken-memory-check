@@ -1,11 +1,3 @@
-CLAUDE.md
-HACKATHON.md
-STATE.md
-judge.sh
-stranger.sh
-judging/
-SETUP.md
-gitignore-add.txt
 # Logs
 logs
 *.log
@@ -53,8 +45,4 @@ design/stranger-*.md
 design/tagline.txt
 design/readme-first-screen.md
 design/gallery-thumbnail.png
-probe.sh
-tally.py
-lint_briefs.py
-.kit/
 __pycache__/
