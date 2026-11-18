@@ -224,7 +224,7 @@ export default function Home() {
           <span className="c-line">A four-minute memory check <span className="c-obj c-obj--word" aria-hidden="true"><Mic /><b lang="ar">نهر</b><small>river</small></span></span>{' '}
           <span className="c-line">by voice, at home <span className="c-obj c-obj--card" aria-hidden="true"><b>Check received</b><small><Check />Thank you</small></span></span>
         </h1>
-        <p className="c-sub">Compared with your own past checks. Your doctor hears only lasting changes.</p>
+        <p className="c-sub">Compared with your past checks and risk factors. Doctors hear only lasting changes.</p>
         <p className="c-btns"><Link to="/try" className="c-btn c-btn--dark"><Mic />Try it with your voice</Link><Link to="/year" className="c-btn"><Trend />See a year of checks</Link></p>
         <p className="c-small"><b>No sign-up.</b> Gulf Arabic or English, nothing to read or type.</p>
       </section>
