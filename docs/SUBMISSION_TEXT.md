@@ -27,11 +27,11 @@ Health impact and clinical relevance: members of the programme say ten words bac
 
 Technical depth: an open speech model runs on the device and the person's own voice is the answer key, so each score is a range from two listeners. The rule is plain code with no language model.
 
-Working solution: the live demo needs no sign-up and runs from a recorded check to a closed referral. In tests on real recordings, the listeners heard 93% of 720 Arabic words from 30 adults. In simulation, 5.2% of stable people get a false packet in a year, and 97% of people losing 2 points per check are flagged.
+Working solution: the live demo needs no sign-up and runs from a recorded check to a closed referral. In tests on real recordings, the listeners heard 93% of 720 Arabic words from 30 adults. In simulation, 5.2% of stable simulated members get a false packet in a year, and 97% of simulated members losing 2 points per check are flagged.
 
 Responsible AI: consent comes in parts and each is off by default, family and genome context included. Scores stay on the device. A failed hearing check holds the check. Every decision is logged.
 
-Scalability: referrals leave as HL7 v2 REF messages for Malaffi and FHIR R4 that passes the official validator with 0 errors. Both speech models are served from our own site.
+Scalability: referrals leave as HL7 v2 REF messages for Malaffi and FHIR R4 that passes the official validator with 0 errors. Both speech models can be served from our own site.
 
 Commercial path: the Thiqa packages 52-45 and 52-46 already fund hearing and dementia screening, and the modelled cost is about AED 26 per eligible member a year.
 
