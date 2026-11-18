@@ -1,8 +1,10 @@
 # Spoken memory check
 
-A four-minute memory check that an adult does at home by voice, in Gulf Arabic or English, compared with their own earlier scores and read alongside the risk factors in their screening record: blood pressure, blood sugar, cholesterol, mood, hearing and, only with consent, family history and genes. The person gets plain prevention steps of their own. Their physician gets a packet, with treatable causes first, only when two checks in a row sit well below that person's usual range or their scores fall steadily, and results are given in person.
+A four-minute memory check that an adult does at home by voice, in Gulf Arabic or English. Each check is compared with that person's own earlier checks and read alongside the risk factors in their screening record: blood pressure, blood sugar, cholesterol, mood, hearing and, only with consent, family history and genes.
 
-Why speech: many older adults in the Gulf had little schooling, and a test that needs reading, typing or tapping is unfair to them. Saying words back and naming animals is how memory has been tested by phone for decades.
+The person gets plain prevention steps of their own. Their physician gets a packet, treatable causes first, only when two checks in a row average about 9.5 points below the person's baseline, the scores fall steadily, or the person says everyday tasks have got harder. Results are given in person.
+
+Why speech: many older adults in the Gulf had little schooling, and a test that needs reading, typing or tapping is unfair to them. Saying words back and naming animals is how memory has been tested by phone for decades. An open speech model on the device writes down the words recalled and the animals named, and the check counts them.
 
 ![The rule running on six synthetic people: a year of checks against each person's own baseline, the steps the rule took, and whether a packet went to the physician](docs/images/rule-demo.gif)
 
