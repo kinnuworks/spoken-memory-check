@@ -196,11 +196,11 @@ function Accordion() {
 
 /** Statement 8's six "Your solution should" items, by their official names, and where each one is in the product. */
 const ITEMS: { t: string; d: string; gap?: string; to: string; see: string }[] = [
-  { t: 'Culturally valid and accessible assessment', d: 'Spoken in Gulf Arabic or English, with nothing to read or type, so schooling and eyesight matter less. A hearing check comes first. The speech model runs on the device, phones included.', gap: 'The Arabic word lists have no native Gulf reviewer yet.', to: '/try', see: 'Try it with your voice' },
-  { t: 'Longitudinal change detection', d: 'Three checks set a personal baseline. Each later check is compared with it after practice and measurement error. Lower once means check again. Two checks well below, or a steady fall, go to a physician. A very large fall goes the same day.', to: '/year', see: 'A year of checks' },
+  { t: 'Culturally valid and accessible assessment', d: 'Spoken in Gulf Arabic or English, with nothing to read or type, so schooling and eyesight matter less. A hearing check comes first. A speech model on the device, phones included, writes down the words recalled and the animals named, and the check counts them.', gap: 'The Arabic word lists have no native Gulf reviewer yet.', to: '/try', see: 'Try it with your voice' },
+  { t: 'Longitudinal change detection', d: 'Three checks set a personal baseline. Each later check is compared with it after practice and measurement error. About 7.6 points below once means check again. Two checks averaging about 9.5 below, or a steady fall, go to a physician. A very large fall goes the same day.', to: '/year', see: 'A year of checks' },
   { t: 'Integrated risk context', d: "With consent, the physician's packet shows ten of the fourteen Lancet risk factors from the screening record, such as blood pressure, HbA1c, mood and hearing, plus family history and APOE from the Emirati Genome Programme.", gap: 'The record has no sleep data. Each check asks about a bad night, and the packet raises sleep apnoea.', to: '/clinician', see: "The physician's packet" },
   { t: 'Personalized prevention and timely care', d: "The person's own page lists, in plain words, what their screening visit shows they can work on. The packet puts treatable causes first, then refers to neurology, geriatric medicine or audiology on a 15-working-day clock.", to: '/me', see: 'What the person sees' },
-  { t: 'Safety and human oversight', d: 'It flags risk and never diagnoses. Scores are ranges with stated limits, no score is shown at home, and a physician approves every routine packet before anyone is told.', to: '/story', see: 'One case, both screens' },
+  { t: 'Safety and human oversight', d: 'It flags risk and never diagnoses. Scores are ranges with stated limits. At home the person sees only "Check received. Thank you.", and a physician approves every routine packet before anyone is told.', to: '/story', see: 'One case, both screens' },
   { t: 'Validation and local population performance', d: 'The Evidence page covers all seven measures the statement names, split by language, age and schooling, each marked measured, simulated or not yet.', gap: 'No patients or older Emirati volunteers yet. A pilot measures the rest.', to: '/benchmark', see: 'Evidence' },
 ]
 
@@ -211,6 +211,8 @@ const HUB = [
   ['Thiqa 52-45, 52-46', 'Fund dementia screening; this fills the memory step'],
   ['Follow-up clock', 'Against the 15-working-day target'],
   ['Consent in parts', 'Each part off by default'],
+  ['Data stays on the device', 'By default, scores and audio stay on the phone or laptop'],
+  ['Pilot design ready', '12 months at one screening provider, 250 members per arm, with stop rules'],
 ]
 
 export default function Home() {
@@ -284,9 +286,9 @@ export default function Home() {
       <section className="c-sec">
         <h2>Handed on in the formats<br />Abu Dhabi already uses.</h2>
         <div className="c-hub">
-          <div className="c-hub__col">{HUB.slice(0, 3).map(([t, d]) => <div key={t} className="c-hub__item"><b>{t}</b><span>{d}</span></div>)}</div>
+          <div className="c-hub__col">{HUB.slice(0, HUB.length / 2).map(([t, d]) => <div key={t} className="c-hub__item"><b>{t}</b><span>{d}</span></div>)}</div>
           <div className="c-hub__mid"><span className="c-hub__logo"><Waves /></span></div>
-          <div className="c-hub__col">{HUB.slice(3).map(([t, d]) => <div key={t} className="c-hub__item"><b>{t}</b><span>{d}</span></div>)}</div>
+          <div className="c-hub__col">{HUB.slice(HUB.length / 2).map(([t, d]) => <div key={t} className="c-hub__item"><b>{t}</b><span>{d}</span></div>)}</div>
         </div>
       </section>
 
