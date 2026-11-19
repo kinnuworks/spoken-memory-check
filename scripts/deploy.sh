@@ -22,10 +22,8 @@ cp api/*.js "$out/site/api/"
 echo '{ "private": true, "type": "module" }' > "$out/site/package.json"
 
 # Cross-origin isolation lets the on-device speech model use several threads.
-# The one server function (the speech token) runs in Vercel's Dubai region, dxb1.
 cat > "$out/site/vercel.json" <<'JSON'
 {
-  "regions": ["dxb1"],
   "headers": [
     {
       "source": "/(.*)",

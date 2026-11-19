@@ -26,7 +26,7 @@ Each row is one rule a real deployment must meet. The middle column is what this
 
 ## Data flow
 
-The static files are served from Vercel's global network, and the site's one server function (a token for the optional UAE speech listener, which never sees audio) runs in Vercel's Dubai region, dxb1. No health data reaches any server. Fonts are served from the site itself, so no font service sees a visitor. The demo voices were generated once, in advance; nothing calls a voice service while the site runs.
+The static site is hosted on Vercel, outside the UAE. No health data reaches its server. Fonts are served from the site itself, so no font service sees a visitor. The demo voices were generated once, offline; nothing calls a voice service while the site runs.
 
 What stays on the device:
 - Scores, consent choices, hearing check results, hearing aid answers and re-scoring results, all in the browser's localStorage (`src/engine/store.ts`, `src/engine/consent.ts`, `src/engine/din.ts`, `src/engine/rescore.ts`). "Delete my checks from this device" clears the scores.
