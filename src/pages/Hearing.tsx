@@ -102,7 +102,7 @@ export default function Hearing() {
           <ol className="steps">
             <li>Use headphones if you have them, in a quiet room.</li>
             <li>Play the sample and set the volume so the voice is clear and comfortable. Then leave the volume alone.</li>
-            <li>You will hear {DIN.trials} sets of three digits. Tap the three you heard, in order. Guess if you are not sure.</li>
+            <li>You will hear {DIN.trials} sets of three digits. Tap the three you heard, in order. Guess if you are not sure. The digits are 1 to 9 without 7, because seven has two syllables in English and is easier to hear.</li>
           </ol>
           {lang === 'ar' && secondSupported('ar') && (
             <p className="muted">

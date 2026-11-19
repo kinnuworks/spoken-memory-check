@@ -238,7 +238,7 @@ export default function Check() {
 
       {stage === 'sound-failed' && (
         <>
-          <p>Nothing was scored. Try again somewhere quieter. If it happens again, the check is held rather than scored, and it may be worth asking your clinic about a hearing test.</p>
+          <p>Nothing was scored. Check that the microphone is on and allowed for this page, then try again somewhere quiet. If it happens again, the check is held rather than scored, and it may be worth asking your clinic about a hearing test.</p>
           <div className="stack"><button className="primary" onClick={run}>Try again</button><Link className="btn" to="/year">See a year of checks (no microphone)</Link></div>
         </>
       )}

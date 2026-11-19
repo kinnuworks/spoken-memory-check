@@ -91,7 +91,7 @@ export const STATUS_LABEL: Record<Status, string> = {
 export const PACKET_STATUSES: readonly Status[] = ['flag', 'trend', 'review']
 
 /** One sentence for the physician packet when the trend route raised it. */
-export const TREND_PACKET_NOTE = 'Raised by the slow-decline route: across all scored checks the practice-adjusted score has fallen steadily, by more than measurement error can explain, even though no single check fell far enough to be flagged.'
+export const TREND_PACKET_NOTE = 'Raised by the slow-decline route: across all scored checks the practice-adjusted score has fallen steadily, by more than measurement error can explain, even though the two-checks-together route did not send a packet on its own.'
 
 export interface CheckResult {
   index: number

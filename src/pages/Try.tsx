@@ -158,8 +158,8 @@ export default function Try() {
 
       {stage === 'sound-failed' && (
         <>
-          <h2>We can't hear you clearly here</h2>
-          <p>Nothing was scored. Try again somewhere quieter, or see the rest without a microphone.</p>
+          <h2>We couldn't hear the three words</h2>
+          <p>Nothing was scored. Check that a microphone is connected and allowed for this page, then try again somewhere quiet. Or see the rest without a microphone.</p>
           <div className="stack">
             <button className="primary" onClick={soundCheck}>Try the sound check again</button>
             <button onClick={() => setStage('typed')}>Type the animals to see the scoring work</button>

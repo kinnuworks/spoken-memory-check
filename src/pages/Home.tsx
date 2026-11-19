@@ -58,7 +58,7 @@ function ruleSteps(p: Persona, t: Trajectory) {
   if (held) s.push({ label: `${held === 1 ? 'One check' : `${held} checks`} held after a failed sound check`, tag: 'Hearing first' })
   const st = t.status
   if (st === 'flag') s.push({ label: 'Last two checks together well below the baseline', tag: 'Two-check route' })
-  if (st === 'trend') s.push({ label: 'Falling steadily across all checks', tag: 'Slow-fall route' })
+  if (st === 'trend') s.push({ label: 'The line through all checks is falling', tag: 'Slow-fall route' })
   if (st === 'review') s.push({ label: 'Everyday tasks reported harder', tag: 'Everyday tasks' })
   if (st === 'urgent') s.push({ label: 'A very large fall between two checks', tag: 'Urgent route' })
   if (st === 'usual-range' || st === 'watch' || st === 'building-baseline') s.push({ label: held >= 2 ? 'Pointed to a hearing assessment' : 'Latest check within the usual range', tag: STATUS_LABEL[st] })

@@ -49,7 +49,7 @@ function Clinician({ id }: { id?: string }) {
     byReport
       ? { step: 'Person reported that everyday tasks have become harder (this overrides the scores)', ok: true, detail: flag.date }
       : flag.status === 'trend'
-        ? { step: 'Falling steadily across every scored check (slow-decline route)', ok: true, detail: `${flag.date}, ${Math.abs(flag.slope as number).toFixed(1)} points a check, slope z ${(flag.slopeZ as number).toFixed(2)}` }
+        ? { step: 'The line through every scored check is falling (slow-decline route)', ok: true, detail: `${flag.date}, ${Math.abs(flag.slope as number).toFixed(1)} points a check, slope z ${(flag.slopeZ as number).toFixed(2)}` }
         : { step: 'The last two scored checks, taken together, lower than usual', ok: true, detail: `${flag.date}, z of the two ${(flag.pairZ as number).toFixed(2)}` },
     { step: byReport ? 'Scores themselves are within the usual range' : flag.status === 'trend' ? 'Off days left out of the line' : 'Neither low check was reported as an off day', ok: true },
     { step: 'Not a very large single drop (that goes to urgent assessment)', ok: true },
