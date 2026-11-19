@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-16",
+ "generated": "2026-11-19",
  "host": "a Mac laptop, not a phone",
  "rows": [
   {
@@ -7,20 +7,20 @@
    "device": "iPhone 15",
    "lang": "en",
    "ran": true,
-   "animals": 19,
+   "animals": 20,
    "of": 20,
-   "seconds": 3.8,
-   "addedMemoryMB": 1099
+   "seconds": 8.5,
+   "addedMemoryMB": 757
   },
   {
    "engine": "WebKit (the engine of Safari on iPhone)",
    "device": "iPhone 15",
    "lang": "ar",
    "ran": true,
-   "animals": 18,
+   "animals": 19,
    "of": 20,
-   "seconds": 20.4,
-   "addedMemoryMB": 1686
+   "seconds": 40.9,
+   "addedMemoryMB": 1379
   },
   {
    "engine": "Chromium (the engine of Chrome on Android)",
@@ -29,18 +29,18 @@
    "ran": true,
    "animals": 19,
    "of": 20,
-   "seconds": 1.1,
-   "addedMemoryMB": 989
+   "seconds": 2.9,
+   "addedMemoryMB": 829
   },
   {
    "engine": "Chromium (the engine of Chrome on Android)",
    "device": "Pixel 7",
    "lang": "ar",
    "ran": true,
-   "animals": 18,
+   "animals": 19,
    "of": 20,
-   "seconds": 9.6,
-   "addedMemoryMB": 1450
+   "seconds": 14.9,
+   "addedMemoryMB": 805
   }
  ]
 }

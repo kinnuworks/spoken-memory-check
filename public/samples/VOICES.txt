@@ -1,3 +1,3 @@
-Every recording under samples/ and din/ is synthetic speech; no person was recorded. Updated 2026-11-16.
+Every recording under samples/ and din/ is synthetic speech; no person was recorded. Updated 2026-11-19.
 English: Piper voice en_US-ljspeech (medium), trained on the LJ Speech recordings (public domain); Piper voices are MIT-licensed. Made by scripts/make-open-voice-audio.ts through sherpa-onnx (Apache-2.0).
-Arabic: Still the macOS Majed system voice, whose licence allows only personal, non-commercial use. To be replaced before submission.
+Arabic: ElevenLabs text to speech (premade voice "Roger", model eleven_multilingual_v2), made on a paid Starter plan whose terms allow commercial use of the audio. Joined into recordings by scripts/el_voice_synth.py.
