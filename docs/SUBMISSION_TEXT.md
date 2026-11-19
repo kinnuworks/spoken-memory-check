@@ -51,7 +51,9 @@ The physician's packet shows treatable contributors, the 2024 Lancet risk factor
 
 There is also a programme view, blind re-scoring of one check in ten and a cost model.
 
-Measured: listeners on 720 real Arabic and 113 real English recordings, and older against adult Gulf speakers on public TV speech. The tests run every line of the decision code. 92% of 1,026 deliberate bugs are caught. A headless browser runs the live site end to end after each deploy, with 0 accessibility violations in axe checks.
+Measured: listeners on 720 real Arabic and 113 real English recordings, and older against adult Gulf speakers on public TV speech. The tests run every line of the decision code. 92% of 1,026 deliberate bugs are caught. A headless browser runs the live site end to end after each deploy, with 0 accessibility violations in axe checks, and a second run feeds a computer voice in as the microphone: 8 animals credited in English and 8 in Arabic in 20 seconds, each one said, while silence fails the sound check.
+
+The demo voices have licences that allow commercial use: an open English voice and a paid-plan Arabic voice.
 <!-- built:end -->
 
 Sources: `docs/HUMAN_SPEECH_BENCH.md`, `docs/TEMPLATE_BENCH.md`, `docs/OLDER_SPEAKERS_BENCH.md`, `src/data/coverage-summary.json`, `src/data/mutation-summary.json`, `src/data/live-check.json`, `docs/ACCESSIBILITY.md`.
