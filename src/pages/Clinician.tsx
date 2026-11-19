@@ -5,12 +5,11 @@ import { PERSONAS } from '../engine/histories'
 import { REFERRAL_TARGET_WORKING_DAYS, addWorkingDays, contextRows, riskFactors, treatableContributors, workingDaysBetween } from '../engine/packet'
 import { apoeObservation, bundle, checkObservation, familyHistory, referralRequest, SPECIALTY, type Specialty } from '../engine/fhir'
 import { refMessage } from '../engine/hl7'
-import { appendAudit, loadAudit } from '../engine/audit'
+import { INVITE, appendAudit, loadAudit } from '../engine/audit'
 import TrajectoryChart from './TrajectoryChart'
 
 type Decision = 'pending' | 'approved' | 'dismissed'
 
-const INVITE = 'Your screening clinic would like to see you to talk about your memory checks. This is a routine follow-up visit. Please book an appointment with your physician.'
 
 // A decision belongs to one case: switching case mounts a fresh packet.
 export default function ClinicianRoute() {
@@ -119,7 +118,7 @@ function Clinician({ id }: { id?: string }) {
           <div className="card"><p className="muted" id="invite-help">Invitation wording. The template is offered to the public health centre for approval; you may edit it for this person before sending.</p><textarea aria-label="Invitation wording" aria-describedby="invite-help" value={invite} onChange={(e) => setInvite(e.target.value)} style={{ minHeight: 80 }} /></div>
           <p><label>Your note for the record (optional)<textarea value={note} onChange={(e) => setNote(e.target.value)} /></label></p>
           <div className="stack">
-            <button className="primary" onClick={() => { setDecision('approved'); record('approved', invite !== INVITE ? 'invitation edited' : undefined) }}>Approve and invite the person to a visit</button>
+            <button className="primary" onClick={() => { setDecision('approved'); record('approved', invite !== INVITE ? `invitation edited: ${invite}` : undefined) }}>Approve and invite the person to a visit</button>
             <p><label>Reason for dismissing<textarea style={{ minHeight: 60 }} value={reason} onChange={(e) => setReason(e.target.value)} /></label></p>
             <button disabled={!reason.trim()} onClick={() => { setDecision('dismissed'); record('dismissed', reason) }}>Dismiss with this reason</button>
           </div>

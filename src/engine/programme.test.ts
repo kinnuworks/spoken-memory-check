@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { cell, simulateProgramme, SMALL_CELL } from './programme'
 import { HEARING_SETTINGS, hearingPathway, lostSignals, SIGNALS } from './signals'
-import { appendAudit, APP_VERSION, loadAudit } from './audit'
+import { appendAudit, APP_VERSION, INVITE, invitationFor, loadAudit } from './audit'
 import { clearChecks, loadChecks, saveCheck, type StoredCheck } from './store'
 import { falseAlarmsByStart, firstFlag, programmeYear, runBenchmark, wilson, BASE_WORLD, rng, simulatePerson } from './simulate'
 
@@ -88,6 +88,18 @@ describe('local records', () => {
     expect(all).toHaveLength(2)
     expect(loadAudit()).toEqual(all)
     expect(all[0]).toMatchObject({ action: 'dismissed', detail: 'recent illness', at: '2026-11-15T08:00:00.000Z', appVersion: APP_VERSION })
+  })
+
+  it("gives the person the invitation only after approval, in the physician's wording when edited", () => {
+    vi.stubGlobal('localStorage', fake)
+    expect(invitationFor('decline')).toBeNull()
+    appendAudit({ case: 'decline', action: 'dismissed', detail: 'recent illness' }, new Date('2026-11-15T08:00:00Z'))
+    expect(invitationFor('decline')).toBeNull()
+    appendAudit({ case: 'decline', action: 'approved' }, new Date('2026-11-16T08:00:00Z'))
+    expect(invitationFor('decline')).toBe(INVITE)
+    appendAudit({ case: 'function', action: 'approved', detail: 'invitation edited: Please come in on Sunday.' }, new Date('2026-11-16T09:00:00Z'))
+    expect(invitationFor('function')).toBe('Please come in on Sunday.')
+    expect(invitationFor('stable')).toBeNull()
   })
 
   it('still shows a decision when storage is unavailable', () => {

@@ -95,7 +95,7 @@ export const PERSONAS: Persona[] = [
     id: 'decline',
     name: 'C, 61',
     path: 'Flag, then physician',
-    story: 'A steady drop from the fifth check on. It is flagged when it persists, and the packet points to treatable contributors first.',
+    story: 'A little lower from the fourth check, then a large drop at the seventh that is still there at the eighth. It is flagged once the drop lasts, and the packet points to treatable contributors first.',
     record: { age: 61, sex: 'F', mocaAtVisit: 26, hba1c: 7.4, onMetformin: true, systolic: 148, ldl: 3.9, bmi: 32, smoker: false, hearing: 'reduced', vision: 'normal', phq9: 11, activeMinutesWeek: 30, schoolingYears: 9, familyDementia: { relative: 'mother', ageAtDiagnosis: 74 }, apoeE4Copies: 1 },
     shared: { familyHistory: true, genome: true },
     // The history stops where the packet is sent: what happens next is the physician's call.

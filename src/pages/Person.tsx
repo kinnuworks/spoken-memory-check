@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { invitationFor } from '../engine/audit'
 import { evaluate } from '../engine/change'
 import { loadConsent, saveConsent } from '../engine/consent'
 import { PERSONAS } from '../engine/histories'
@@ -13,6 +14,7 @@ export default function Person() {
   const steps = improvable(person.record)
   const [consent, setConsent] = useState(loadConsent())
   const scored = person.checks.filter((c) => c.low !== null).length
+  const invitation = invitationFor(person.id)
   const set = (patch: Partial<typeof consent>) => setConsent(saveConsent({ ...consent, ...patch }))
 
   return (
@@ -26,6 +28,7 @@ export default function Person() {
       </nav>
 
       <h2>Your checks</h2>
+      {invitation && traj.status !== 'urgent' && <div className="note"><strong>A message from your screening clinic.</strong> {invitation}</div>}
       {traj.status === 'urgent' ? (
         <div className="note note-alert">
           <strong>Please see a doctor today.</strong> Your last check was very different from your earlier ones. This can have many causes, some of them simple to treat, and it is worth checking straight away. Call your screening clinic, or go to an urgent care centre. In a pilot, the clinic would be told at the same time; that alert is not built in this prototype.

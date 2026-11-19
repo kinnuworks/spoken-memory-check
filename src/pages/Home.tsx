@@ -112,7 +112,7 @@ function CostPanel() {
 
 
 const WORDS = WORD_LISTS.en[0]
-const packetPeople = PERSONAS.map((p) => ({ p, t: evaluate(p.checks) })).filter(({ p, t }) => !outcome(t, p).ok)
+const packetPeople = PERSONAS.map((p) => ({ p, t: evaluate(p.checks) })).filter(({ t }) => PACKET_STATUSES.includes(t.status))
 const MEASURED = [
   `${pct1(ours.falseAlarmYear)} false alarms a year in stable people, simulated`,
   `${Math.round(ours.detected['2'] * 100)}% of people losing two points a check flagged within a year, simulated`,
