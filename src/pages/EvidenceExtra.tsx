@@ -115,7 +115,7 @@ export function ValidationTable() {
       c('Not measured.', 'Not yet'), c('Not measured.', 'Not yet'), c('Not measured.', 'Not yet')],
     ['Sensitivity',
       c(`${p1(b2.sensitivity)} of people in real decline get a packet within the year (2% prevalence); ${p0(now.detected['2'])} at 2 points lost per check, ${p0(now.detected['1'])} at 1 point.`, 'Simulated'),
-      c(`Listeners together heard ${p0(ar.union.rate)} of ${ar.union.n} real Arabic words and ${p0(en.union.rate)} of ${en.union.n} real English words. With each listener missing 15 in 100 words, ${p0(miss15.detected['2'])} are still caught at 2 points per check.`, 'Measured'),
+      c(`The on-device model and own-voice matching together heard ${p0(ar.union.rate)} of ${ar.union.n} real Arabic words and ${p0(en.union.rate)} of ${en.union.n} real English words (the model alone: ${p0(ar.whisperAlone.rate)} and ${p0(en.whisperAlone.rate)} of the same words). With each listener missing 15 in 100 words, ${p0(miss15.detected['2'])} are still caught at 2 points per check.`, 'Measured'),
       c(`On Gulf TV speech, the proposed UAE listener's word error was ${p0(r.jaisAsr['Older, Gulf (Khaliji)'].wer)} for older speakers and ${p0(r.jaisAsr['Adult, Gulf (Khaliji)'].wer)} for other adults. Not measured on the check itself.`, 'Measured'),
       c('Each person is compared with their own baseline, so where they start does not change what counts as a fall.', 'Simulated')],
     ['Specificity',
