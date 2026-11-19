@@ -21,24 +21,22 @@ Software
 ## Solution summary (2,000 characters)
 
 <!-- summary:start -->
-A four-minute spoken memory check that Abu Dhabi's adult screening programme could pilot next quarter. It finds change against each person's own baseline between clinic visits, says how sure it is, and gives their physician one clear next step.
+A four-minute memory check by voice, at home, for adults in Abu Dhabi's screening programme. It compares each check with the person's own baseline and screening-record risk factors, gives plain prevention steps, and tells their physician only about lasting change.
 
-Health impact and clinical relevance: members of the programme say ten words back, recall them, name animals for a minute and recall the words again, at home, in Gulf Arabic or English. A hearing check comes first. Three checks set a personal baseline, so low schooling is not read as decline. Two checks in a row well below that baseline, or a steady fall, send a packet to the ordering physician, who approves before anyone is invited. It watches people already in the programme; it does not screen the population.
+Statement 8, item by item:
+1. Culturally valid and accessible: spoken in Gulf Arabic or English, nothing to read or type. A hearing check comes first.
+2. Longitudinal change: three checks set a personal baseline. One low check means a repeat check; two in a row averaging about 9.5 points below it, or a steady fall, send a packet; a very large fall goes the same day.
+3. Integrated risk context: the packet shows ten of the fourteen Lancet risk factors from the screening record (blood pressure, HbA1c, LDL, mood, hearing), and, each under its own consent, family history and Emirati Genome Programme results.
+4. Prevention and timely care: the person sees plain steps from their own record. The packet puts treatable causes first (B12, thyroid, mood, hearing, sleep apnoea, medicines), then refers to neurology, geriatrics or audiology on a 15-working-day clock.
+5. Safety and oversight: no score at home, ranges with stated limits, a physician approves every routine packet, and no language model makes any decision.
+6. Validation: the statement's seven measures, by language, age and schooling, each marked measured, simulated or not yet.
 
-Technical depth: an open speech model runs on the device and the person's own voice is the answer key, so each score is a range from two listeners. The rule is plain code with no language model.
+Back-test on public data (Arabic Speech Commands, 30 adults): the on-device model, with the person's own voice as the answer key, heard 93% of 720 Arabic words. In simulation, 5.2% of stable simulated members get a false packet a year; 97% of those losing 2 points a check are flagged.
 
-Working solution: the live demo needs no sign-up and runs from a recorded check to a closed referral. In tests on real recordings, the listeners heard 93% of 720 Arabic words from 30 adults. In simulation, 5.2% of stable simulated members get a false packet in a year, and 97% of simulated members losing 2 points per check are flagged.
+Abu Dhabi fit: HL7 v2 REF referrals for Malaffi, FHIR R4 with 0 validator errors, Thiqa packages 52-45 and 52-46, a modelled AED 26 per member a year.
 
-Responsible AI: consent comes in parts and each is off by default, family and genome context included. Scores stay on the device. A failed hearing check holds the check. Every decision is logged.
-
-Scalability: referrals leave as HL7 v2 REF messages for Malaffi and FHIR R4 that passes the official validator with 0 errors. Both speech models can be served from our own site.
-
-Commercial path: the Thiqa packages 52-45 and 52-46 already fund hearing and dementia screening, and the modelled cost is about AED 26 per eligible member a year.
-
-Not yet: no patients or older Emirati volunteers, Arabic lists not reviewed by a native speaker, and retest variation taken from published studies.
+Not yet: no patients or older Emirati volunteers, Arabic lists not reviewed by a native speaker, retest error from published studies.
 <!-- summary:end -->
-
-Sources: `src/data/own-voice-summary.json` (93%, 720, 30), `src/data/benchmark.json` (5.2%, 97%), `docs/FHIR_VALIDATION.md`, `docs/COMMERCIAL.md` and `src/engine/cost.ts` (AED 26), `docs/LIMITS.md`.
 
 ## What has been built during the challenge? (1,500 characters)
 
