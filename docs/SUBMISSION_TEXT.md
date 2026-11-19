@@ -21,21 +21,23 @@ Software
 ## Solution summary (2,000 characters)
 
 <!-- summary:start -->
-A four-minute memory check by voice at home, with no clinician on the line, for adults in Abu Dhabi's screening programme. Their physician hears only about lasting change.
+A four-minute memory check by voice at home for adults in Abu Dhabi's screening programme. Their physician hears only about lasting change.
 
 Statement 8, item by item:
 1. Culturally valid and accessible: spoken in Gulf Arabic or English, nothing to read or type. A hearing check comes first.
-2. Longitudinal change: three checks set a personal baseline. One low check means a repeat check; two in a row averaging about 9.5 points (words said back and recalled later, plus animals named) below it, or a steady fall, send a packet; a very large fall goes the same day.
-3. Integrated risk context: the packet shows ten of the fourteen Lancet risk factors from the screening record (blood pressure, HbA1c, LDL, mood, hearing), and, each under its own consent, family history and Emirati Genome Programme results.
-4. Prevention and timely care: the person sees plain steps from their own record. The packet puts treatable causes first (B12, thyroid, mood, hearing, sleep apnoea, medicines), then refers to neurology, geriatrics or audiology on a 15-working-day clock.
-5. Safety and oversight: no score at home, ranges with stated limits, a physician approves every routine packet, and no language model makes any decision.
+2. Longitudinal change: three checks set a personal baseline. One low check means a repeat check; two in a row averaging about 9.5 points below it, or a steady fall, send a packet; a very large fall goes the same day.
+3. Integrated risk context: the packet shows ten of the fourteen Lancet risk factors from the screening record, and, each under its own consent, family history and Emirati Genome Programme results.
+4. Prevention and timely care: the person sees plain steps from their own record. The packet puts treatable causes first (B12, thyroid, mood, hearing, sleep apnoea, medicines), then refers to a specialist on a 15-working-day clock.
+5. Safety and oversight: no score at home, a physician approves every routine packet, and no language model makes any decision.
 6. Validation: the statement's seven measures, by language, age and schooling, each marked measured, simulated or not yet.
 
-Back-test on public data (Arabic Speech Commands, 30 adults): the on-device model, matching recalled words against the person's own recording of each word, heard 93% of 720 Arabic words. In simulation, 5.2% of stable simulated members get a false packet a year; 97% of those losing 2 points a check are flagged.
+Measured on public recordings of 30 adults: with each person's own voice as the answer key, the on-device model heard 93% of 720 Arabic words. Simulated: 5.2% false packets a year in stable members, 97% of those losing 2 points a check flagged.
 
-Abu Dhabi fit: HL7 v2 REF referrals for Malaffi, FHIR R4 with 0 validator errors, Thiqa packages 52-45 and 52-46, a modelled AED 26 per member a year.
+Abu Dhabi fit: HL7 v2 REF referrals for Malaffi, FHIR R4 with 0 validator errors, Thiqa packages 52-45 and 52-46 as payer, modelled at AED 26 per member a year.
 
-Not yet: no patients or older Emirati volunteers, Arabic lists not reviewed by a native speaker, retest error from published studies.
+Pilot plan: after ethics approval, 12 months at one screening provider, 250 members per arm randomised to usual care or home checks. Measures: baseline completion and specialist visits within 15 working days; stop rules for dismissed packets and distress.
+
+Not yet: no partner, no patients or older Emirati volunteers, no native review of the Arabic lists, retest error borrowed from studies.
 <!-- summary:end -->
 
 ## What has been built during the challenge? (1,500 characters)

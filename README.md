@@ -16,6 +16,8 @@ Why speech: many older adults in the Gulf had little schooling, and a test that 
 
 A prototype for Abu Dhabi's adult screening programme, built for Statement 8 of the Future Health challenge, "Protecting Brain Health Earlier". It does not diagnose. The people and histories in the demo are synthetic and labelled.
 
+Who pays and the first pilot: Thiqa packages 52-45 and 52-46 as payer, modelled at AED 26 per member a year. The pilot plan, after ethics approval, is 12 months at one screening provider with 250 members per arm randomised to usual care or home checks, measured on baseline completion and specialist visits within 15 working days, with stop rules ([docs/PILOT.md](docs/PILOT.md)). No provider has signed up yet.
+
 ## Statement 8, item by item
 
 The statement lists six things a solution should do. This is where each one is in the live demo.
