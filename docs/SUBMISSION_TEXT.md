@@ -21,17 +21,17 @@ Software
 ## Solution summary (2,000 characters)
 
 <!-- summary:start -->
-A four-minute memory check by voice, at home, for adults in Abu Dhabi's screening programme. It compares each check with the person's own baseline and screening-record risk factors, gives plain prevention steps, and tells their physician only about lasting change.
+A four-minute memory check by voice at home, with no clinician on the line, for adults in Abu Dhabi's screening programme. Their physician hears only about lasting change.
 
 Statement 8, item by item:
 1. Culturally valid and accessible: spoken in Gulf Arabic or English, nothing to read or type. A hearing check comes first.
-2. Longitudinal change: three checks set a personal baseline. One low check means a repeat check; two in a row averaging about 9.5 points below it, or a steady fall, send a packet; a very large fall goes the same day.
+2. Longitudinal change: three checks set a personal baseline. One low check means a repeat check; two in a row averaging about 9.5 points (words recalled plus animals named) below it, or a steady fall, send a packet; a very large fall goes the same day.
 3. Integrated risk context: the packet shows ten of the fourteen Lancet risk factors from the screening record (blood pressure, HbA1c, LDL, mood, hearing), and, each under its own consent, family history and Emirati Genome Programme results.
 4. Prevention and timely care: the person sees plain steps from their own record. The packet puts treatable causes first (B12, thyroid, mood, hearing, sleep apnoea, medicines), then refers to neurology, geriatrics or audiology on a 15-working-day clock.
 5. Safety and oversight: no score at home, ranges with stated limits, a physician approves every routine packet, and no language model makes any decision.
 6. Validation: the statement's seven measures, by language, age and schooling, each marked measured, simulated or not yet.
 
-Back-test on public data (Arabic Speech Commands, 30 adults): the on-device model, with the person's own voice as the answer key, heard 93% of 720 Arabic words. In simulation, 5.2% of stable simulated members get a false packet a year; 97% of those losing 2 points a check are flagged.
+Back-test on public data (Arabic Speech Commands, 30 adults): the on-device model, matching recalled words against the person's own recording of each word, heard 93% of 720 Arabic words. In simulation, 5.2% of stable simulated members get a false packet a year; 97% of those losing 2 points a check are flagged.
 
 Abu Dhabi fit: HL7 v2 REF referrals for Malaffi, FHIR R4 with 0 validator errors, Thiqa packages 52-45 and 52-46, a modelled AED 26 per member a year.
 
