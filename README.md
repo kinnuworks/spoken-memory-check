@@ -2,7 +2,7 @@
 
 A four-minute memory check that an adult does at home by voice, in Gulf Arabic or English. Each check is compared with that person's own earlier checks and read alongside the risk factors in their screening record: blood pressure, blood sugar, cholesterol, mood, hearing and, only with consent, family history and genes.
 
-The person gets plain prevention steps of their own. Their physician gets a packet, treatable causes first, only when two checks in a row average about 9.5 points below the person's baseline, the scores fall steadily, or the person says everyday tasks have got harder. Results are given in person.
+The person gets plain prevention steps of their own. Their physician gets a packet, treatable causes first, only when two checks in a row average about 9.5 points (words recalled plus animals named) below the person's baseline, the scores fall steadily, or the person says everyday tasks have got harder. Results are given in person.
 
 Why speech: many older adults in the Gulf had little schooling, and a test that needs reading, typing or tapping is unfair to them. Saying words back and naming animals is how memory has been tested by phone for decades. An open speech model on the device writes down the words recalled and the animals named, and the check counts them.
 
