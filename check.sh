@@ -28,3 +28,9 @@ fi
 echo "== demo path on the live site"
 mkdir -p output/demo-path
 LIVE_CHECK_NO_WRITE=1 LIVE_CHECK_VIDEO=output/demo-path npx tsx scripts/live-check.ts
+
+# The microphone path: "Try it with your voice" on the live site with a computer voice fed in as
+# Chromium's microphone, plus a control with silence (English here; the Arabic run downloads the
+# larger model and is run on its own: npx tsx scripts/mic-check.ts).
+echo "== microphone path on the live site"
+MIC_CHECK_NO_WRITE=1 npx tsx scripts/mic-check.ts https://spoken-memory-check.vercel.app en

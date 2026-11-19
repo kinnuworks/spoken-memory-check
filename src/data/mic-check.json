@@ -1,0 +1,22 @@
+{
+ "url": "https://spoken-memory-check.vercel.app",
+ "ranAt": "2026-11-19T08:16:04.384Z",
+ "voice": "computer voice fed in as the microphone (Chromium fake audio capture), not a person",
+ "rows": [
+  {
+   "lang": "en",
+   "ok": true,
+   "detail": "sound check passed; 8 animals credited in 20 s, all said by the recording (dog, cat, horse, cow, sheep, goat, camel, lion); 37 s in all"
+  },
+  {
+   "lang": "ar",
+   "ok": true,
+   "detail": "sound check passed; 8 animals credited in 20 s, all said by the recording (جمل, حصان, كلب, قطة, بقرة, خروف, ماعز, أسد); 138 s in all"
+  },
+  {
+   "lang": "silence",
+   "ok": true,
+   "detail": "silence as the microphone fails the sound check, so nothing is scored"
+  }
+ ]
+}

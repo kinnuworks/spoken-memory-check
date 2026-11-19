@@ -5,6 +5,7 @@ import coverage from '../data/coverage-summary.json'
 import mutation from '../data/mutation-summary.json'
 import live from '../data/live-check.json'
 import phone from '../data/phone-check.json'
+import mic from '../data/mic-check.json'
 import SurveyChart from './SurveyChart'
 import { BuiltToBeChecked, OlderSpeakers, RuleChecks, ValidationTable } from './EvidenceExtra'
 
@@ -43,6 +44,7 @@ export default function Benchmark() {
           <tr><th scope="row">Is one cutoff fair?</th><td>No: it flags 48% of healthy adults with under 9 years of school against 16% of graduates</td><td>Real survey, US</td></tr>
           <tr><th scope="row">Does the flag avoid false alarms?</th><td>{pct(data.rows.find((r) => r.world === 'As assumed' && r.rule === 'ours')!.falseAlarmYear)} a year in stable people; {pct(det(now, '2'))} of people losing 2 points a check flagged within the year, {pct(det(now, '1'))} at 1 point</td><td>Simulated</td></tr>
           <tr><th scope="row">Does it run on phones?</th><td>In the browser engines of iPhone and Android phones, run on a laptop with phone screen sizes: {phone.rows.every((r) => r.ran) ? 'yes' : 'not in every case'}, scoring {phoneRows('en')[0].animals} of 20 English and {phoneRows('ar')[0].animals} of 20 Arabic animals, as on a laptop. The page needs about {phoneRange('en')} more memory for English and {phoneRange('ar')} for Arabic while the model runs; whether a given phone allows that is only known on the phone. If it does not, the page says so next time and offers the browser's speech service or typing. Not yet tried on a real phone</td><td>Phone engines, not phones</td></tr>
+          <tr><th scope="row">Does it work through a microphone?</th><td>{mic.rows.filter((r) => r.lang !== 'silence').every((r) => r.ok) ? 'Yes' : 'Not in every case'}, with a computer voice fed in as the browser's microphone: "Try it with your voice" passed the sound check and credited {mic.rows.filter((r) => r.lang !== 'silence').map((r) => (r.detail.match(/(\d+) animals? credited/) ?? [])[1] ?? '?').join(' (English) and ')} (Arabic) animals in 20 seconds, each one the voice said. With silence as the microphone the sound check failed and nothing was scored. Not yet tried with a person</td><td>Our own test, computer voice</td></tr>
           <tr><th scope="row">Is the code tested?</th><td>{coverage.engine.linesCovered} of {coverage.engine.linesTotal} lines run by the tests; {Math.round(mutation.score * 100)}% of {mutation.mutants} deliberate bugs caught; live site {live.passed} of {live.total} end to end</td><td>Code</td></tr>
           <tr><th scope="row">Does it work in patients?</th><td>Not measured. No patients, no older Emirati volunteers and no retest yet</td><td>Pending</td></tr>
         </tbody>

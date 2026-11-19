@@ -2,12 +2,12 @@
 
 The words were made with ElevenLabs text to speech on a Starter plan, whose terms allow commercial
 use of the audio: premade voice "Roger", model eleven_multilingual_v2, language ar, stability 0.8.
-Each batch file holds ten words in the order of BATCHES below, separated by 1.5 s breaks. This
+Each batch file holds the words of one line of BATCHES below, in order, separated by 1.5 s breaks. This
 script cuts each batch at its silences, then builds every job the same way open_voice_synth.py does:
 each word trimmed, joined with the given pauses, the rate changed by ratePct, about -1 dBFS.
 
 usage: external/tts-venv/bin/python -I scripts/el_voice_synth.py <jobs.json> <batch-dir>
-<batch-dir> holds batch1.mp3 to batch4.mp3 (kept under external/, never committed).
+<batch-dir> holds batch1.mp3 to batch5.mp3 (kept under external/, never committed).
 """
 import json
 import os
@@ -24,6 +24,7 @@ BATCHES = [
     "كرسي جمل حصان قطة كلب أسد نمر فيل زرافة غزال",
     "صقر سمكة بقرة خروف ثعلب لا. ماعز حمار قرد دب",
     "ذئب أرنب واحد اثنان ثلاثة أربعة خمسة ستة ثمانية تسعة",
+    "طاولة ماء صباح",  # the sound-check words, for the microphone test (scripts/mic-check.ts)
 ]
 
 
