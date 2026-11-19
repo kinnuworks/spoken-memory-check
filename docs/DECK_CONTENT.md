@@ -1,55 +1,100 @@
-# Deck content, slide by slide (draft for the official 15-slide template)
+# Deck content, slide by slide (for the official 15-slide template)
 
-Export the PDF with real, selectable text (not images of text), under 5 MB. Name the six judging criteria in their own words on the additional slide, so a reader or an automated scorer finds the evidence for each.
-
-Items in [brackets] need the team's details.
+`scripts/fill_deck.py` puts each numbered section on the template slide of the same number, under the slide's own heading. Team details (slides 1, 2, 3 and 14) live outside the repo, in `external/deck/team.json`. Slide 4 also gets the workflow diagram (`docs/images/workflow.png`).
 
 ## 1. Team name, team size, problem statement
-[Team name], [team size]. [Population Health] Protecting Brain Health Earlier.
+{team}
+
+Spoken memory check: a four-minute memory check by voice at home, in Gulf Arabic or English, compared with the person's own past checks. Their physician hears only about lasting change.
 
 ## 2. Team members
-[S.No, name, country, role, organisation, age confirmation for each member.]
+{members}
 
-## 3. Team capability summary (up to 1,000 characters)
-[Draft once the team is known: engineering, clinical adviser, Arabic linguist, pilot experience.]
+## 3. Team capability summary
+{capability}
 
 ## 4. Architecture or workflow
-Spoken check at home (sound check, ten words said back, a minute of animals, counting backwards, the words again, one question about everyday tasks) → an open speech model on the device by default (the browser's recogniser only if the person turns it on), each word marked heard by both, one or neither → range score → fixed rule against the person's own baseline (practice-adjusted change against measurement error; two checks in a row well below baseline, or a steady fall; reported change in everyday tasks; failed sound check holds; very large fall goes urgent) → physician's packet (trajectory, treatable contributors first, ten of fourteen risk factors from the screening record) → approve, edit or dismiss → in-person visit → referral tracked to closure → programme view. FHIR R4 out. No language model anywhere.
+Everything left of the physician runs in the person's browser; audio and scores stay on the device by default. Fixed rules in code make every decision: no language model.
 
 ## 5. Target users and intended outcome
-Adults aged 50 to 64 in the adult screening programme, who have a clinic memory test only every three years. Their ordering physicians. The public health centre. Outcome: a meaningful change found between clinic tests, checked for treatable causes first, and seen by a specialist within 15 working days, without alarming anyone at home.
+- Members of Abu Dhabi's adult screening programme aged 50 to 75. Thiqa's hearing and dementia screening packages cover 52-45 (ages 50 to 64, every three years) and 52-46 (65 to 75, every year), and name no memory tool.
+- Their ordering physicians, who get a packet only when a change lasts, with treatable causes first.
+- The screening provider's programme team, who see every member, packet and referral by facility.
+
+Intended outcome: a lasting change in memory found between screening visits, checked for treatable causes (B12, thyroid, mood, hearing, sleep apnoea, medicines), and seen by neurology, geriatric medicine or audiology within 15 working days, without alarming anyone at home and without flagging people for having had little schooling.
 
 ## 6. How success will be measured
-Baseline completion; checks per member per year; packets per 1,000 members and the share dismissed; share of approved packets assessed within 15 working days; agreement between listeners and with a human listener by language, age and schooling; retest reliability; physician minutes per packet; complaints of distress.
+The seven measures Statement 8 names, each split by language, age and schooling:
+- completion (baseline checks finished);
+- test-retest reliability;
+- sensitivity and specificity against the clinic's own assessment;
+- meaningful change (practice-adjusted change beyond measurement error);
+- false-referral burden (packets per 1,000 members a year, and the share physicians dismiss);
+- time to clinical assessment (share of approved packets seen within 15 working days).
+
+Also: agreement between the machine and a person who re-scores one check in ten without seeing the machine's result; physician minutes per packet; reports of distress. The pilot (slide 12) measures these; today the Evidence page marks each one measured, simulated or not yet.
 
 ## 7. Evidence supporting the approach
-- Our analysis of a public US survey (NHANES 2011 to 2014, adults aged 60+): among 2,619 who reported no worsening memory and no trouble managing money, a fixed cutoff of 14 animals flags 48% of those with under 9 years of school (265 people) against 16% of graduates (569). A personal baseline avoids this.
-- Published: within-person variation of animal naming and phone word recall (Duff et al.; Gavett et al.; Health and Retirement Study); spoken word recall and fluency scored by speech recognition agree closely with human scoring in Dutch, German and English studies.
-- Simulation of our flag: 5.2% false alarms a year in stable people against 27.4% for a single-low-check rule; flagged within the year: 52% of people losing one point a check, 97% losing two; about 70 packets per 1,000 members a year at 2% in real decline, 19 of them real.
-- 240 automated tests, listed by case.
+Real recordings, public data:
+- Arabic words: the on-device model, matching recalled words against the speaker's own recording of each word, heard 93% of 720 single words from 30 adults (Arabic Speech Commands; read words, not older Gulf speakers).
+- Older speakers: on Saudi TV speech labelled by age and dialect (SADA), word error was 31% for older against 33% for adult Gulf speakers (Jais-ASR); the on-device model also did no worse for older voices.
+
+Real survey data: in NHANES 2011 to 2014 (3,110 adults aged 60 and over), a fixed cutoff of 14 animals flags 48% of healthy adults with under 9 years of school against 16% of graduates. In the Gulf, the usual MoCA cut-off classed 69.3% of 606 older adults in Dubai and Sharjah as impaired (Issa et al. 2026). A personal baseline avoids this.
+
+Simulated: 5.2% of stable simulated members get a false packet a year; 52% of those losing 1 point a check and 97% losing 2 are flagged within the year.
+
+Our own tests: FHIR R4 with 0 errors from the HL7 validator 7.0.5; 240 automated tests; 92% of 1,026 deliberate bugs caught; the live site walked end to end after each deploy; a computer voice fed in as the microphone credited 8 of 12 animals said in English and in Arabic, and silence failed the sound check.
 
 ## 8. Data sources and legal right to use them
-NHANES (US CDC, public domain, de-identified); seeded and simulated people (ours, no personal data); our own word lists and animal names; Google Speech Commands and Arabic Speech Commands (CC BY 4.0, cited) to measure the listeners; SADA 2022 (SDAIA and the Saudi Broadcasting Authority, CC BY-NC-SA 4.0) used only for a research evaluation of the listeners, not redistributed, not used for training, not shipped; a commercial pilot would repeat that check on licensed or local recordings or ask SDAIA. Open speech models (MIT, Apache-2.0). Demo voices are labelled synthetic: English from the open Piper voice trained on the public-domain LJ Speech recordings (MIT), Arabic from ElevenLabs on a paid plan whose licence allows commercial use. A tester's own scores stay on their device. No licensed cognitive test items. No data from surveys that bar automated tools.
+- NHANES 2011 to 2014: survey, de-identified, US CDC; public domain; no personal data.
+- Arabic and Google Speech Commands: single-word recordings of consenting adults; CC BY 4.0, cited; used to measure the listeners, not shipped.
+- SADA 2022: Saudi TV speech, SDAIA and the Saudi Broadcasting Authority; CC BY-NC-SA 4.0; research evaluation only, not shipped or trained on.
+- Demo people and histories: synthetic, ours; no personal data.
+- Demo voices: synthetic speech; Piper LJ Speech (public domain, MIT) and ElevenLabs on a paid plan whose licence allows commercial use.
+- Speech models: OpenAI Whisper (MIT) and an Arabic fine-tune (Apache-2.0); Jais-ASR by MBZUAI and Inception (Apache-2.0) for the optional UAE listener.
+
+In a pilot: the member's own spoken checks and screening-record values, with consent in parts, each off by default; family history and Emirati Genome Programme results only under their own consent. No licensed test items; no survey that bars automated tools.
 
 ## 9. Risks and safeguards
-False reassurance (clinic test continues; everyday-tasks question overrides scores). False alarm (two low checks; physician reviews first; burden published). Mishearing (two listeners; range; "not scored", never low). Hearing loss (sound check holds). Distress (nothing abnormal shown in the app; results in person). Data leaving the country (on-device listener; cloud only in a UAE region with approval). Bias by schooling (personal baseline). Full hazard log in docs/SAFETY_CASE.md.
+- Privacy: audio is scored on the device and not saved; scores stay in the browser; the browser's own recogniser only if the person turns it on.
+- Security: no server holds health data; the one server function never sees audio; keys never reach the browser.
+- Bias: each person is compared with their own baseline, not a cut-off that penalises little schooling; results are split by language, age and schooling.
+- Explainability: fixed rules in code; every packet shows the trajectory, the rule that fired and a logged decision.
+- Misuse: risk, not diagnosis; no score is shown at home; results are given in person.
+- Human oversight: a physician approves, edits or dismisses every routine packet before anyone is told.
+- Failure modes: a failed sound check holds the check instead of scoring it low; a missed or unheard check is never counted as low; a reported change in everyday tasks goes to the physician whatever the score; a very large fall goes for urgent assessment the same day.
 
-## 10. Hardware
-None. Any phone or laptop with a browser and a microphone.
+## 10. Hardware requirements
+None. Any phone or laptop with a current browser and a microphone. No wearable, sensor or connected device.
 
 ## 11. Access for evaluators
-Open [live link]. No sign-up. Three buttons: try it with your voice; play a recorded check (no microphone); the physician's view. All people shown are synthetic and labelled.
+No login, no sign-up, no guest step: https://spoken-memory-check.vercel.app
+- "Try it with your voice": a sound check, then 20 seconds of naming animals.
+- "Play a recorded check": the full four-minute check with a computer voice, scored on your device; no microphone needed.
+- "A year of checks", then the physician's packet: approve it through to a closed referral with the Malaffi message and FHIR file.
+
+Code: {repo}. All people shown are synthetic and labelled.
 
 ## 12. Path to pilot and scale
-Ethics approval, then a 12-month randomised pilot at one screening provider, 250 per arm, powered on baseline completion. Stop rules. Who pays: the screening programme for its members; insurers and employers for expatriates; other Gulf programmes. Regulatory route: research use under ethics approval, registration as medical-device software after the pilot. Stages with exit tests in docs/PILOT.md.
+- Stakeholders: ADPHC (runs the screening programme), Thiqa (funds packages 52-45 and 52-46), one screening provider, its ordering physicians, neurology, geriatric medicine and audiology.
+- Integration: referrals as HL7 v2 REF messages with SNOMED specialty for Malaffi (Circular 2026/144); FHIR R4 for the record.
+- Regulatory: research use under ethics approval and DoH data rules first; registration as medical-device software after the pilot.
+- Timeline assumption: a 12-month randomised pilot at one screening provider, 250 members per arm, with stop rules (docs/PILOT.md).
+- Sustainability: modelled cost about AED 26 per eligible member a year at 40% uptake, inside packages Thiqa already funds. No partner has agreed yet.
 
 ## 13. Pre-existing IP and third-party materials
-Built during the challenge. Open-source components: React, React Router, Vite, TypeScript (MIT, Apache-2.0); Transformers.js (Apache-2.0); ONNX Runtime Web (MIT); Azure Speech SDK (MIT); OpenAI Whisper base (MIT, browser version Apache-2.0); whisper-small-ar fine-tune (Apache-2.0), served from our site in a modified, smaller copy with its licence and a change notice; fonts under the SIL Open Font License. Demo voices: Piper en_US-ljspeech (MIT; LJ Speech recordings public domain) through sherpa-onnx (Apache-2.0) for English; ElevenLabs text to speech on a paid Starter plan, commercial licence, for Arabic. Generated illustrations: made for this project. [Confirm nothing pre-existing.]
+All code was written during the challenge (first commit 10 November 2026); nothing pre-existing. Open-source components: React, React Router, Vite, TypeScript (MIT, Apache-2.0); Transformers.js (Apache-2.0); ONNX Runtime Web (MIT); OpenAI Whisper base (MIT; browser version Apache-2.0); an Arabic Whisper-small fine-tune (Apache-2.0), served from our site in a smaller copy with its licence and a change notice; fonts under the SIL Open Font License. Demo voices: Piper en_US-ljspeech (MIT; LJ Speech recordings public domain) through sherpa-onnx (Apache-2.0) for English, and ElevenLabs on a paid plan whose licence allows commercial use for Arabic. No licensed cognitive test items. The repository carries no open-source licence, so the organiser's right of first refusal stays open.
 
-## 14. Conflict of interest
-[Team to confirm: no relationship with the Department of Health, Future Health, Microsoft, Inception, MBZUAI, Hack2skill or any judge.]
+## 14. Conflict of interest declaration
+{coi}
 
 ## 15. Additional slide
-- The six judging criteria, each with the one piece of evidence for it and where to see it: health impact and clinical relevance; technical depth and architecture; working solution and demonstration quality; responsible AI, safety and data governance; scalability and deployment readiness; commercial viability and path to pilot.
-- What is real and what is simulated (from the how-it-works page).
-- Limits stated plainly (from docs/LIMITS.md), including assumptions and dependencies.
+The six criteria, and where each is shown:
+- Health impact and clinical relevance: lasting change found between screening visits, treatable causes first (home page; physician's packet).
+- Technical depth and architecture: on-device speech, own-voice matching, a change rule against a personal baseline (How it works; slide 4).
+- Working solution and demonstration quality: the live demo, no login, end to end to a closed referral (slide 11).
+- Responsible AI, safety and data governance: no score at home, consent in parts, physician approval, nothing leaves the device by default (slide 9).
+- Scalability and deployment readiness: HL7 v2 for Malaffi, FHIR R4, phones and laptops, both speech models served from our own site.
+- Commercial viability and path to pilot: Thiqa packages 52-45 and 52-46, about AED 26 per member a year, a 12-month pilot design (slide 12).
+
+Not yet: no patients or older Emirati volunteers; the Arabic word lists have no native Gulf reviewer; no physician has reviewed the packet; retest error comes from published studies.

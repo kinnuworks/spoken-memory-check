@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Workflow</title>
+<style>
+  :root { --ink: #1f1d1b; --muted: #5d5853; --line: #b9b2aa; --device: #f3f0ec; --clinic: #eef3f1; --accent: #2f6f5e; }
+  * { box-sizing: border-box; margin: 0; }
+  body { width: 1600px; height: 494px; background: #fff; font-family: "Helvetica Neue", Arial, sans-serif; color: var(--ink); padding: 28px 32px; }
+  .zones { display: grid; grid-template-columns: 1.55fr 1fr; gap: 22px; height: 100%; }
+  .zone { border-radius: 14px; padding: 18px 18px 16px; position: relative; }
+  .device { background: var(--device); }
+  .clinic { background: var(--clinic); }
+  .zone h2 { font-size: 19px; font-weight: 700; margin-bottom: 4px; }
+  .zone .sub { font-size: 15px; color: var(--muted); margin-bottom: 14px; }
+  .row { display: flex; align-items: stretch; gap: 10px; }
+  .box { background: #fff; border: 1.5px solid var(--line); border-radius: 10px; padding: 11px 12px; font-size: 15.5px; line-height: 1.32; flex: 1; }
+  .box b { display: block; font-size: 16.5px; margin-bottom: 4px; }
+  .arrow { align-self: center; font-size: 26px; color: var(--muted); flex: 0 0 auto; }
+  .down { text-align: center; font-size: 26px; color: var(--muted); margin: 6px 0; }
+  .routes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 2px; }
+  .route { background: #fff; border: 1.5px solid var(--line); border-radius: 10px; padding: 9px 10px; font-size: 14.5px; line-height: 1.3; }
+  .route b { display: block; font-size: 15px; }
+  .route.go { border-color: var(--accent); border-width: 2px; }
+  .note { position: absolute; left: 18px; right: 18px; bottom: 14px; font-size: 14.5px; color: var(--muted); }
+  .clinic .box { margin-bottom: 10px; }
+  .clinic .box.go { border-color: var(--accent); border-width: 2px; }
+</style>
+</head>
+<body>
+<div class="zones" style="position:relative">
+  <section class="zone device">
+    <h2>At home, in the browser on a phone or laptop</h2>
+    <p class="sub">Audio and scores stay on the device by default</p>
+    <div class="row">
+      <div class="box"><b>1. Sound and hearing check</b>Three words to repeat; a digits-in-noise test. A fail holds the check, never scores it low.</div>
+      <div class="arrow">→</div>
+      <div class="box"><b>2. Spoken check, 4 minutes</b>Ten words said back, a minute of animals, the words again, one question on everyday tasks. Gulf Arabic or English.</div>
+      <div class="arrow">→</div>
+      <div class="box"><b>3. On-device speech model</b>Writes down the words; recalled words matched against the person's own recording of each. Score is a range.</div>
+    </div>
+    <div class="down">↓</div>
+    <div class="box" style="margin-bottom:10px"><b>4. Change rule against the person's own baseline</b>First three checks set the baseline; later checks are compared after practice gain and measurement error. Fixed rules in code, no language model.</div>
+    <div class="routes">
+      <div class="route"><b>Lower once</b>check again</div>
+      <div class="route go"><b>Two checks well below, or a steady fall</b>packet to the physician</div>
+      <div class="route go"><b>Everyday tasks harder</b>packet, whatever the score</div>
+      <div class="route go"><b>Very large fall</b>urgent assessment the same day</div>
+    </div>
+  </section>
+  <section class="zone clinic">
+    <h2>Ordering physician and screening provider</h2>
+    <p class="sub">Nothing is shown at home; results are given in person</p>
+    <div class="box go"><b>5. Physician's packet</b>Trajectory; treatable causes first (B12, thyroid, mood, hearing, sleep apnoea, medicines); risk factors from the screening record; family history and genome results only with their own consent.</div>
+    <div class="box"><b>6. Approve, edit or dismiss</b>Every decision logged. Then an in-person visit.</div>
+    <div class="box"><b>7. Referral tracked to closure</b>HL7 v2 REF for Malaffi, FHIR R4. Neurology, geriatric medicine or audiology within 15 working days. Programme view by facility.</div>
+  </section>
+</div>
+</body>
+</html>
