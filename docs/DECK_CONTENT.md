@@ -43,7 +43,7 @@ Real survey data: in NHANES 2011 to 2014 (3,110 adults aged 60 and over), a fixe
 
 Simulated: 5.2% of stable simulated members get a false packet a year; 52% of those losing 1 point a check and 97% losing 2 are flagged within the year.
 
-Our own tests: FHIR R4 with 0 errors from the HL7 validator 7.0.5; 240 automated tests; 92% of 1,026 deliberate bugs caught; the live site walked end to end after each deploy; a computer voice fed in as the microphone credited 8 of 12 animals said in English and in Arabic, and silence failed the sound check.
+Our own tests: FHIR R4 with 0 errors from the HL7 validator 7.0.5; 241 automated tests; 92% of 1,026 deliberate bugs caught; the live site walked end to end after each deploy; a computer voice fed in as the microphone credited 8 of 12 animals said in English and in Arabic, and silence failed the sound check.
 
 ## 8. Data sources and legal right to use them
 - NHANES 2011 to 2014: survey, de-identified, US CDC; public domain; no personal data.
