@@ -137,7 +137,7 @@ function Clinician({ id }: { id?: string }) {
           </div>
           {referredOn && (
             <div className="card">
-              <p><strong>{seenOn ? 'Closed' : 'Open'}</strong>: {used} of {REFERRAL_TARGET_WORKING_DAYS} working days used{seenOn ? '' : ' so far'}.</p>
+              <p><strong>{seenOn ? 'Closed' : 'Open'}</strong>: {used} of {REFERRAL_TARGET_WORKING_DAYS} working days used{seenOn ? '' : ' so far'}. <span className="muted">The dates are filled in as an illustration; in a pilot they come from the referral and visit records, and the clock measures the real gap.</span></p>
               <p className="muted">Visit {visitOn}. Referral made {referredOn}.{seenOn ? ` Seen ${seenOn}.` : ' Waiting for the appointment.'} Owner: the ordering physician at the screening provider.</p>
             </div>
           )}

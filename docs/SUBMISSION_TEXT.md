@@ -25,7 +25,7 @@ A four-minute memory check by voice at home, with no clinician on the line, for 
 
 Statement 8, item by item:
 1. Culturally valid and accessible: spoken in Gulf Arabic or English, nothing to read or type. A hearing check comes first.
-2. Longitudinal change: three checks set a personal baseline. One low check means a repeat check; two in a row averaging about 9.5 points (words recalled plus animals named) below it, or a steady fall, send a packet; a very large fall goes the same day.
+2. Longitudinal change: three checks set a personal baseline. One low check means a repeat check; two in a row averaging about 9.5 points (words said back and recalled later, plus animals named) below it, or a steady fall, send a packet; a very large fall goes the same day.
 3. Integrated risk context: the packet shows ten of the fourteen Lancet risk factors from the screening record (blood pressure, HbA1c, LDL, mood, hearing), and, each under its own consent, family history and Emirati Genome Programme results.
 4. Prevention and timely care: the person sees plain steps from their own record. The packet puts treatable causes first (B12, thyroid, mood, hearing, sleep apnoea, medicines), then refers to neurology, geriatrics or audiology on a 15-working-day clock.
 5. Safety and oversight: no score at home, ranges with stated limits, a physician approves every routine packet, and no language model makes any decision.

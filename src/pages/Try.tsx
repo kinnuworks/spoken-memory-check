@@ -35,6 +35,9 @@ export default function Try() {
   // Scoring stays on this device unless the person turns on the browser's recogniser.
   const [browserOn, setBrowserOn] = useState(false)
   const [scoring, setScoring] = useState(false)
+  // Each run gets a number; leaving a run (for typing) makes any late answer from it be ignored.
+  const run = useRef(0)
+  const leave = () => { run.current++; window.clearInterval(timer.current); setScoring(false); setStage('typed') }
 
   function startSecond(l: Lang) {
     if (!secondSupported(l) || secondLoading(l)) return
@@ -67,6 +70,7 @@ export default function Try() {
   }
 
   async function soundCheck() {
+    const id = ++run.current
     setLive(null)
     if (!browserOn) {
       // The on-device listener has to be ready before anything is recorded.
@@ -77,15 +81,17 @@ export default function Try() {
         setSecond('ready')
       } catch {
         setSecond('off')
-        return setStage('blocked')
+        if (run.current === id) setStage('blocked')
+        return
       }
+      if (run.current !== id) return
     } else if (lang === 'en') startSecond('en') // English fetches the second listener by itself; Arabic is a large download, so the person chooses.
     setStage('sound')
     try {
       const res = await listenAll(7000, SOUND_CHECK_WORDS[lang].map((w) => [w]), false)
-      setStage(res.high >= 2 ? 'ready' : 'sound-failed')
+      if (run.current === id) setStage(res.high >= 2 ? 'ready' : 'sound-failed')
     } catch {
-      setStage('blocked')
+      if (run.current === id) setStage('blocked')
     }
   }
 
@@ -96,6 +102,7 @@ export default function Try() {
   }
 
   async function animals() {
+    const id = ++run.current
     setViaTyping(false)
     setLive(null)
     setLeft(ANIMAL_SECONDS)
@@ -103,9 +110,9 @@ export default function Try() {
     timer.current = window.setInterval(() => setLeft((s) => Math.max(0, s - 1)), 1000)
     try {
       await listenAll(ANIMAL_SECONDS * 1000, ANIMALS[lang], true)
-      setStage('result')
+      if (run.current === id) setStage('result')
     } catch {
-      setStage('blocked')
+      if (run.current === id) setStage('blocked')
     } finally {
       window.clearInterval(timer.current)
     }
@@ -144,6 +151,8 @@ export default function Try() {
           <p className="prompt-words" lang={lang} dir={lang === 'ar' ? 'rtl' : 'ltr'}>{SOUND_CHECK_WORDS[lang].join(lang === 'ar' ? '، ' : ', ')}</p>
           <div className="chips" lang={lang} dir={lang === 'ar' ? 'rtl' : 'ltr'}>{chips}</div>
           <p className="listening"><i />{scoring ? 'Scoring on this device…' : 'Listening…'}</p>
+          {!scoring && <p className="muted">If your browser asks to use the microphone, choose Allow. Nothing happening?</p>}
+          {!scoring && <div className="stack"><button onClick={leave}>Stop and type the animals instead</button></div>}
         </>
       )}
 
@@ -173,6 +182,7 @@ export default function Try() {
           <h2>Name animals</h2>
           <p className="big">{left}s</p>
           <p className="listening"><i />{scoring ? 'Scoring on this device…' : 'Listening'}</p>
+          {!scoring && <div className="stack"><button onClick={leave}>Stop and type the animals instead</button></div>}
           <div className="chips" lang={lang} dir={lang === 'ar' ? 'rtl' : 'ltr'}>{chips}</div>
         </>
       )}

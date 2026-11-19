@@ -226,7 +226,7 @@ export default function Check() {
       {percent !== null && <p className="muted">Speech model on this device: {percent}%</p>}
       {stage === 'function' && <p lang={lang} dir={dir}>{T[lang].fn}</p>}
       {stage === 'scoring' && <p className="listening"><i />{useCloud ? 'The on-device and UAE listeners are going through your recordings.' : 'The second listener is going through your recordings on this device.'} This can take up to a minute.</p>}
-      {stage === 'sound' && <><p className="prompt-words" lang={lang} dir={dir}>{SOUND_CHECK_WORDS[lang].join(lang === 'ar' ? '، ' : ', ')}</p><p className="listening"><i />Listening…</p></>}
+      {stage === 'sound' && <><p className="prompt-words" lang={lang} dir={dir}>{SOUND_CHECK_WORDS[lang].join(lang === 'ar' ? '، ' : ', ')}</p><p className="listening"><i />Listening…</p><p className="muted">If your browser asks to use the microphone, choose Allow.</p></>}
       {stage === 'hear-list' && <p className="listening"><i />{bi('Say each word back after you hear it. Your own voice becomes the answer key for later.', AR.hearList)}</p>}
       {stage === 'animals' && <div className="chips" lang={lang} dir={dir}>{live?.items.map((it) => <span key={it.row} className="chip">{it.label}</span>)}</div>}
       {listening && (

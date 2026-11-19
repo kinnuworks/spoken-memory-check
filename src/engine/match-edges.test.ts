@@ -38,6 +38,13 @@ describe('Arabic word forms', () => {
     expect(tokens('أرنب،قطة؛فيل؟', 'ar')).toEqual(['ارنب', 'قطة', 'فيل'])
   })
 
+  it('reads a long vowel written twice as one, so a drawn-out word still counts', () => {
+    expect(foldArabic('فييل')).toBe(foldArabic('فيل'))
+    expect(foldArabic('طاووس')).toBe(foldArabic('طاوس'))
+    const rows = Array.from({ length: 30 }, (_, i) => (i === 0 ? ['فيل'] : [`كلمة${i}`]))
+    expect([...matchWithRest('فييل', rows, 'ar').found]).toEqual([0])
+  })
+
   it('folds swapped letters in both directions of a pair', () => {
     expect(foldArabic('صقر')).toBe(foldArabic('سقر'))
     expect(foldArabic('ثعلب')).toBe('سعلب')

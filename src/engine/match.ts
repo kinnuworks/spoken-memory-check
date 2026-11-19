@@ -30,7 +30,9 @@ const AR_FOLD: Record<string, string> = { 'ص': 'س', 'ث': 'س', 'ط': 'ت', '�
 
 /** A normalised Arabic token with confusable letters folded and a final ة, ه or ا written as ه. */
 export function foldArabic(tok: string): string {
-  const s = [...tok].map((c) => AR_FOLD[c] ?? c).join('')
+  // A drawn-out long vowel is sometimes written twice (فييل for فيل); Arabic never spells a doubled
+  // vowel letter, so the pair is read as one.
+  const s = [...tok].map((c) => AR_FOLD[c] ?? c).join('').replace(/([اوي])\1+/g, '$1')
   return s.length > 2 ? s.replace(/[ةها]$/, 'ه') : s
 }
 
