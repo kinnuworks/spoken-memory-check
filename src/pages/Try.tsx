@@ -34,6 +34,8 @@ export default function Try() {
   const [second, setSecond] = useState<'off' | 'loading' | 'ready' | 'checking'>('off')
   // True when the speech model, not the microphone, is what failed: the page then says so.
   const [modelFailed, setModelFailed] = useState(false)
+  // While the browser's own microphone prompt is open, say so: some browsers show it only as an icon by the address bar.
+  const [askingMic, setAskingMic] = useState(false)
   const [percent, setPercent] = useState(0)
   const [listeners, setListeners] = useState(1)
   // Scoring stays on this device unless the person turns on the browser's recogniser.
@@ -80,7 +82,10 @@ export default function Try() {
       // The on-device listener has to be ready before anything is recorded.
       if (!deviceOnlyPossible(lang)) return setStage('blocked')
       // Check the microphone before the one-time model download, so nobody waits for a download they cannot use.
-      if (!(await hasMicrophone())) { if (run.current === id) setStage('blocked'); return }
+      setAskingMic(true)
+      const micOk = await hasMicrophone()
+      setAskingMic(false)
+      if (!micOk) { if (run.current === id) setStage('blocked'); return }
       setSecond('loading')
       setModelFailed(false)
       try {
@@ -144,6 +149,7 @@ export default function Try() {
 
       {stage === 'intro' && (
         <>
+          {askingMic && <p className="note" role="status"><strong>Your browser is asking to use the microphone.</strong> Choose Allow. In some browsers the question is a small icon next to the address bar.</p>}
           <p>First a sound check, then 20 seconds of naming animals. This is a short taste of the full four-minute check. Nothing is stored.</p>
           <p className="note">{deviceOnlyPossible(lang) ? `An open speech model on this device scores what you say, and your voice is sent nowhere. It needs a one-time download of about ${DOWNLOAD_MB[lang]} MB from ${DOWNLOAD_FROM[lang]}, so use Wi-Fi on a phone.` : secondCrashedBefore(lang) ? "Last time, this device closed the page while running the speech model, which usually means it ran out of memory. Turn on the browser's speech service below, or type the animals instead." : "This device can't run the on-device speech model (older and low-memory devices can't). Turn on the browser's speech service below, or type the animals instead."}</p>
           <label className="choice"><input className="switch" type="checkbox" checked={browserOn} onChange={(e) => setBrowserOn(e.target.checked)} /><span>Also use my browser's speech service. It shows words as you speak, but may send your voice to the browser's maker, outside the UAE.</span></label>
