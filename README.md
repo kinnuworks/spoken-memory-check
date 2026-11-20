@@ -33,6 +33,8 @@ The statement lists six things a solution should do. This is where each one is i
 
 ## Proof you can check yourself
 
+[![ci](https://github.com/kinnuworks/spoken-memory-check/actions/workflows/ci.yml/badge.svg)](https://github.com/kinnuworks/spoken-memory-check/actions/workflows/ci.yml) Every push runs the lint, the tests, the build and the million-history safety check on GitHub's servers.
+
 - **Your voice stays on the device.** Chromium's own network log of a check by voice on the live site: 40 requests in English and 33 in Arabic, every one a download, and 0 bytes uploaded. In Arabic every request went to this site alone. Each result screen shows the page's own count of what it sent (0 bytes). `npx tsx scripts/privacy-check.ts`
 - **The rule keeps its nine safety promises.** 1,000,000 random histories with missed checks, failed sound checks, off days, slow falls and sudden crashes; none broke a promise. The test first found a real gap (a "yes" to the everyday-tasks question on an unscored check was dropped), fixed on 20 Nov. The Evidence page runs 100,000 more in your browser. `npx tsx scripts/safety-check.ts`
 - **The live site is walked end to end after every deploy**, and once more with a computer voice as the microphone. `scripts/live-check.ts`, `scripts/mic-check.ts`

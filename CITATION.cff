@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite it as below."
+title: "Spoken memory check: a four-minute voice check at home, compared with each person's own baseline"
+type: software
+authors:
+  - name: "Kinnu"
+repository-code: "https://github.com/kinnuworks/spoken-memory-check"
+url: "https://spoken-memory-check.vercel.app"
+abstract: "A four-minute memory check by voice at home, in Gulf Arabic or English, scored on the device and compared with the person's own first three checks. A physician hears only about a lasting change, with risk context, treatable causes first and a referral tracked to closure. Built for Statement 8 of the Future Health Digital Innovation Challenge, Abu Dhabi, 2026. A prototype: not validated in patients."
+keywords:
+  - cognitive screening
+  - personal baseline
+  - on-device speech recognition
+  - Gulf Arabic
+  - FHIR
+date-released: "2026-11-20"
+version: "1.0.0"
