@@ -14,7 +14,7 @@ Spoken memory check: a four-minute memory check by voice at home, in Gulf Arabic
 {capability}
 
 ## 4. Architecture or workflow
-Everything left of the physician runs in the person's browser; audio and scores stay on the device by default. Fixed rules in code make every decision: no language model.
+Everything left of the physician runs in the person's browser; audio and scores stay on the device by default. Fixed rules in code make every decision: no language model. The packet reads the checks with risk context in Statement 8's eight areas and the LIBRA modifiable-risk index; context never changes the flag.
 
 ## 5. Target users and intended outcome
 - Members of Abu Dhabi's adult screening programme aged 50 to 75. Thiqa's hearing and dementia screening packages cover 52-45 (ages 50 to 64, every three years) and 52-46 (65 to 75, every year), and name no memory tool.
@@ -41,9 +41,9 @@ Real recordings, public data:
 
 Real survey data: in NHANES 2011 to 2014 (3,110 adults aged 60 and over), a fixed cutoff of 14 animals flags 48% of healthy adults with under 9 years of school against 16% of graduates. In the Gulf, the usual MoCA cut-off classed 69.3% of 606 older adults in Dubai and Sharjah as impaired (Issa et al. 2026). A personal baseline avoids this.
 
-Simulated: 5.2% of stable simulated members get a false packet a year; 52% of those losing 1 point a check and 97% losing 2 are flagged within the year.
+Simulated: 5.2% of stable simulated members get a false packet a year; 52% of those losing 1 point a check and 97% losing 2 are flagged within the year if every word is heard (64% in Arabic, 30% in English at 2 points with miss rates from the real recordings).
 
-Our own tests: FHIR R4 with 0 errors from the HL7 validator 7.0.5; 242 automated tests; 92% of 1,026 deliberate bugs caught; the live site walked end to end after each deploy; a computer voice fed in as the microphone credited 8 of 12 animals said in English and in Arabic, and silence failed the sound check.
+Our own tests: FHIR R4 with 0 errors from the HL7 validator 7.0.5; 257 automated tests; 92% of 1,026 deliberate bugs caught; the live site walked end to end after each deploy; a computer voice fed in as the microphone credited 8 of 12 animals said in English and in Arabic, and silence failed the sound check.
 
 ## 8. Data sources and legal right to use them
 - NHANES 2011 to 2014: survey, de-identified, US CDC; public domain; no personal data.
@@ -77,7 +77,7 @@ Code: {repo}. All people shown are synthetic and labelled.
 
 ## 12. Path to pilot and scale
 - Stakeholders: ADPHC (runs the screening programme), Thiqa (funds packages 52-45 and 52-46), one screening provider, its ordering physicians, neurology, geriatric medicine and audiology.
-- Integration: referrals as HL7 v2 REF messages with SNOMED specialty for Malaffi (Circular 2026/144); FHIR R4 for the record.
+- Integration: referrals as HL7 v2 REF messages with SNOMED specialty for Malaffi (Circular 2026/144); FHIR R4 for the record, the LIBRA index as a RiskAssessment. Self-hosts on UAE servers from one Node process.
 - Regulatory: research use under ethics approval and DoH data rules first; registration as medical-device software after the pilot.
 - Timeline assumption: a 12-month randomised pilot at one screening provider, 250 members per arm, with stop rules (docs/PILOT.md).
 - Sustainability: modelled cost about AED 26 per eligible member a year at 40% uptake, inside packages Thiqa already funds. No partner has agreed yet.
@@ -90,11 +90,11 @@ All code was written during the challenge (first commit 10 November 2026); nothi
 
 ## 15. Additional slide
 The six criteria, and where each is shown:
-- Health impact and clinical relevance: lasting change found between screening visits, treatable causes first (home page; physician's packet).
+- Health impact and clinical relevance: lasting change found between screening visits, read with risk context in eight areas and the LIBRA index, treatable causes first (physician's packet).
 - Technical depth and architecture: on-device speech, own-voice matching, a change rule against a personal baseline (How it works; slide 4).
 - Working solution and demonstration quality: the live demo, no login, end to end to a closed referral (slide 11).
 - Responsible AI, safety and data governance: no score at home, consent in parts, physician approval, nothing leaves the device by default (slide 9).
-- Scalability and deployment readiness: HL7 v2 for Malaffi, FHIR R4, phones and laptops, both speech models served from our own site.
+- Scalability and deployment readiness: HL7 v2 for Malaffi, FHIR R4, phones and laptops, both speech models served from our own site, a self-hosted build for UAE servers.
 - Commercial viability and path to pilot: Thiqa packages 52-45 and 52-46, about AED 26 per member a year, a 12-month pilot design (slide 12).
 
 Not yet: no patients or older Emirati volunteers; the Arabic word lists have no native Gulf reviewer; no physician has reviewed the packet; retest error comes from published studies.

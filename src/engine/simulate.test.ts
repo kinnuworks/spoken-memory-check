@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { DEFAULT_PARAMS } from './change'
-import { BASE_WORLD, firstFlag, rng, simulatePerson, suddenDrops } from './simulate'
+import { BASE_WORLD, byLanguage, firstFlag, rng, simulatePerson, suddenDrops } from './simulate'
 import { bundle, checkObservation, referralRequest } from './fhir'
 
 const share = (n: number, f: (r: () => number) => boolean) => { const r = rng(7); let k = 0; for (let i = 0; i < n; i++) if (f(r)) k++; return k / n }
@@ -80,5 +80,20 @@ describe('FHIR output', () => {
   it('bundles a referral with its due date', () => {
     const b = bundle([referralRequest('Patient/1', 'Practitioner/9', '2026-08-31', '2026-09-21')]) as Record<string, any>
     expect(b.entry[0].resource.occurrencePeriod.end).toBe('2026-09-21')
+  })
+})
+
+describe('the flag by language, from measured listening', () => {
+  it('sets each listener\'s miss rate so that either one hears the measured share, and loses sensitivity as listening gets worse', () => {
+    const rows = byLanguage(400, [
+      { lang: 'perfect', heard: 1, heardLow: 1, words: 1, speakers: 1 },
+      { lang: 'poor', heard: 0.75, heardLow: 0.64, words: 1, speakers: 1 },
+    ])
+    expect(rows[0].central.miss).toBe(0)
+    expect(rows[1].central.miss).toBe(0.5)
+    expect(rows[1].pessimistic.miss).toBe(0.6)
+    expect(rows[1].central.detected['2']).toBeLessThan(rows[0].central.detected['2'])
+    expect(rows[1].pessimistic.detected['2']).toBeLessThanOrEqual(rows[1].central.detected['2'])
+    expect(rows[0].lang).toBe('perfect')
   })
 })

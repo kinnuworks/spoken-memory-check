@@ -49,3 +49,18 @@ describe('LIBRA index from the screening record', () => {
     }
   })
 })
+
+describe('LIBRA as a FHIR RiskAssessment', () => {
+  it('states the score, the range and the factors, and no probability', async () => {
+    const { libraAssessment } = await import('./fhir')
+    const ra = libraAssessment('Patient/x', base, '2026-11-20')
+    expect(ra.resourceType).toBe('RiskAssessment')
+    expect(ra.prediction[0].qualitativeRisk.text).toContain('LIBRA 9.1 from 7 of 12 factors')
+    expect(ra.prediction[0].qualitativeRisk.text).toContain('between 3.2 and 11.2')
+    expect(ra.prediction[0].rationale).toMatch(/^Modifiable factors present: depression, hypertension/)
+    expect(JSON.stringify(ra)).not.toMatch(/probability/)
+    const none = libraAssessment('Patient/x', healthy, '2026-11-20')
+    expect(none.prediction[0].rationale).toBe('No modifiable factor in the screening record is present.')
+    expect(none.text.div).toContain('Present, heaviest first: none')
+  })
+})

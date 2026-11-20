@@ -23,19 +23,19 @@ Software
 <!-- summary:start -->
 A four-minute memory check by voice at home for adults in Abu Dhabi's screening programme. Their physician hears only about lasting change.
 
-Statement 8, item by item:
+Statement 8:
 1. Culturally valid and accessible: spoken in Gulf Arabic or English, nothing to read or type. Hearing is checked first.
 2. Cognitive and functional change: three checks set a personal baseline. One low check means a repeat; two in a row averaging about 9.5 points below it, a steady fall, or a yes to the everyday-tasks question send a packet; a very large fall goes the same day.
-3. Integrated risk context: the packet shows 10 of the 14 Lancet risk factors from the screening record, and, each under its own consent, family history and Emirati Genome Programme results.
-4. Prevention and timely care: the person sees plain steps from their own record. The packet puts treatable causes first (B12, thyroid, mood, hearing, sleep apnoea, medicines), then a specialist referral on a 15-working-day clock.
-5. Safety and oversight: no score at home, a physician approves every routine packet, and no language model decides anything.
+3. Integrated risk context: the packet reads the checks with all eight named areas (sleep too), weighs modifiable risk with the LIBRA index, and adds family history and Emirati Genome Programme results only under their own consent.
+4. Prevention and timely care: the person gets plain steps from their own record. The packet lists treatable causes first (B12, thyroid, mood, hearing, sleep apnoea, medicines), then a specialist referral on a 15-working-day clock.
+5. Safety and oversight: no score at home, a physician approves every routine packet, and no language model decides.
 6. Validation: the statement's seven measures, by language, age and schooling, each marked measured, simulated or not yet.
 
-Measured on recordings of 30 adults: with each person's own voice as the answer key, the on-device model heard 93% of 720 Arabic words. Simulated: 5.2% false packets a year in stable people, 97% of those losing 2 points a check flagged.
+Measured: with each speaker's own voice as the answer key, the on-device model heard 93% of 720 Arabic words from 30 adults. Simulated: 5.2% false packets a year in stable people; 97% of those losing 2 points a check flagged if every word is heard.
 
-Abu Dhabi fit: HL7 v2 referrals for Malaffi, FHIR R4 with 0 validator errors, Thiqa packages 52-45 and 52-46 as payer, modelled at AED 26 per member a year.
+Abu Dhabi fit: HL7 v2 referrals for Malaffi, FHIR R4 with 0 validator errors, UAE self-hosting, Thiqa packages 52-45 and 52-46 as payer, modelled at AED 26 a member a year.
 
-Pilot plan: after ethics approval, 12 months at one screening provider, 250 per arm randomised to usual care or home checks. Measures: baseline completion and specialist visits within 15 working days; stop rules for dismissed packets and distress.
+Pilot plan: after ethics approval, 12 months at one screening provider, 250 per arm randomised to usual care or home checks. Measures: baseline completion and specialist visits within 15 working days.
 
 Not yet: no partner, no patients or older Emirati volunteers, no native review of Arabic lists, retest error borrowed from studies.
 <!-- summary:end -->
@@ -49,7 +49,7 @@ The spoken check runs in the browser in English and Gulf Arabic, with an on-devi
 
 The change rule uses a personal baseline, two routes to a packet and an urgent route, with a simulated benchmark against simpler rules.
 
-The physician's packet shows treatable contributors, the 2024 Lancet risk factors from the screening record, family history and genome results only with consent, a decision log and a 15-working-day referral clock. Referrals export as HL7 v2 and FHIR R4.
+The physician's packet shows treatable contributors, risk context in the statement's eight areas with the LIBRA index, family history and genome results only with consent, a decision log and a 15-working-day referral clock. Referrals export as HL7 v2 and FHIR R4. The site also runs self-hosted from one Node process.
 
 There is also a programme view, blind re-scoring of one check in ten and a cost model.
 

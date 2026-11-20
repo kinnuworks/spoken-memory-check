@@ -77,7 +77,7 @@ function Clinician({ id }: { id?: string }) {
       </nav>
       <p><strong>{person.name}</strong>, {person.record.sex === 'F' ? 'female' : 'male'}. Clinic MoCA at the screening visit: {person.record.mocaAtVisit}. Home checks since {person.checks[0].date}.</p>
       <div className="card" aria-label="Read together">
-        <p><strong>Read together.</strong> The checks show {finding}. {concernAreas.length} of the 8 risk areas show something to act on{concernAreas.length ? `: ${concernAreas.join(', ')}` : ''}. Modifiable risk (LIBRA): {lib.known} from the record{lib.ranked.length ? `, mostly ${lib.ranked.slice(0, 2).map((f) => f.name.toLowerCase()).join(' and ')}` : ''}. Check first: {contributors.map((c) => c.name[0].toLowerCase() + c.name.slice(1)).join(', ')}. Then decide on a specialist referral.</p>
+        <p><strong>Read together.</strong> The checks show {finding}. {concernAreas.length} of the 8 risk areas need attention{concernAreas.length ? `: ${concernAreas.join(', ')}` : ''}. Modifiable risk (LIBRA): {lib.known} from the record{lib.ranked.length ? `, mostly ${lib.ranked.slice(0, 2).map((f) => f.name.toLowerCase()).join(' and ')}` : ''}. Check first: {contributors.map((c) => c.name[0].toLowerCase() + c.name.slice(1)).join(', ')}. Then decide on a specialist referral.</p>
         <p className="muted">Risk context helps you read the change and plan prevention. It never raises or lowers the flag: the rule reads only the checks.</p>
       </div>
 
@@ -108,7 +108,7 @@ function Clinician({ id }: { id?: string }) {
       <p className="muted">The physical, metabolic, sleep, mental-wellbeing, functional, lifestyle, family-history and genomic areas Statement 8 names. Each row says where it came from and under which consent.</p>
       <div className="scroll" tabIndex={0} role="region" aria-label="Risk context in the eight areas"><table>
         <thead><tr><th>Area</th><th>For this person</th><th>Source</th><th>Shared under</th></tr></thead>
-        <tbody>{areas.map((a) => <tr key={a.area}><td><strong>{a.area}</strong>{a.concern ? <><br /><strong className="status-watch">to act on</strong></> : null}</td><td>{a.access === 'Not shared' ? <span className="muted">{a.finding}</span> : a.finding}</td><td className="muted">{a.source}</td><td className="muted">{a.access}</td></tr>)}</tbody>
+        <tbody>{areas.map((a) => <tr key={a.area}><td><strong>{a.area}</strong>{a.concern ? <><br /><strong className="status-watch">needs attention</strong></> : null}</td><td>{a.access === 'Not shared' ? <span className="muted">{a.finding}</span> : a.finding}</td><td className="muted">{a.source}</td><td className="muted">{a.access}</td></tr>)}</tbody>
       </table></div>
       <p className="muted">{context.map((c) => c.shared ? `${c.name}: ${c.note}` : '').filter(Boolean).join(' ')}</p>
 

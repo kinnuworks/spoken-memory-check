@@ -66,3 +66,20 @@ Run them with `npm test`. Each line is one automated test.
 - Items are split into heard by both, the person only and the machine only; agreement is both over either.
 - Two empty sides count as full agreement.
 - A running figure is kept per language.
+
+## Risk context, LIBRA and sleep
+- always returns the eight areas, in the statement order
+- keeps family history and genome out unless each was shared
+- reads sleep from the first home check and marks snoring or short sleep
+- carries the everyday-tasks answers from the checks into the functional area
+- never changes what the rule decides
+- puts sleep apnoea on the check-first list when snoring is reported, even with normal BMI and blood pressure
+- gives the person a sleep step for snoring or short sleep, and none otherwise
+- orders the person's steps: hearing first, then by LIBRA weight
+- has twelve factors whose weights span the published range of -5.9 to +12.7
+- scores 0 from the record when no known factor is present, with the unknowns as a range
+- adds each present factor once, and ranks them heaviest first
+- uses the thresholds at their edges
+- never changes what the change rule decides
+- states the score, the range and the factors, and no probability
+- sets each listener's miss rate so that either one hears the measured share, and loses sensitivity as listening gets worse
