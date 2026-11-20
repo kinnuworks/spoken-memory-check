@@ -4,6 +4,7 @@ import { ANIMALS, ARABIC_REVIEWED, SOUND_CHECK_WORDS, type Lang } from '../engin
 import { scoreTask, type RangeScore } from '../engine/score'
 import { browserSpeechAvailable } from '../speech/recogniser'
 import { DOWNLOAD_FROM, DOWNLOAD_MB, loadSecond, secondCrashedBefore, secondLoading, secondSupported } from '../speech/second'
+import { hasMicrophone } from '../speech/capture'
 import { deviceOnlyPossible, listenTask } from '../speech/session'
 import SurveyChart from './SurveyChart'
 
@@ -75,6 +76,8 @@ export default function Try() {
     if (!browserOn) {
       // The on-device listener has to be ready before anything is recorded.
       if (!deviceOnlyPossible(lang)) return setStage('blocked')
+      // Check the microphone before the one-time model download, so nobody waits for a download they cannot use.
+      if (!(await hasMicrophone())) { if (run.current === id) setStage('blocked'); return }
       setSecond('loading')
       try {
         await loadSecond(lang, setPercent)

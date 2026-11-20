@@ -82,6 +82,19 @@ export function secondLoading(lang: Lang): boolean {
   return ready[lang] !== undefined
 }
 
+/**
+ * Throws the worker away and loads the model again in a fresh one. A transcription that fails
+ * straight away usually means the worker's memory is in a bad state; a fresh worker clears it.
+ */
+export async function restartSecond(lang: Lang): Promise<boolean> {
+  worker?.terminate()
+  worker = null
+  for (const w of waiting.values()) w.reject(new Error('listener restarted'))
+  waiting.clear()
+  ready = {}
+  try { await loadSecond(lang); return true } catch { return false }
+}
+
 /** Transcribes a finished 16 kHz mono clip on this device. Resolves to null if it fails or takes too long. */
 export async function transcribeSecond(audio: Float32Array, lang: Lang, timeoutMs = 90000): Promise<string | null> {
   try {
@@ -93,7 +106,8 @@ export async function transcribeSecond(audio: Float32Array, lang: Lang, timeoutM
     ])
     end(lang, text !== null)
     return text
-  } catch {
+  } catch (e) {
+    console.warn('on-device listener failed:', e)
     end(lang, false)
     return null
   }

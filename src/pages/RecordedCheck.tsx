@@ -8,7 +8,7 @@ import bench from '../data/benchmark.json'
 import tplBench from '../data/template-bench.json'
 import { addConfirmed, features, spot, type Templates } from '../engine/templates'
 import { decodeTo16k, level } from '../speech/capture'
-import { DOWNLOAD_FROM, DOWNLOAD_MB, SECOND_NAME, loadSecond, transcribeSecond } from '../speech/second'
+import { DOWNLOAD_FROM, DOWNLOAD_MB, SECOND_NAME, loadSecond, restartSecond, transcribeSecond } from '../speech/second'
 import { OWN_NAME } from '../speech/session'
 
 // The first check anyone takes uses list 1, so the recording does too.
@@ -91,7 +91,7 @@ export default function RecordedCheck() {
   const [secondOk, setSecondOk] = useState(true)
   const [added, setAdded] = useState<number | null>(null)
   const [tasks, setTasks] = useState<Partial<Record<TaskKey, TaskResult>>>({})
-  const [total, setTotal] = useState<{ low: number; high: number; scored: boolean; seconds: number; result: CheckResult } | null>(null)
+  const [total, setTotal] = useState<{ low: number; high: number; scored: boolean; seconds: number; result: CheckResult; reason: string } | null>(null)
   const player = useRef<HTMLAudioElement | null>(null)
 
   const words = WORD_LISTS[lang][LIST]
@@ -138,8 +138,8 @@ export default function RecordedCheck() {
         const t = performance.now()
         const transcripts: Record<string, string> = {}
         if (haveSecond) {
-          // One retry: a first transcription straight after the download can fail while the model warms up.
-          const text = (await transcribeSecond(audio, lang, 180000)) ?? (await transcribeSecond(audio, lang, 180000))
+          // One retry, in a fresh worker: a transcription that fails can leave the worker in a bad state.
+          const text = (await transcribeSecond(audio, lang, 180000)) ?? ((await restartSecond(lang)) ? await transcribeSecond(audio, lang, 180000) : null)
           if (text !== null) transcripts[SECOND_NAME] = text
           else setSecondOk(false)
         }
@@ -161,10 +161,18 @@ export default function RecordedCheck() {
 
       const heardAll = immediate.recognisers.length > 0 && animals.recognisers.length > 0 && delayed.recognisers.length > 0
       const scored = heardAll && immediate.scored && animals.scored && delayed.scored
+      // Say exactly why a check was not scored, so nobody is left with a bare "Not scored".
+      const parts: [string, typeof immediate][] = [['the words recalled straight away', immediate], ['the minute of animals', animals], ['the words recalled later', delayed]]
+      const join = (xs: string[]) => xs.length > 1 ? `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}` : xs[0]
+      const unheard = parts.filter(([, sc]) => sc.recognisers.length === 0).map(([n]) => n)
+      const wide = parts.filter(([, sc]) => sc.recognisers.length > 0 && !sc.scored).map(([n]) => n)
+      const reason = scored ? '' : unheard.length
+        ? `No listener could score ${join(unheard)}: the on-device model did not finish within its time limit on this device, twice. That is about this device being busy or short of memory, not about the voice. The real check would not count it and would ask again another day.`
+        : `The two listeners disagreed on more than a third of the words in ${join(wide)}, so the check is not counted rather than guessed. The real check would ask again another day with a different list.`
       const low = immediate.low + animals.low + delayed.low, high = immediate.high + animals.high + delayed.high
       // As the first check on a device: the rule of record decides what happens next.
       const traj = evaluate([{ date: new Date().toISOString().slice(0, 10), low: scored ? low : null, high: scored ? high : null }])
-      setTotal({ low, high, scored, seconds: sec(performance.now() - tScore), result: traj.results[0] })
+      setTotal({ low, high, scored, seconds: sec(performance.now() - tScore), result: traj.results[0], reason })
       setStage('done')
     } catch {
       setStage('failed')
@@ -281,7 +289,8 @@ export default function RecordedCheck() {
         <>
           <h2>The whole check</h2>
           <p className="big" data-said={saidAll} data-missed={missedAll.length} data-added={addedAll.length}>{total.scored ? range(total) : 'Not scored'}</p>
-          <p>{total.scored ? `Words heard, of ${saidAll} said: words recalled straight away, plus animals, plus words recalled later. ${total.low === total.high ? 'The listeners agreed on every item.' : 'The low end counts words both listeners heard; the high end counts words either one heard.'}` : 'The listeners disagreed on too much, or could not hear a task, so the real check would not count this one. It would be repeated another day with a different list.'}</p>
+          <p>{total.scored ? `Words heard, of ${saidAll} said: words recalled straight away, plus animals, plus words recalled later. ${total.low === total.high ? 'The listeners agreed on every item.' : 'The low end counts words both listeners heard; the high end counts words either one heard.'}` : total.reason}</p>
+          {!total.scored && <div className="stack"><button className="primary" onClick={run}>Score it again</button><p className="muted">The model is already on this device, so this goes faster.</p></div>}
           <div className="card">
             <p><strong>Checked against what the voice said</strong></p>
             <p>{missedAll.length === 0 ? `Every one of the ${saidAll} words said was heard by at least one listener.` : `${saidAll - missedAll.length} of the ${saidAll} words said were heard. No listener heard ${missedAll.length === 1 ? 'this one' : `these ${missedAll.length}`}:`}</p>

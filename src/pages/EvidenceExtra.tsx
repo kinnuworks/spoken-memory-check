@@ -94,7 +94,7 @@ type Kind = 'Measured' | 'Simulated' | 'Not yet'
 type Cell = { text: string; kind: Kind }
 const c = (text: string, kind: Kind): Cell => ({ text, kind })
 const p1 = (x: number) => `${(x * 100).toFixed(1).replace(/\.0$/, '')}%`
-const p0 = (x: number) => `${Math.round(x * 100)}%`
+const p0 = (x: number) => `${Math.round(x * 100 + 1e-9)}%`
 
 /** Statement 8's own validation measures, overall and by language, age and schooling. */
 export function ValidationTable() {

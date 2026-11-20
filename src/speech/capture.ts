@@ -47,3 +47,15 @@ export function level(audio: Float32Array): number {
   for (let i = 0; i < audio.length; i++) e += audio[i] * audio[i]
   return Math.sqrt(e / Math.max(1, audio.length))
 }
+
+/** Asks for the microphone once and lets it go. False when there is none, or it is blocked, so the page can say so before any download. */
+export async function hasMicrophone(): Promise<boolean> {
+  if (!navigator.mediaDevices?.getUserMedia) return false
+  try {
+    const s = await navigator.mediaDevices.getUserMedia({ audio: true })
+    s.getTracks().forEach((t) => t.stop())
+    return true
+  } catch {
+    return false
+  }
+}
