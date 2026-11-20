@@ -248,7 +248,7 @@ export default function RecordedCheck() {
 
       {stage === 'intro' && <div className="stack"><button className="primary" onClick={run}>Score the whole check on my device</button></div>}
       {busy && <p className="listening"><i />{step}</p>}
-      {percent !== null && <div><p className="muted">On-device listener: {percent}%</p><div className="meter"><i style={{ width: `${percent}%` }} /></div></div>}
+      {percent !== null && <div><p className="muted">Downloading the on-device listener: {percent}%</p><div className="meter"><i style={{ width: `${percent}%` }} /></div></div>}
       {stage === 'failed' && <p>Something went wrong loading the recordings on this device. Try again, or <Link to="/recorded">play the shorter recorded check</Link>.</p>}
       {!secondOk && <p className="note">The on-device listener could not run here, so only own-voice matching scored the recall. Older or low-memory devices score with fewer listeners.</p>}
 

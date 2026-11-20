@@ -25,6 +25,9 @@ function Clinician({ id }: { id?: string }) {
   const flag = traj.results.find((r) => PACKET_STATUSES.includes(r.status))!
   const byReport = flag.status === 'review'
   const base = traj.baseline as number
+  // For the slow-decline route: how far the last two checks together fell, to show why the two-checks route had not fired yet.
+  const prevScored = traj.results.filter((r) => r.index < flag.index && r.change !== null && !person.checks[r.index].offDay).pop()
+  const pairShort = flag.status === 'trend' && flag.pairZ !== null && prevScored ? -((flag.change as number) + (prevScored.change as number)) / 2 : null
   const factors = riskFactors(person.record)
   const contributors = treatableContributors(person.record)
   const context = contextRows(person.record, person.shared)
@@ -86,7 +89,7 @@ function Clinician({ id }: { id?: string }) {
       <p>Scores are totals from a spoken check at home. Each is a range from two speech recognisers.</p>
 
       <h2>2. What was calculated</h2>
-      {flag.status === 'trend' && <p>{TREND_PACKET_NOTE}</p>}
+      {flag.status === 'trend' && <p>{TREND_PACKET_NOTE}{pairShort !== null && ` Here the last two checks averaged ${pairShort.toFixed(1)} points below baseline after the practice gain, z ${(flag.pairZ as number).toFixed(2)}: just short of the z ${DEFAULT_PARAMS.pairZ} the two-checks route needs, so that route alone would have waited for the next check.`}</p>}
       {byReport
         ? <p>Baseline {base.toFixed(1)} (mean of the first three checks). On {flag.date} the score was {(flag.mid as number).toFixed(1)}, within this person's usual range (z {(flag.z as number).toFixed(2)}). The packet was raised because the person said everyday tasks such as money, medicines or appointments have become harder. A reported change in daily life goes to you whatever the scores say.</p>
         : <p>Baseline {base.toFixed(1)} (mean of the first three checks). On {flag.date} the score was {(flag.mid as number).toFixed(1)}, which is {Math.abs(flag.change as number).toFixed(1)} points below baseline after the expected practice gain, {Math.abs(flag.z as number).toFixed(1)} times the measurement error. The check before it was also low.</p>}
