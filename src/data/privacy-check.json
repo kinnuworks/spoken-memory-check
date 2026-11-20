@@ -1,6 +1,6 @@
 {
- "url": "http://localhost:4391",
- "ranAt": "2026-11-20T15:42:04.293Z",
+ "url": "https://spoken-memory-check.vercel.app",
+ "ranAt": "2026-11-20T16:44:46.283Z",
  "voice": "computer voice fed in as the microphone (Chromium fake audio capture), not a person",
  "path": "\"Try it with your voice\": sound check, animals, scored on the device",
  "uploadBytes": 0,
@@ -9,13 +9,14 @@
   {
    "lang": "en",
    "heard": "8 animals",
-   "requests": 32,
+   "requests": 40,
    "methods": {
-    "GET": 32
+    "GET": 40
    },
    "hosts": [
     "huggingface.co",
-    "localhost:4391"
+    "spoken-memory-check.vercel.app",
+    "us.aws.cdn.hf.co"
    ],
    "uploadBytes": 0,
    "uploads": 0,
@@ -30,12 +31,12 @@
   {
    "lang": "ar",
    "heard": "8 animals",
-   "requests": 31,
+   "requests": 33,
    "methods": {
-    "GET": 31
+    "GET": 33
    },
    "hosts": [
-    "localhost:4391"
+    "spoken-memory-check.vercel.app"
    ],
    "uploadBytes": 0,
    "uploads": 0,
