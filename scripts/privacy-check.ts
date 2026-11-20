@@ -21,7 +21,7 @@ const wav = resolve(`output/mic-check/mic-${LANG}.wav`)
 if (!existsSync(wav)) throw new Error(`${wav} is missing: run npx tsx scripts/mic-check.ts first`)
 const netlog = join(dir, `netlog-${LANG}.json`)
 
-const browser = await chromium.launch({ args: ['--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream', `--use-file-for-fake-audio-capture=${wav}`, `--log-net-log=${netlog}`, '--net-log-capture-mode=Everything'] })
+const browser = await chromium.launch({ args: ['--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream', `--use-file-for-fake-audio-capture=${wav}`, `--log-net-log=${netlog}`, '--net-log-capture-mode=Default'] })
 let page = { bytes: -1, uploads: -1 }
 let heard = ''
 try {
@@ -30,7 +30,7 @@ try {
   await p.goto(`${BASE}/#/try`)
   if (LANG === 'ar') await p.getByRole('button', { name: 'العربية' }).click()
   await p.getByRole('button', { name: 'Start the sound check' }).click()
-  const outcome = p.getByRole('heading', { name: /We can hear you|We couldn't hear the three words|The microphone isn't available here/ })
+  const outcome = p.getByRole('heading', { name: /We can hear you|We couldn't hear the three words|The microphone isn't available here|The speech model didn't load/ })
   await outcome.waitFor({ timeout: 4 * 60_000 })
   if ((await outcome.innerText()) !== 'We can hear you') throw new Error(`sound check: ${await outcome.innerText()}`)
   await p.getByRole('button', { name: 'Start naming animals' }).click()

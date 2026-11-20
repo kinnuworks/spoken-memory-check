@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { ANIMALS, ARABIC_REVIEWED, SOUND_CHECK_WORDS, type Lang } from '../engine/lexicon'
 import { scoreTask, type RangeScore } from '../engine/score'
 import { browserSpeechAvailable } from '../speech/recogniser'
-import { DOWNLOAD_FROM, DOWNLOAD_MB, loadSecond, secondCrashedBefore, secondLoading, secondSupported } from '../speech/second'
+import { DOWNLOAD_FROM, DOWNLOAD_MB, loadSecond, restartSecond, secondCrashedBefore, secondLoading, secondSupported } from '../speech/second'
 import { hasMicrophone } from '../speech/capture'
 import SentMeter from '../components/SentMeter'
 import { deviceOnlyPossible, listenTask } from '../speech/session'
@@ -32,6 +32,8 @@ export default function Try() {
   const [typed, setTyped] = useState('')
   const [viaTyping, setViaTyping] = useState(forced === 'result')
   const [second, setSecond] = useState<'off' | 'loading' | 'ready' | 'checking'>('off')
+  // True when the speech model, not the microphone, is what failed: the page then says so.
+  const [modelFailed, setModelFailed] = useState(false)
   const [percent, setPercent] = useState(0)
   const [listeners, setListeners] = useState(1)
   // Scoring stays on this device unless the person turns on the browser's recogniser.
@@ -80,11 +82,14 @@ export default function Try() {
       // Check the microphone before the one-time model download, so nobody waits for a download they cannot use.
       if (!(await hasMicrophone())) { if (run.current === id) setStage('blocked'); return }
       setSecond('loading')
+      setModelFailed(false)
       try {
-        await loadSecond(lang, setPercent)
+        // One retry in a fresh worker: a download that breaks off halfway usually works the second time.
+        try { await loadSecond(lang, setPercent) } catch { if (!(await restartSecond(lang))) throw new Error('speech model did not load') }
         setSecond('ready')
       } catch {
         setSecond('off')
+        setModelFailed(true)
         if (run.current === id) setStage('blocked')
         return
       }
@@ -228,8 +233,14 @@ export default function Try() {
 
       {stage === 'blocked' && (
         <>
-          <h2>The microphone isn't available here</h2>
-          <p>It may be blocked, or this browser has no speech recognition. Open this page in Chrome or Safari, or carry on without a microphone.</p>
+          {modelFailed ? <>
+            <h2>The speech model didn't load</h2>
+            <p>The microphone is fine; the one-time download of the speech model broke off. Check the connection and try again, or carry on without it.</p>
+            <div className="stack"><button className="primary" onClick={soundCheck}>Try again</button></div>
+          </> : <>
+            <h2>The microphone isn't available here</h2>
+            <p>It may be blocked, or this browser has no speech recognition. Open this page in Chrome or Safari, or carry on without a microphone.</p>
+          </>}
           <div className="stack">
             <button onClick={() => navigator.clipboard?.writeText(window.location.href)}>Copy the link</button>
             <button onClick={() => setStage('typed')}>Type the animals to see the scoring work</button>
