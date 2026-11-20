@@ -8,6 +8,11 @@ import phone from '../data/phone-check.json'
 import mic from '../data/mic-check.json'
 import SurveyChart from './SurveyChart'
 import { BuiltToBeChecked, OlderSpeakers, RuleChecks, ValidationTable } from './EvidenceExtra'
+import { PrivacyProof, SafetyPromises } from './Proofs'
+import privacy from '../data/privacy-check.json'
+import safety from '../data/safety-check.json'
+import { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 
 const RULE: Record<string, string> = {
   ours: 'This check: the last two checks together well below baseline, or a slowly falling line',
@@ -23,6 +28,9 @@ const phoneAnimals = (lang: string) => { const a = phoneRows(lang).map((r) => r.
 const phoneRange = (lang: string) => { const m = phoneRows(lang).map((r) => r.addedMemoryMB); return `${gb(Math.min(...m))} to ${gb(Math.max(...m))} GB` }
 
 export default function Benchmark() {
+  const loc = useLocation()
+  // Links such as #/benchmark#privacy land on that section.
+  useEffect(() => { if (loc.hash) document.getElementById(loc.hash.slice(1))?.scrollIntoView() }, [loc.hash])
   const b2 = data.burden.find((b) => b.prevalence === 0.02)!
   const worlds = [...new Set(data.rows.map((r) => r.world))]
   const row = (world: string, rule: string) => data.rows.find((r) => r.world.includes(world) && r.rule === rule)!
@@ -47,9 +55,14 @@ export default function Benchmark() {
           <tr><th scope="row">Does it run on phones?</th><td>In the browser engines of iPhone and Android phones, run on a laptop with phone screen sizes: {phone.rows.every((r) => r.ran) ? 'yes' : 'not in every case'}, scoring {phoneAnimals('en')} of 20 English and {phoneAnimals('ar')} of 20 Arabic animals, as on a laptop. The page needs about {phoneRange('en')} more memory for English and {phoneRange('ar')} for Arabic while the model runs; whether a given phone allows that is only known on the phone. If it does not, the page says so next time and offers the browser's speech service or typing. Tried once on one real phone, the team's own (19 Nov): the English and Arabic recorded checks both scored on the device. Its model and browser were not written down</td><td>Phone engines, and one real phone</td></tr>
           <tr><th scope="row">Does it work through a microphone?</th><td>{mic.rows.filter((r) => r.lang !== 'silence').every((r) => r.ok) ? 'Yes' : 'Not in every case'}, with a computer voice fed in as the browser's microphone: "Try it with your voice" passed the sound check and credited {mic.rows.filter((r) => r.lang !== 'silence').map((r) => (r.detail.match(/(\d+) animals? credited/) ?? [])[1] ?? '?').join(' (English) and ')} (Arabic) animals in 20 seconds, each one the voice said. With silence as the microphone the sound check failed and nothing was scored. Not yet tried with a person</td><td>Our own test, computer voice</td></tr>
           <tr><th scope="row">Is the code tested?</th><td>{coverage.engine.linesCovered} of {coverage.engine.linesTotal} lines run by the tests; {Math.round(mutation.score * 100)}% of {mutation.mutants} deliberate bugs caught; live site {live.passed} of {live.total} end to end</td><td>Code</td></tr>
+          <tr><th scope="row">Does my voice leave the device?</th><td>No. In Chromium's own network log of a check by voice, every request was a download and {privacy.uploadBytes} bytes went out; the page's own count agreed</td><td>Our own test, live site</td></tr>
+          <tr><th scope="row">Does the rule keep its promises?</th><td>{Object.values(safety.violations).every((v) => v === 0) ? 'Yes' : 'Not always'}: {safety.histories.toLocaleString('en')} random histories, none broke any of nine safety promises. The test first found one real gap, fixed the same day. You can rerun it in your browser</td><td>Our own break test</td></tr>
           <tr><th scope="row">Does it work in patients?</th><td>Not measured. No patients, no older Emirati volunteers and no retest yet</td><td>Pending</td></tr>
         </tbody>
       </table></div>
+
+      <PrivacyProof />
+      <SafetyPromises />
 
       <ValidationTable />
 

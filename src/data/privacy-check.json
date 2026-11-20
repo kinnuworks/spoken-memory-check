@@ -1,0 +1,51 @@
+{
+ "url": "http://localhost:4391",
+ "ranAt": "2026-11-20T15:42:04.293Z",
+ "voice": "computer voice fed in as the microphone (Chromium fake audio capture), not a person",
+ "path": "\"Try it with your voice\": sound check, animals, scored on the device",
+ "uploadBytes": 0,
+ "ok": true,
+ "runs": [
+  {
+   "lang": "en",
+   "heard": "8 animals",
+   "requests": 32,
+   "methods": {
+    "GET": 32
+   },
+   "hosts": [
+    "huggingface.co",
+    "localhost:4391"
+   ],
+   "uploadBytes": 0,
+   "uploads": 0,
+   "notGet": [],
+   "websocketEvents": 0,
+   "pageCounter": {
+    "bytes": 0,
+    "uploads": 0
+   },
+   "ok": true
+  },
+  {
+   "lang": "ar",
+   "heard": "8 animals",
+   "requests": 31,
+   "methods": {
+    "GET": 31
+   },
+   "hosts": [
+    "localhost:4391"
+   ],
+   "uploadBytes": 0,
+   "uploads": 0,
+   "notGet": [],
+   "websocketEvents": 0,
+   "pageCounter": {
+    "bytes": 0,
+    "uploads": 0
+   },
+   "ok": true
+  }
+ ]
+}

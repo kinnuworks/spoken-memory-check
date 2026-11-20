@@ -1,0 +1,26 @@
+{
+ "generated": "2026-11-20",
+ "seconds": 21,
+ "histories": 1000000,
+ "checks": 8501343,
+ "seed": 20261120,
+ "violations": {
+  "same": 0,
+  "missing": 0,
+  "tasks": 0,
+  "offday": 0,
+  "twochecks": 0,
+  "urgent": 0,
+  "baseline": 0,
+  "higher": 0,
+  "context": 0
+ },
+ "examples": {},
+ "foundBeforeFix": {
+  "promise": "tasks",
+  "histories": 100000,
+  "broke": 2390,
+  "date": "2026-11-20",
+  "what": "A yes to the everyday-tasks question on a check that could not be scored was dropped; fixed the same day."
+ }
+}

@@ -4,6 +4,7 @@ import { evaluate } from '../engine/change'
 import { ANIMALS, ARABIC_REVIEWED, SOUND_CHECK_WORDS, WORD_LISTS, type Lang } from '../engine/lexicon'
 import { scoreTask, type RangeScore } from '../engine/score'
 import { readYesNo } from '../engine/yesno'
+import SentMeter from '../components/SentMeter'
 import { clearChecks, loadChecks, saveCheck, type StoredCheck } from '../engine/store'
 import { browserSpeechAvailable, type ListenControl } from '../speech/recogniser'
 import { level, startCapture } from '../speech/capture'
@@ -260,6 +261,7 @@ export default function Check() {
         <>
           {lang === 'ar' && <p lang="ar" dir="rtl">{AR.thanks}</p>}
           <p>Thank you. {last.low === null ? 'This check could not be scored, so it does not count. In real use it is repeated another day with a different list.' : `That was check ${history.length}.`}</p>
+          <SentMeter browserOn={browserOn} />
           <p className="note">{loadConsent().sharePhysician ? 'You agreed that your physician is told if your scores stay lower than usual. Nothing is sent after a single check.' : 'You have not agreed to share with your physician, so nothing from this check goes to a physician. You can change this on your choices screen.'}</p>
           <div className="card">
             <p><strong>What we heard</strong> <span className="tag">shown to you as a tester</span></p>

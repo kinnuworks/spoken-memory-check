@@ -5,6 +5,7 @@ import { scoreTask, type RangeScore } from '../engine/score'
 import { browserSpeechAvailable } from '../speech/recogniser'
 import { DOWNLOAD_FROM, DOWNLOAD_MB, loadSecond, secondCrashedBefore, secondLoading, secondSupported } from '../speech/second'
 import { hasMicrophone } from '../speech/capture'
+import SentMeter from '../components/SentMeter'
 import { deviceOnlyPossible, listenTask } from '../speech/session'
 import SurveyChart from './SurveyChart'
 
@@ -196,6 +197,7 @@ export default function Try() {
           {sample && <p className="tag syn">Sample result from typed animals</p>}
           <p className="big">{live.low === live.high ? live.high : `${live.low} to ${live.high}`} animals</p>
           <div className="chips" lang={lang} dir={lang === 'ar' ? 'rtl' : 'ltr'}>{chips}</div>
+          <SentMeter browserOn={browserOn} />
           {viaTyping
             ? <p className="note">You typed these, so no speech was recognised. The matching and counting are the same ones the spoken check uses: each animal counts once, whatever form you give it.</p>
             : !browserOn

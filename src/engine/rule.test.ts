@@ -201,3 +201,16 @@ describe('when a session is too uncertain to score', () => {
     expect(s.items.map((i) => i.heard)).toEqual(['both', 'one', 'one'])
   })
 })
+
+describe('a reported change in everyday tasks on a check that was not scored', () => {
+  it('still goes to the physician, before and after the baseline', () => {
+    const base = [{ date: 'd1', low: 30, high: 30 }, { date: 'd2', low: 31, high: 31 }, { date: 'd3', low: 30, high: 30 }]
+    const after = evaluate([...base, { date: 'd4', low: null, high: null, functionChange: true }])
+    expect(after.results[3].status).toBe('review')
+    expect(after.status).toBe('review')
+    const held = evaluate([...base, { date: 'd4', low: null, high: null, hearingLimited: true, functionChange: true }])
+    expect(held.results[3].status).toBe('review')
+    const early = evaluate([{ date: 'd1', low: null, high: null, functionChange: true }])
+    expect(early.results[0].status).toBe('review')
+  })
+})

@@ -14,6 +14,9 @@ npx oxlint src
 echo "== unit and rule tests"
 npx vitest run src
 
+# The rule's nine safety promises on a million random histories (about 20 s).
+SAFETY_NO_WRITE=1 npx tsx scripts/safety-check.ts 1000000
+
 # Evidence labels: once evidence/EVAL_PLAN.md exists, the public text (README, submission text,
 # video script) must label every evidence claim for its kind.
 if [ -f evidence/EVAL_PLAN.md ] && [ -f evidence_lint.py ]; then

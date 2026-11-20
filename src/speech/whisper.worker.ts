@@ -19,6 +19,8 @@ const HOST: Record<Lang, { host: string; path: string }> = {
   ar: { host: `${self.location.origin}/models/`, path: '{model}/' },
 }
 env.allowLocalModels = false
+// The ONNX Runtime files come from this site (scripts/copy-ort.mjs), not from a public CDN.
+if (env.backends.onnx.wasm) env.backends.onnx.wasm.wasmPaths = `${self.location.origin}/ort/`
 env.allowRemoteModels = true
 const HF_EN = 'https://huggingface.co/onnx-community/whisper-base/resolve/main/'
 const OWN_EN = `${self.location.origin}/models/whisper-base/`

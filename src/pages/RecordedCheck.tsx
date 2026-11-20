@@ -8,6 +8,7 @@ import bench from '../data/benchmark.json'
 import tplBench from '../data/template-bench.json'
 import { addConfirmed, features, spot, type Templates } from '../engine/templates'
 import { decodeTo16k, level } from '../speech/capture'
+import SentMeter from '../components/SentMeter'
 import { DOWNLOAD_FROM, DOWNLOAD_MB, SECOND_NAME, loadSecond, restartSecond, transcribeSecond } from '../speech/second'
 import { OWN_NAME } from '../speech/session'
 
@@ -288,6 +289,7 @@ export default function RecordedCheck() {
       {total && (
         <>
           <h2>The whole check</h2>
+          <SentMeter />
           <p className="big" data-said={saidAll} data-missed={missedAll.length} data-added={addedAll.length}>{total.scored ? range(total) : 'Not scored'}</p>
           <p>{total.scored ? `Words heard, of ${saidAll} said: words recalled straight away, plus animals, plus words recalled later. ${total.low === total.high ? 'The listeners agreed on every item.' : 'The low end counts words both listeners heard; the high end counts words either one heard.'}` : total.reason}</p>
           {!total.scored && <div className="stack"><button className="primary" onClick={run}>Score it again</button><p className="muted">The model is already on this device, so this goes faster.</p></div>}

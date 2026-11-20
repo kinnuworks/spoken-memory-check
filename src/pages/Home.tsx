@@ -7,6 +7,9 @@ import own from '../data/own-voice-summary.json'
 import tests from '../data/tests.json'
 import sada from '../data/sada-bench.json'
 import coverage from '../data/coverage-summary.json'
+import privacy from '../data/privacy-check.json'
+import safety from '../data/safety-check.json'
+import liveRun from '../data/live-check.json'
 import { COST_DEFAULTS, yearlyCost } from '../engine/cost'
 import { evaluate, PACKET_STATUSES, STATUS_LABEL, type Trajectory } from '../engine/change'
 import { PERSONAS, type Persona } from '../engine/histories'
@@ -32,6 +35,14 @@ const FACTS = [
   { n: `${older}% vs ${adult}%`, t: 'word error, older against adult Gulf speakers' },
   { n: '52-45 and 52-46', t: 'the Thiqa packages it fills the memory step of' },
   { n: '0 errors', t: 'from the official HL7 FHIR validator' },
+]
+
+// Proof a visitor can check: each tile links to how it was tested.
+const PROOFS = [
+  { n: `${privacy.uploadBytes} bytes`, t: "sent off the device during a check by voice, in the browser's own network log", to: '/benchmark#privacy' },
+  { n: safety.histories.toLocaleString('en'), t: 'random histories; none broke the rule\'s nine safety promises. Rerun it in your browser', to: '/benchmark#safety' },
+  { n: `${liveRun.steps.filter((x) => x.ok).length} of ${liveRun.steps.length}`, t: 'end-to-end steps on the live site after every deploy, in a real browser', to: '/benchmark' },
+  { n: `${coverage.engine.linesCovered} of ${coverage.engine.linesTotal}`, t: `lines of the decision code run by ${tests.passed} automated tests`, to: '/benchmark' },
 ]
 
 const ROUTES = [
@@ -241,6 +252,11 @@ export default function Home() {
       <section className="c-facts">
         <p>Measured so far, each with its method</p>
         <div>{FACTS.map((f) => <p key={f.n}><b>{f.n}</b><span>{f.t}</span></p>)}</div>
+      </section>
+
+      <section className="c-facts c-facts--proof">
+        <p>Proof you can check yourself</p>
+        <div>{PROOFS.map((f) => <p key={f.to + f.n}><b>{f.n}</b><span>{f.t}</span><Link to={f.to}>How it is checked</Link></p>)}</div>
       </section>
 
       <section className="c-sec" aria-labelledby="statement-items">

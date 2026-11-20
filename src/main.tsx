@@ -14,7 +14,11 @@ import './index.css'
 import './styles/design/base.css'
 import './styles/design/components.css'
 import App from './App.tsx'
+import { installMeter } from './privacy/meter'
 import './styles/design/theme.css'
+
+// Before the app starts, so every upload the page makes is counted.
+installMeter()
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

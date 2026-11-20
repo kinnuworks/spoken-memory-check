@@ -176,7 +176,10 @@ export function evaluate(checks: Check[], p: RuleParams = DEFAULT_PARAMS): Traje
           ? 'Held again: the sound check failed twice in a row. Not scored. The person is pointed to a hearing test.'
           : 'Held: the sound check failed, so this check was not scored. A missing score is never treated as a low score. If it happens again the person is pointed to a hearing test.'
         : 'Not scored. Nothing is assumed from a missing check; the next one is compared as usual.'
-      results.push({ index: i, date: c.date, scored: false, mid: null, change: null, sd: null, z: null, pBelow: null, pairZ: null, slope: null, slopeSd: null, slopeZ: null, status: overall, note })
+      // A reported change in everyday tasks counts even when the memory part could not be scored.
+      if (c.functionChange) overall = 'review'
+      const fnNote = c.functionChange ? ' The person reported that everyday tasks have become harder. That goes to the physician whatever the scores say.' : ''
+      results.push({ index: i, date: c.date, scored: false, mid: null, change: null, sd: null, z: null, pBelow: null, pairZ: null, slope: null, slopeSd: null, slopeZ: null, status: overall, note: note + fnNote })
       return
     }
     nScored += 1

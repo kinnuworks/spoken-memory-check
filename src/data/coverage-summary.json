@@ -2,11 +2,11 @@
  "generated": "2026-11-20",
  "tool": "Vitest v8 coverage",
  "engine": {
-  "files": 21,
-  "linesCovered": 729,
-  "linesTotal": 729,
+  "files": 22,
+  "linesCovered": 797,
+  "linesTotal": 797,
   "lines": 1,
-  "branches": 0.9538002980625931
+  "branches": 0.9426336375488917
  },
  "rules": [
   {
@@ -43,7 +43,7 @@
    "file": "packet.ts",
    "role": "Physician packet and referral clock",
    "lines": 1,
-   "branches": 0.9736842105263158
+   "branches": 0.9868421052631579
   }
  ]
 }

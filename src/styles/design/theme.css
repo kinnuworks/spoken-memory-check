@@ -371,3 +371,6 @@ body { background: var(--bg); color: var(--ink-2); font-family: var(--font-body)
 .c-col .c-slot:first-of-type { margin-top: 0; }
 @media (max-width: 1000px) { .c-col + .c-col { border-left: 0; border-top: 1px solid #e5e7eb; } }
 @media (max-width: 520px) { .c-people__label { width: 100%; margin-bottom: 4px; } }
+.c-facts--proof { margin-top: 40px; }
+.c-facts--proof > div p a { font-size: 14px; color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.sent-meter.is-zero strong { color: #1f6b45; }
