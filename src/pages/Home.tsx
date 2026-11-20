@@ -11,6 +11,7 @@ import { COST_DEFAULTS, yearlyCost } from '../engine/cost'
 import { evaluate, PACKET_STATUSES, STATUS_LABEL, type Trajectory } from '../engine/change'
 import { PERSONAS, type Persona } from '../engine/histories'
 import { WORD_LISTS } from '../engine/lexicon'
+import { libra } from '../engine/libra'
 import { Alert, Check, Code, Ear, EyeOff, List, Mic, Moon, Trend, Waves } from '../components/Icons'
 import TrajectoryChart from './TrajectoryChart'
 
@@ -66,7 +67,7 @@ function ruleSteps(p: Persona, t: Trajectory) {
 }
 
 function outcome(t: Trajectory, p: Persona) {
-  if (PACKET_STATUSES.includes(t.status)) return { ok: false, text: 'Packet sent to the ordering physician', side: 'The physician approves before anyone is told.' }
+  if (PACKET_STATUSES.includes(t.status)) return { ok: false, text: 'Packet sent to the ordering physician', side: `With risk context in eight areas and a LIBRA risk index of ${libra(p.record).known} from the screening record. The physician approves before anyone is told.` }
   if (t.status === 'urgent') return { ok: false, text: 'Told to seek urgent assessment', side: 'The routine flow is bypassed.' }
   if (p.checks.filter((c) => c.hearingLimited).length >= 2) return { ok: true, text: 'Held for hearing, nothing sent', side: 'The person sees: Check received. Thank you.' }
   return { ok: true, text: 'Nothing sent', side: 'The person sees: Check received. Thank you.' }
