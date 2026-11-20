@@ -31,7 +31,7 @@ function Clinician({ id }: { id?: string }) {
   const lib = libra(person.record)
   const areas = riskContext(person.record, person.shared, person.checks)
   const concernAreas = areas.filter((a) => a.concern).map((a) => a.area.toLowerCase())
-  const finding = byReport ? 'a reported change in everyday tasks, with scores in the usual range' : flag.status === 'trend' ? 'a slow, steady fall from this person\'s own baseline' : 'a lasting fall from this person\'s own baseline across two checks'
+  const finding = byReport ? 'a reported change in everyday tasks, with scores in the usual range' : flag.status === 'trend' ? 'a line through all the checks falling further than measurement error explains' : 'a lasting fall from this person\'s own baseline across two checks'
   const [decision, setDecision] = useState<Decision>('pending')
   const [reason, setReason] = useState('')
   const [note, setNote] = useState('')
