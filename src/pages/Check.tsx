@@ -52,6 +52,8 @@ const HEAD_AR: Record<Stage, string> = {
 const AR = {
   intro: 'يستغرق الفحص نحو أربع دقائق، ولا تحتاج إلا إلى صوتك. يبدأ بفحص للصوت. بعدها تكرر عشر كلمات، وتذكر أسماء حيوانات لمدة دقيقة، وتعد تنازلياً. وفي النهاية تقول الكلمات العشر مرة أخرى. اختر مكاناً هادئاً وأجرِ الفحص وحدك.',
   offDay: 'نمت نوماً سيئاً أو أشعر بتوعك اليوم',
+  sleepHours: 'كم ساعة تنام في الليلة عادةً؟',
+  snoring: 'أخبرني أحد أنني أشخر بصوت عالٍ أو يتوقف تنفسي أثناء النوم',
   cloud: 'اسمح أيضاً لخدمة تعرّف على الكلام مستضافة في الإمارات بسماع هذا الفحص. لديها نموذج للهجة الخليجية، ولم تُقَس بعد دقتها مع المتحدثين الخليجيين في هذا الفحص. يغادر تسجيلك هذا الجهاز لهذا الغرض، ولا يُحفظ، ويمكنك إيقاف ذلك في أي وقت.',
   listeners: 'يقيّم ما تقوله نموذج كلام يعمل على هذا الجهاز، ولا يُرسل صوتك إلى أي مكان. نتائجك تبقى على هذا الجهاز. هذه نسخة تجريبية ولا تشخّص.',
   browser: 'استخدم أيضاً خدمة الكلام في متصفحي. تعرض الكلمات أثناء حديثي، لكنها قد ترسل صوتي إلى الشركة المصنّعة للمتصفح خارج الإمارات.',
@@ -68,6 +70,8 @@ export default function Check() {
   const [stage, setStage] = useState<Stage>(deviceOnlyPossible('en') || browserSpeechAvailable() ? 'intro' : 'blocked')
   const [live, setLive] = useState<RangeScore | null>(null)
   const [offDay, setOffDay] = useState(false)
+  const [sleepHours, setSleepHours] = useState(7)
+  const [snoring, setSnoring] = useState(false)
   const [history, setHistory] = useState<StoredCheck[]>(loadChecks())
   const [last, setLast] = useState<StoredCheck | null>(null)
   const control = useRef<ListenControl>({})
@@ -171,6 +175,7 @@ export default function Check() {
         low: scored ? immediate.low + delayed.low + animals.low : null,
         high: scored ? immediate.high + delayed.high + animals.high : null,
         offDay, lang, list: listIndex, ...(functionChange === true ? { functionChange } : {}),
+        ...(loadChecks().length === 0 ? { sleep: { hoursPerNight: sleepHours, snoringOrPauses: snoring } } : {}),
         parts: { immediate: [immediate.low, immediate.high], delayed: [delayed.low, delayed.high], animals: [animals.low, animals.high] },
         recognisers: Object.keys(ani),
         appVersion: APP_VERSION, listVersion: `${lang}-${listIndex + 1}`, heard: { immediate: imm, animals: ani, delayed: del },
@@ -205,6 +210,14 @@ export default function Check() {
           </div>
           {lang === 'ar' && !ARABIC_REVIEWED && <p className="note">The Arabic wording and word lists are a draft, not yet reviewed by a native Gulf Arabic speaker, and the voice is the device's synthetic one.</p>}
           <label className="choice"><input className="switch" type="checkbox" checked={offDay} onChange={(e) => setOffDay(e.target.checked)} /><span>{bi('I slept badly or feel unwell today', AR.offDay)}</span></label>
+          {history.length === 0 && (
+            <fieldset className="card">
+              <legend>{bi('Two questions about sleep, asked only this first time', 'سؤالان عن النوم، مرة واحدة فقط')}</legend>
+              <p><label>{bi('About how many hours do you usually sleep a night?', AR.sleepHours)} <select value={sleepHours} onChange={(e) => setSleepHours(Number(e.target.value))}>{[3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((h) => <option key={h} value={h}>{h}</option>)}</select></label></p>
+              <label className="choice"><input className="switch" type="checkbox" checked={snoring} onChange={(e) => setSnoring(e.target.checked)} /><span>{bi('Someone has told me I snore loudly or stop breathing in my sleep', AR.snoring)}</span></label>
+              <p className="muted">{bi('Your physician sees these only if you agree to share. They never change how your memory check is read.', 'لا يرى طبيبك هذه الإجابات إلا إذا وافقت على المشاركة، ولا تغيّر طريقة قراءة فحص الذاكرة.')}</p>
+            </fieldset>
+          )}
           {cloudReady && <label className="choice"><input className="switch" type="checkbox" checked={cloudOn} onChange={(e) => { setCloudOn(e.target.checked); saveConsent({ ...loadConsent(), cloudListener: e.target.checked }) }} /><span>{bi('Also let a speech service hosted in the UAE hear this check. It has a Gulf Arabic model; how well it hears Gulf speakers in this check has not been measured yet. Your recording leaves this device for this, is not kept, and you can turn this off at any time.', AR.cloud)}</span></label>}
           {lang === 'ar' && <p className="note" lang="ar" dir="rtl">{AR.listeners}</p>}
           <p className="note">An open speech model on this device scores what you say, and your voice is sent nowhere.{secondSupported(lang) ? ` It needs a one-time download of about ${DOWNLOAD_MB[lang]} MB from ${DOWNLOAD_FROM[lang]}, so use Wi-Fi on a phone.` : secondCrashedBefore(lang) ? " Last time, this device closed the page while running it, which usually means it ran out of memory. To take the check here, turn on the browser's speech service below." : " This device can't run it, so to take the check here, turn on the browser's speech service below."} What you say back is also matched against your own voice saying the words. The voice reading the words is your device's own. Your scores stay on this device. This is a test version and does not diagnose.</p>
@@ -254,6 +267,7 @@ export default function Check() {
               <tr><td>Words said back</td><td>{range(last.parts.immediate)} of 10</td></tr>
               <tr><td>Animals in a minute</td><td>{range(last.parts.animals)}</td></tr>
               <tr><td>Words recalled later</td><td>{range(last.parts.delayed)} of 10</td></tr>
+              {last.sleep && <tr><td>Sleep</td><td>{last.sleep.hoursPerNight} hours a night{last.sleep.snoringOrPauses ? '; loud snoring or pauses reported' : ''}</td></tr>}
               <tr><td>Everyday tasks harder?</td><td>{last.functionChange ? 'Yes: this goes to the physician whatever the scores say' : 'No, or unclear'}</td></tr>
             </tbody></table>
             <p className="muted">{last.recognisers.length > 1 ? 'Both listeners scored this check, so each figure is a range where they disagreed.' : 'One listener scored this check, so there are no ranges.'}</p>

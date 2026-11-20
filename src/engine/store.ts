@@ -11,6 +11,8 @@ export interface StoredCheck extends Check {
   appVersion?: string
   listVersion?: string
   heard?: Record<string, Record<string, string>>
+  /** The two sleep questions, asked only at the person's first check. */
+  sleep?: { hoursPerNight: number; snoringOrPauses: boolean }
 }
 
 const KEY = 'smc.checks.v1'

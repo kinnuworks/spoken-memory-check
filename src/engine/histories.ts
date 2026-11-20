@@ -38,6 +38,8 @@ export interface ScreeningRecord {
   familyDementia: { relative: 'mother' | 'father' | 'sibling' | 'none' | 'unknown'; ageAtDiagnosis?: number }
   /** APOE e4 copies from the Emirati Genome Programme result, if the person has one. */
   apoeE4Copies: 0 | 1 | 2 | null
+  /** Two sleep questions asked once, at the first home check (the screening record has no sleep field). Missing when not asked. */
+  sleep?: { hoursPerNight: number; snoringOrPauses: boolean }
 }
 
 /** What the person agreed to share with the physician beyond the scores. Off unless agreed. */
@@ -78,7 +80,7 @@ export const PERSONAS: Persona[] = [
     name: 'A, 58',
     path: 'No flag',
     story: 'Stable. One clearly low check on a day reported as a bad night does not count, and one check was missed; nothing is flagged.',
-    record: { age: 58, sex: 'F', mocaAtVisit: 25, hba1c: 5.6, onMetformin: false, systolic: 124, ldl: 2.9, bmi: 27, smoker: false, hearing: 'normal', vision: 'normal', phq9: 3, activeMinutesWeek: 160, schoolingYears: 6, familyDementia: { relative: 'none' }, apoeE4Copies: null },
+    record: { age: 58, sex: 'F', mocaAtVisit: 25, hba1c: 5.6, onMetformin: false, systolic: 124, ldl: 2.9, bmi: 27, smoker: false, hearing: 'normal', vision: 'normal', phq9: 3, activeMinutesWeek: 160, schoolingYears: 6, familyDementia: { relative: 'none' }, apoeE4Copies: null, sleep: { hoursPerNight: 7, snoringOrPauses: false } },
     shared: { familyHistory: false, genome: false },
     checks: series(11, 31, 0, 99, { off: [6], missed: [8], dip: { 6: 11 } }),
   },
@@ -87,7 +89,7 @@ export const PERSONAS: Persona[] = [
     name: 'B, 63',
     path: 'No flag',
     story: 'Scores rise with practice over the first checks, more than the rule expects. Rising scores never raise a flag.',
-    record: { age: 63, sex: 'M', mocaAtVisit: 27, hba1c: 6.1, onMetformin: false, systolic: 136, ldl: 3.4, bmi: 30, smoker: true, hearing: 'normal', vision: 'reduced', phq9: 2, activeMinutesWeek: 60, schoolingYears: 12, familyDementia: { relative: 'father', ageAtDiagnosis: 81 }, apoeE4Copies: 0 },
+    record: { age: 63, sex: 'M', mocaAtVisit: 27, hba1c: 6.1, onMetformin: false, systolic: 136, ldl: 3.4, bmi: 30, smoker: true, hearing: 'normal', vision: 'reduced', phq9: 2, activeMinutesWeek: 60, schoolingYears: 12, familyDementia: { relative: 'father', ageAtDiagnosis: 81 }, apoeE4Copies: 0, sleep: { hoursPerNight: 6, snoringOrPauses: true } },
     shared: { familyHistory: true, genome: false },
     checks: series(23, 31, 0, 99, { wide: [4], practice: 4 }),
   },
@@ -96,7 +98,7 @@ export const PERSONAS: Persona[] = [
     name: 'C, 61',
     path: 'Flag, then physician',
     story: 'A little lower from the fourth check, then a large drop at the seventh that is still there at the eighth. It is flagged once the drop lasts, and the packet points to treatable contributors first.',
-    record: { age: 61, sex: 'F', mocaAtVisit: 26, hba1c: 7.4, onMetformin: true, systolic: 148, ldl: 3.9, bmi: 32, smoker: false, hearing: 'reduced', vision: 'normal', phq9: 11, activeMinutesWeek: 30, schoolingYears: 9, familyDementia: { relative: 'mother', ageAtDiagnosis: 74 }, apoeE4Copies: 1 },
+    record: { age: 61, sex: 'F', mocaAtVisit: 26, hba1c: 7.4, onMetformin: true, systolic: 148, ldl: 3.9, bmi: 32, smoker: false, hearing: 'reduced', vision: 'normal', phq9: 11, activeMinutesWeek: 30, schoolingYears: 9, familyDementia: { relative: 'mother', ageAtDiagnosis: 74 }, apoeE4Copies: 1, sleep: { hoursPerNight: 5, snoringOrPauses: true } },
     shared: { familyHistory: true, genome: true },
     // The history stops where the packet is sent: what happens next is the physician's call.
     checks: series(37, 33, 2.4, 4, { stopAfter: 8 }),
@@ -106,7 +108,7 @@ export const PERSONAS: Persona[] = [
     name: 'D, 62',
     path: 'Held for hearing',
     story: 'The sound check fails twice in a row. Those checks are held, not scored as low, and the person is pointed to a hearing assessment.',
-    record: { age: 62, sex: 'M', mocaAtVisit: 24, hba1c: 5.9, onMetformin: false, systolic: 132, ldl: 3.1, bmi: 26, smoker: false, hearing: 'reduced', vision: 'normal', phq9: 4, activeMinutesWeek: 120, schoolingYears: 4, familyDementia: { relative: 'unknown' }, apoeE4Copies: null },
+    record: { age: 62, sex: 'M', mocaAtVisit: 24, hba1c: 5.9, onMetformin: false, systolic: 132, ldl: 3.1, bmi: 26, smoker: false, hearing: 'reduced', vision: 'normal', phq9: 4, activeMinutesWeek: 120, schoolingYears: 4, familyDementia: { relative: 'unknown' }, apoeE4Copies: null, sleep: { hoursPerNight: 7, snoringOrPauses: false } },
     shared: { familyHistory: false, genome: false },
     checks: series(51, 27, 0, 99, { held: [5, 6], stopAfter: 9 }),
   },
@@ -115,7 +117,7 @@ export const PERSONAS: Persona[] = [
     name: 'E, 64',
     path: 'Review on reported change',
     story: 'Scores stay in the usual range, but the person says everyday tasks have become harder. That goes to the physician whatever the scores say.',
-    record: { age: 64, sex: 'F', mocaAtVisit: 23, hba1c: 6.0, onMetformin: false, systolic: 138, ldl: 3.0, bmi: 28, smoker: false, hearing: 'normal', vision: 'normal', phq9: 6, activeMinutesWeek: 90, schoolingYears: 0, familyDementia: { relative: 'sibling', ageAtDiagnosis: 69 }, apoeE4Copies: 1 },
+    record: { age: 64, sex: 'F', mocaAtVisit: 23, hba1c: 6.0, onMetformin: false, systolic: 138, ldl: 3.0, bmi: 28, smoker: false, hearing: 'normal', vision: 'normal', phq9: 6, activeMinutesWeek: 90, schoolingYears: 0, familyDementia: { relative: 'sibling', ageAtDiagnosis: 69 }, apoeE4Copies: 1, sleep: { hoursPerNight: 6, snoringOrPauses: false } },
     shared: { familyHistory: true, genome: false },
     checks: series(64, 24, 0, 99, { fn: [6], stopAfter: 7 }),
   },
@@ -124,7 +126,7 @@ export const PERSONAS: Persona[] = [
     name: 'F, 59',
     path: 'Urgent route',
     story: 'A very large fall between two neighbouring checks. The routine flow is bypassed and the person is told to seek urgent assessment.',
-    record: { age: 59, sex: 'M', mocaAtVisit: 26, hba1c: 6.8, onMetformin: true, systolic: 156, ldl: 3.6, bmi: 29, smoker: true, hearing: 'normal', vision: 'normal', phq9: 3, activeMinutesWeek: 100, schoolingYears: 8, familyDementia: { relative: 'none' }, apoeE4Copies: 0 },
+    record: { age: 59, sex: 'M', mocaAtVisit: 26, hba1c: 6.8, onMetformin: true, systolic: 156, ldl: 3.6, bmi: 29, smoker: true, hearing: 'normal', vision: 'normal', phq9: 3, activeMinutesWeek: 100, schoolingYears: 8, familyDementia: { relative: 'none' }, apoeE4Copies: 0, sleep: { hoursPerNight: 6, snoringOrPauses: true } },
     shared: { familyHistory: false, genome: false },
     checks: series(78, 32, 0, 99, { crashAt: 6, stopAfter: 7 }),
   },

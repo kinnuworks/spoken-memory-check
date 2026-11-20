@@ -11,7 +11,7 @@ import { spawnSync } from 'node:child_process'
 import { existsSync, mkdtempSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
-import { apoeObservation, bundle, checkObservation, familyHistory, referralRequest } from '../src/engine/fhir'
+import { apoeObservation, bundle, checkObservation, familyHistory, libraAssessment, referralRequest } from '../src/engine/fhir'
 import { PERSONAS } from '../src/engine/histories'
 
 const JAR = resolve('external/fhir-validator/validator_cli.jar')
@@ -46,11 +46,13 @@ const resources: Record<string, object> = {
   'servicerequest-ent.json': referralRequest(patientRef('hearing'), 'Practitioner/ordering', '2026-07-01', '2026-07-22', 'ent', 'urgent'),
   'familymemberhistory-mother.json': familyHistory(patientRef('decline'), decline.record)!,
   'observation-apoe.json': apoeObservation(patientRef('decline'), decline.record)!,
+  'riskassessment-libra.json': libraAssessment(patientRef('decline'), decline.record, '2026-08-01'),
   // Built exactly as the clinician screen builds its download.
   'bundle-decline.json': bundle([
     ...decline.checks.map((c) => checkObservation(patientRef('decline'), c)),
     familyHistory(patientRef('decline'), decline.record)!,
     apoeObservation(patientRef('decline'), decline.record)!,
+    libraAssessment(patientRef('decline'), decline.record, '2026-08-01'),
     referralRequest(patientRef('decline'), 'Practitioner/ordering', '2026-08-01', '2026-08-22', 'neurology'),
   ]),
   'bundle-hearing.json': bundle([

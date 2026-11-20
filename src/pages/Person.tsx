@@ -54,7 +54,7 @@ export default function Person() {
           <p>{s.found} {s.action}</p>
         </div>
       ))}
-      <p className="muted">These come from your own screening record. There is no risk score here. Figures about large groups of people cannot tell what will happen to you. Wording is a fixed template offered to the public health centre for approval.</p>
+      <p className="muted">These come from your own screening record, the ones that count most first. There is no risk score here. Figures about large groups of people cannot tell what will happen to you. Wording is a fixed template offered to the public health centre for approval.</p>
 
       <h2>Your choices</h2>
       <p>Each one is off until you turn it on, and you can turn it off again at any time.</p>

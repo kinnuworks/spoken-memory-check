@@ -200,3 +200,30 @@ export function programmeYear(members: number, prevalence: number, seed = 202611
     realPer1000: (tp / members) * 1000,
   }
 }
+
+/**
+ * The flag by language, with each listener's miss rate set from what was measured on real
+ * recordings in that language. The simulator has two independent listeners; the miss rate m
+ * is chosen so that the share heard by at least one of them, 1 − m², equals the measured
+ * share heard by the on-device model or own-voice matching. An approximation: the real
+ * listeners are not independent and do not miss at the same rate.
+ */
+export function byLanguage(n: number, measured: { lang: string; heard: number; heardLow: number; words: number; speakers: number }[], seed = REPORT_SEED, p: RuleParams = DEFAULT_PARAMS) {
+  return measured.map((m) => {
+    const run = (heard: number) => {
+      const miss = Math.sqrt(1 - heard)
+      const r = rng(seed)
+      let fa = 0
+      for (let i = 0; i < n; i++) if (firstFlag('ours', simulatePerson({ ...BASE_WORLD, miss, slope: 0 }, r), p) >= 0) fa++
+      const detected: Record<string, number> = {}
+      for (const s of [1, 2]) {
+        const world = { ...BASE_WORLD, miss, slope: s }
+        let k = 0
+        for (let i = 0; i < n; i++) if (firstFlag('ours', simulatePerson(world, r), p) >= world.declineFrom) k++
+        detected[String(s)] = k / n
+      }
+      return { miss: Math.round(miss * 1000) / 1000, falseAlarmYear: fa / n, detected }
+    }
+    return { ...m, central: run(m.heard), pessimistic: run(m.heardLow) }
+  })
+}

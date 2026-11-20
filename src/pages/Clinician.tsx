@@ -2,8 +2,9 @@ import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { DEFAULT_PARAMS, PACKET_STATUSES, TREND_PACKET_NOTE, evaluate } from '../engine/change'
 import { PERSONAS } from '../engine/histories'
-import { REFERRAL_TARGET_WORKING_DAYS, addWorkingDays, contextRows, riskFactors, treatableContributors, workingDaysBetween } from '../engine/packet'
-import { apoeObservation, bundle, checkObservation, familyHistory, referralRequest, SPECIALTY, type Specialty } from '../engine/fhir'
+import { REFERRAL_TARGET_WORKING_DAYS, addWorkingDays, contextRows, riskContext, riskFactors, treatableContributors, workingDaysBetween } from '../engine/packet'
+import { apoeObservation, bundle, checkObservation, familyHistory, libraAssessment, referralRequest, SPECIALTY, type Specialty } from '../engine/fhir'
+import { LIBRA_RANGE, libra } from '../engine/libra'
 import { refMessage } from '../engine/hl7'
 import { INVITE, appendAudit, loadAudit } from '../engine/audit'
 import TrajectoryChart from './TrajectoryChart'
@@ -27,6 +28,10 @@ function Clinician({ id }: { id?: string }) {
   const factors = riskFactors(person.record)
   const contributors = treatableContributors(person.record)
   const context = contextRows(person.record, person.shared)
+  const lib = libra(person.record)
+  const areas = riskContext(person.record, person.shared, person.checks)
+  const concernAreas = areas.filter((a) => a.concern).map((a) => a.area.toLowerCase())
+  const finding = byReport ? 'a reported change in everyday tasks, with scores in the usual range' : flag.status === 'trend' ? 'a slow, steady fall from this person\'s own baseline' : 'a lasting fall from this person\'s own baseline across two checks'
   const [decision, setDecision] = useState<Decision>('pending')
   const [reason, setReason] = useState('')
   const [note, setNote] = useState('')
@@ -37,11 +42,16 @@ function Clinician({ id }: { id?: string }) {
   const [log, setLog] = useState(() => loadAudit().filter((a) => a.case === person.id))
   const record = (action: Parameters<typeof appendAudit>[0]['action'], detail?: string) => setLog(appendAudit({ case: person.id, action, detail }).filter((a) => a.case === person.id))
 
-  // Illustrative dates on working days: approval two working days after the flag, the visit five after that.
-  const approvedOn = addWorkingDays(flag.date, 2)
-  const visitOn = addWorkingDays(approvedOn, 5)
+  // Real dates: approval is the day the button is pressed; the visit and the specialist
+  // appointment are the dates the physician enters. The clock counts working days between them.
+  const today = new Date().toISOString().slice(0, 10)
+  const [approvedOn, setApprovedOn] = useState(today)
+  const [visitDate, setVisitDate] = useState(today)
+  const [seenDate, setSeenDate] = useState(today)
+  const visitOn = referredOn ?? visitDate
   const addDays = (iso: string, n: number) => addWorkingDays(iso, n)
-  const used = referredOn ? workingDaysBetween(visitOn, seenOn ?? referredOn) : 0
+  const used = referredOn ? workingDaysBetween(visitOn, seenOn ?? (today > visitOn ? today : visitOn)) : 0
+  const seenTooEarly = seenDate < visitOn
 
   const trace = [
     { step: 'Consent on file (given at the screening visit, can be withdrawn)', ok: true },
@@ -61,11 +71,15 @@ function Clinician({ id }: { id?: string }) {
   return (
     <>
       <h1>Physician's packet</h1>
-      <p><span className="tag syn">Synthetic patient; dates are illustrative</span> <span className="tag">Decision support. You decide.</span></p>
+      <p><span className="tag syn">Synthetic patient and check dates; the referral dates are the ones you enter</span> <span className="tag">Decision support. You decide.</span></p>
       <nav className="personas" aria-label="Packets waiting">
         {candidates.map((p) => <Link key={p.id} className="persona" aria-current={p.id === person.id} to={`/clinician/${p.id}`}><b>{p.name}</b><span>{p.path}</span></Link>)}
       </nav>
       <p><strong>{person.name}</strong>, {person.record.sex === 'F' ? 'female' : 'male'}. Clinic MoCA at the screening visit: {person.record.mocaAtVisit}. Home checks since {person.checks[0].date}.</p>
+      <div className="card" aria-label="Read together">
+        <p><strong>Read together.</strong> The checks show {finding}. {concernAreas.length} of the 8 risk areas show something to act on{concernAreas.length ? `: ${concernAreas.join(', ')}` : ''}. Modifiable risk (LIBRA): {lib.known} from the record{lib.ranked.length ? `, mostly ${lib.ranked.slice(0, 2).map((f) => f.name.toLowerCase()).join(' and ')}` : ''}. Check first: {contributors.map((c) => c.name[0].toLowerCase() + c.name.slice(1)).join(', ')}. Then decide on a specialist referral.</p>
+        <p className="muted">Risk context helps you read the change and plan prevention. It never raises or lowers the flag: the rule reads only the checks.</p>
+      </div>
 
       <h2>1. What was observed</h2>
       <div className="card chart-card"><TrajectoryChart checks={person.checks} traj={traj} /></div>
@@ -90,35 +104,46 @@ function Clinician({ id }: { id?: string }) {
         <tbody>{contributors.map((c) => <tr key={c.name}><td><strong>{c.name}</strong></td><td>{c.why}</td><td>{c.action}</td></tr>)}</tbody>
       </table></div>
 
-      <h2>4. Risk factors already in the screening record</h2>
-      <p className="muted">Ten of the fourteen modifiable risk factors in the 2024 Lancet Commission report have a matching field in the screening record. Four do not.</p>
-      <div className="scroll" tabIndex={0} role="region" aria-label="Risk factors already in the screening record"><table>
-        <thead><tr><th>Factor</th><th>Screening field</th><th>Value</th><th><span className="sr-only">Status</span></th></tr></thead>
-        <tbody>
-          {factors.map((f) => (
-            <tr key={f.name}>
-              <td>{f.name}</td><td>{f.field ?? <span className="muted">no matching field</span>}</td><td>{f.value ?? ''}</td>
-              <td>{f.field ? (f.present ? <strong className="status-watch">present</strong> : 'not present') : ''}{f.note ? <><br /><span className="muted">{f.note}</span></> : null}</td>
-            </tr>
-          ))}
-        </tbody>
+      <h2>4. Risk context in the eight areas</h2>
+      <p className="muted">The physical, metabolic, sleep, mental-wellbeing, functional, lifestyle, family-history and genomic areas Statement 8 names. Each row says where it came from and under which consent.</p>
+      <div className="scroll" tabIndex={0} role="region" aria-label="Risk context in the eight areas"><table>
+        <thead><tr><th>Area</th><th>For this person</th><th>Source</th><th>Shared under</th></tr></thead>
+        <tbody>{areas.map((a) => <tr key={a.area}><td><strong>{a.area}</strong>{a.concern ? <><br /><strong className="status-watch">to act on</strong></> : null}</td><td>{a.access === 'Not shared' ? <span className="muted">{a.finding}</span> : a.finding}</td><td className="muted">{a.source}</td><td className="muted">{a.access}</td></tr>)}</tbody>
       </table></div>
+      <p className="muted">{context.map((c) => c.shared ? `${c.name}: ${c.note}` : '').filter(Boolean).join(' ')}</p>
 
-      <h2>5. Family and genetic context</h2>
-      <p className="muted">Only what the person agreed to share, each part with its own consent. Context for your conversation: the rule never reads it and the flag does not change with it.</p>
-      <div className="scroll" tabIndex={0} role="region" aria-label="Family and genetic context"><table>
-        <thead><tr><th>Item</th><th>For this person</th><th>How to read it</th></tr></thead>
-        <tbody>{context.map((c) => <tr key={c.name}><td><strong>{c.name}</strong></td><td>{c.shared ? c.value : <span className="muted">{c.value}</span>}</td><td className="muted">{c.shared ? c.note : ''}</td></tr>)}</tbody>
+      <h2>5. Modifiable risk: the LIBRA index</h2>
+      <p>LIBRA weighs twelve modifiable factors by how strongly each is tied to dementia in published meta-analyses. From the screening record: <strong>{lib.known}</strong>, from {lib.knownCount} of the 12 factors. The other {12 - lib.knownCount} are not in the record, so the full score lies between <strong>{lib.low}</strong> and <strong>{lib.high}</strong> (scale {LIBRA_RANGE.min} to +{LIBRA_RANGE.max}; higher means more modifiable risk).</p>
+      <div className="scroll" tabIndex={0} role="region" aria-label="LIBRA factors"><table>
+        <thead><tr><th>Factor</th><th>Weight</th><th>For this person</th></tr></thead>
+        <tbody>{lib.factors.map((f) => <tr key={f.name}><td>{f.name}</td><td>{f.weight > 0 ? `+${f.weight}` : f.weight}</td><td>{f.present === null ? <span className="muted">{f.basis}</span> : f.present ? <><strong className="status-watch">present</strong>: {f.basis}</> : <>not present: {f.basis}</>}</td></tr>)}</tbody>
       </table></div>
+      <p className="muted">Factors: Deckers et al. 2015; index: Schiepers et al. 2018; weights as reprinted in Stubs et al. 2025. In the English Longitudinal Study of Ageing each point raised dementia risk by 13% (hazard ratio 1.13, C-statistic 0.68); in midlife, over 30 years, by 27% (1.27, C 0.67). It ranks what is worth working on; it does not predict this person's future, and the change rule never reads it. Not yet checked in Emirati adults.</p>
 
-      <h2>6. Your decision</h2>
+      <h2>6. Lancet Commission risk factors</h2>
+      <details>
+        <summary>Ten of the fourteen modifiable risk factors in the 2024 Lancet Commission report have a matching field in the screening record. Four do not.</summary>
+        <div className="scroll" tabIndex={0} role="region" aria-label="Lancet Commission risk factors"><table>
+          <thead><tr><th>Factor</th><th>Screening field</th><th>Value</th><th><span className="sr-only">Status</span></th></tr></thead>
+          <tbody>
+            {factors.map((f) => (
+              <tr key={f.name}>
+                <td>{f.name}</td><td>{f.field ?? <span className="muted">no matching field</span>}</td><td>{f.value ?? ''}</td>
+                <td>{f.field ? (f.present ? <strong className="status-watch">present</strong> : 'not present') : ''}{f.note ? <><br /><span className="muted">{f.note}</span></> : null}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table></div>
+      </details>
+
+      <h2>7. Your decision</h2>
       {decision === 'pending' && (
         <>
           <p>Until you decide, the person sees only "Check received". If you approve, the app sends the invitation below and nothing else. You give the result in person.</p>
           <div className="card"><p className="muted" id="invite-help">Invitation wording. The template is offered to the public health centre for approval; you may edit it for this person before sending.</p><textarea aria-label="Invitation wording" aria-describedby="invite-help" value={invite} onChange={(e) => setInvite(e.target.value)} style={{ minHeight: 80 }} /></div>
           <p><label>Your note for the record (optional)<textarea value={note} onChange={(e) => setNote(e.target.value)} /></label></p>
           <div className="stack">
-            <button className="primary" onClick={() => { setDecision('approved'); record('approved', invite !== INVITE ? `invitation edited: ${invite}` : undefined) }}>Approve and invite the person to a visit</button>
+            <button className="primary" onClick={() => { setApprovedOn(new Date().toISOString().slice(0, 10)); setDecision('approved'); record('approved', invite !== INVITE ? `invitation edited: ${invite}` : undefined) }}>Approve and invite the person to a visit</button>
             <p><label>Reason for dismissing<textarea style={{ minHeight: 60 }} value={reason} onChange={(e) => setReason(e.target.value)} /></label></p>
             <button disabled={!reason.trim()} onClick={() => { setDecision('dismissed'); record('dismissed', reason) }}>Dismiss with this reason</button>
           </div>
@@ -127,16 +152,23 @@ function Clinician({ id }: { id?: string }) {
       {decision === 'dismissed' && <div className="note">Dismissed. Reason recorded: "{reason}". Home checks continue and the person is not contacted.</div>}
       {decision === 'approved' && (
         <>
-          <div className="note">Approved on {approvedOn}{invite !== INVITE ? ' with edited wording' : ''}. The person received this invitation and nothing else: "{invite}"</div>
-          <h2>7. Follow-up clock</h2>
+          <div className="note">Approved on {approvedOn} (today){invite !== INVITE ? ' with edited wording' : ''}. The person received this invitation and nothing else: "{invite}"</div>
+          <h2>8. Follow-up clock</h2>
           <p>Target: referral to a neurologist or geriatrician completed within {REFERRAL_TARGET_WORKING_DAYS} working days of the visit. The number is borrowed from the screening programme's own referral indicator.</p>
           <div className="stack">
-            {!referredOn && <button className="primary" onClick={() => { setReferredOn(visitOn); record('result given in person', `referral to ${SPECIALTY[specialty].display}`) }}>Record: result given in person on {visitOn}, referral made the same day</button>}
-            {referredOn && !seenOn && <button className="primary" onClick={() => { setSeenOn(addWorkingDays(visitOn, 12)); record('specialist seen') }}>Record: specialist appointment attended</button>}
+            {!referredOn && <>
+              <p><label>Date of the visit where you gave the result <input type="date" value={visitDate} min={approvedOn} onChange={(e) => setVisitDate(e.target.value || today)} /></label></p>
+              <button className="primary" disabled={visitDate < approvedOn} onClick={() => { setReferredOn(visitDate); record('result given in person', `visit ${visitDate}; referral to ${SPECIALTY[specialty].display}`) }}>Record: result given in person on {visitDate}, referral made the same day</button>
+            </>}
+            {referredOn && !seenOn && <>
+              <p><label>Date the specialist saw the person <input type="date" value={seenDate} min={referredOn} onChange={(e) => setSeenDate(e.target.value || today)} /></label></p>
+              <button className="primary" disabled={seenTooEarly} onClick={() => { setSeenOn(seenDate); record('specialist seen', `seen ${seenDate}`) }}>Record: specialist appointment attended</button>
+              {seenTooEarly && <p className="muted">The appointment cannot be before the visit.</p>}
+            </>}
           </div>
           {referredOn && (
             <div className="card">
-              <p><strong>{seenOn ? 'Closed' : 'Open'}</strong>: {used} of {REFERRAL_TARGET_WORKING_DAYS} working days used{seenOn ? '' : ' so far'}. <span className="muted">The dates are filled in as an illustration; in a pilot they come from the referral and visit records, and the clock measures the real gap.</span></p>
+              <p><strong>{seenOn ? 'Closed' : 'Open'}</strong>: {used} of {REFERRAL_TARGET_WORKING_DAYS} working days used{seenOn ? '' : ' so far, counted to today'}{used > REFERRAL_TARGET_WORKING_DAYS ? '. Over the target' : ''}. <span className="muted">Counted Monday to Friday between the dates you entered. In a pilot they come from the referral and visit records.</span></p>
               <p className="muted">Visit {visitOn}. Referral made {referredOn}.{seenOn ? ` Seen ${seenOn}.` : ' Waiting for the appointment.'} Owner: the ordering physician at the screening provider.</p>
             </div>
           )}
@@ -160,7 +192,7 @@ function Clinician({ id }: { id?: string }) {
       <button className="small" onClick={() => {
         const ref = `Patient/synthetic-${person.id}`
         // Family history and genome results go only if the person agreed to share each one.
-        const ctx = [person.shared.familyHistory ? familyHistory(ref, person.record) : null, person.shared.genome ? apoeObservation(ref, person.record) : null].filter((x) => x !== null)
+        const ctx = [person.shared.familyHistory ? familyHistory(ref, person.record) : null, person.shared.genome ? apoeObservation(ref, person.record) : null, libraAssessment(ref, person.record, new Date().toISOString().slice(0, 10))].filter((x) => x !== null)
         const res = [...person.checks.map((c) => checkObservation(ref, c)), ...ctx, ...(referredOn ? [referralRequest(ref, 'Practitioner/ordering', referredOn, addDays(visitOn, 21), specialty)] : [])]
         const url = URL.createObjectURL(new Blob([JSON.stringify(bundle(res), null, 2)], { type: 'application/fhir+json' }))
         Object.assign(document.createElement('a'), { href: url, download: `synthetic-${person.id}.fhir.json` }).click()

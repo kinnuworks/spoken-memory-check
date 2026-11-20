@@ -1,5 +1,6 @@
 import type { Check } from './change'
 import type { ScreeningRecord } from './histories'
+import { libra } from './libra'
 
 // FHIR R4 resources for handing a check and a referral to another system.
 // Local codes are used where no standard code fits; the system URI marks them as ours.
@@ -79,6 +80,31 @@ export function apoeObservation(patientRef: string, r: ScreeningRecord) {
     code: { coding: [{ system: SYSTEM, code: 'apoe-e4-copies', display: 'APOE e4 allele copies' }], text: 'APOE e4 allele copies (genome programme result)' },
     subject: { reference: patientRef },
     valueInteger: r.apoeE4Copies,
+  }
+}
+
+/**
+ * The LIBRA modifiable-risk index from the screening record, as a FHIR RiskAssessment. LIBRA is
+ * an index, not a probability, so it goes in the narrative and the qualitative risk text, with
+ * the unknown factors as a range. Context for the physician; the check's rule never reads it.
+ */
+export function libraAssessment(patientRef: string, r: ScreeningRecord, occurrence: string) {
+  const l = libra(r)
+  const present = l.ranked.map((f) => f.name.toLowerCase())
+  const summary = `LIBRA ${l.known} from ${l.knownCount} of 12 factors in the screening record; between ${l.low} and ${l.high} once the other ${12 - l.knownCount} are allowed for (scale -5.9 to +12.7, higher means more modifiable risk).`
+  return {
+    resourceType: 'RiskAssessment',
+    text: narrative(`${summary} Present, heaviest first: ${present.length ? present.join(', ') : 'none'}. An index of modifiable risk, not a diagnosis or a personal prediction.`),
+    status: 'final',
+    subject: { reference: patientRef },
+    occurrenceDateTime: occurrence,
+    method: { coding: [{ system: SYSTEM, code: 'libra-2018', display: 'LIBRA index (Schiepers et al. 2018)' }], text: 'LIBRA index (Schiepers et al. 2018), weights as reprinted in Stubs et al. 2025' },
+    prediction: [{
+      outcome: { coding: [{ system: 'http://snomed.info/sct', code: '52448006', display: 'Dementia' }], text: 'Dementia' },
+      qualitativeRisk: { text: summary },
+      rationale: present.length ? `Modifiable factors present: ${present.join(', ')}.` : 'No modifiable factor in the screening record is present.',
+    }],
+    note: [{ text: 'Context for the ordering physician. The spoken check\'s change rule does not read this.' }],
   }
 }
 
