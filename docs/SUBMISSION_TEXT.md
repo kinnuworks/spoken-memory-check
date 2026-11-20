@@ -31,7 +31,7 @@ Statement 8:
 5. Safety and oversight: no score at home, a physician approves every routine packet, and no language model decides.
 6. Validation: the statement's seven measures, by language, age and schooling, each marked measured, simulated or not yet.
 
-Measured: with each speaker's own voice as the answer key, the on-device model heard 93% of 720 Arabic words from 30 adults. Simulated: 5.2% false packets a year in stable people; 97% of those losing 2 points a check flagged if every word is heard.
+Measured: with each speaker's own voice as the answer key, the on-device model heard 93% of 720 Arabic words from 30 adults. Simulated: 5.2% false packets a year when memory is stable; 97% of 2-point-a-check declines flagged if every word is heard.
 
 Abu Dhabi fit: HL7 v2 referrals for Malaffi, FHIR R4 with 0 validator errors, UAE self-hosting, Thiqa packages 52-45 and 52-46 as payer, modelled at AED 26 a member a year.
 
