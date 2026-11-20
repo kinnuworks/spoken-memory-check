@@ -41,9 +41,9 @@ Real recordings, public data:
 
 Real survey data: in NHANES 2011 to 2014 (3,110 adults aged 60 and over), a fixed cutoff of 14 animals flags 48% of healthy adults with under 9 years of school against 16% of graduates. In the Gulf, the usual MoCA cut-off classed 69.3% of 606 older adults in Dubai and Sharjah as impaired (Issa et al. 2026). A personal baseline avoids this.
 
-Simulated: 5.2% of stable simulated members get a false packet a year; 52% of those losing 1 point a check and 97% losing 2 are flagged within the year if every word is heard (64% in Arabic, 30% in English at 2 points with miss rates from the real recordings).
+Simulated: 5.2% of stable simulated members get a false packet a year; 52% of those losing 1 point a check and 97% losing 2 are flagged within the year if every word is heard (87% in Arabic, 66% in English at 2 points when heard at the rates measured on real recordings).
 
-Our own tests: FHIR R4 with 0 errors from the HL7 validator 7.0.5; 257 automated tests; 92% of 1,026 deliberate bugs caught; the live site walked end to end after each deploy; a computer voice fed in as the microphone credited 8 of 12 animals said in English and in Arabic, and silence failed the sound check.
+Our own tests: FHIR R4 with 0 errors from the HL7 validator 7.0.5; 258 automated tests; 92% of 1,026 deliberate bugs caught; the live site walked end to end after each deploy; a computer voice fed in as the microphone credited 8 of 12 animals said in English and in Arabic, and silence failed the sound check.
 
 ## 8. Data sources and legal right to use them
 - NHANES 2011 to 2014: survey, de-identified, US CDC; public domain; no personal data.

@@ -2,50 +2,67 @@
  "generated": "2026-11-20",
  "n": 20000,
  "seed": 20261110,
+ "animalShare": 0.5185185185185185,
  "rows": [
   {
    "lang": "Arabic",
-   "heard": 0.931,
-   "heardLow": 0.91,
    "words": 720,
    "speakers": 30,
    "central": {
-    "miss": 0.263,
-    "falseAlarmYear": 0.00195,
+    "listening": {
+     "animalsHeard": 0.821,
+     "recallBoth": 0.5999999999999999,
+     "recallEither": 0.931,
+     "animalShare": 0.5185185185185185
+    },
+    "falseAlarmYear": 0.02625,
     "detected": {
-     "1": 0.0882,
-     "2": 0.63615
+     "1": 0.3034,
+     "2": 0.86765
     }
    },
    "pessimistic": {
-    "miss": 0.3,
-    "falseAlarmYear": 0.00115,
+    "listening": {
+     "animalsHeard": 0.791,
+     "recallBoth": 0.5789999999999998,
+     "recallEither": 0.91,
+     "animalShare": 0.5185185185185185
+    },
+    "falseAlarmYear": 0.02625,
     "detected": {
-     "1": 0.0566,
-     "2": 0.52795
+     "1": 0.2861,
+     "2": 0.84855
     }
    }
   },
   {
    "lang": "English",
-   "heard": 0.85,
-   "heardLow": 0.772,
    "words": 113,
    "speakers": 68,
    "central": {
-    "miss": 0.387,
-    "falseAlarmYear": 0.0004,
+    "listening": {
+     "animalsHeard": 0.575,
+     "recallBoth": 0.4859999999999999,
+     "recallEither": 0.85,
+     "animalShare": 0.5185185185185185
+    },
+    "falseAlarmYear": 0.01625,
     "detected": {
-     "1": 0.01925,
-     "2": 0.3023
+     "1": 0.1676,
+     "2": 0.65835
     }
    },
    "pessimistic": {
-    "miss": 0.477,
-    "falseAlarmYear": 0,
+    "listening": {
+     "animalsHeard": 0.483,
+     "recallBoth": 0.4079999999999999,
+     "recallEither": 0.772,
+     "animalShare": 0.5185185185185185
+    },
+    "falseAlarmYear": 0.0128,
     "detected": {
-     "1": 0.0036,
-     "2": 0.12945
+     "1": 0.10975,
+     "2": 0.50835
     }
    }
   }

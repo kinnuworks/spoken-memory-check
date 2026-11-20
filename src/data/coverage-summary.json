@@ -3,10 +3,10 @@
  "tool": "Vitest v8 coverage",
  "engine": {
   "files": 21,
-  "linesCovered": 718,
-  "linesTotal": 718,
+  "linesCovered": 729,
+  "linesTotal": 729,
   "lines": 1,
-  "branches": 0.9535232383808095
+  "branches": 0.9538002980625931
  },
  "rules": [
   {

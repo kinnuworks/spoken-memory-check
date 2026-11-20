@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { DEFAULT_PARAMS } from './change'
-import { BASE_WORLD, byLanguage, firstFlag, rng, simulatePerson, suddenDrops } from './simulate'
+import { BASE_WORLD, byLanguage, firstFlag, rng, simulatePerson, simulatePersonHeard, suddenDrops } from './simulate'
 import { bundle, checkObservation, referralRequest } from './fhir'
 
 const share = (n: number, f: (r: () => number) => boolean) => { const r = rng(7); let k = 0; for (let i = 0; i < n; i++) if (f(r)) k++; return k / n }
@@ -84,14 +84,22 @@ describe('FHIR output', () => {
 })
 
 describe('the flag by language, from measured listening', () => {
-  it('sets each listener\'s miss rate so that either one hears the measured share, and loses sensitivity as listening gets worse', () => {
+  const perfect = { animalsHeard: 1, recallBoth: 1, recallEither: 1, animalShare: 0.5 }
+  const poor = { animalsHeard: 0.6, recallBoth: 0.5, recallEither: 0.85, animalShare: 0.5 }
+  it('hears animals with one listener and recall with two, so only recall adds a range', () => {
+    const r = rng(7)
+    const animalsOnly = simulatePersonHeard({ ...BASE_WORLD, slope: 0 }, { ...poor, animalShare: 1 }, r)
+    expect(animalsOnly.every((c) => c.low === c.high)).toBe(true)
+    const heardAll = simulatePersonHeard({ ...BASE_WORLD, slope: 0 }, perfect, rng(7))
+    expect(heardAll.every((c) => c.low === c.high)).toBe(true)
+    const recallOnly = simulatePersonHeard({ ...BASE_WORLD, slope: 0 }, { ...poor, animalShare: 0 }, rng(7))
+    expect(recallOnly.some((c) => (c.high as number) > (c.low as number))).toBe(true)
+  })
+  it('loses sensitivity as listening gets worse', () => {
     const rows = byLanguage(400, [
-      { lang: 'perfect', heard: 1, heardLow: 1, words: 1, speakers: 1 },
-      { lang: 'poor', heard: 0.75, heardLow: 0.64, words: 1, speakers: 1 },
+      { lang: 'perfect', central: perfect, pessimistic: perfect, words: 1, speakers: 1 },
+      { lang: 'poor', central: poor, pessimistic: { ...poor, animalsHeard: 0.4 }, words: 1, speakers: 1 },
     ])
-    expect(rows[0].central.miss).toBe(0)
-    expect(rows[1].central.miss).toBe(0.5)
-    expect(rows[1].pessimistic.miss).toBe(0.6)
     expect(rows[1].central.detected['2']).toBeLessThan(rows[0].central.detected['2'])
     expect(rows[1].pessimistic.detected['2']).toBeLessThanOrEqual(rows[1].central.detected['2'])
     expect(rows[0].lang).toBe('perfect')

@@ -202,28 +202,56 @@ export function programmeYear(members: number, prevalence: number, seed = 202611
 }
 
 /**
- * The flag by language, with each listener's miss rate set from what was measured on real
- * recordings in that language. The simulator has two independent listeners; the miss rate m
- * is chosen so that the share heard by at least one of them, 1 − m², equals the measured
- * share heard by the on-device model or own-voice matching. An approximation: the real
- * listeners are not independent and do not miss at the same rate.
+ * How well each part of the check is heard, as measured on real recordings. Animal naming has one
+ * listener (the on-device model), so its count has no range. Word recall has two (the model and
+ * own-voice matching): the low end counts words both heard, the high end words either heard.
  */
-export function byLanguage(n: number, measured: { lang: string; heard: number; heardLow: number; words: number; speakers: number }[], seed = REPORT_SEED, p: RuleParams = DEFAULT_PARAMS) {
+export interface Listening {
+  /** Share of animals said that the on-device model hears. */
+  animalsHeard: number
+  /** Share of recall words heard by both listeners, and by at least one. */
+  recallBoth: number
+  recallEither: number
+  /** Share of a check's points that come from animal naming (the rest from recall). */
+  animalShare: number
+}
+
+/** A simulated person whose checks are heard as measured: animals by one listener, recall by two. */
+export function simulatePersonHeard(w: World, l: Listening, r: () => number): Check[] {
+  const mu = POP_MEAN + normal(r) * w.betweenSd
+  const out: Check[] = []
+  for (let i = 0; i < w.checks; i++) {
+    const gain = w.practiceGain * (1 - Math.exp(-i / DEFAULT_PARAMS.practiceTau))
+    const drop = i >= w.declineFrom ? w.slope * (i - w.declineFrom + 1) + (w.step ?? 0) : 0
+    const said = Math.max(0, Math.round(mu + gain - drop + normal(r) * w.sem))
+    const animals = Math.round(said * l.animalShare), recall = said - animals
+    const a = binomial(animals, l.animalsHeard, r)
+    const both = binomial(recall, l.recallBoth, r)
+    const one = binomial(recall - both, (l.recallEither - l.recallBoth) / Math.max(1e-9, 1 - l.recallBoth), r)
+    out.push({ date: `c${i}`, low: a + both, high: a + both + one })
+  }
+  return out
+}
+
+/**
+ * The flag by language, with each part of the check heard at the rates measured on real
+ * recordings in that language. The pessimistic run uses the low end of each 95% interval.
+ */
+export function byLanguage(n: number, measured: { lang: string; central: Listening; pessimistic: Listening; words: number; speakers: number }[], seed = REPORT_SEED, p: RuleParams = DEFAULT_PARAMS) {
   return measured.map((m) => {
-    const run = (heard: number) => {
-      const miss = Math.sqrt(1 - heard)
+    const run = (l: Listening) => {
       const r = rng(seed)
       let fa = 0
-      for (let i = 0; i < n; i++) if (firstFlag('ours', simulatePerson({ ...BASE_WORLD, miss, slope: 0 }, r), p) >= 0) fa++
+      for (let i = 0; i < n; i++) if (firstFlag('ours', simulatePersonHeard({ ...BASE_WORLD, slope: 0 }, l, r), p) >= 0) fa++
       const detected: Record<string, number> = {}
       for (const s of [1, 2]) {
-        const world = { ...BASE_WORLD, miss, slope: s }
+        const world = { ...BASE_WORLD, slope: s }
         let k = 0
-        for (let i = 0; i < n; i++) if (firstFlag('ours', simulatePerson(world, r), p) >= world.declineFrom) k++
+        for (let i = 0; i < n; i++) if (firstFlag('ours', simulatePersonHeard(world, l, r), p) >= world.declineFrom) k++
         detected[String(s)] = k / n
       }
-      return { miss: Math.round(miss * 1000) / 1000, falseAlarmYear: fa / n, detected }
+      return { listening: l, falseAlarmYear: fa / n, detected }
     }
-    return { ...m, central: run(m.heard), pessimistic: run(m.heardLow) }
+    return { lang: m.lang, words: m.words, speakers: m.speakers, central: run(m.central), pessimistic: run(m.pessimistic) }
   })
 }
