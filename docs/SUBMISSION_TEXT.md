@@ -27,15 +27,15 @@ Statement 8:
 1. Culturally valid and accessible: spoken in Gulf Arabic or English, nothing to read or type. Hearing is checked first.
 2. Cognitive and functional change: three checks set a personal baseline. One low check means a repeat; two in a row averaging about 9.5 points below it, a steady fall, or a yes to the everyday-tasks question send a packet; a very large fall goes the same day.
 3. Integrated risk context: the packet reads the checks with all eight named areas, weighs modifiable risk with the LIBRA index, and adds family history and Emirati Genome Programme data only under their own consent.
-4. Prevention and timely care: the person gets plain steps from their own record. The packet lists treatable causes first (B12, thyroid, mood, hearing, sleep apnoea, medicines), then specialist referral on a 15-working-day clock.
+4. Prevention and timely care: the person gets plain steps from their own record. The packet lists treatable causes first (B12, thyroid, mood, hearing, sleep, medicines), then specialist referral on a 15-working-day clock.
 5. Safety and oversight: no score at home, a physician approves every routine packet, no language model decides.
 6. Validation: the statement's seven measures, by language, age and schooling, each marked measured, simulated or not yet.
 
-Proof anyone can check: in the browser's own network log of a voice check, 0 bytes left the device. 1,000,000 random histories broke none of the rule's nine safety promises. The on-device model heard 93% of 720 real Arabic words. Simulated: 5.2% false packets a year when memory is stable; 97% of 2-point-a-check declines flagged if every word is heard.
+Proof anyone can check: in the browser's own network log of a voice check, 0 bytes left the device. 1,000,000 random histories broke none of the rule's nine safety promises. With own-voice matching, the device heard 93% of 720 real Arabic words. Simulated: 5.2% false packets a year when memory is stable; 97% of 2-point-a-check declines flagged if every word is heard.
 
 Abu Dhabi fit: HL7 v2 referrals for Malaffi, FHIR R4 with 0 validator errors, UAE self-hosting, Thiqa packages 52-45 and 52-46 as payer, modelled at AED 26 a member a year.
 
-Pilot: after ethics approval, 12 months at one screening provider, 250 per arm randomised to usual care or home checks.
+Pilot: after ethics approval, 12 months at one provider, 250 per arm randomised to usual care or home checks.
 
 Not yet: no partner, patients or older Emirati volunteers; no native review of Arabic lists; retest error borrowed from studies.
 <!-- summary:end -->
